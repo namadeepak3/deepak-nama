@@ -1278,24 +1278,13 @@ function BlogEditor({
               placeholder="SEO, AI, Growth"
             />
           </Field>
-          <Field label="Category">
-            <input
-              value={v.category}
-              onChange={(e) => patch("category", e.target.value)}
-              className={inp}
-              placeholder="e.g. SEO, Performance Marketing"
-              list="blog-category-suggestions"
-            />
-            <datalist id="blog-category-suggestions">
-              <option value="SEO" />
-              <option value="AI &amp; Automation" />
-              <option value="Performance Marketing" />
-              <option value="Analytics" />
-              <option value="Content Strategy" />
-              <option value="Case Studies" />
-              <option value="News" />
-            </datalist>
-          </Field>
+          <CategorySelect
+            value={v.category_id}
+            onChange={(id, name) => {
+              patch("category_id", id);
+              patch("category", name);
+            }}
+          />
         </div>
 
         <BannerUpload
