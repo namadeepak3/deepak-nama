@@ -35,6 +35,18 @@ import {
   BarChart3,
   ShieldCheck,
   FileText,
+  Upload,
+  ImageIcon,
+  Bold,
+  Italic,
+  Heading2,
+  Heading3,
+  Link as LinkIcon,
+  List,
+  ListOrdered,
+  Quote,
+  Code,
+  Image as ImagePlus,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
