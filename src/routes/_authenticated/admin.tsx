@@ -647,6 +647,118 @@ function emptyPost(): BlogPostInput {
   };
 }
 
+const SITE_URL = "https://clever-reach-pro.lovable.app";
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-default.jpg`;
+
+function resolveSeo(v: BlogPostInput) {
+  const title = v.meta_title?.trim() || v.title || "Untitled post";
+  const description =
+    v.meta_description?.trim() ||
+    v.excerpt?.trim() ||
+    "Insights on AI-driven SEO, performance marketing and automation.";
+  const ogTitle = v.og_title?.trim() || title;
+  const ogDescription = v.og_description?.trim() || description;
+  const ogImage = v.og_image?.trim() || v.cover_image?.trim() || DEFAULT_OG_IMAGE;
+  const twTitle = v.twitter_title?.trim() || ogTitle;
+  const twDescription = v.twitter_description?.trim() || ogDescription;
+  const twImage = v.twitter_image?.trim() || ogImage;
+  const canonical = v.canonical_url?.trim() || `${SITE_URL}/blog/${v.slug || "your-post"}`;
+  return { title, description, ogTitle, ogDescription, ogImage, twTitle, twDescription, twImage, canonical };
+}
+
+function SeoPreview({ v }: { v: BlogPostInput }) {
+  const s = resolveSeo(v);
+  const displayUrl = s.canonical.replace(/^https?:\/\//, "");
+  const titleLen = s.title.length;
+  const descLen = s.description.length;
+  const titleColor = titleLen > 60 ? "text-destructive" : titleLen > 50 ? "text-yellow-500" : "text-muted-foreground";
+  const descColor = descLen > 160 ? "text-destructive" : descLen > 140 ? "text-yellow-500" : "text-muted-foreground";
+
+  return (
+    <div className="rounded-lg border border-border bg-background/40 p-4 space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-display font-semibold">Live SEO preview</h3>
+        <div className="flex gap-3 text-[11px]">
+          <span className={titleColor}>Title {titleLen}/60</span>
+          <span className={descColor}>Desc {descLen}/160</span>
+        </div>
+      </div>
+
+      {/* Google SERP */}
+      <div>
+        <p className="mb-1.5 text-[10px] uppercase tracking-widest text-muted-foreground">Google search result</p>
+        <div className="rounded-md bg-white p-4 text-left">
+          <p className="text-xs text-[#202124]">{displayUrl}</p>
+          <p className="mt-1 text-[18px] leading-snug text-[#1a0dab] truncate">{s.title}</p>
+          <p className="mt-1 text-[13px] leading-snug text-[#4d5156] line-clamp-2">{s.description}</p>
+        </div>
+      </div>
+
+      {/* Facebook / Open Graph */}
+      <div>
+        <p className="mb-1.5 text-[10px] uppercase tracking-widest text-muted-foreground">Facebook / Open Graph</p>
+        <div className="overflow-hidden rounded-md border border-[#dadde1] bg-white">
+          <div className="aspect-[1.91/1] bg-[#f0f2f5]">
+            {s.ogImage ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={s.ogImage} alt="" className="h-full w-full object-cover" onError={(e) => ((e.currentTarget.style.display = "none"))} />
+            ) : null}
+          </div>
+          <div className="px-3 py-2">
+            <p className="text-[11px] uppercase text-[#606770]">{displayUrl.split("/")[0]}</p>
+            <p className="mt-0.5 text-[15px] font-semibold text-[#1d2129] line-clamp-2">{s.ogTitle}</p>
+            <p className="mt-0.5 text-[12px] text-[#606770] line-clamp-2">{s.ogDescription}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Twitter / X */}
+      <div>
+        <p className="mb-1.5 text-[10px] uppercase tracking-widest text-muted-foreground">X / Twitter card</p>
+        <div className="overflow-hidden rounded-2xl border border-[#cfd9de] bg-white">
+          <div className="aspect-[1.91/1] bg-[#f7f9f9]">
+            {s.twImage ? (
+              <img src={s.twImage} alt="" className="h-full w-full object-cover" onError={(e) => ((e.currentTarget.style.display = "none"))} />
+            ) : null}
+          </div>
+          <div className="px-3 py-2">
+            <p className="text-[15px] font-semibold text-[#0f1419] line-clamp-1">{s.twTitle}</p>
+            <p className="mt-0.5 text-[13px] text-[#536471] line-clamp-2">{s.twDescription}</p>
+            <p className="mt-1 text-[12px] text-[#536471]">{displayUrl.split("/")[0]}</p>
+          </div>
+        </div>
+      </div>
+
+      <p className="text-[11px] text-muted-foreground">
+        Tip: OG image falls back to cover image, then to the site default.
+      </p>
+    </div>
+  );
+}
+
+function _unusedEmptyPost(): BlogPostInput {
+  return {
+    slug: "",
+    title: "",
+    excerpt: "",
+    cover_image: "",
+    content: "",
+    tags: [],
+    status: "draft",
+    author_name: "vrseoguru",
+    reading_minutes: 5,
+    meta_title: "",
+    meta_description: "",
+    canonical_url: "",
+    og_title: "",
+    og_description: "",
+    og_image: "",
+    twitter_title: "",
+    twitter_description: "",
+    twitter_image: "",
+  };
+}
+
 function postToInput(p: BlogPost): BlogPostInput {
   return {
     id: p.id,
