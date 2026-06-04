@@ -1,0 +1,10 @@
+ALTER TABLE public.blog_posts
+  ADD COLUMN IF NOT EXISTS meta_title text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS meta_description text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS canonical_url text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS og_title text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS og_description text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS og_image text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS twitter_title text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS twitter_description text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS twitter_image text NOT NULL DEFAULT '';
