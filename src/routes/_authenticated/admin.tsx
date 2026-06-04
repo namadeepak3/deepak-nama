@@ -736,29 +736,6 @@ function SeoPreview({ v }: { v: BlogPostInput }) {
   );
 }
 
-function _unusedEmptyPost(): BlogPostInput {
-  return {
-    slug: "",
-    title: "",
-    excerpt: "",
-    cover_image: "",
-    content: "",
-    tags: [],
-    status: "draft",
-    author_name: "vrseoguru",
-    reading_minutes: 5,
-    meta_title: "",
-    meta_description: "",
-    canonical_url: "",
-    og_title: "",
-    og_description: "",
-    og_image: "",
-    twitter_title: "",
-    twitter_description: "",
-    twitter_image: "",
-  };
-}
-
 function postToInput(p: BlogPost): BlogPostInput {
   return {
     id: p.id,
