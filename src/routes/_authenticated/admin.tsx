@@ -15,6 +15,13 @@ import {
 import { ICON_OPTIONS, iconFor, type Service } from "@/lib/services.shared";
 import { supabase } from "@/integrations/supabase/client";
 import {
+  listAllPosts,
+  upsertPost,
+  deletePost,
+  type BlogPostInput,
+} from "@/lib/blog.functions";
+import type { BlogPost } from "@/lib/blog.shared";
+import {
   Plus,
   Pencil,
   Trash2,
@@ -27,6 +34,7 @@ import {
   Settings2,
   BarChart3,
   ShieldCheck,
+  FileText,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -70,12 +78,14 @@ function AdminPage() {
   const canManage = !!capsQuery.data?.canManageServices;
   const canAnalytics = !!capsQuery.data?.canViewAnalytics;
 
-  const defaultTab: "services" | "analytics" = canManage ? "services" : canAnalytics ? "analytics" : "services";
-  const [tab, setTab] = useState<"services" | "analytics">(defaultTab);
+  type Tab = "services" | "analytics" | "blog";
+  const defaultTab: Tab = canManage ? "services" : canAnalytics ? "analytics" : "services";
+  const [tab, setTab] = useState<Tab>(defaultTab);
   useEffect(() => {
     if (!capsQuery.data) return;
     if (tab === "services" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "analytics" && !canAnalytics && canManage) setTab("services");
+    if (tab === "blog" && !canManage && canAnalytics) setTab("analytics");
   }, [capsQuery.data, canManage, canAnalytics, tab]);
 
   const services = useQuery({ queryKey: ["services"], queryFn: () => list(), enabled: canManage });
@@ -86,6 +96,7 @@ function AdminPage() {
   });
 
   const [editing, setEditing] = useState<ServiceInput | null>(null);
+  const [editingPost, setEditingPost] = useState<BlogPostInput | null>(null);
 
   const saveMutation = useMutation({
     mutationFn: (input: ServiceInput) => save({ data: input }),
@@ -173,6 +184,14 @@ function AdminPage() {
               <Plus className="h-4 w-4" /> New service
             </button>
           )}
+          {canManage && tab === "blog" && (
+            <button
+              onClick={() => setEditingPost(emptyPost())}
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent"
+            >
+              <Plus className="h-4 w-4" /> New post
+            </button>
+          )}
           <button onClick={handleSignOut} className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground">
             <LogOut className="h-4 w-4" /> Sign out
           </button>
@@ -183,6 +202,11 @@ function AdminPage() {
         {canManage && (
           <TabButton active={tab === "services"} onClick={() => setTab("services")} icon={Settings2}>
             Manage services
+          </TabButton>
+        )}
+        {canManage && (
+          <TabButton active={tab === "blog"} onClick={() => setTab("blog")} icon={FileText}>
+            Blog
           </TabButton>
         )}
         {canAnalytics && (
@@ -254,12 +278,24 @@ function AdminPage() {
         />
       )}
 
+      {tab === "blog" && canManage && (
+        <BlogPanel onEdit={(p) => setEditingPost(p)} />
+      )}
+
       {editing && canManage && (
         <ServiceEditor
           initial={editing}
           onCancel={() => setEditing(null)}
           onSubmit={(v) => saveMutation.mutate(v)}
           saving={saveMutation.isPending}
+        />
+      )}
+
+      {editingPost && canManage && (
+        <BlogEditor
+          initial={editingPost}
+          onCancel={() => setEditingPost(null)}
+          onSaved={() => setEditingPost(null)}
         />
       )}
     </section>
