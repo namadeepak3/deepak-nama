@@ -277,6 +277,21 @@ function AdminPage() {
                 <p className="font-medium text-foreground truncate">{s.title}</p>
                 <p className="text-xs text-muted-foreground truncate">/{s.slug} · {s.tag}</p>
               </div>
+              <span
+                title="Views"
+                className="hidden sm:inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-[11px] tabular-nums text-muted-foreground"
+              >
+                <EyeCount className="h-3 w-3" /> {(s.viewCount ?? 0).toLocaleString()}
+              </span>
+              <a
+                href={`/services/${s.slug}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
+                title="Open live page in new tab"
+              >
+                <ExternalLink className="h-3 w-3" /> View
+              </a>
               <button
                 onClick={() => setEditing(serviceToInput(s))}
                 className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
@@ -1194,6 +1209,23 @@ function BlogPanel({ onEdit }: { onEdit: (p: BlogPostInput) => void }) {
               {p.publishedAt ? ` · ${new Date(p.publishedAt).toLocaleDateString()}` : ""}
             </p>
           </div>
+          <span
+            title="Views"
+            className="hidden sm:inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-[11px] tabular-nums text-muted-foreground"
+          >
+            <EyeCount className="h-3 w-3" /> {p.viewCount.toLocaleString()}
+          </span>
+          {p.status === "published" && (
+            <a
+              href={`/blog/${p.slug}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
+              title="Open live page in new tab"
+            >
+              <ExternalLink className="h-3 w-3" /> View
+            </a>
+          )}
           <button
             onClick={() => {
               const next: BlogPostInput = {
