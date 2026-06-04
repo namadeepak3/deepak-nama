@@ -201,6 +201,7 @@ function SiteHeader() {
           </div>
 
           <Link to="/about" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-foreground" }}>About</Link>
+          <Link to="/blog" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-foreground" }}>Blog</Link>
           <Link to="/contact" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-foreground" }}>Contact</Link>
         </nav>
 
@@ -241,6 +242,7 @@ function SiteHeader() {
               </div>
             </details>
             <Link to="/about" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">About</Link>
+            <Link to="/blog" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Blog</Link>
             <Link to="/contact" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Contact</Link>
             <Link to="/contact" onClick={() => setMobileOpen(false)} className="mt-3 inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
               Hire me <ArrowRight className="h-3.5 w-3.5" />
@@ -301,6 +303,7 @@ function SiteFooter() {
             <ul className="space-y-2 text-sm">
               <li><Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">About</Link></li>
               <li><Link to="/services" className="text-muted-foreground hover:text-foreground transition-colors">All services</Link></li>
+             <li><Link to="/blog" className="text-muted-foreground hover:text-foreground transition-colors">Blog</Link></li>
               <li><Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</Link></li>
             </ul>
           </div>

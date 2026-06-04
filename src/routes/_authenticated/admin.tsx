@@ -15,6 +15,13 @@ import {
 import { ICON_OPTIONS, iconFor, type Service } from "@/lib/services.shared";
 import { supabase } from "@/integrations/supabase/client";
 import {
+  listAllPosts,
+  upsertPost,
+  deletePost,
+  type BlogPostInput,
+} from "@/lib/blog.functions";
+import type { BlogPost } from "@/lib/blog.shared";
+import {
   Plus,
   Pencil,
   Trash2,
@@ -27,6 +34,7 @@ import {
   Settings2,
   BarChart3,
   ShieldCheck,
+  FileText,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -70,12 +78,14 @@ function AdminPage() {
   const canManage = !!capsQuery.data?.canManageServices;
   const canAnalytics = !!capsQuery.data?.canViewAnalytics;
 
-  const defaultTab: "services" | "analytics" = canManage ? "services" : canAnalytics ? "analytics" : "services";
-  const [tab, setTab] = useState<"services" | "analytics">(defaultTab);
+  type Tab = "services" | "analytics" | "blog";
+  const defaultTab: Tab = canManage ? "services" : canAnalytics ? "analytics" : "services";
+  const [tab, setTab] = useState<Tab>(defaultTab);
   useEffect(() => {
     if (!capsQuery.data) return;
     if (tab === "services" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "analytics" && !canAnalytics && canManage) setTab("services");
+    if (tab === "blog" && !canManage && canAnalytics) setTab("analytics");
   }, [capsQuery.data, canManage, canAnalytics, tab]);
 
   const services = useQuery({ queryKey: ["services"], queryFn: () => list(), enabled: canManage });
@@ -86,6 +96,7 @@ function AdminPage() {
   });
 
   const [editing, setEditing] = useState<ServiceInput | null>(null);
+  const [editingPost, setEditingPost] = useState<BlogPostInput | null>(null);
 
   const saveMutation = useMutation({
     mutationFn: (input: ServiceInput) => save({ data: input }),
@@ -173,6 +184,14 @@ function AdminPage() {
               <Plus className="h-4 w-4" /> New service
             </button>
           )}
+          {canManage && tab === "blog" && (
+            <button
+              onClick={() => setEditingPost(emptyPost())}
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent"
+            >
+              <Plus className="h-4 w-4" /> New post
+            </button>
+          )}
           <button onClick={handleSignOut} className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground">
             <LogOut className="h-4 w-4" /> Sign out
           </button>
@@ -183,6 +202,11 @@ function AdminPage() {
         {canManage && (
           <TabButton active={tab === "services"} onClick={() => setTab("services")} icon={Settings2}>
             Manage services
+          </TabButton>
+        )}
+        {canManage && (
+          <TabButton active={tab === "blog"} onClick={() => setTab("blog")} icon={FileText}>
+            Blog
           </TabButton>
         )}
         {canAnalytics && (
@@ -254,12 +278,24 @@ function AdminPage() {
         />
       )}
 
+      {tab === "blog" && canManage && (
+        <BlogPanel onEdit={(p) => setEditingPost(p)} />
+      )}
+
       {editing && canManage && (
         <ServiceEditor
           initial={editing}
           onCancel={() => setEditing(null)}
           onSubmit={(v) => saveMutation.mutate(v)}
           saving={saveMutation.isPending}
+        />
+      )}
+
+      {editingPost && canManage && (
+        <BlogEditor
+          initial={editingPost}
+          onCancel={() => setEditingPost(null)}
+          onSaved={() => setEditingPost(null)}
         />
       )}
     </section>
@@ -585,6 +621,201 @@ function TierEditor({
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+function emptyPost(): BlogPostInput {
+  return {
+    slug: "",
+    title: "",
+    excerpt: "",
+    cover_image: "",
+    content: "",
+    tags: [],
+    status: "draft",
+    author_name: "vrseoguru",
+    reading_minutes: 5,
+  };
+}
+
+function postToInput(p: BlogPost): BlogPostInput {
+  return {
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt,
+    cover_image: p.coverImage,
+    content: p.content,
+    tags: p.tags,
+    status: p.status,
+    author_name: p.authorName,
+    reading_minutes: p.readingMinutes,
+  };
+}
+
+function BlogPanel({ onEdit }: { onEdit: (p: BlogPostInput) => void }) {
+  const qc = useQueryClient();
+  const list = useServerFn(listAllPosts);
+  const del = useServerFn(deletePost);
+  const posts = useQuery({ queryKey: ["blog", "all"], queryFn: () => list() });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => del({ data: { id } }),
+    onSuccess: () => {
+      toast.success("Deleted");
+      qc.invalidateQueries({ queryKey: ["blog", "all"] });
+      qc.invalidateQueries({ queryKey: ["blog", "published"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Delete failed"),
+  });
+
+  if (posts.isLoading) return <p className="mt-10 text-center text-sm text-muted-foreground">Loading posts…</p>;
+  const items = posts.data ?? [];
+
+  return (
+    <div className="mt-8 space-y-3">
+      {items.length === 0 && (
+        <p className="text-center text-sm text-muted-foreground py-10">No blog posts yet. Click "New post".</p>
+      )}
+      {items.map((p) => (
+        <div key={p.id} className="rounded-xl border border-border bg-card p-4 flex items-center gap-4">
+          <div className="h-12 w-16 rounded-md overflow-hidden bg-muted shrink-0">
+            {p.coverImage ? <img src={p.coverImage} alt="" className="h-full w-full object-cover" /> : null}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-medium text-foreground truncate">{p.title}</p>
+            <p className="text-xs text-muted-foreground truncate">
+              /{p.slug} ·{" "}
+              <span className={p.status === "published" ? "text-primary" : "text-muted-foreground"}>
+                {p.status}
+              </span>
+              {p.publishedAt ? ` · ${new Date(p.publishedAt).toLocaleDateString()}` : ""}
+            </p>
+          </div>
+          <button
+            onClick={() => onEdit(postToInput(p))}
+            className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
+          >
+            <Pencil className="h-3 w-3" /> Edit
+          </button>
+          <button
+            onClick={() => {
+              if (confirm(`Delete "${p.title}"?`)) deleteMutation.mutate(p.id);
+            }}
+            className="inline-flex items-center gap-1 rounded-md border border-destructive/40 text-destructive px-3 py-1.5 text-xs hover:bg-destructive/10"
+          >
+            <Trash2 className="h-3 w-3" /> Delete
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function BlogEditor({
+  initial,
+  onCancel,
+  onSaved,
+}: {
+  initial: BlogPostInput;
+  onCancel: () => void;
+  onSaved: () => void;
+}) {
+  const qc = useQueryClient();
+  const save = useServerFn(upsertPost);
+  const [v, setV] = useState<BlogPostInput>(initial);
+  useEffect(() => setV(initial), [initial]);
+
+  const saveMutation = useMutation({
+    mutationFn: (input: BlogPostInput) => save({ data: input }),
+    onSuccess: () => {
+      toast.success("Saved");
+      qc.invalidateQueries({ queryKey: ["blog", "all"] });
+      qc.invalidateQueries({ queryKey: ["blog", "published"] });
+      onSaved();
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Save failed"),
+  });
+
+  function patch<K extends keyof BlogPostInput>(key: K, val: BlogPostInput[K]) {
+    setV((p) => ({ ...p, [key]: val }));
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur grid place-items-center p-4 overflow-y-auto">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          saveMutation.mutate(v);
+        }}
+        className="w-full max-w-3xl my-8 rounded-2xl border border-border bg-card p-6 space-y-5"
+      >
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-display font-semibold">{v.id ? "Edit post" : "New post"}</h2>
+          <button type="button" onClick={onCancel} className="h-8 w-8 rounded-md border border-border grid place-items-center">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-3">
+          <Field label="Title">
+            <input required value={v.title} onChange={(e) => patch("title", e.target.value)} className={inp} />
+          </Field>
+          <Field label="Slug (URL)">
+            <input required value={v.slug} onChange={(e) => patch("slug", e.target.value)} className={inp} placeholder="my-post-slug" />
+          </Field>
+          <Field label="Author name">
+            <input value={v.author_name} onChange={(e) => patch("author_name", e.target.value)} className={inp} />
+          </Field>
+          <Field label="Reading time (minutes)">
+            <input
+              type="number"
+              min={1}
+              max={120}
+              value={v.reading_minutes}
+              onChange={(e) => patch("reading_minutes", Number(e.target.value) || 1)}
+              className={inp}
+            />
+          </Field>
+          <Field label="Status">
+            <select value={v.status} onChange={(e) => patch("status", e.target.value as BlogPostInput["status"])} className={inp}>
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
+            </select>
+          </Field>
+          <Field label="Tags (comma separated)">
+            <input
+              value={v.tags.join(", ")}
+              onChange={(e) => patch("tags", e.target.value.split(",").map((s) => s.trim()).filter(Boolean))}
+              className={inp}
+              placeholder="SEO, AI, Growth"
+            />
+          </Field>
+        </div>
+
+        <Field label="Cover image URL">
+          <input value={v.cover_image} onChange={(e) => patch("cover_image", e.target.value)} className={inp} placeholder="https://…" />
+        </Field>
+
+        <Field label="Excerpt (shown in cards)">
+          <textarea rows={2} value={v.excerpt} onChange={(e) => patch("excerpt", e.target.value)} className={inp} />
+        </Field>
+
+        <Field label="Content (Markdown supported)">
+          <textarea rows={14} value={v.content} onChange={(e) => patch("content", e.target.value)} className={`${inp} font-mono text-xs`} />
+        </Field>
+
+        <div className="flex justify-end gap-2 pt-2">
+          <button type="button" onClick={onCancel} className="rounded-md border border-border px-4 py-2 text-sm">Cancel</button>
+          <button
+            type="submit"
+            disabled={saveMutation.isPending}
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent disabled:opacity-50"
+          >
+            <Save className="h-4 w-4" /> {saveMutation.isPending ? "Saving…" : "Save"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
