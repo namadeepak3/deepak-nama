@@ -132,12 +132,27 @@ function ServiceDetail() {
             {coreAreas.map((c) => {
               const CIcon = iconFor(c.icon);
               return (
-                <div key={c.title} className="group rounded-2xl border border-border bg-card p-6 hover:border-primary/60 transition-colors">
+                <div
+                  key={c.title}
+                  className="group flex flex-col rounded-2xl border border-border bg-card p-6 hover:border-primary/60 transition-colors"
+                >
                   <div className="h-11 w-11 rounded-xl bg-primary/10 border border-primary/30 grid place-items-center">
                     <CIcon className="h-5 w-5 text-primary" />
                   </div>
                   <h3 className="mt-5 text-lg font-display font-semibold">{c.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
+                  <ul className="mt-5 space-y-2 text-sm">
+                    {c.bullets.map((b) => (
+                      <li key={b} className="flex gap-2">
+                        <Check className="h-4 w-4 shrink-0 text-primary mt-0.5" />
+                        <span className="text-foreground/85">{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-6 pt-5 border-t border-border/60">
+                    <p className="text-[11px] uppercase tracking-widest text-primary">Outcome</p>
+                    <p className="mt-1 text-sm text-foreground/90">{c.outcome}</p>
+                  </div>
                 </div>
               );
             })}
