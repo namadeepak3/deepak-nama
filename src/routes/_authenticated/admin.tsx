@@ -989,28 +989,20 @@ function BlogEditor({
           <CharField label="Meta description" value={v.meta_description} onChange={(val) => patch("meta_description", val)} placeholder="Defaults to excerpt" maxLen={160} warnMin={150} warnMax={160} textarea rows={2} />
 
           <div className="grid md:grid-cols-2 gap-3">
-            <Field label="OG title">
-              <input value={v.og_title} onChange={(e) => patch("og_title", e.target.value)} className={inp} />
-            </Field>
+            <CharField label="OG title" value={v.og_title} onChange={(val) => patch("og_title", val)} maxLen={60} warnMin={40} warnMax={60} />
             <Field label="OG image URL">
               <input value={v.og_image} onChange={(e) => patch("og_image", e.target.value)} className={inp} placeholder="Defaults to cover image" />
             </Field>
           </div>
-          <Field label="OG description">
-            <textarea rows={2} value={v.og_description} onChange={(e) => patch("og_description", e.target.value)} className={inp} />
-          </Field>
+          <CharField label="OG description" value={v.og_description} onChange={(val) => patch("og_description", val)} maxLen={200} warnMin={100} warnMax={200} textarea rows={2} />
 
           <div className="grid md:grid-cols-2 gap-3">
-            <Field label="Twitter title">
-              <input value={v.twitter_title} onChange={(e) => patch("twitter_title", e.target.value)} className={inp} />
-            </Field>
+            <CharField label="Twitter title" value={v.twitter_title} onChange={(val) => patch("twitter_title", val)} maxLen={70} warnMin={50} warnMax={70} />
             <Field label="Twitter image URL">
               <input value={v.twitter_image} onChange={(e) => patch("twitter_image", e.target.value)} className={inp} placeholder="Defaults to OG / cover image" />
             </Field>
           </div>
-          <Field label="Twitter description">
-            <textarea rows={2} value={v.twitter_description} onChange={(e) => patch("twitter_description", e.target.value)} className={inp} />
-          </Field>
+          <CharField label="Twitter description" value={v.twitter_description} onChange={(val) => patch("twitter_description", val)} maxLen={200} warnMin={100} warnMax={200} textarea rows={2} />
         </div>
 
         <div className="flex justify-end gap-2 pt-2">
