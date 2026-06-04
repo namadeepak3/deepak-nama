@@ -3,7 +3,7 @@ import { ArrowRight, Check, ArrowLeft, Sparkles } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { listServices, getServiceBySlug } from "@/lib/services.functions";
-import { iconFor, type Service } from "@/lib/services.shared";
+import { iconFor, coreAreasFor, type Service } from "@/lib/services.shared";
 
 export const Route = createFileRoute("/services/$slug")({
   head: ({ params }) => {
@@ -57,6 +57,7 @@ function ServiceDetail() {
   }
   const Icon = iconFor(svc.icon);
   const related = all.filter((s: Service) => s.slug !== svc.slug).slice(0, 3);
+  const coreAreas = coreAreasFor(svc.slug);
 
   return (
     <>
@@ -116,6 +117,33 @@ function ServiceDetail() {
           ))}
         </ul>
       </section>
+
+      {/* Core areas */}
+      {coreAreas.length > 0 && (
+        <section className="mx-auto max-w-7xl px-6 pb-20">
+          <div className="max-w-2xl">
+            <p className="text-sm text-primary uppercase tracking-widest">Core areas</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-display font-semibold">
+              Everything covered under <span className="text-gradient-gold">{svc.tag.toLowerCase()}</span>
+            </h2>
+            <p className="mt-3 text-muted-foreground">A unified discipline broken into the workstreams that actually move the needle.</p>
+          </div>
+          <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {coreAreas.map((c) => {
+              const CIcon = iconFor(c.icon);
+              return (
+                <div key={c.title} className="group rounded-2xl border border-border bg-card p-6 hover:border-primary/60 transition-colors">
+                  <div className="h-11 w-11 rounded-xl bg-primary/10 border border-primary/30 grid place-items-center">
+                    <CIcon className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="mt-5 text-lg font-display font-semibold">{c.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       {/* Process */}
       <section className="mx-auto max-w-7xl px-6 pb-20">
