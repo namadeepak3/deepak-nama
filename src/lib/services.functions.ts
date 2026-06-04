@@ -40,16 +40,26 @@ const serviceInputSchema = z.object({
 
 export type ServiceInput = z.infer<typeof serviceInputSchema>;
 
-async function assertAdmin(userId: string) {
+async function getRoles(userId: string): Promise<string[]> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin
     .from("user_roles")
     .select("role")
-    .eq("user_id", userId)
-    .eq("role", "admin")
-    .maybeSingle();
+    .eq("user_id", userId);
   if (error) throw new Error(error.message);
-  if (!data) throw new Error("Forbidden: admin role required");
+  return (data ?? []).map((r) => r.role as string);
+}
+
+async function assertCanEditServices(userId: string) {
+  const roles = await getRoles(userId);
+  if (!roles.includes("admin") && !roles.includes("editor")) {
+    throw new Error("Forbidden: editor or admin role required");
+  }
+}
+
+async function assertAdmin(userId: string) {
+  const roles = await getRoles(userId);
+  if (!roles.includes("admin")) throw new Error("Forbidden: admin role required");
 }
 
 export const listServices = createServerFn({ method: "GET" }).handler(async (): Promise<Service[]> => {
@@ -88,11 +98,65 @@ export const checkIsAdmin = createServerFn({ method: "GET" })
     return { isAdmin: !!data };
   });
 
+export type Capabilities = {
+  roles: string[];
+  canManageServices: boolean;
+  canViewAnalytics: boolean;
+  isAdmin: boolean;
+};
+
+export const getMyCapabilities = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<Capabilities> => {
+    const roles = await getRoles(context.userId);
+    const isAdmin = roles.includes("admin");
+    const isEditor = roles.includes("editor");
+    return {
+      roles,
+      isAdmin,
+      canManageServices: isAdmin || isEditor,
+      canViewAnalytics: isAdmin,
+    };
+  });
+
+export type ServiceAnalytics = {
+  total: number;
+  recentlyUpdated: { id: string; title: string; slug: string; updatedAt: string }[];
+  byTag: { tag: string; count: number }[];
+  totalTiers: number;
+};
+
+export const getServiceAnalytics = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<ServiceAnalytics> => {
+    await assertAdmin(context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data, error } = await supabaseAdmin
+      .from("services")
+      .select("id, title, slug, tag, tiers, updated_at")
+      .order("updated_at", { ascending: false });
+    if (error) throw new Error(error.message);
+    const rows = (data ?? []) as Array<{ id: string; title: string; slug: string; tag: string; tiers: unknown[]; updated_at: string }>;
+    const byTagMap = new Map<string, number>();
+    let totalTiers = 0;
+    for (const r of rows) {
+      const tag = r.tag || "untagged";
+      byTagMap.set(tag, (byTagMap.get(tag) ?? 0) + 1);
+      totalTiers += Array.isArray(r.tiers) ? r.tiers.length : 0;
+    }
+    return {
+      total: rows.length,
+      totalTiers,
+      byTag: [...byTagMap.entries()].map(([tag, count]) => ({ tag, count })).sort((a, b) => b.count - a.count),
+      recentlyUpdated: rows.slice(0, 5).map((r) => ({ id: r.id, title: r.title, slug: r.slug, updatedAt: r.updated_at })),
+    };
+  });
+
 export const upsertService = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => serviceInputSchema.parse(input))
   .handler(async ({ data, context }): Promise<Service> => {
-    await assertAdmin(context.userId);
+    await assertCanEditServices(context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const payload = {
       slug: data.slug,
@@ -132,7 +196,7 @@ export const deleteService = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { id: string }) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }): Promise<{ ok: true }> => {
-    await assertAdmin(context.userId);
+    await assertCanEditServices(context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.from("services").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
@@ -149,7 +213,7 @@ export const reorderServices = createServerFn({ method: "POST" })
     }).parse(input),
   )
   .handler(async ({ data, context }): Promise<{ ok: true }> => {
-    await assertAdmin(context.userId);
+    await assertCanEditServices(context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     for (const item of data.order) {
       const { error } = await supabaseAdmin
