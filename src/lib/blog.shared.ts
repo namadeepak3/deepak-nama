@@ -14,6 +14,7 @@ export type BlogPost = {
   updatedAt: string;
   metaTitle: string;
   category: string;
+  categoryId: string | null;
   metaDescription: string;
   canonicalUrl: string;
   ogTitle: string;
@@ -39,6 +40,7 @@ export type BlogPostRow = {
   created_at: string;
   updated_at: string;
   category?: string | null;
+  category_id?: string | null;
   meta_title?: string | null;
   meta_description?: string | null;
   canonical_url?: string | null;
@@ -66,6 +68,7 @@ export function mapPost(row: BlogPostRow): BlogPost {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
     category: row.category ?? "",
+    categoryId: row.category_id ?? null,
     metaTitle: row.meta_title ?? "",
     metaDescription: row.meta_description ?? "",
     canonicalUrl: row.canonical_url ?? "",
