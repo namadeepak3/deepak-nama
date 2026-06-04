@@ -171,11 +171,20 @@
 
 @utility bg-noir-grid {
   background-image:
-    radial-gradient(circle at 20% 20%, oklch(0.68 0.20 270 / 0.20), transparent 45%),
-    radial-gradient(circle at 80% 60%, oklch(0.78 0.14 210 / 0.15), transparent 50%),
-    linear-gradient(oklch(0.40 0.05 270 / 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(0.40 0.05 270 / 0.12) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 56px 56px, 56px 56px;
+    radial-gradient(ellipse 60% 50% at 15% 0%, oklch(0.68 0.20 270 / 0.18), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 100%, oklch(0.78 0.14 210 / 0.10), transparent 60%),
+    linear-gradient(oklch(0.35 0.05 270 / 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.35 0.05 270 / 0.08) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 64px 64px, 64px 64px;
+  background-color: var(--background);
+}
+
+@utility bg-aurora {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, oklch(0.68 0.20 270 / 0.30), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 30%, oklch(0.78 0.14 210 / 0.18), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 80%, oklch(0.55 0.22 290 / 0.18), transparent 60%),
+    var(--background);
 }
 
 @utility shadow-gold {
