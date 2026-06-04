@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -27,7 +28,8 @@ function AboutPage() {
     <>
       <section className="bg-noir-grid border-b border-border">
         <div className="mx-auto max-w-5xl px-6 py-24 md:py-32">
-          <p className="text-sm text-primary uppercase tracking-widest">About</p>
+          <Breadcrumbs items={[{ label: "About" }]} />
+          <p className="mt-6 text-sm text-primary uppercase tracking-widest">About</p>
           <h1 className="mt-4 text-5xl md:text-6xl font-display font-semibold leading-[1.05]">
             A freelance operator obsessed with <span className="text-gradient-gold">compounding growth</span>.
           </h1>

@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Clock } from "lucide-react";
 import { listPublishedPosts } from "@/lib/blog.functions";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
@@ -28,7 +29,8 @@ function BlogIndex() {
     <>
       <section className="bg-noir-grid border-b border-border">
         <div className="mx-auto max-w-7xl px-6 py-24 md:py-32">
-          <p className="text-sm text-primary uppercase tracking-widest">Journal</p>
+          <Breadcrumbs items={[{ label: "Blog" }]} />
+          <p className="mt-6 text-sm text-primary uppercase tracking-widest">Journal</p>
           <h1 className="mt-4 text-5xl md:text-6xl font-display font-semibold max-w-3xl">
             Tactical writing on <span className="text-gradient-gold">growth, AI and SEO.</span>
           </h1>
