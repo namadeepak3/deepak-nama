@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, TrendingUp, Search, Megaphone, BarChart3, Share2, Bot, ShieldCheck, Zap, LineChart } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart } from "lucide-react";
+import { services } from "@/lib/service-catalog";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -15,14 +16,6 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const services = [
-  { icon: Search, title: "SEO", desc: "AI-driven keyword strategy, technical audits and content systems that rank and compound." },
-  { icon: BarChart3, title: "Performance Marketing", desc: "ROAS-obsessed campaigns across Meta, Google and programmatic with creative testing at scale." },
-  { icon: Share2, title: "Social Media (SMO)", desc: "Brand-first social systems — content engines, community and growth loops." },
-  { icon: Megaphone, title: "PPC", desc: "Search, Shopping and YouTube ads tuned weekly with bid scripts and AI copy." },
-  { icon: Bot, title: "AI Automation", desc: "Custom GPTs, workflows and dashboards that automate your reporting and outreach." },
-  { icon: TrendingUp, title: "CRO & Analytics", desc: "Funnels, A/B tests and GA4 setups that turn clicks into measurable revenue." },
-];
 
 function Home() {
   return (
@@ -86,15 +79,23 @@ function Home() {
           </Link>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-border rounded-2xl overflow-hidden border border-border">
-          {services.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="group bg-card p-8 hover:bg-secondary transition-colors">
-              <div className="h-11 w-11 rounded-lg bg-primary/10 border border-primary/30 grid place-items-center mb-5">
-                <Icon className="h-5 w-5 text-primary" />
-              </div>
-              <h3 className="text-xl font-display font-semibold">{title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
-            </div>
-          ))}
+          {services.map((s) => {
+            const Icon = s.icon;
+            return (
+              <Link
+                key={s.slug}
+                to="/services/$slug"
+                params={{ slug: s.slug }}
+                className="group bg-card p-8 hover:bg-secondary transition-colors block"
+              >
+                <div className="h-11 w-11 rounded-lg bg-primary/10 border border-primary/30 grid place-items-center mb-5">
+                  <Icon className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="text-xl font-display font-semibold">{s.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.shortDesc}</p>
+              </Link>
+            );
+          })}
         </div>
       </section>
 

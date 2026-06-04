@@ -271,7 +271,7 @@ function SiteFooter() {
             <div>
               <p className="text-xs uppercase tracking-widest text-primary mb-4">Services</p>
               <ul className="space-y-2 text-sm">
-                {services.slice(0, 4).map((s) => (
+                {services.slice(0, Math.ceil(services.length / 2)).map((s) => (
                   <li key={s.slug}>
                     <Link to="/services/$slug" params={{ slug: s.slug }} className="text-muted-foreground hover:text-foreground transition-colors">{s.title}</Link>
                   </li>
@@ -281,7 +281,7 @@ function SiteFooter() {
             <div>
               <p className="text-xs uppercase tracking-widest text-primary mb-4">More</p>
               <ul className="space-y-2 text-sm">
-                {services.slice(4).map((s) => (
+                {services.slice(Math.ceil(services.length / 2)).map((s) => (
                   <li key={s.slug}>
                     <Link to="/services/$slug" params={{ slug: s.slug }} className="text-muted-foreground hover:text-foreground transition-colors">{s.title}</Link>
                   </li>
