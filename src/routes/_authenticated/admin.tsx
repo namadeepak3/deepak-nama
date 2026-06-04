@@ -1144,6 +1144,7 @@ function BlogPanel({ onEdit }: { onEdit: (p: BlogPostInput) => void }) {
   const qc = useQueryClient();
   const list = useServerFn(listAllPosts);
   const del = useServerFn(deletePost);
+  const save = useServerFn(upsertPost);
   const posts = useQuery({ queryKey: ["blog", "all"], queryFn: () => list() });
 
   const deleteMutation = useMutation({
@@ -1154,6 +1155,16 @@ function BlogPanel({ onEdit }: { onEdit: (p: BlogPostInput) => void }) {
       qc.invalidateQueries({ queryKey: ["blog", "published"] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Delete failed"),
+  });
+
+  const publishMutation = useMutation({
+    mutationFn: (input: BlogPostInput) => save({ data: input }),
+    onSuccess: (_, vars) => {
+      toast.success(vars.status === "published" ? "Published" : "Unpublished");
+      qc.invalidateQueries({ queryKey: ["blog", "all"] });
+      qc.invalidateQueries({ queryKey: ["blog", "published"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Update failed"),
   });
 
   if (posts.isLoading) return <p className="mt-10 text-center text-sm text-muted-foreground">Loading posts…</p>;
@@ -1176,9 +1187,31 @@ function BlogPanel({ onEdit }: { onEdit: (p: BlogPostInput) => void }) {
               <span className={p.status === "published" ? "text-primary" : "text-muted-foreground"}>
                 {p.status}
               </span>
+              {p.category ? ` · ${p.category}` : ""}
               {p.publishedAt ? ` · ${new Date(p.publishedAt).toLocaleDateString()}` : ""}
             </p>
           </div>
+          <button
+            onClick={() => {
+              const next: BlogPostInput = {
+                ...postToInput(p),
+                status: p.status === "published" ? "draft" : "published",
+              };
+              publishMutation.mutate(next);
+            }}
+            disabled={publishMutation.isPending}
+            className={`inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-xs ${
+              p.status === "published"
+                ? "border border-border hover:border-primary"
+                : "bg-primary text-primary-foreground hover:bg-accent"
+            } disabled:opacity-50`}
+          >
+            {p.status === "published" ? (
+              <><EyeOff className="h-3 w-3" /> Unpublish</>
+            ) : (
+              <><Eye className="h-3 w-3" /> Publish</>
+            )}
+          </button>
           <button
             onClick={() => onEdit(postToInput(p))}
             className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
