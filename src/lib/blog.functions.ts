@@ -14,6 +14,7 @@ const postInputSchema = z.object({
   status: z.enum(["draft", "published"]).default("draft"),
   author_name: z.string().max(80).default(""),
   reading_minutes: z.number().int().min(1).max(120).default(5),
+  category: z.string().max(60).default(""),
   meta_title: z.string().max(200).default(""),
   meta_description: z.string().max(400).default(""),
   canonical_url: z.string().max(1000).default(""),
@@ -94,6 +95,7 @@ export const upsertPost = createServerFn({ method: "POST" })
       status: data.status,
       author_name: data.author_name,
       reading_minutes: data.reading_minutes,
+      category: data.category,
       published_at:
         data.status === "published" ? new Date().toISOString() : null,
       meta_title: data.meta_title,
