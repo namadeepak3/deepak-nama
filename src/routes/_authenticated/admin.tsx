@@ -921,16 +921,12 @@ function BlogEditor({
           </div>
 
           <div className="grid md:grid-cols-2 gap-3">
-            <Field label="Meta title">
-              <input value={v.meta_title} onChange={(e) => patch("meta_title", e.target.value)} className={inp} placeholder="Defaults to post title" />
-            </Field>
+            <CharField label="Meta title" value={v.meta_title} onChange={(val) => patch("meta_title", val)} placeholder="Defaults to post title" maxLen={60} warnMin={50} warnMax={60} />
             <Field label="Canonical URL">
               <input value={v.canonical_url} onChange={(e) => patch("canonical_url", e.target.value)} className={inp} placeholder="https://example.com/blog/slug" />
             </Field>
           </div>
-          <Field label="Meta description">
-            <textarea rows={2} value={v.meta_description} onChange={(e) => patch("meta_description", e.target.value)} className={inp} placeholder="Defaults to excerpt" />
-          </Field>
+          <CharField label="Meta description" value={v.meta_description} onChange={(val) => patch("meta_description", val)} placeholder="Defaults to excerpt" maxLen={160} warnMin={150} warnMax={160} textarea rows={2} />
 
           <div className="grid md:grid-cols-2 gap-3">
             <Field label="OG title">
