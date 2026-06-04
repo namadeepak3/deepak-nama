@@ -1,10 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, queryOptions } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getPostBySlug, listPublishedPosts } from "@/lib/blog.functions";
+import { recordView } from "@/lib/views.functions";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { PageFaqs } from "@/components/PageFaqs";
 
 const SITE_URL = "https://clever-reach-pro.lovable.app";
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-default.jpg`;
@@ -73,8 +77,14 @@ export const Route = createFileRoute("/blog/$slug")({
 function BlogDetail() {
   const { slug } = Route.useParams();
   const fetchAll = useServerFn(listPublishedPosts);
+  const trackView = useServerFn(recordView);
   const { data: post, isLoading } = useQuery(postQuery(slug));
   const { data: all = [] } = useQuery({ queryKey: ["blog", "published"], queryFn: () => fetchAll() });
+
+  useEffect(() => {
+    if (!post?.id) return;
+    trackView({ data: { target_type: "blog", target_id: post.id } }).catch(() => {});
+  }, [post?.id, trackView]);
 
   if (isLoading) return <p className="px-6 py-20 text-center text-muted-foreground">Loading…</p>;
   if (!post) {
@@ -94,9 +104,12 @@ function BlogDetail() {
     <>
       <section className="bg-noir-grid border-b border-border">
         <div className="mx-auto max-w-4xl px-6 py-16 md:py-20">
-          <Link to="/blog" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-4 w-4" /> Back to blog
-          </Link>
+          <Breadcrumbs
+            items={[
+              { label: "Blog", to: "/blog" },
+              { label: post.title },
+            ]}
+          />
           <div className="mt-8 flex flex-wrap gap-2">
             {post.tags.map((t) => (
               <span key={t} className="rounded-full border border-primary/30 bg-primary/5 px-2.5 py-0.5 text-[11px] uppercase tracking-widest text-primary">
@@ -125,6 +138,8 @@ function BlogDetail() {
       <article className="mx-auto max-w-3xl px-6 py-16 prose prose-invert prose-headings:font-display prose-headings:font-semibold prose-a:text-primary prose-strong:text-foreground prose-code:text-primary max-w-none">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
       </article>
+
+      <PageFaqs items={post.faqs} />
 
       {related.length > 0 && (
         <section className="mx-auto max-w-7xl px-6 pb-24">

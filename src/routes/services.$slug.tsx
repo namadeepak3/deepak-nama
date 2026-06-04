@@ -1,9 +1,13 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check, ArrowLeft, Sparkles } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { listServices, getServiceBySlug } from "@/lib/services.functions";
 import { iconFor, coreAreasFor, type Service } from "@/lib/services.shared";
+import { recordView } from "@/lib/views.functions";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { PageFaqs } from "@/components/PageFaqs";
 
 export const Route = createFileRoute("/services/$slug")({
   head: ({ params }) => {
@@ -42,8 +46,13 @@ function ServiceDetail() {
   const { slug } = Route.useParams();
   const fetchOne = useServerFn(getServiceBySlug);
   const fetchAll = useServerFn(listServices);
+  const trackView = useServerFn(recordView);
   const { data: svc, isLoading } = useQuery({ queryKey: ["service", slug], queryFn: () => fetchOne({ data: { slug } }) });
   const { data: all = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchAll() });
+  useEffect(() => {
+    if (!svc?.id) return;
+    trackView({ data: { target_type: "service", target_id: svc.id } }).catch(() => {});
+  }, [svc?.id, trackView]);
   if (isLoading) return <p className="px-6 py-20 text-center text-muted-foreground">Loading…</p>;
   if (!svc) {
     return (
@@ -64,9 +73,12 @@ function ServiceDetail() {
       {/* Hero */}
       <section className="bg-noir-grid border-b border-border">
         <div className="mx-auto max-w-7xl px-6 py-20 md:py-28">
-          <Link to="/services" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="h-4 w-4" /> All services
-          </Link>
+          <Breadcrumbs
+            items={[
+              { label: "Services", to: "/services" },
+              { label: svc.title },
+            ]}
+          />
           <div className="mt-8 flex items-start gap-5">
             <div className="h-14 w-14 shrink-0 rounded-2xl bg-primary/10 border border-primary/30 grid place-items-center">
               <Icon className="h-6 w-6 text-primary" />
@@ -226,20 +238,7 @@ function ServiceDetail() {
       </section>
 
       {/* FAQs */}
-      <section className="mx-auto max-w-4xl px-6 pb-20">
-        <h2 className="text-3xl font-display font-semibold text-center">Frequently asked questions</h2>
-        <div className="mt-10 space-y-3">
-          {svc.faqs.map((f) => (
-            <details key={f.q} className="group rounded-2xl border border-border bg-card p-6 open:border-primary/50 transition-colors">
-              <summary className="cursor-pointer list-none flex items-center justify-between text-foreground font-medium">
-                <span>{f.q}</span>
-                <span className="ml-4 h-6 w-6 rounded-full border border-border grid place-items-center text-muted-foreground group-open:rotate-45 transition-transform">+</span>
-              </summary>
-              <p className="mt-4 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
-            </details>
-          ))}
-        </div>
-      </section>
+      <PageFaqs items={svc.faqs} />
 
       {/* Related */}
       <section className="mx-auto max-w-7xl px-6 pb-24">

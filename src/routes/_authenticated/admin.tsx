@@ -58,6 +58,7 @@ import {
   Code,
   Image as ImagePlus,
 } from "lucide-react";
+import { ExternalLink, Eye as EyeCount } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -276,6 +277,21 @@ function AdminPage() {
                 <p className="font-medium text-foreground truncate">{s.title}</p>
                 <p className="text-xs text-muted-foreground truncate">/{s.slug} · {s.tag}</p>
               </div>
+              <span
+                title="Views"
+                className="hidden sm:inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-[11px] tabular-nums text-muted-foreground"
+              >
+                <EyeCount className="h-3 w-3" /> {(s.viewCount ?? 0).toLocaleString()}
+              </span>
+              <a
+                href={`/services/${s.slug}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
+                title="Open live page in new tab"
+              >
+                <ExternalLink className="h-3 w-3" /> View
+              </a>
               <button
                 onClick={() => setEditing(serviceToInput(s))}
                 className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
@@ -1022,6 +1038,7 @@ function emptyPost(): BlogPostInput {
     twitter_title: "",
     twitter_description: "",
     twitter_image: "",
+    faqs: [],
   };
 }
 
@@ -1137,6 +1154,7 @@ function postToInput(p: BlogPost): BlogPostInput {
     twitter_title: p.twitterTitle,
     twitter_description: p.twitterDescription,
     twitter_image: p.twitterImage,
+    faqs: p.faqs ?? [],
   };
 }
 
@@ -1191,6 +1209,23 @@ function BlogPanel({ onEdit }: { onEdit: (p: BlogPostInput) => void }) {
               {p.publishedAt ? ` · ${new Date(p.publishedAt).toLocaleDateString()}` : ""}
             </p>
           </div>
+          <span
+            title="Views"
+            className="hidden sm:inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-[11px] tabular-nums text-muted-foreground"
+          >
+            <EyeCount className="h-3 w-3" /> {p.viewCount.toLocaleString()}
+          </span>
+          {p.status === "published" && (
+            <a
+              href={`/blog/${p.slug}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
+              title="Open live page in new tab"
+            >
+              <ExternalLink className="h-3 w-3" /> View
+            </a>
+          )}
           <button
             onClick={() => {
               const next: BlogPostInput = {
@@ -1332,6 +1367,13 @@ function BlogEditor({
         <ContentEditor value={v.content} onChange={(val) => patch("content", val)} />
 
         <SeoPreview v={v} />
+
+        <KeyedListEditor
+          label="FAQs (shown on the post page with FAQ schema)"
+          items={v.faqs}
+          keys={["q", "a"]}
+          onChange={(arr) => patch("faqs", arr as BlogPostInput["faqs"])}
+        />
 
         <div className="rounded-lg border border-border bg-background/40 p-4 space-y-4">
           <div>

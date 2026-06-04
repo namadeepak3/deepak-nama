@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { listServices } from "@/lib/services.functions";
 import { iconFor } from "@/lib/services.shared";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export const Route = createFileRoute("/services/")({
   head: () => ({
@@ -26,7 +27,8 @@ function ServicesPage() {
     <>
       <section className="bg-noir-grid border-b border-border">
         <div className="mx-auto max-w-7xl px-6 py-24 md:py-32">
-          <p className="text-sm text-primary uppercase tracking-widest">Services</p>
+          <Breadcrumbs items={[{ label: "Services" }]} />
+          <p className="mt-6 text-sm text-primary uppercase tracking-widest">Services</p>
           <h1 className="mt-4 text-5xl md:text-6xl font-display font-semibold max-w-3xl">
             Every lever of growth, <span className="text-gradient-gold">handled by one operator.</span>
           </h1>

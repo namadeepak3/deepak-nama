@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Mail, MessageSquare, Send, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -36,7 +37,8 @@ function ContactPage() {
       <Toaster />
       <section className="bg-noir-grid border-b border-border">
         <div className="mx-auto max-w-5xl px-6 py-24 md:py-32">
-          <p className="text-sm text-primary uppercase tracking-widest">Contact</p>
+          <Breadcrumbs items={[{ label: "Contact" }]} />
+          <p className="mt-6 text-sm text-primary uppercase tracking-widest">Contact</p>
           <h1 className="mt-4 text-5xl md:text-6xl font-display font-semibold max-w-3xl">
             Tell me about your <span className="text-gradient-gold">next growth chapter.</span>
           </h1>

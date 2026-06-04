@@ -54,6 +54,7 @@ export type Database = {
           cover_image: string
           created_at: string
           excerpt: string
+          faqs: Json
           id: string
           meta_description: string
           meta_title: string
@@ -70,6 +71,7 @@ export type Database = {
           twitter_image: string
           twitter_title: string
           updated_at: string
+          view_count: number
         }
         Insert: {
           author_name?: string
@@ -80,6 +82,7 @@ export type Database = {
           cover_image?: string
           created_at?: string
           excerpt?: string
+          faqs?: Json
           id?: string
           meta_description?: string
           meta_title?: string
@@ -96,6 +99,7 @@ export type Database = {
           twitter_image?: string
           twitter_title?: string
           updated_at?: string
+          view_count?: number
         }
         Update: {
           author_name?: string
@@ -106,6 +110,7 @@ export type Database = {
           cover_image?: string
           created_at?: string
           excerpt?: string
+          faqs?: Json
           id?: string
           meta_description?: string
           meta_title?: string
@@ -122,6 +127,7 @@ export type Database = {
           twitter_image?: string
           twitter_title?: string
           updated_at?: string
+          view_count?: number
         }
         Relationships: [
           {
@@ -150,6 +156,7 @@ export type Database = {
           tiers: Json
           title: string
           updated_at: string
+          view_count: number
         }
         Insert: {
           ai_angle?: string
@@ -167,6 +174,7 @@ export type Database = {
           tiers?: Json
           title: string
           updated_at?: string
+          view_count?: number
         }
         Update: {
           ai_angle?: string
@@ -184,6 +192,7 @@ export type Database = {
           tiers?: Json
           title?: string
           updated_at?: string
+          view_count?: number
         }
         Relationships: []
       }
