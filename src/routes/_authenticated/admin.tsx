@@ -823,6 +823,8 @@ function BlogEditor({
           <textarea rows={14} value={v.content} onChange={(e) => patch("content", e.target.value)} className={`${inp} font-mono text-xs`} />
         </Field>
 
+        <SeoPreview v={v} />
+
         <div className="rounded-lg border border-border bg-background/40 p-4 space-y-4">
           <div>
             <h3 className="text-sm font-display font-semibold">SEO &amp; social</h3>
