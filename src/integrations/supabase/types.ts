@@ -229,10 +229,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      increment_view: {
-        Args: { _target_id: string; _target_type: string }
-        Returns: undefined
-      }
     }
     Enums: {
       app_role: "admin" | "user" | "editor"
