@@ -22,6 +22,13 @@ import {
 } from "@/lib/blog.functions";
 import type { BlogPost } from "@/lib/blog.shared";
 import {
+  listCategories,
+  upsertCategory,
+  deleteCategory,
+  type BlogCategoryInput,
+} from "@/lib/categories.functions";
+import type { BlogCategory } from "@/lib/categories.shared";
+import {
   Plus,
   Pencil,
   Trash2,
@@ -35,6 +42,9 @@ import {
   BarChart3,
   ShieldCheck,
   FileText,
+  Tags,
+  Eye,
+  EyeOff,
   Upload,
   ImageIcon,
   Bold,
