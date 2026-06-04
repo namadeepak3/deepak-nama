@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import { getPostBySlug, listPublishedPosts } from "@/lib/blog.functions";
 
 const SITE_URL = "https://clever-reach-pro.lovable.app";
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-default.jpg`;
 
 const postQuery = (slug: string) =>
   queryOptions({
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/blog/$slug")({
       "Insights on AI-driven SEO, performance marketing and automation.";
     const ogTitle = post?.ogTitle || title;
     const ogDescription = post?.ogDescription || description;
-    const ogImage = post?.ogImage || post?.coverImage || "";
+    const ogImage = post?.ogImage || post?.coverImage || DEFAULT_OG_IMAGE;
     const twTitle = post?.twitterTitle || ogTitle;
     const twDescription = post?.twitterDescription || ogDescription;
     const twImage = post?.twitterImage || ogImage;
