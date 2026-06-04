@@ -972,19 +972,36 @@ function BlogEditor({
               placeholder="SEO, AI, Growth"
             />
           </Field>
+          <Field label="Category">
+            <input
+              value={v.category}
+              onChange={(e) => patch("category", e.target.value)}
+              className={inp}
+              placeholder="e.g. SEO, Performance Marketing"
+              list="blog-category-suggestions"
+            />
+            <datalist id="blog-category-suggestions">
+              <option value="SEO" />
+              <option value="AI &amp; Automation" />
+              <option value="Performance Marketing" />
+              <option value="Analytics" />
+              <option value="Content Strategy" />
+              <option value="Case Studies" />
+              <option value="News" />
+            </datalist>
+          </Field>
         </div>
 
-        <Field label="Cover image URL">
-          <input value={v.cover_image} onChange={(e) => patch("cover_image", e.target.value)} className={inp} placeholder="https://…" />
-        </Field>
+        <BannerUpload
+          value={v.cover_image}
+          onChange={(url) => patch("cover_image", url)}
+        />
 
         <Field label="Excerpt (shown in cards)">
           <textarea rows={2} value={v.excerpt} onChange={(e) => patch("excerpt", e.target.value)} className={inp} />
         </Field>
 
-        <Field label="Content (Markdown supported)">
-          <textarea rows={14} value={v.content} onChange={(e) => patch("content", e.target.value)} className={`${inp} font-mono text-xs`} />
-        </Field>
+        <ContentEditor value={v.content} onChange={(val) => patch("content", val)} />
 
         <SeoPreview v={v} />
 
