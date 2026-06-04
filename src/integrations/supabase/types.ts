@@ -17,47 +17,74 @@ export type Database = {
       blog_posts: {
         Row: {
           author_name: string
+          canonical_url: string
           content: string
           cover_image: string
           created_at: string
           excerpt: string
           id: string
+          meta_description: string
+          meta_title: string
+          og_description: string
+          og_image: string
+          og_title: string
           published_at: string | null
           reading_minutes: number
           slug: string
           status: string
           tags: Json
           title: string
+          twitter_description: string
+          twitter_image: string
+          twitter_title: string
           updated_at: string
         }
         Insert: {
           author_name?: string
+          canonical_url?: string
           content?: string
           cover_image?: string
           created_at?: string
           excerpt?: string
           id?: string
+          meta_description?: string
+          meta_title?: string
+          og_description?: string
+          og_image?: string
+          og_title?: string
           published_at?: string | null
           reading_minutes?: number
           slug: string
           status?: string
           tags?: Json
           title: string
+          twitter_description?: string
+          twitter_image?: string
+          twitter_title?: string
           updated_at?: string
         }
         Update: {
           author_name?: string
+          canonical_url?: string
           content?: string
           cover_image?: string
           created_at?: string
           excerpt?: string
           id?: string
+          meta_description?: string
+          meta_title?: string
+          og_description?: string
+          og_image?: string
+          og_title?: string
           published_at?: string | null
           reading_minutes?: number
           slug?: string
           status?: string
           tags?: Json
           title?: string
+          twitter_description?: string
+          twitter_image?: string
+          twitter_title?: string
           updated_at?: string
         }
         Relationships: []
