@@ -233,6 +233,11 @@ function AdminPage() {
             Blog
           </TabButton>
         )}
+        {canManage && (
+          <TabButton active={tab === "categories"} onClick={() => setTab("categories")} icon={Tags}>
+            Categories
+          </TabButton>
+        )}
         {canAnalytics && (
           <TabButton active={tab === "analytics"} onClick={() => setTab("analytics")} icon={BarChart3}>
             Analytics
@@ -304,6 +309,10 @@ function AdminPage() {
 
       {tab === "blog" && canManage && (
         <BlogPanel onEdit={(p) => setEditingPost(p)} />
+      )}
+
+      {tab === "categories" && canManage && (
+        <CategoriesPanel />
       )}
 
       {editing && canManage && (
