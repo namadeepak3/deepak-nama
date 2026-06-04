@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           author_name: string
           canonical_url: string
+          category: string
           content: string
           cover_image: string
           created_at: string
@@ -42,6 +43,7 @@ export type Database = {
         Insert: {
           author_name?: string
           canonical_url?: string
+          category?: string
           content?: string
           cover_image?: string
           created_at?: string
@@ -66,6 +68,7 @@ export type Database = {
         Update: {
           author_name?: string
           canonical_url?: string
+          category?: string
           content?: string
           cover_image?: string
           created_at?: string

@@ -35,6 +35,18 @@ import {
   BarChart3,
   ShieldCheck,
   FileText,
+  Upload,
+  ImageIcon,
+  Bold,
+  Italic,
+  Heading2,
+  Heading3,
+  Link as LinkIcon,
+  List,
+  ListOrdered,
+  Quote,
+  Code,
+  Image as ImagePlus,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -511,6 +523,290 @@ function ServiceEditor({
   );
 }
 
+const REQUIRED_BANNER_W = 1200;
+const REQUIRED_BANNER_H = 628;
+
+function BannerUpload({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (url: string) => void;
+}) {
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [warn, setWarn] = useState<string | null>(null);
+
+  async function readImageSize(file: File): Promise<{ w: number; h: number }> {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const out = { w: img.naturalWidth, h: img.naturalHeight };
+        URL.revokeObjectURL(url);
+        resolve(out);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("Could not read image"));
+      };
+      img.src = url;
+    });
+  }
+
+  async function handleFile(file: File) {
+    setError(null);
+    setWarn(null);
+    if (!file.type.startsWith("image/")) {
+      setError("File must be an image");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Image must be under 5 MB");
+      return;
+    }
+    try {
+      const { w, h } = await readImageSize(file);
+      if (w !== REQUIRED_BANNER_W || h !== REQUIRED_BANNER_H) {
+        const ratio = w / h;
+        const targetRatio = REQUIRED_BANNER_W / REQUIRED_BANNER_H;
+        if (Math.abs(ratio - targetRatio) > 0.05) {
+          setError(
+            `Recommended size is ${REQUIRED_BANNER_W}×${REQUIRED_BANNER_H}. Your image is ${w}×${h} — aspect ratio doesn't match.`,
+          );
+          return;
+        }
+        setWarn(`Uploaded ${w}×${h} (recommended ${REQUIRED_BANNER_W}×${REQUIRED_BANNER_H}).`);
+      }
+
+      setUploading(true);
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `banners/${crypto.randomUUID()}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from("blog-images")
+        .upload(path, file, { cacheControl: "31536000", upsert: false, contentType: file.type });
+      if (upErr) throw upErr;
+      const { data: pub } = supabase.storage.from("blog-images").getPublicUrl(path);
+      onChange(pub.publicUrl);
+      toast.success("Banner uploaded");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">
+          Banner image <span className="text-foreground/60">(recommended {REQUIRED_BANNER_W}×{REQUIRED_BANNER_H})</span>
+        </span>
+        {value && (
+          <button type="button" onClick={() => onChange("")} className="text-xs text-destructive hover:underline">
+            Remove
+          </button>
+        )}
+      </div>
+      <div className="mt-2 rounded-lg border border-dashed border-border bg-background/40 p-4">
+        {value ? (
+          <div className="space-y-3">
+            <div className="aspect-[1200/628] w-full overflow-hidden rounded-md bg-muted">
+              <img src={value} alt="" className="h-full w-full object-cover" />
+            </div>
+            <input
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              className={inp}
+              placeholder="https://…"
+            />
+          </div>
+        ) : (
+          <label className="flex flex-col items-center justify-center gap-2 py-8 cursor-pointer text-center">
+            <ImageIcon className="h-8 w-8 text-muted-foreground" />
+            <span className="text-sm text-foreground">
+              {uploading ? "Uploading…" : "Click to upload a banner"}
+            </span>
+            <span className="text-xs text-muted-foreground">
+              PNG, JPG, or WebP · {REQUIRED_BANNER_W}×{REQUIRED_BANNER_H} · up to 5 MB
+            </span>
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              className="hidden"
+              disabled={uploading}
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleFile(f);
+                e.target.value = "";
+              }}
+            />
+          </label>
+        )}
+
+        <div className="mt-3 flex items-center justify-between gap-3">
+          <label className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-xs cursor-pointer hover:border-primary">
+            <Upload className="h-3 w-3" />
+            {value ? "Replace image" : "Choose file"}
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              className="hidden"
+              disabled={uploading}
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleFile(f);
+                e.target.value = "";
+              }}
+            />
+          </label>
+          {uploading && <span className="text-xs text-muted-foreground">Uploading…</span>}
+        </div>
+
+        {error && <p className="mt-2 text-xs text-destructive">{error}</p>}
+        {warn && !error && <p className="mt-2 text-xs text-yellow-500">{warn}</p>}
+      </div>
+    </div>
+  );
+}
+
+function ContentEditor({ value, onChange }: { value: string; onChange: (val: string) => void }) {
+  const [ref, setRef] = useState<HTMLTextAreaElement | null>(null);
+
+  function wrap(before: string, after = before, placeholder = "text") {
+    if (!ref) return;
+    const start = ref.selectionStart;
+    const end = ref.selectionEnd;
+    const sel = value.slice(start, end) || placeholder;
+    const next = value.slice(0, start) + before + sel + after + value.slice(end);
+    onChange(next);
+    requestAnimationFrame(() => {
+      ref.focus();
+      ref.selectionStart = start + before.length;
+      ref.selectionEnd = start + before.length + sel.length;
+    });
+  }
+
+  function prefixLines(prefix: string) {
+    if (!ref) return;
+    const start = ref.selectionStart;
+    const end = ref.selectionEnd;
+    const before = value.slice(0, start);
+    const sel = value.slice(start, end) || "text";
+    const after = value.slice(end);
+    const transformed = sel.split("\n").map((l) => `${prefix}${l}`).join("\n");
+    onChange(before + transformed + after);
+    requestAnimationFrame(() => ref.focus());
+  }
+
+  async function insertImage() {
+    const url = window.prompt("Image URL (or leave blank to upload)");
+    if (url === null) return;
+    let finalUrl = url.trim();
+    if (!finalUrl) {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "image/*";
+      input.onchange = async () => {
+        const f = input.files?.[0];
+        if (!f) return;
+        const ext = f.name.split(".").pop() || "jpg";
+        const path = `content/${crypto.randomUUID()}.${ext}`;
+        const { error } = await supabase.storage
+          .from("blog-images")
+          .upload(path, f, { contentType: f.type, cacheControl: "31536000" });
+        if (error) {
+          toast.error(error.message);
+          return;
+        }
+        const { data: pub } = supabase.storage.from("blog-images").getPublicUrl(path);
+        const alt = window.prompt("Alt text", "") ?? "";
+        const md = `\n\n![${alt}](${pub.publicUrl})\n\n`;
+        onChange(value + md);
+        toast.success("Image inserted");
+      };
+      input.click();
+      return;
+    }
+    const alt = window.prompt("Alt text", "") ?? "";
+    wrap(`![${alt}](${finalUrl})`, "", "");
+  }
+
+  function insertLink() {
+    const url = window.prompt("Link URL", "https://");
+    if (!url) return;
+    wrap("[", `](${url})`, "link text");
+  }
+
+  const toolBtn =
+    "inline-flex items-center justify-center h-7 w-7 rounded border border-border text-muted-foreground hover:text-foreground hover:border-primary";
+
+  return (
+    <Field label="Content (Markdown)">
+      <div className="rounded-md border border-border bg-background">
+        <div className="flex flex-wrap items-center gap-1 border-b border-border p-2">
+          <button type="button" onClick={() => prefixLines("# ")} className={toolBtn} title="Heading 1">
+            <span className="text-[10px] font-bold">H1</span>
+          </button>
+          <button type="button" onClick={() => prefixLines("## ")} className={toolBtn} title="Heading 2">
+            <Heading2 className="h-3.5 w-3.5" />
+          </button>
+          <button type="button" onClick={() => prefixLines("### ")} className={toolBtn} title="Heading 3">
+            <Heading3 className="h-3.5 w-3.5" />
+          </button>
+          <span className="mx-1 h-5 w-px bg-border" />
+          <button type="button" onClick={() => wrap("**")} className={toolBtn} title="Bold">
+            <Bold className="h-3.5 w-3.5" />
+          </button>
+          <button type="button" onClick={() => wrap("_")} className={toolBtn} title="Italic">
+            <Italic className="h-3.5 w-3.5" />
+          </button>
+          <button type="button" onClick={() => wrap("`")} className={toolBtn} title="Inline code">
+            <Code className="h-3.5 w-3.5" />
+          </button>
+          <span className="mx-1 h-5 w-px bg-border" />
+          <button type="button" onClick={() => prefixLines("- ")} className={toolBtn} title="Bulleted list">
+            <List className="h-3.5 w-3.5" />
+          </button>
+          <button type="button" onClick={() => prefixLines("1. ")} className={toolBtn} title="Numbered list">
+            <ListOrdered className="h-3.5 w-3.5" />
+          </button>
+          <button type="button" onClick={() => prefixLines("> ")} className={toolBtn} title="Quote">
+            <Quote className="h-3.5 w-3.5" />
+          </button>
+          <span className="mx-1 h-5 w-px bg-border" />
+          <button type="button" onClick={insertLink} className={toolBtn} title="Insert link">
+            <LinkIcon className="h-3.5 w-3.5" />
+          </button>
+          <button type="button" onClick={insertImage} className={toolBtn} title="Insert image">
+            <ImagePlus className="h-3.5 w-3.5" />
+          </button>
+          <span className="mx-1 h-5 w-px bg-border" />
+          <button
+            type="button"
+            onClick={() => onChange(value + "\n\n---\n\n")}
+            className="text-[10px] text-muted-foreground hover:text-foreground px-2"
+            title="Horizontal rule"
+          >
+            HR
+          </button>
+          <span className="ml-auto text-[10px] tabular-nums text-muted-foreground">
+            {value.length.toLocaleString()} chars · ~{Math.max(1, Math.round(value.split(/\s+/).filter(Boolean).length / 200))} min read
+          </span>
+        </div>
+        <textarea
+          ref={setRef}
+          rows={18}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full bg-transparent px-3 py-2 text-sm font-mono focus:outline-none"
+          placeholder="Write your post in Markdown…"
+        />
+      </div>
+    </Field>
+  );
+}
+
 const inp = "w-full rounded-md border border-border bg-background px-3 py-2 text-sm";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -695,6 +991,7 @@ function emptyPost(): BlogPostInput {
     status: "draft",
     author_name: "vrseoguru",
     reading_minutes: 5,
+    category: "",
     meta_title: "",
     meta_description: "",
     canonical_url: "",
@@ -808,6 +1105,7 @@ function postToInput(p: BlogPost): BlogPostInput {
     status: p.status,
     author_name: p.authorName,
     reading_minutes: p.readingMinutes,
+    category: p.category,
     meta_title: p.metaTitle,
     meta_description: p.metaDescription,
     canonical_url: p.canonicalUrl,
@@ -958,19 +1256,36 @@ function BlogEditor({
               placeholder="SEO, AI, Growth"
             />
           </Field>
+          <Field label="Category">
+            <input
+              value={v.category}
+              onChange={(e) => patch("category", e.target.value)}
+              className={inp}
+              placeholder="e.g. SEO, Performance Marketing"
+              list="blog-category-suggestions"
+            />
+            <datalist id="blog-category-suggestions">
+              <option value="SEO" />
+              <option value="AI &amp; Automation" />
+              <option value="Performance Marketing" />
+              <option value="Analytics" />
+              <option value="Content Strategy" />
+              <option value="Case Studies" />
+              <option value="News" />
+            </datalist>
+          </Field>
         </div>
 
-        <Field label="Cover image URL">
-          <input value={v.cover_image} onChange={(e) => patch("cover_image", e.target.value)} className={inp} placeholder="https://…" />
-        </Field>
+        <BannerUpload
+          value={v.cover_image}
+          onChange={(url) => patch("cover_image", url)}
+        />
 
         <Field label="Excerpt (shown in cards)">
           <textarea rows={2} value={v.excerpt} onChange={(e) => patch("excerpt", e.target.value)} className={inp} />
         </Field>
 
-        <Field label="Content (Markdown supported)">
-          <textarea rows={14} value={v.content} onChange={(e) => patch("content", e.target.value)} className={`${inp} font-mono text-xs`} />
-        </Field>
+        <ContentEditor value={v.content} onChange={(val) => patch("content", val)} />
 
         <SeoPreview v={v} />
 
