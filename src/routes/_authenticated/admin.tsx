@@ -8,7 +8,8 @@ import {
   upsertService,
   deleteService,
   reorderServices,
-  checkIsAdmin,
+  getMyCapabilities,
+  getServiceAnalytics,
   type ServiceInput,
 } from "@/lib/services.functions";
 import { ICON_OPTIONS, iconFor, type Service } from "@/lib/services.shared";
@@ -23,6 +24,9 @@ import {
   ArrowLeft,
   Save,
   X,
+  Settings2,
+  BarChart3,
+  ShieldCheck,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -56,13 +60,30 @@ function AdminPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const list = useServerFn(listServices);
-  const check = useServerFn(checkIsAdmin);
+  const caps = useServerFn(getMyCapabilities);
+  const analytics = useServerFn(getServiceAnalytics);
   const save = useServerFn(upsertService);
   const del = useServerFn(deleteService);
   const reorder = useServerFn(reorderServices);
 
-  const adminCheck = useQuery({ queryKey: ["isAdmin"], queryFn: () => check() });
-  const services = useQuery({ queryKey: ["services"], queryFn: () => list(), enabled: !!adminCheck.data?.isAdmin });
+  const capsQuery = useQuery({ queryKey: ["capabilities"], queryFn: () => caps() });
+  const canManage = !!capsQuery.data?.canManageServices;
+  const canAnalytics = !!capsQuery.data?.canViewAnalytics;
+
+  const defaultTab: "services" | "analytics" = canManage ? "services" : canAnalytics ? "analytics" : "services";
+  const [tab, setTab] = useState<"services" | "analytics">(defaultTab);
+  useEffect(() => {
+    if (!capsQuery.data) return;
+    if (tab === "services" && !canManage && canAnalytics) setTab("analytics");
+    if (tab === "analytics" && !canAnalytics && canManage) setTab("services");
+  }, [capsQuery.data, canManage, canAnalytics, tab]);
+
+  const services = useQuery({ queryKey: ["services"], queryFn: () => list(), enabled: canManage });
+  const analyticsQuery = useQuery({
+    queryKey: ["serviceAnalytics"],
+    queryFn: () => analytics(),
+    enabled: canAnalytics && tab === "analytics",
+  });
 
   const [editing, setEditing] = useState<ServiceInput | null>(null);
 
@@ -109,16 +130,16 @@ function AdminPage() {
     reorderMutation.mutate(order);
   }
 
-  if (adminCheck.isLoading) {
+  if (capsQuery.isLoading) {
     return <p className="px-6 py-20 text-center text-muted-foreground">Checking permissions…</p>;
   }
 
-  if (!adminCheck.data?.isAdmin) {
+  if (!canManage && !canAnalytics) {
     return (
       <section className="mx-auto max-w-md px-6 py-24 text-center">
         <h1 className="text-2xl font-display font-semibold">Access denied</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Your account doesn't have admin permissions. The first user to sign up becomes the admin.
+          Your account doesn't have admin or editor permissions. The first user to sign up becomes the admin.
         </p>
         <button onClick={handleSignOut} className="mt-6 inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm">
           <LogOut className="h-4 w-4" /> Sign out
@@ -134,23 +155,45 @@ function AdminPage() {
           <Link to="/" className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-3 w-3" /> Back to site
           </Link>
-          <h1 className="mt-2 text-3xl font-display font-semibold">Service catalog</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Create, edit, reorder and delete services. Changes go live instantly.</p>
+          <h1 className="mt-2 text-3xl font-display font-semibold">Admin dashboard</h1>
+          <p className="mt-1 text-sm text-muted-foreground flex items-center gap-2 flex-wrap">
+            Signed in as{" "}
+            <span className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-2 py-0.5 text-xs">
+              <ShieldCheck className="h-3 w-3 text-primary" />
+              {(capsQuery.data?.roles ?? []).join(", ") || "no roles"}
+            </span>
+          </p>
         </div>
         <div className="flex gap-2">
-          <button
-            onClick={() => setEditing(emptyService(services.data?.length ?? 0))}
-            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent"
-          >
-            <Plus className="h-4 w-4" /> New service
-          </button>
+          {canManage && tab === "services" && (
+            <button
+              onClick={() => setEditing(emptyService(services.data?.length ?? 0))}
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent"
+            >
+              <Plus className="h-4 w-4" /> New service
+            </button>
+          )}
           <button onClick={handleSignOut} className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground">
             <LogOut className="h-4 w-4" /> Sign out
           </button>
         </div>
       </div>
 
-      <div className="mt-10 space-y-3">
+      <nav role="tablist" className="mt-8 inline-flex rounded-lg border border-border bg-card p-1 gap-1">
+        {canManage && (
+          <TabButton active={tab === "services"} onClick={() => setTab("services")} icon={Settings2}>
+            Manage services
+          </TabButton>
+        )}
+        {canAnalytics && (
+          <TabButton active={tab === "analytics"} onClick={() => setTab("analytics")} icon={BarChart3}>
+            Analytics
+          </TabButton>
+        )}
+      </nav>
+
+      {tab === "services" && canManage && (
+      <div className="mt-8 space-y-3">
         {(services.data ?? []).map((s, i) => {
           const Icon = iconFor(s.icon);
           return (
@@ -201,8 +244,17 @@ function AdminPage() {
           <p className="text-center text-sm text-muted-foreground py-10">No services yet. Click "New service".</p>
         )}
       </div>
+      )}
 
-      {editing && (
+      {tab === "analytics" && canAnalytics && (
+        <AnalyticsPanel
+          loading={analyticsQuery.isLoading}
+          data={analyticsQuery.data}
+          error={analyticsQuery.error instanceof Error ? analyticsQuery.error.message : null}
+        />
+      )}
+
+      {editing && canManage && (
         <ServiceEditor
           initial={editing}
           onCancel={() => setEditing(null)}
@@ -211,6 +263,94 @@ function AdminPage() {
         />
       )}
     </section>
+  );
+}
+
+function TabButton({
+  active,
+  onClick,
+  icon: Icon,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ComponentType<{ className?: string }>;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      role="tab"
+      aria-selected={active}
+      onClick={onClick}
+      className={`inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm transition-colors ${
+        active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+      }`}
+    >
+      <Icon className="h-4 w-4" />
+      {children}
+    </button>
+  );
+}
+
+function AnalyticsPanel({
+  loading,
+  data,
+  error,
+}: {
+  loading: boolean;
+  data: import("@/lib/services.functions").ServiceAnalytics | undefined;
+  error: string | null;
+}) {
+  if (loading) return <p className="mt-10 text-center text-sm text-muted-foreground">Loading analytics…</p>;
+  if (error) return <p className="mt-10 text-center text-sm text-destructive">{error}</p>;
+  if (!data) return null;
+  return (
+    <div className="mt-8 space-y-6">
+      <div className="grid sm:grid-cols-3 gap-3">
+        <Stat label="Total services" value={data.total} />
+        <Stat label="Pricing tiers" value={data.totalTiers} />
+        <Stat label="Tags in use" value={data.byTag.length} />
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="rounded-xl border border-border bg-card p-5">
+          <h3 className="text-sm font-medium text-foreground">Services by tag</h3>
+          <ul className="mt-3 space-y-2">
+            {data.byTag.length === 0 && <li className="text-xs text-muted-foreground">No data</li>}
+            {data.byTag.map((t) => (
+              <li key={t.tag} className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground truncate">{t.tag}</span>
+                <span className="tabular-nums text-foreground">{t.count}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="rounded-xl border border-border bg-card p-5">
+          <h3 className="text-sm font-medium text-foreground">Recently updated</h3>
+          <ul className="mt-3 space-y-2">
+            {data.recentlyUpdated.length === 0 && <li className="text-xs text-muted-foreground">No data</li>}
+            {data.recentlyUpdated.map((s) => (
+              <li key={s.id} className="flex items-center justify-between gap-3 text-sm">
+                <span className="text-foreground truncate">{s.title}</span>
+                <span className="text-xs text-muted-foreground tabular-nums">
+                  {new Date(s.updatedAt).toLocaleDateString()}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-xl border border-border bg-card p-5">
+      <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="mt-2 text-3xl font-display font-semibold tabular-nums">{value}</p>
+    </div>
   );
 }
 
