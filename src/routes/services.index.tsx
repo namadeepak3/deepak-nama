@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { listServices } from "@/lib/services.functions";
 import { iconFor } from "@/lib/services.shared";
 
-export const Route = createFileRoute("/services")({
+export const Route = createFileRoute("/services/")({
   head: () => ({
     meta: [
       { title: "Services — vrseoguru" },
