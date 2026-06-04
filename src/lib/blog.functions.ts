@@ -25,6 +25,15 @@ const postInputSchema = z.object({
   twitter_title: z.string().max(200).default(""),
   twitter_description: z.string().max(400).default(""),
   twitter_image: z.string().max(1000).default(""),
+  faqs: z
+    .array(
+      z.object({
+        q: z.string().min(1).max(200),
+        a: z.string().min(1).max(2000),
+      }),
+    )
+    .max(30)
+    .default([]),
 });
 
 export type BlogPostInput = z.infer<typeof postInputSchema>;
@@ -109,6 +118,7 @@ export const upsertPost = createServerFn({ method: "POST" })
       twitter_title: data.twitter_title,
       twitter_description: data.twitter_description,
       twitter_image: data.twitter_image,
+      faqs: data.faqs,
     };
     if (data.id) {
       const { data: existing } = await supabaseAdmin

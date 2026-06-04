@@ -23,6 +23,8 @@ export type BlogPost = {
   twitterTitle: string;
   twitterDescription: string;
   twitterImage: string;
+  faqs: { q: string; a: string }[];
+  viewCount: number;
 };
 
 export type BlogPostRow = {
@@ -50,6 +52,8 @@ export type BlogPostRow = {
   twitter_title?: string | null;
   twitter_description?: string | null;
   twitter_image?: string | null;
+  faqs?: unknown;
+  view_count?: number | null;
 };
 
 export function mapPost(row: BlogPostRow): BlogPost {
@@ -78,5 +82,11 @@ export function mapPost(row: BlogPostRow): BlogPost {
     twitterTitle: row.twitter_title ?? "",
     twitterDescription: row.twitter_description ?? "",
     twitterImage: row.twitter_image ?? "",
+    faqs: Array.isArray(row.faqs)
+      ? (row.faqs as { q: string; a: string }[]).filter(
+          (x) => x && typeof x.q === "string" && typeof x.a === "string",
+        )
+      : [],
+    viewCount: row.view_count ?? 0,
   };
 }
