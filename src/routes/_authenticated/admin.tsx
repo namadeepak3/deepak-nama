@@ -43,6 +43,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
       { title: "Admin — Service Catalog" },
       { name: "robots", content: "noindex" },
     ],
+    links: [{ rel: "canonical", href: "/admin" }],
   }),
   component: AdminPage,
 });
