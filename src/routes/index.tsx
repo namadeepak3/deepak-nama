@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, TrendingUp, Search, Megaphone, BarChart3, Share2, Bot } from "lucide-react";
-import heroImage from "@/assets/hero-noir.jpg";
+import { ArrowRight, Sparkles, TrendingUp, Search, Megaphone, BarChart3, Share2, Bot, ShieldCheck, Zap, LineChart } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,27 +27,22 @@ const services = [
 function Home() {
   return (
     <>
-      <section className="relative overflow-hidden bg-noir-grid">
-        <div
-          className="absolute inset-0 opacity-40"
-          style={{
-            backgroundImage: `url(${heroImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            maskImage: "linear-gradient(to bottom, black 30%, transparent 100%)",
-          }}
-          aria-hidden
-        />
+      <section className="relative overflow-hidden bg-aurora">
+        {/* Subtle grid overlay */}
+        <div className="absolute inset-0 bg-noir-grid opacity-40" aria-hidden />
+        {/* Soft glow accent */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-primary/10 blur-[120px] pointer-events-none" aria-hidden />
+
         <div className="relative mx-auto max-w-7xl px-6 pt-24 pb-32 md:pt-36 md:pb-44">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 backdrop-blur px-3 py-1 text-xs text-muted-foreground">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 backdrop-blur px-3 py-1 text-xs text-foreground/80">
             <Sparkles className="h-3 w-3 text-primary" />
             AI-native freelance studio · open for projects
           </div>
-          <h1 className="mt-6 max-w-4xl text-5xl md:text-7xl font-display font-semibold leading-[1.02]">
+          <h1 className="mt-6 max-w-4xl text-5xl md:text-7xl font-display font-semibold leading-[1.02] tracking-tight">
             Digital marketing,<br />
             <span className="text-gradient-gold">engineered with AI.</span>
           </h1>
-          <p className="mt-6 max-w-xl text-lg text-muted-foreground">
+          <p className="mt-6 max-w-xl text-lg text-muted-foreground leading-relaxed">
             I&apos;m <span className="text-foreground font-medium">vrseoguru</span> — a freelance growth partner blending SEO, PPC,
             performance marketing and SMO with AI workflows that compound revenue.
           </p>
@@ -62,7 +56,15 @@ function Home() {
             </Link>
           </div>
 
-          <dl className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl">
+
+          {/* Trust strip */}
+          <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Transparent reporting</div>
+            <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-primary" /> Ship in days, not months</div>
+            <div className="flex items-center gap-2"><LineChart className="h-4 w-4 text-primary" /> Profit-first metrics</div>
+          </div>
+
+          <dl className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl">
             {[["7+ yrs", "Marketing craft"],["120+", "Campaigns shipped"],["4.2x", "Avg. ROAS lift"],["24h", "Reply window"]].map(([k, v]) => (
               <div key={v}>
                 <dt className="text-3xl font-display text-gradient-gold">{k}</dt>
