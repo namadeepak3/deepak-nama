@@ -81,10 +81,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Freelance AI-driven SEO, PPC, performance marketing and SMO services that compound results." },
       { name: "author", content: "vrseoguru" },
       { property: "og:title", content: "vrseoguru — AI-Powered Digital Marketing" },
-      { property: "og:description", content: "Freelance AI-driven SEO, PPC, performance marketing and SMO services." },
+      { property: "og:description", content: "Freelance AI-driven SEO, PPC, performance marketing and SMO services that compound results." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "vrseoguru — AI-Powered Digital Marketing" },
+      { name: "twitter:description", content: "Freelance AI-driven SEO, PPC, performance marketing and SMO services that compound results." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c43fc0c3-5275-4f4c-9dbc-2707fd8d78ff/id-preview-c02c2699--afc8d152-a67e-4bce-810b-0e4adf0e6c1a.lovable.app-1780582325022.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c43fc0c3-5275-4f4c-9dbc-2707fd8d78ff/id-preview-c02c2699--afc8d152-a67e-4bce-810b-0e4adf0e6c1a.lovable.app-1780582325022.png" },
     ],
     links: [
       {
