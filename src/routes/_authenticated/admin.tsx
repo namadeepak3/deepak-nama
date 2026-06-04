@@ -101,7 +101,7 @@ function AdminPage() {
   const canManage = !!capsQuery.data?.canManageServices;
   const canAnalytics = !!capsQuery.data?.canViewAnalytics;
 
-  type Tab = "services" | "analytics" | "blog";
+  type Tab = "services" | "analytics" | "blog" | "categories";
   const defaultTab: Tab = canManage ? "services" : canAnalytics ? "analytics" : "services";
   const [tab, setTab] = useState<Tab>(defaultTab);
   useEffect(() => {
@@ -109,6 +109,7 @@ function AdminPage() {
     if (tab === "services" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "analytics" && !canAnalytics && canManage) setTab("services");
     if (tab === "blog" && !canManage && canAnalytics) setTab("analytics");
+    if (tab === "categories" && !canManage && canAnalytics) setTab("analytics");
   }, [capsQuery.data, canManage, canAnalytics, tab]);
 
   const services = useQuery({ queryKey: ["services"], queryFn: () => list(), enabled: canManage });
