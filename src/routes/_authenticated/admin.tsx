@@ -823,6 +823,49 @@ function BlogEditor({
           <textarea rows={14} value={v.content} onChange={(e) => patch("content", e.target.value)} className={`${inp} font-mono text-xs`} />
         </Field>
 
+        <div className="rounded-lg border border-border bg-background/40 p-4 space-y-4">
+          <div>
+            <h3 className="text-sm font-display font-semibold">SEO &amp; social</h3>
+            <p className="text-xs text-muted-foreground">Override how this post appears in search results and on social shares. Leave blank to fall back to title / excerpt / cover image.</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-3">
+            <Field label="Meta title">
+              <input value={v.meta_title} onChange={(e) => patch("meta_title", e.target.value)} className={inp} placeholder="Defaults to post title" />
+            </Field>
+            <Field label="Canonical URL">
+              <input value={v.canonical_url} onChange={(e) => patch("canonical_url", e.target.value)} className={inp} placeholder="https://example.com/blog/slug" />
+            </Field>
+          </div>
+          <Field label="Meta description">
+            <textarea rows={2} value={v.meta_description} onChange={(e) => patch("meta_description", e.target.value)} className={inp} placeholder="Defaults to excerpt" />
+          </Field>
+
+          <div className="grid md:grid-cols-2 gap-3">
+            <Field label="OG title">
+              <input value={v.og_title} onChange={(e) => patch("og_title", e.target.value)} className={inp} />
+            </Field>
+            <Field label="OG image URL">
+              <input value={v.og_image} onChange={(e) => patch("og_image", e.target.value)} className={inp} placeholder="Defaults to cover image" />
+            </Field>
+          </div>
+          <Field label="OG description">
+            <textarea rows={2} value={v.og_description} onChange={(e) => patch("og_description", e.target.value)} className={inp} />
+          </Field>
+
+          <div className="grid md:grid-cols-2 gap-3">
+            <Field label="Twitter title">
+              <input value={v.twitter_title} onChange={(e) => patch("twitter_title", e.target.value)} className={inp} />
+            </Field>
+            <Field label="Twitter image URL">
+              <input value={v.twitter_image} onChange={(e) => patch("twitter_image", e.target.value)} className={inp} placeholder="Defaults to OG / cover image" />
+            </Field>
+          </div>
+          <Field label="Twitter description">
+            <textarea rows={2} value={v.twitter_description} onChange={(e) => patch("twitter_description", e.target.value)} className={inp} />
+          </Field>
+        </div>
+
         <div className="flex justify-end gap-2 pt-2">
           <button type="button" onClick={onCancel} className="rounded-md border border-border px-4 py-2 text-sm">Cancel</button>
           <button
