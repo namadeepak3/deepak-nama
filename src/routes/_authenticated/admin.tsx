@@ -58,6 +58,7 @@ import {
   Code,
   Image as ImagePlus,
 } from "lucide-react";
+import { ExternalLink, Eye as EyeCount } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -1022,6 +1023,7 @@ function emptyPost(): BlogPostInput {
     twitter_title: "",
     twitter_description: "",
     twitter_image: "",
+    faqs: [],
   };
 }
 
@@ -1137,6 +1139,7 @@ function postToInput(p: BlogPost): BlogPostInput {
     twitter_title: p.twitterTitle,
     twitter_description: p.twitterDescription,
     twitter_image: p.twitterImage,
+    faqs: p.faqs ?? [],
   };
 }
 
