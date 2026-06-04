@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowRight, Check, ArrowLeft, Sparkles } from "lucide-react";
-import { serviceBySlug, services } from "@/lib/service-catalog";
+import { serviceBySlug, services, type Service } from "@/lib/service-catalog";
 
 export const Route = createFileRoute("/services/$slug")({
   head: ({ params }) => {
@@ -42,7 +42,7 @@ export const Route = createFileRoute("/services/$slug")({
 });
 
 function ServiceDetail() {
-  const { svc } = Route.useLoaderData();
+  const { svc } = Route.useLoaderData() as { svc: Service };
   const Icon = svc.icon;
   const related = services.filter((s) => s.slug !== svc.slug).slice(0, 3);
 
