@@ -16,14 +16,6 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const services = [
-  { icon: Search, title: "SEO", desc: "AI-driven keyword strategy, technical audits and content systems that rank and compound." },
-  { icon: BarChart3, title: "Performance Marketing", desc: "ROAS-obsessed campaigns across Meta, Google and programmatic with creative testing at scale." },
-  { icon: Share2, title: "Social Media (SMO)", desc: "Brand-first social systems — content engines, community and growth loops." },
-  { icon: Megaphone, title: "PPC", desc: "Search, Shopping and YouTube ads tuned weekly with bid scripts and AI copy." },
-  { icon: Bot, title: "AI Automation", desc: "Custom GPTs, workflows and dashboards that automate your reporting and outreach." },
-  { icon: TrendingUp, title: "CRO & Analytics", desc: "Funnels, A/B tests and GA4 setups that turn clicks into measurable revenue." },
-];
 
 function Home() {
   return (
