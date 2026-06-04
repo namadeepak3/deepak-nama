@@ -1336,6 +1336,13 @@ function BlogEditor({
 
         <SeoPreview v={v} />
 
+        <KeyedListEditor
+          label="FAQs (shown on the post page with FAQ schema)"
+          items={v.faqs}
+          keys={["q", "a"]}
+          onChange={(arr) => patch("faqs", arr as BlogPostInput["faqs"])}
+        />
+
         <div className="rounded-lg border border-border bg-background/40 p-4 space-y-4">
           <div>
             <h3 className="text-sm font-display font-semibold">SEO &amp; social</h3>
