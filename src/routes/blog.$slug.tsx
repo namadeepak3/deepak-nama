@@ -1,20 +1,57 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, queryOptions } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getPostBySlug, listPublishedPosts } from "@/lib/blog.functions";
 
+const SITE_URL = "https://clever-reach-pro.lovable.app";
+
+const postQuery = (slug: string) =>
+  queryOptions({
+    queryKey: ["blog", "post", slug],
+    queryFn: () => getPostBySlug({ data: { slug } }),
+  });
+
 export const Route = createFileRoute("/blog/$slug")({
-  head: ({ params }) => ({
-    meta: [
-      { title: "Article — vrseoguru" },
-      { name: "description", content: "Insights on AI-driven SEO, performance marketing and automation." },
-      { property: "og:url", content: `/blog/${params?.slug ?? ""}` },
-    ],
-    links: [{ rel: "canonical", href: `/blog/${params?.slug ?? ""}` }],
-  }),
+  loader: ({ params, context }) =>
+    context.queryClient.ensureQueryData(postQuery(params.slug)),
+  head: ({ params, loaderData }) => {
+    const post = loaderData as Awaited<ReturnType<typeof getPostBySlug>> | undefined;
+    const url = `${SITE_URL}/blog/${params?.slug ?? ""}`;
+    const title = post?.metaTitle || post?.title || "Article — vrseoguru";
+    const description =
+      post?.metaDescription ||
+      post?.excerpt ||
+      "Insights on AI-driven SEO, performance marketing and automation.";
+    const ogTitle = post?.ogTitle || title;
+    const ogDescription = post?.ogDescription || description;
+    const ogImage = post?.ogImage || post?.coverImage || "";
+    const twTitle = post?.twitterTitle || ogTitle;
+    const twDescription = post?.twitterDescription || ogDescription;
+    const twImage = post?.twitterImage || ogImage;
+    const canonical = post?.canonicalUrl || url;
+
+    const meta: Array<Record<string, string>> = [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: ogTitle },
+      { property: "og:description", content: ogDescription },
+      { property: "og:type", content: "article" },
+      { property: "og:url", content: url },
+      { name: "twitter:card", content: twImage ? "summary_large_image" : "summary" },
+      { name: "twitter:title", content: twTitle },
+      { name: "twitter:description", content: twDescription },
+    ];
+    if (ogImage) meta.push({ property: "og:image", content: ogImage });
+    if (twImage) meta.push({ name: "twitter:image", content: twImage });
+
+    return {
+      meta,
+      links: [{ rel: "canonical", href: canonical }],
+    };
+  },
   component: BlogDetail,
   notFoundComponent: () => (
     <div className="mx-auto max-w-3xl px-6 py-32 text-center">
@@ -34,9 +71,8 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function BlogDetail() {
   const { slug } = Route.useParams();
-  const fetchOne = useServerFn(getPostBySlug);
   const fetchAll = useServerFn(listPublishedPosts);
-  const { data: post, isLoading } = useQuery({ queryKey: ["blog", "post", slug], queryFn: () => fetchOne({ data: { slug } }) });
+  const { data: post, isLoading } = useQuery(postQuery(slug));
   const { data: all = [] } = useQuery({ queryKey: ["blog", "published"], queryFn: () => fetchAll() });
 
   if (isLoading) return <p className="px-6 py-20 text-center text-muted-foreground">Loading…</p>;
