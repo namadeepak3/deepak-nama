@@ -1,12 +1,14 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowRight, Check, ArrowLeft, Sparkles } from "lucide-react";
-import { serviceBySlug, services, type Service } from "@/lib/service-catalog";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
+import { listServices, getServiceBySlug } from "@/lib/services.functions";
+import { iconFor, type Service } from "@/lib/services.shared";
 
 export const Route = createFileRoute("/services/$slug")({
   head: ({ params }) => {
-    const svc = params?.slug ? serviceBySlug(params.slug) : undefined;
-    const title = svc ? `${svc.title} — vrseoguru` : "Service — vrseoguru";
-    const description = svc?.shortDesc ?? "AI-powered digital marketing services.";
+    const title = "Service — vrseoguru";
+    const description = "AI-powered digital marketing services.";
     return {
       meta: [
         { title },
@@ -17,11 +19,6 @@ export const Route = createFileRoute("/services/$slug")({
       ],
       links: [{ rel: "canonical", href: `/services/${params?.slug ?? ""}` }],
     };
-  },
-  loader: ({ params }) => {
-    const svc = serviceBySlug(params.slug);
-    if (!svc) throw notFound();
-    return { svc };
   },
   component: ServiceDetail,
   notFoundComponent: () => (
@@ -42,9 +39,24 @@ export const Route = createFileRoute("/services/$slug")({
 });
 
 function ServiceDetail() {
-  const { svc } = Route.useLoaderData() as { svc: Service };
-  const Icon = svc.icon;
-  const related = services.filter((s) => s.slug !== svc.slug).slice(0, 3);
+  const { slug } = Route.useParams();
+  const fetchOne = useServerFn(getServiceBySlug);
+  const fetchAll = useServerFn(listServices);
+  const { data: svc, isLoading } = useQuery({ queryKey: ["service", slug], queryFn: () => fetchOne({ data: { slug } }) });
+  const { data: all = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchAll() });
+  if (isLoading) return <p className="px-6 py-20 text-center text-muted-foreground">Loading…</p>;
+  if (!svc) {
+    return (
+      <div className="mx-auto max-w-3xl px-6 py-32 text-center">
+        <h1 className="text-4xl font-display font-semibold">Service not found</h1>
+        <Link to="/services" className="mt-6 inline-flex items-center gap-2 text-primary hover:text-accent">
+          <ArrowLeft className="h-4 w-4" /> Back to all services
+        </Link>
+      </div>
+    );
+  }
+  const Icon = iconFor(svc.icon);
+  const related = all.filter((s: Service) => s.slug !== svc.slug).slice(0, 3);
 
   return (
     <>
@@ -191,7 +203,7 @@ function ServiceDetail() {
         <h2 className="text-2xl font-display font-semibold">Related services</h2>
         <div className="mt-6 grid md:grid-cols-3 gap-5">
           {related.map((r) => {
-            const RIcon = r.icon;
+            const RIcon = iconFor(r.icon);
             return (
               <Link
                 key={r.slug}

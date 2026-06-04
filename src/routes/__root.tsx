@@ -11,7 +11,10 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { services } from "@/lib/service-catalog";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
+import { listServices } from "@/lib/services.functions";
+import { iconFor } from "@/lib/services.shared";
 import { Menu, X, ChevronDown, ArrowRight, Mail, Github, Linkedin, Twitter } from "lucide-react";
 import { useState } from "react";
 
@@ -145,6 +148,8 @@ function SiteShell() {
 function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navLink = "text-sm text-muted-foreground hover:text-foreground transition-colors";
+  const fetchServices = useServerFn(listServices);
+  const { data: services = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchServices() });
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/75 border-b border-border">
@@ -167,7 +172,7 @@ function SiteHeader() {
             <div className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+0.5rem)] w-[900px] max-w-[90vw] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 translate-y-1 group-hover:translate-y-0">
               <div className="rounded-2xl border border-border bg-popover/95 backdrop-blur-xl shadow-2xl p-6 grid grid-cols-3 gap-2">
                 {services.map((s) => {
-                  const Icon = s.icon;
+                  const Icon = iconFor(s.icon);
                   return (
                     <Link
                       key={s.slug}
@@ -248,6 +253,8 @@ function SiteHeader() {
 }
 
 function SiteFooter() {
+  const fetchServices = useServerFn(listServices);
+  const { data: services = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchServices() });
   return (
     <footer className="border-t border-border mt-24 bg-aurora">
       <div className="mx-auto max-w-7xl px-6 py-16">
