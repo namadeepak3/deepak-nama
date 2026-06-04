@@ -22,6 +22,13 @@ import {
 } from "@/lib/blog.functions";
 import type { BlogPost } from "@/lib/blog.shared";
 import {
+  listCategories,
+  upsertCategory,
+  deleteCategory,
+  type BlogCategoryInput,
+} from "@/lib/categories.functions";
+import type { BlogCategory } from "@/lib/categories.shared";
+import {
   Plus,
   Pencil,
   Trash2,
@@ -35,6 +42,9 @@ import {
   BarChart3,
   ShieldCheck,
   FileText,
+  Tags,
+  Eye,
+  EyeOff,
   Upload,
   ImageIcon,
   Bold,
@@ -91,7 +101,7 @@ function AdminPage() {
   const canManage = !!capsQuery.data?.canManageServices;
   const canAnalytics = !!capsQuery.data?.canViewAnalytics;
 
-  type Tab = "services" | "analytics" | "blog";
+  type Tab = "services" | "analytics" | "blog" | "categories";
   const defaultTab: Tab = canManage ? "services" : canAnalytics ? "analytics" : "services";
   const [tab, setTab] = useState<Tab>(defaultTab);
   useEffect(() => {
@@ -99,6 +109,7 @@ function AdminPage() {
     if (tab === "services" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "analytics" && !canAnalytics && canManage) setTab("services");
     if (tab === "blog" && !canManage && canAnalytics) setTab("analytics");
+    if (tab === "categories" && !canManage && canAnalytics) setTab("analytics");
   }, [capsQuery.data, canManage, canAnalytics, tab]);
 
   const services = useQuery({ queryKey: ["services"], queryFn: () => list(), enabled: canManage });
@@ -222,6 +233,11 @@ function AdminPage() {
             Blog
           </TabButton>
         )}
+        {canManage && (
+          <TabButton active={tab === "categories"} onClick={() => setTab("categories")} icon={Tags}>
+            Categories
+          </TabButton>
+        )}
         {canAnalytics && (
           <TabButton active={tab === "analytics"} onClick={() => setTab("analytics")} icon={BarChart3}>
             Analytics
@@ -293,6 +309,10 @@ function AdminPage() {
 
       {tab === "blog" && canManage && (
         <BlogPanel onEdit={(p) => setEditingPost(p)} />
+      )}
+
+      {tab === "categories" && canManage && (
+        <CategoriesPanel />
       )}
 
       {editing && canManage && (
@@ -992,6 +1012,7 @@ function emptyPost(): BlogPostInput {
     author_name: "vrseoguru",
     reading_minutes: 5,
     category: "",
+    category_id: null,
     meta_title: "",
     meta_description: "",
     canonical_url: "",
@@ -1106,6 +1127,7 @@ function postToInput(p: BlogPost): BlogPostInput {
     author_name: p.authorName,
     reading_minutes: p.readingMinutes,
     category: p.category,
+    category_id: p.categoryId,
     meta_title: p.metaTitle,
     meta_description: p.metaDescription,
     canonical_url: p.canonicalUrl,
@@ -1122,6 +1144,7 @@ function BlogPanel({ onEdit }: { onEdit: (p: BlogPostInput) => void }) {
   const qc = useQueryClient();
   const list = useServerFn(listAllPosts);
   const del = useServerFn(deletePost);
+  const save = useServerFn(upsertPost);
   const posts = useQuery({ queryKey: ["blog", "all"], queryFn: () => list() });
 
   const deleteMutation = useMutation({
@@ -1132,6 +1155,16 @@ function BlogPanel({ onEdit }: { onEdit: (p: BlogPostInput) => void }) {
       qc.invalidateQueries({ queryKey: ["blog", "published"] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Delete failed"),
+  });
+
+  const publishMutation = useMutation({
+    mutationFn: (input: BlogPostInput) => save({ data: input }),
+    onSuccess: (_, vars) => {
+      toast.success(vars.status === "published" ? "Published" : "Unpublished");
+      qc.invalidateQueries({ queryKey: ["blog", "all"] });
+      qc.invalidateQueries({ queryKey: ["blog", "published"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Update failed"),
   });
 
   if (posts.isLoading) return <p className="mt-10 text-center text-sm text-muted-foreground">Loading posts…</p>;
@@ -1154,9 +1187,31 @@ function BlogPanel({ onEdit }: { onEdit: (p: BlogPostInput) => void }) {
               <span className={p.status === "published" ? "text-primary" : "text-muted-foreground"}>
                 {p.status}
               </span>
+              {p.category ? ` · ${p.category}` : ""}
               {p.publishedAt ? ` · ${new Date(p.publishedAt).toLocaleDateString()}` : ""}
             </p>
           </div>
+          <button
+            onClick={() => {
+              const next: BlogPostInput = {
+                ...postToInput(p),
+                status: p.status === "published" ? "draft" : "published",
+              };
+              publishMutation.mutate(next);
+            }}
+            disabled={publishMutation.isPending}
+            className={`inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-xs ${
+              p.status === "published"
+                ? "border border-border hover:border-primary"
+                : "bg-primary text-primary-foreground hover:bg-accent"
+            } disabled:opacity-50`}
+          >
+            {p.status === "published" ? (
+              <><EyeOff className="h-3 w-3" /> Unpublish</>
+            ) : (
+              <><Eye className="h-3 w-3" /> Publish</>
+            )}
+          </button>
           <button
             onClick={() => onEdit(postToInput(p))}
             className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
@@ -1256,24 +1311,13 @@ function BlogEditor({
               placeholder="SEO, AI, Growth"
             />
           </Field>
-          <Field label="Category">
-            <input
-              value={v.category}
-              onChange={(e) => patch("category", e.target.value)}
-              className={inp}
-              placeholder="e.g. SEO, Performance Marketing"
-              list="blog-category-suggestions"
-            />
-            <datalist id="blog-category-suggestions">
-              <option value="SEO" />
-              <option value="AI &amp; Automation" />
-              <option value="Performance Marketing" />
-              <option value="Analytics" />
-              <option value="Content Strategy" />
-              <option value="Case Studies" />
-              <option value="News" />
-            </datalist>
-          </Field>
+          <CategorySelect
+            value={v.category_id}
+            onChange={(id, name) => {
+              patch("category_id", id);
+              patch("category", name);
+            }}
+          />
         </div>
 
         <BannerUpload
@@ -1328,6 +1372,261 @@ function BlogEditor({
             className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent disabled:opacity-50"
           >
             <Save className="h-4 w-4" /> {saveMutation.isPending ? "Saving…" : "Save"}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+function CategorySelect({
+  value,
+  onChange,
+}: {
+  value: string | null;
+  onChange: (id: string | null, name: string) => void;
+}) {
+  const list = useServerFn(listCategories);
+  const cats = useQuery({ queryKey: ["blog-categories"], queryFn: () => list() });
+  const items = cats.data ?? [];
+
+  return (
+    <Field label="Category">
+      <select
+        value={value ?? ""}
+        onChange={(e) => {
+          const id = e.target.value || null;
+          const match = items.find((c) => c.id === id);
+          onChange(id, match?.name ?? "");
+        }}
+        className={inp}
+      >
+        <option value="">— None —</option>
+        {items.map((c) => (
+          <option key={c.id} value={c.id}>
+            {c.name}
+          </option>
+        ))}
+      </select>
+      {items.length === 0 && (
+        <p className="mt-1 text-[11px] text-muted-foreground">
+          No categories yet — open the Categories tab to create one.
+        </p>
+      )}
+    </Field>
+  );
+}
+
+function slugify(s: string) {
+  return s
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+function emptyCategory(nextOrder: number): BlogCategoryInput {
+  return { name: "", slug: "", description: "", sort_order: nextOrder };
+}
+
+function categoryToInput(c: BlogCategory): BlogCategoryInput {
+  return {
+    id: c.id,
+    name: c.name,
+    slug: c.slug,
+    description: c.description,
+    sort_order: c.sortOrder,
+  };
+}
+
+function CategoriesPanel() {
+  const qc = useQueryClient();
+  const list = useServerFn(listCategories);
+  const save = useServerFn(upsertCategory);
+  const del = useServerFn(deleteCategory);
+  const cats = useQuery({ queryKey: ["blog-categories"], queryFn: () => list() });
+
+  const [editing, setEditing] = useState<BlogCategoryInput | null>(null);
+
+  const saveMutation = useMutation({
+    mutationFn: (input: BlogCategoryInput) => save({ data: input }),
+    onSuccess: () => {
+      toast.success("Saved");
+      qc.invalidateQueries({ queryKey: ["blog-categories"] });
+      setEditing(null);
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Save failed"),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => del({ data: { id } }),
+    onSuccess: () => {
+      toast.success("Deleted");
+      qc.invalidateQueries({ queryKey: ["blog-categories"] });
+      qc.invalidateQueries({ queryKey: ["blog", "all"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Delete failed"),
+  });
+
+  const items = cats.data ?? [];
+
+  return (
+    <div className="mt-8 space-y-3">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">
+          Manage blog categories. Deleting one keeps the posts but clears their category.
+        </p>
+        <button
+          onClick={() => setEditing(emptyCategory(items.length))}
+          className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent"
+        >
+          <Plus className="h-4 w-4" /> New category
+        </button>
+      </div>
+
+      {cats.isLoading && (
+        <p className="text-center text-sm text-muted-foreground py-10">Loading…</p>
+      )}
+      {!cats.isLoading && items.length === 0 && (
+        <p className="text-center text-sm text-muted-foreground py-10">
+          No categories yet. Click "New category".
+        </p>
+      )}
+
+      {items.map((c) => (
+        <div key={c.id} className="rounded-xl border border-border bg-card p-4 flex items-center gap-4">
+          <div className="h-10 w-10 rounded-lg bg-primary/10 border border-primary/30 grid place-items-center">
+            <Tags className="h-4 w-4 text-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-medium text-foreground truncate">{c.name}</p>
+            <p className="text-xs text-muted-foreground truncate">
+              /{c.slug}
+              {c.description ? ` · ${c.description}` : ""}
+            </p>
+          </div>
+          <button
+            onClick={() => setEditing(categoryToInput(c))}
+            className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
+          >
+            <Pencil className="h-3 w-3" /> Rename
+          </button>
+          <button
+            onClick={() => {
+              if (confirm(`Delete "${c.name}"? Posts using it will lose this category.`))
+                deleteMutation.mutate(c.id);
+            }}
+            className="inline-flex items-center gap-1 rounded-md border border-destructive/40 text-destructive px-3 py-1.5 text-xs hover:bg-destructive/10"
+          >
+            <Trash2 className="h-3 w-3" /> Delete
+          </button>
+        </div>
+      ))}
+
+      {editing && (
+        <CategoryEditor
+          initial={editing}
+          onCancel={() => setEditing(null)}
+          onSubmit={(v) => saveMutation.mutate(v)}
+          saving={saveMutation.isPending}
+        />
+      )}
+    </div>
+  );
+}
+
+function CategoryEditor({
+  initial,
+  onCancel,
+  onSubmit,
+  saving,
+}: {
+  initial: BlogCategoryInput;
+  onCancel: () => void;
+  onSubmit: (v: BlogCategoryInput) => void;
+  saving: boolean;
+}) {
+  const [v, setV] = useState<BlogCategoryInput>(initial);
+  useEffect(() => setV(initial), [initial]);
+  const slugTouched = !!initial.id;
+
+  function patch<K extends keyof BlogCategoryInput>(k: K, val: BlogCategoryInput[K]) {
+    setV((p) => ({ ...p, [k]: val }));
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur grid place-items-center p-4 overflow-y-auto">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit(v);
+        }}
+        className="w-full max-w-lg my-8 rounded-2xl border border-border bg-card p-6 space-y-4"
+      >
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-display font-semibold">
+            {v.id ? "Edit category" : "New category"}
+          </h2>
+          <button type="button" onClick={onCancel} className="h-8 w-8 rounded-md border border-border grid place-items-center">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <Field label="Name">
+          <input
+            required
+            value={v.name}
+            onChange={(e) => {
+              const name = e.target.value;
+              patch("name", name);
+              if (!slugTouched) patch("slug", slugify(name));
+            }}
+            className={inp}
+            placeholder="Performance Marketing"
+          />
+        </Field>
+
+        <Field label="Slug (URL)">
+          <input
+            required
+            value={v.slug}
+            onChange={(e) => patch("slug", e.target.value)}
+            className={inp}
+            placeholder="performance-marketing"
+          />
+        </Field>
+
+        <Field label="Description (optional)">
+          <textarea
+            rows={3}
+            value={v.description}
+            onChange={(e) => patch("description", e.target.value)}
+            className={inp}
+            placeholder="Short summary shown on category pages."
+          />
+        </Field>
+
+        <Field label="Sort order">
+          <input
+            type="number"
+            min={0}
+            value={v.sort_order}
+            onChange={(e) => patch("sort_order", Number(e.target.value) || 0)}
+            className={inp}
+          />
+        </Field>
+
+        <div className="flex justify-end gap-2 pt-2">
+          <button type="button" onClick={onCancel} className="rounded-md border border-border px-4 py-2 text-sm">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={saving}
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent disabled:opacity-50"
+          >
+            <Save className="h-4 w-4" /> {saving ? "Saving…" : "Save"}
           </button>
         </div>
       </form>
