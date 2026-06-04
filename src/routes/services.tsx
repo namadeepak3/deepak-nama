@@ -1,6 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { services } from "@/lib/service-catalog";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
+import { listServices } from "@/lib/services.functions";
+import { iconFor } from "@/lib/services.shared";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -17,6 +20,8 @@ export const Route = createFileRoute("/services")({
 });
 
 function ServicesPage() {
+  const fetchServices = useServerFn(listServices);
+  const { data: services = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchServices() });
   return (
     <>
       <section className="bg-noir-grid border-b border-border">
@@ -34,7 +39,7 @@ function ServicesPage() {
       <section className="mx-auto max-w-7xl px-6 py-20">
         <div className="grid md:grid-cols-2 gap-6">
           {services.map((s) => {
-            const Icon = s.icon;
+            const Icon = iconFor(s.icon);
             return (
               <Link
                 key={s.slug}
