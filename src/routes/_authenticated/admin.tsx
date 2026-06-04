@@ -521,6 +521,65 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
+function CharField({
+  label,
+  value,
+  onChange,
+  placeholder,
+  maxLen,
+  warnMin,
+  warnMax,
+  textarea: isTextarea,
+  rows,
+}: {
+  label: string;
+  value: string;
+  onChange: (val: string) => void;
+  placeholder?: string;
+  maxLen: number;
+  warnMin: number;
+  warnMax: number;
+  textarea?: boolean;
+  rows?: number;
+}) {
+  const len = value.length;
+  let status: "good" | "warn" | "bad" = "good";
+  if (len === 0) status = "good";
+  else if (len < warnMin || len > warnMax) status = "bad";
+  else if (len < warnMin + 5 || len > warnMax - 5) status = "warn";
+
+  const color = status === "bad" ? "text-destructive" : status === "warn" ? "text-yellow-500" : "text-green-500";
+
+  return (
+    <label className="block">
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">{label}</span>
+        <span className={`text-[10px] tabular-nums ${color}`}>
+          {len}/{maxLen}
+        </span>
+      </div>
+      <div className="mt-1">
+        {isTextarea ? (
+          <textarea
+            rows={rows ?? 2}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className={inp}
+            placeholder={placeholder}
+          />
+        ) : (
+          <input
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className={inp}
+            placeholder={placeholder}
+          />
+        )}
+      </div>
+    </label>
+  );
+}
+
 function splitLines(t: string) {
   return t.split("\n").map((s) => s.trim()).filter(Boolean);
 }
