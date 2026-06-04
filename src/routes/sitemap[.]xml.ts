@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { listServices } from "@/lib/services.functions";
+import { listPublishedPosts } from "@/lib/blog.functions";
 
 const BASE_URL = "";
 
@@ -9,12 +10,15 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         const services = await listServices();
+        const posts = await listPublishedPosts();
         const paths = [
           "/",
           "/services",
           "/about",
           "/contact",
+          "/blog",
           ...services.map((s) => `/services/${s.slug}`),
+          ...posts.map((p) => `/blog/${p.slug}`),
         ];
         const urls = paths
           .map((p) => `  <url><loc>${BASE_URL}${p}</loc><changefreq>weekly</changefreq></url>`)

@@ -43,6 +43,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
       { title: "Admin — Service Catalog" },
       { name: "robots", content: "noindex" },
     ],
+    links: [{ rel: "canonical", href: "/admin" }],
   }),
   component: AdminPage,
 });
@@ -521,6 +522,65 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
+function CharField({
+  label,
+  value,
+  onChange,
+  placeholder,
+  maxLen,
+  warnMin,
+  warnMax,
+  textarea: isTextarea,
+  rows,
+}: {
+  label: string;
+  value: string;
+  onChange: (val: string) => void;
+  placeholder?: string;
+  maxLen: number;
+  warnMin: number;
+  warnMax: number;
+  textarea?: boolean;
+  rows?: number;
+}) {
+  const len = value.length;
+  let status: "good" | "warn" | "bad" = "good";
+  if (len === 0) status = "good";
+  else if (len < warnMin || len > warnMax) status = "bad";
+  else if (len < warnMin + 5 || len > warnMax - 5) status = "warn";
+
+  const color = status === "bad" ? "text-destructive" : status === "warn" ? "text-yellow-500" : "text-green-500";
+
+  return (
+    <label className="block">
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">{label}</span>
+        <span className={`text-[10px] tabular-nums ${color}`}>
+          {len}/{maxLen}
+        </span>
+      </div>
+      <div className="mt-1">
+        {isTextarea ? (
+          <textarea
+            rows={rows ?? 2}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className={inp}
+            placeholder={placeholder}
+          />
+        ) : (
+          <input
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className={inp}
+            placeholder={placeholder}
+          />
+        )}
+      </div>
+    </label>
+  );
+}
+
 function splitLines(t: string) {
   return t.split("\n").map((s) => s.trim()).filter(Boolean);
 }
@@ -921,40 +981,28 @@ function BlogEditor({
           </div>
 
           <div className="grid md:grid-cols-2 gap-3">
-            <Field label="Meta title">
-              <input value={v.meta_title} onChange={(e) => patch("meta_title", e.target.value)} className={inp} placeholder="Defaults to post title" />
-            </Field>
+            <CharField label="Meta title" value={v.meta_title} onChange={(val) => patch("meta_title", val)} placeholder="Defaults to post title" maxLen={60} warnMin={50} warnMax={60} />
             <Field label="Canonical URL">
               <input value={v.canonical_url} onChange={(e) => patch("canonical_url", e.target.value)} className={inp} placeholder="https://example.com/blog/slug" />
             </Field>
           </div>
-          <Field label="Meta description">
-            <textarea rows={2} value={v.meta_description} onChange={(e) => patch("meta_description", e.target.value)} className={inp} placeholder="Defaults to excerpt" />
-          </Field>
+          <CharField label="Meta description" value={v.meta_description} onChange={(val) => patch("meta_description", val)} placeholder="Defaults to excerpt" maxLen={160} warnMin={150} warnMax={160} textarea rows={2} />
 
           <div className="grid md:grid-cols-2 gap-3">
-            <Field label="OG title">
-              <input value={v.og_title} onChange={(e) => patch("og_title", e.target.value)} className={inp} />
-            </Field>
+            <CharField label="OG title" value={v.og_title} onChange={(val) => patch("og_title", val)} maxLen={60} warnMin={40} warnMax={60} />
             <Field label="OG image URL">
               <input value={v.og_image} onChange={(e) => patch("og_image", e.target.value)} className={inp} placeholder="Defaults to cover image" />
             </Field>
           </div>
-          <Field label="OG description">
-            <textarea rows={2} value={v.og_description} onChange={(e) => patch("og_description", e.target.value)} className={inp} />
-          </Field>
+          <CharField label="OG description" value={v.og_description} onChange={(val) => patch("og_description", val)} maxLen={200} warnMin={100} warnMax={200} textarea rows={2} />
 
           <div className="grid md:grid-cols-2 gap-3">
-            <Field label="Twitter title">
-              <input value={v.twitter_title} onChange={(e) => patch("twitter_title", e.target.value)} className={inp} />
-            </Field>
+            <CharField label="Twitter title" value={v.twitter_title} onChange={(val) => patch("twitter_title", val)} maxLen={70} warnMin={50} warnMax={70} />
             <Field label="Twitter image URL">
               <input value={v.twitter_image} onChange={(e) => patch("twitter_image", e.target.value)} className={inp} placeholder="Defaults to OG / cover image" />
             </Field>
           </div>
-          <Field label="Twitter description">
-            <textarea rows={2} value={v.twitter_description} onChange={(e) => patch("twitter_description", e.target.value)} className={inp} />
-          </Field>
+          <CharField label="Twitter description" value={v.twitter_description} onChange={(val) => patch("twitter_description", val)} maxLen={200} warnMin={100} warnMax={200} textarea rows={2} />
         </div>
 
         <div className="flex justify-end gap-2 pt-2">

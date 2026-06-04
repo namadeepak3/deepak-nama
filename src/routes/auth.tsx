@@ -11,6 +11,7 @@ export const Route = createFileRoute("/auth")({
       { title: "Sign in — vrseoguru admin" },
       { name: "robots", content: "noindex" },
     ],
+    links: [{ rel: "canonical", href: "/auth" }],
   }),
   component: AuthPage,
 });
