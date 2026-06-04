@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
+import { adminExists } from "@/lib/admin-bootstrap.functions";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -22,6 +23,16 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [hasAdmin, setHasAdmin] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    adminExists()
+      .then((r) => {
+        setHasAdmin(r.exists);
+        if (!r.exists) setMode("signup");
+      })
+      .catch(() => setHasAdmin(true));
+  }, []);
 
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
@@ -44,8 +55,13 @@ function AuthPage() {
           options: { emailRedirectTo: window.location.origin + "/admin" },
         });
         if (error) throw error;
-        toast.success("Check your inbox to confirm your email, then sign in.");
-        setMode("signin");
+        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInError) {
+          toast.success("Account created. Check your inbox to confirm, then sign in.");
+          setMode("signin");
+        } else {
+          toast.success(hasAdmin === false ? "Admin account created." : "Account created.");
+        }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -76,14 +92,31 @@ function AuthPage() {
         <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" /> Back to site
         </Link>
+        {hasAdmin === false && (
+          <div className="mt-6 rounded-2xl border border-primary/40 bg-primary/5 p-4 flex gap-3">
+            <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+            <div className="text-sm">
+              <div className="font-medium">First-time setup</div>
+              <p className="text-muted-foreground mt-1">
+                No admin exists yet. Create the initial admin below — this first account is automatically granted admin access.
+              </p>
+            </div>
+          </div>
+        )}
         <div className="mt-6 rounded-2xl border border-border bg-card p-8">
           <h1 className="text-2xl font-display font-semibold">
-            {mode === "signin" ? "Admin sign in" : "Create admin account"}
+            {hasAdmin === false
+              ? "Create initial admin"
+              : mode === "signin"
+                ? "Admin sign in"
+                : "Create account"}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {mode === "signin"
-              ? "Sign in to manage your service catalog."
-              : "First account becomes the admin."}
+            {hasAdmin === false
+              ? "Set the admin email and password for your site."
+              : mode === "signin"
+                ? "Sign in to manage your service catalog."
+                : "Create a new account."}
           </p>
 
           <button
@@ -131,17 +164,19 @@ function AuthPage() {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-xs text-muted-foreground">
-            {mode === "signin" ? (
-              <>No account?{" "}
-                <button onClick={() => setMode("signup")} className="text-primary hover:text-accent">Create one</button>
-              </>
-            ) : (
-              <>Already have one?{" "}
-                <button onClick={() => setMode("signin")} className="text-primary hover:text-accent">Sign in</button>
-              </>
-            )}
-          </p>
+          {hasAdmin !== false && (
+            <p className="mt-6 text-center text-xs text-muted-foreground">
+              {mode === "signin" ? (
+                <>No account?{" "}
+                  <button onClick={() => setMode("signup")} className="text-primary hover:text-accent">Create one</button>
+                </>
+              ) : (
+                <>Already have one?{" "}
+                  <button onClick={() => setMode("signin")} className="text-primary hover:text-accent">Sign in</button>
+                </>
+              )}
+            </p>
+          )}
         </div>
       </div>
     </section>
