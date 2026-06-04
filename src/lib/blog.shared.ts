@@ -12,6 +12,15 @@ export type BlogPost = {
   publishedAt: string | null;
   createdAt: string;
   updatedAt: string;
+  metaTitle: string;
+  metaDescription: string;
+  canonicalUrl: string;
+  ogTitle: string;
+  ogDescription: string;
+  ogImage: string;
+  twitterTitle: string;
+  twitterDescription: string;
+  twitterImage: string;
 };
 
 export type BlogPostRow = {
@@ -28,6 +37,15 @@ export type BlogPostRow = {
   published_at: string | null;
   created_at: string;
   updated_at: string;
+  meta_title?: string | null;
+  meta_description?: string | null;
+  canonical_url?: string | null;
+  og_title?: string | null;
+  og_description?: string | null;
+  og_image?: string | null;
+  twitter_title?: string | null;
+  twitter_description?: string | null;
+  twitter_image?: string | null;
 };
 
 export function mapPost(row: BlogPostRow): BlogPost {
@@ -45,5 +63,14 @@ export function mapPost(row: BlogPostRow): BlogPost {
     publishedAt: row.published_at,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+    metaTitle: row.meta_title ?? "",
+    metaDescription: row.meta_description ?? "",
+    canonicalUrl: row.canonical_url ?? "",
+    ogTitle: row.og_title ?? "",
+    ogDescription: row.og_description ?? "",
+    ogImage: row.og_image ?? "",
+    twitterTitle: row.twitter_title ?? "",
+    twitterDescription: row.twitter_description ?? "",
+    twitterImage: row.twitter_image ?? "",
   };
 }

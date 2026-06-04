@@ -635,6 +635,15 @@ function emptyPost(): BlogPostInput {
     status: "draft",
     author_name: "vrseoguru",
     reading_minutes: 5,
+    meta_title: "",
+    meta_description: "",
+    canonical_url: "",
+    og_title: "",
+    og_description: "",
+    og_image: "",
+    twitter_title: "",
+    twitter_description: "",
+    twitter_image: "",
   };
 }
 
@@ -650,6 +659,15 @@ function postToInput(p: BlogPost): BlogPostInput {
     status: p.status,
     author_name: p.authorName,
     reading_minutes: p.readingMinutes,
+    meta_title: p.metaTitle,
+    meta_description: p.metaDescription,
+    canonical_url: p.canonicalUrl,
+    og_title: p.ogTitle,
+    og_description: p.ogDescription,
+    og_image: p.ogImage,
+    twitter_title: p.twitterTitle,
+    twitter_description: p.twitterDescription,
+    twitter_image: p.twitterImage,
   };
 }
 

@@ -14,6 +14,15 @@ const postInputSchema = z.object({
   status: z.enum(["draft", "published"]).default("draft"),
   author_name: z.string().max(80).default(""),
   reading_minutes: z.number().int().min(1).max(120).default(5),
+  meta_title: z.string().max(200).default(""),
+  meta_description: z.string().max(400).default(""),
+  canonical_url: z.string().max(1000).default(""),
+  og_title: z.string().max(200).default(""),
+  og_description: z.string().max(400).default(""),
+  og_image: z.string().max(1000).default(""),
+  twitter_title: z.string().max(200).default(""),
+  twitter_description: z.string().max(400).default(""),
+  twitter_image: z.string().max(1000).default(""),
 });
 
 export type BlogPostInput = z.infer<typeof postInputSchema>;
@@ -87,6 +96,15 @@ export const upsertPost = createServerFn({ method: "POST" })
       reading_minutes: data.reading_minutes,
       published_at:
         data.status === "published" ? new Date().toISOString() : null,
+      meta_title: data.meta_title,
+      meta_description: data.meta_description,
+      canonical_url: data.canonical_url,
+      og_title: data.og_title,
+      og_description: data.og_description,
+      og_image: data.og_image,
+      twitter_title: data.twitter_title,
+      twitter_description: data.twitter_description,
+      twitter_image: data.twitter_image,
     };
     if (data.id) {
       const { data: existing } = await supabaseAdmin
