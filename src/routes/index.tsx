@@ -642,71 +642,28 @@ function Home() {
 
       {/* ============ CASE STUDIES ============ */}
       <section className="mx-auto max-w-7xl px-6 py-14">
-        <div className="flex items-end justify-between flex-wrap gap-6 mb-8">
+        <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">Brands we&apos;ve <span className="text-gradient-gold">scaled.</span></h2>
-            <p className="mt-4 text-muted-foreground">A few recent wins — full breakdowns inside.</p>
+            <h2 className="mt-2 text-3xl md:text-4xl font-display leading-[1.05]">Brands we&apos;ve <span className="text-gradient-gold">scaled.</span></h2>
           </div>
-          <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">View all <ArrowRight className="h-4 w-4"/></Link>
+          <Link to="/case-studies" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1">View all <ArrowRight className="h-4 w-4"/></Link>
         </div>
-        <div className="grid grid-cols-12 gap-4">
-          {[
-            {
-              span: "col-span-12 lg:col-span-7",
-              tag: "D2C · Ecommerce",
-              title: "Lumen Skincare — From ₹40L to ₹3.2Cr/mo in 9 months",
-              desc: "Rebuilt the Meta + Google funnel with creative iteration loops and server-side tracking. Profit-first scaling, not blended ROAS theatre.",
-              stats: [["8.1x","Peak ROAS"],["+312%","Revenue"],["-44%","CAC"]],
-              channels: ["Meta","Google","Email"],
-            },
-            {
-              span: "col-span-12 lg:col-span-5",
-              tag: "B2B SaaS",
-              title: "Velocity SaaS — CPL cut by 52% in 4 months",
-              desc: "Restructured Google Ads accounts, layered intent + LinkedIn retargeting, and built a content-led demo funnel.",
-              stats: [["-52%","CPL"],["2.1x","MQLs"]],
-              channels: ["Google","LinkedIn"],
-            },
-            {
-              span: "col-span-12 lg:col-span-5",
-              tag: "Fintech",
-              title: "Finovate — #1 ranking on 14 money keywords",
-              desc: "Technical SEO overhaul + topical authority programme. AI-search optimization (GEO) baked in from day one.",
-              stats: [["+240%","Organic"],["#1","SERP"]],
-              channels: ["SEO","Content"],
-            },
-            {
-              span: "col-span-12 lg:col-span-7",
-              tag: "Real Estate",
-              title: "Harborline Homes — Regional to national in 12 months",
-              desc: "Geo-expansion playbook with localized landing pages, performance creative testing, and a lifecycle engine that nurtures cold leads to booked tours.",
-              stats: [["5.8x","ROAS"],["+186%","Site visits"],["3.4x","Bookings"]],
-              channels: ["Google","Meta","SEO"],
-            },
-          ].map((c)=>(
-            <Link key={c.title} to="/blog" className={`${c.span} group relative rounded-3xl border border-border bg-card p-7 md:p-8 hover:border-primary transition overflow-hidden`}>
-              <div className="absolute -bottom-20 -right-20 h-56 w-56 rounded-full bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition"/>
-              <div className="relative flex items-center justify-between flex-wrap gap-2">
-                <span className="rounded-full bg-primary/15 border border-primary/30 px-3 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-widest">{c.tag}</span>
-                <div className="flex gap-1.5">
-                  {c.channels.map(ch=>(
-                    <span key={ch} className="rounded-md bg-secondary border border-border px-2 py-0.5 text-[10px] text-muted-foreground">{ch}</span>
-                  ))}
-                </div>
-              </div>
-              <h3 className="relative mt-5 text-2xl md:text-3xl font-display leading-tight">{c.title}</h3>
-              <p className="relative mt-3 text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
-              <div className="relative mt-6 grid grid-cols-3 gap-3">
-                {c.stats.map(([k,v])=>(
-                  <div key={v} className="rounded-2xl border border-border bg-background/40 p-3">
-                    <div className="text-xl md:text-2xl font-display text-gradient-gold leading-none">{k}</div>
-                    <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">{v}</div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {caseStudies.slice(0, 3).map((c) => (
+            <Link key={c.slug} to="/case-studies/$slug" params={{ slug: c.slug }} className="group flex flex-col rounded-2xl border border-border bg-card p-5 hover:border-foreground transition">
+              <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{c.tag}</span>
+              <h3 className="mt-2 text-base font-display leading-snug line-clamp-2">{c.title}</h3>
+              <div className="mt-3 grid grid-cols-3 gap-2">
+                {c.heroStats.slice(0, 3).map((s) => (
+                  <div key={s.v} className="rounded-xl border border-border bg-background/40 p-2 text-center">
+                    <div className="text-sm font-display text-gradient-gold leading-none">{s.k}</div>
+                    <div className="mt-0.5 text-[9px] uppercase tracking-widest text-muted-foreground truncate">{s.v}</div>
                   </div>
                 ))}
               </div>
-              <div className="relative mt-5 inline-flex items-center gap-1 text-xs font-semibold text-primary">
-                Read case study <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1"/>
+              <div className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-foreground">
+                Read case study <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1"/>
               </div>
             </Link>
           ))}
