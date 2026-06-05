@@ -132,14 +132,14 @@ export function AuditPopup({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto p-3 sm:p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="audit-popup-title"
     >
       <div
-        className="relative w-full max-w-lg rounded-3xl border border-border bg-card shadow-gold p-6 md:p-7 max-h-[90vh] overflow-y-auto"
+        className="relative my-auto w-full max-w-lg rounded-[1.75rem] border border-border bg-card shadow-gold px-4 py-5 sm:p-6 md:p-7 max-h-[min(92vh,820px)] overflow-y-auto overscroll-contain"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -162,9 +162,9 @@ export function AuditPopup({
           />
         ) : (
           <>
-        <p className="text-xs uppercase tracking-[0.22em] text-primary font-semibold">Free Website Audit</p>
-        <h3 id="audit-popup-title" className="mt-1 text-2xl font-display">Get a free website audit</h3>
-        <p className="mt-1 text-xs text-muted-foreground">
+        <p className="pr-10 text-[11px] uppercase tracking-[0.18em] text-primary font-semibold">Free Website Audit</p>
+        <h3 id="audit-popup-title" className="mt-1 pr-10 text-[clamp(1.75rem,5vw,2rem)] leading-tight font-display">Get a free website audit</h3>
+        <p className="mt-1 pr-6 text-xs leading-relaxed text-muted-foreground">
           Tell us about your site — a senior strategist replies within one business day.
         </p>
         {serverError && (
@@ -183,7 +183,7 @@ export function AuditPopup({
             <input name="website" value={values.website} onChange={setField("website")} placeholder="Your website (e.g. example.com)" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.website ? "border-red-400" : "border-border"}`} />
             {errors.website && <p className="mt-1 text-xs text-red-500">{errors.website}</p>}
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <input name="phone" value={values.phone} onChange={setField("phone")} placeholder="Phone number" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.phone ? "border-red-400" : "border-border"}`} />
               {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone}</p>}
@@ -204,7 +204,7 @@ export function AuditPopup({
           >
             {step === "submitting" ? "Sending..." : <>Request my free audit <Send className="h-4 w-4" /></>}
           </button>
-          <p className="text-[11px] text-muted-foreground text-center">🔒 Your details stay private. Your progress is auto-saved.</p>
+          <p className="text-[11px] leading-relaxed text-muted-foreground text-center">🔒 Your details stay private. Your progress is auto-saved.</p>
         </form>
           </>
         )}
