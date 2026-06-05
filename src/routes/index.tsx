@@ -733,11 +733,9 @@ function Home() {
       <section className="relative bg-gradient-to-br from-primary/10 via-card/30 to-background overflow-hidden">
         <div aria-hidden className="absolute -top-24 left-1/4 h-56 w-56 rounded-full bg-primary/20 blur-3xl"/>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
-          <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
-            <div>
-              <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Numbers do the talking</p>
-              <h2 className="mt-2 text-2xl md:text-3xl font-display">Impact across 120+ engagements</h2>
-            </div>
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Numbers do the talking</p>
+            <h2 className="mt-2 text-2xl md:text-3xl font-display">Impact across 120+ engagements</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
