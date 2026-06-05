@@ -2653,6 +2653,17 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
           >
             <Eye className="h-3 w-3" /> View first
           </button>
+          {kind === "audit" && (
+            <button
+              type="button"
+              onClick={bulkDownloadZip}
+              disabled={zipping}
+              className="inline-flex items-center gap-1 rounded-md border border-primary/40 bg-primary/10 text-primary px-2 py-1.5 text-xs hover:bg-primary/20 disabled:opacity-50"
+              title="Generate and download a ZIP of audit PDFs for the selected leads"
+            >
+              <Download className="h-3 w-3" /> {zipping ? "Zipping…" : "Download PDFs (ZIP)"}
+            </button>
+          )}
           <button
             type="button"
             onClick={clearSelection}
