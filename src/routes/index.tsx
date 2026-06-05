@@ -1,9 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { listServices } from "@/lib/services.functions";
 import { iconFor } from "@/lib/services.shared";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,49 +26,88 @@ export const Route = createFileRoute("/")({
 function Home() {
   const fetchServices = useServerFn(listServices);
   const { data: services = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchServices() });
+  const [sending, setSending] = useState(false);
+  const onInquiry = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSending(true);
+    setTimeout(() => {
+      setSending(false);
+      (e.target as HTMLFormElement).reset();
+      toast.success("Inquiry sent — I'll reply within 24 hours.");
+    }, 600);
+  };
   return (
     <>
-      <section className="relative overflow-hidden bg-aurora">
-        {/* Subtle grid overlay */}
-        <div className="absolute inset-0 bg-noir-grid opacity-40" aria-hidden />
-        {/* Soft glow accent */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-primary/10 blur-[120px] pointer-events-none" aria-hidden />
-
-        <div className="relative mx-auto max-w-7xl px-6 pt-24 pb-32 md:pt-36 md:pb-44">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 backdrop-blur px-3 py-1 text-xs text-foreground/80">
-            <Sparkles className="h-3 w-3 text-primary" />
-            AI-native freelance studio · open for projects
-          </div>
-          <h1 className="mt-6 max-w-4xl text-5xl md:text-7xl font-display font-semibold leading-[1.02] tracking-tight">
-            Digital marketing,<br />
-            <span className="text-gradient-gold">engineered with AI.</span>
-          </h1>
-          <p className="mt-6 max-w-xl text-lg text-muted-foreground leading-relaxed">
-            I&apos;m <span className="text-foreground font-medium">vrseoguru</span> — a freelance growth partner blending SEO, PPC,
-            performance marketing and SMO with AI workflows that compound revenue.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link to="/contact" className="group inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-gold hover:bg-accent transition-all">
-              Book a free strategy call
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link to="/services" className="inline-flex items-center gap-2 rounded-md border border-border bg-card/50 backdrop-blur px-6 py-3 text-sm font-medium text-foreground hover:border-primary transition-colors">
-              Explore services
-            </Link>
-          </div>
-
-
-          {/* Trust strip */}
-          <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs text-muted-foreground">
-            <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Transparent reporting</div>
-            <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-primary" /> Ship in days, not months</div>
-            <div className="flex items-center gap-2"><LineChart className="h-4 w-4 text-primary" /> Profit-first metrics</div>
+      <Toaster />
+      <section className="relative overflow-hidden bg-digital border-b border-border">
+        <div className="relative mx-auto max-w-7xl px-6 pt-16 pb-20 md:pt-24 md:pb-28 grid lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-7">
+            <div className="inline-flex items-center gap-2 rounded-full border border-ink/20 bg-white/70 backdrop-blur px-3 py-1 text-xs text-foreground">
+              <Sparkles className="h-3 w-3" />
+              AI-native freelance studio · open for projects
+            </div>
+            <h1 className="mt-6 text-5xl md:text-6xl font-display font-semibold leading-[1.04] tracking-tight">
+              Digital marketing,<br />
+              <span className="text-gradient-gold">engineered with AI.</span>
+            </h1>
+            <p className="mt-6 max-w-xl text-lg text-muted-foreground leading-relaxed">
+              I&apos;m <span className="text-foreground font-medium">vrseoguru</span> — a freelance growth partner blending SEO, PPC,
+              performance marketing and SMO with AI workflows that compound revenue.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link to="/contact" className="group inline-flex items-center gap-2 rounded-md bg-ink px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-foreground transition-colors">
+                Book a free strategy call
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link to="/services" className="inline-flex items-center gap-2 rounded-md border border-ink/30 bg-white px-6 py-3 text-sm font-medium text-foreground hover:border-ink transition-colors">
+                Explore services
+              </Link>
+            </div>
+            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs text-muted-foreground">
+              <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4" /> Transparent reporting</div>
+              <div className="flex items-center gap-2"><Zap className="h-4 w-4" /> Ship in days, not months</div>
+              <div className="flex items-center gap-2"><LineChart className="h-4 w-4" /> Profit-first metrics</div>
+            </div>
           </div>
 
-          <dl className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl">
+          {/* Inquiry form */}
+          <div className="lg:col-span-5">
+            <form
+              onSubmit={onInquiry}
+              className="rounded-2xl border border-border bg-white shadow-gold p-6 md:p-7 space-y-4"
+            >
+              <div>
+                <p className="text-xs uppercase tracking-widest text-muted-foreground">Quick inquiry</p>
+                <h3 className="mt-1 text-xl font-display font-semibold">Get a free 30-day plan</h3>
+              </div>
+              <input required name="name" placeholder="Your name" className="w-full rounded-md bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-ink" />
+              <input required name="email" type="email" placeholder="Email address" className="w-full rounded-md bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-ink" />
+              <select name="service" className="w-full rounded-md bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-ink">
+                <option>SEO</option>
+                <option>Performance Marketing</option>
+                <option>PPC</option>
+                <option>Social Media (SMO)</option>
+                <option>AI Automation</option>
+              </select>
+              <textarea name="message" rows={3} placeholder="Tell me about your goals..." className="w-full rounded-md bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-ink resize-none" />
+              <button
+                type="submit"
+                disabled={sending}
+                className="w-full inline-flex justify-center items-center gap-2 rounded-md bg-ink px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-foreground transition-colors disabled:opacity-60"
+              >
+                {sending ? "Sending..." : <>Send inquiry <Send className="h-4 w-4" /></>}
+              </button>
+              <p className="text-[11px] text-muted-foreground text-center">Reply within 24 hours · No spam.</p>
+            </form>
+          </div>
+        </div>
+
+        {/* Stats below hero */}
+        <div className="relative mx-auto max-w-7xl px-6 pb-16">
+          <dl className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[["7+ yrs", "Marketing craft"],["120+", "Campaigns shipped"],["4.2x", "Avg. ROAS lift"],["24h", "Reply window"]].map(([k, v]) => (
               <div key={v}>
-                <dt className="text-3xl font-display text-gradient-gold">{k}</dt>
+                <dt className="text-3xl font-display font-semibold text-foreground">{k}</dt>
                 <dd className="mt-1 text-sm text-muted-foreground">{v}</dd>
               </div>
             ))}
@@ -105,13 +147,13 @@ function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-24">
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-12 md:p-16 bg-noir-grid">
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-ink text-white p-12 md:p-16">
           <div className="max-w-2xl">
             <h2 className="text-4xl md:text-5xl font-display font-semibold">Ready to outgrow your competitors?</h2>
-            <p className="mt-4 text-muted-foreground text-lg">
+            <p className="mt-4 text-white/70 text-lg">
               Tell me about your goals. I&apos;ll send back a 30-day AI growth blueprint within 48 hours — free.
             </p>
-            <Link to="/contact" className="mt-8 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-gold hover:bg-accent transition-colors">
+            <Link to="/contact" className="mt-8 inline-flex items-center gap-2 rounded-md bg-white text-ink px-6 py-3 text-sm font-medium hover:bg-white/90 transition-colors">
               Start the conversation <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

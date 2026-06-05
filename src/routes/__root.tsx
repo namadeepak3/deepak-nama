@@ -147,20 +147,20 @@ function SiteShell() {
 
 function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const navLink = "text-sm text-muted-foreground hover:text-foreground transition-colors";
+  const navLink = "text-sm text-white/70 hover:text-white transition-colors";
   const fetchServices = useServerFn(listServices);
   const { data: services = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchServices() });
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/75 border-b border-border">
+    <header className="sticky top-0 z-50 backdrop-blur-xl bg-ink border-b border-white/10 text-white">
       <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 font-display font-bold tracking-tight">
-          <span className="h-7 w-7 rounded-md bg-gradient-to-br from-primary to-accent text-primary-foreground grid place-items-center text-xs shadow-gold">V</span>
-          <span className="text-foreground">vrseoguru</span>
+          <span className="h-7 w-7 rounded-md bg-white text-ink grid place-items-center text-xs">V</span>
+          <span className="text-white">vrseoguru</span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
-          <Link to="/" className={`${navLink} px-3 py-2`} activeOptions={{ exact: true }} activeProps={{ className: "text-foreground" }}>Home</Link>
+          <Link to="/" className={`${navLink} px-3 py-2`} activeOptions={{ exact: true }} activeProps={{ className: "text-white" }}>Home</Link>
 
           {/* Mega menu trigger */}
           <div className="relative group">
@@ -170,7 +170,7 @@ function SiteHeader() {
             {/* Invisible bridge to prevent hover gap */}
             <div className="absolute left-1/2 -translate-x-1/2 top-full h-3 w-[900px] hidden group-hover:block" aria-hidden />
             <div className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+0.5rem)] w-[900px] max-w-[90vw] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 translate-y-1 group-hover:translate-y-0">
-              <div className="rounded-2xl border border-border bg-popover/95 backdrop-blur-xl shadow-2xl p-6 grid grid-cols-3 gap-2">
+              <div className="rounded-2xl border border-border bg-white text-foreground backdrop-blur-xl shadow-2xl p-6 grid grid-cols-3 gap-2">
                 {services.map((s) => {
                   const Icon = iconFor(s.icon);
                   return (
@@ -178,9 +178,9 @@ function SiteHeader() {
                       key={s.slug}
                       to="/services/$slug"
                       params={{ slug: s.slug }}
-                      className="group/item flex gap-3 rounded-xl p-3 hover:bg-secondary/60 transition-colors"
+                      className="group/item flex gap-3 rounded-xl p-3 hover:bg-secondary transition-colors"
                     >
-                      <div className="h-9 w-9 shrink-0 rounded-lg bg-primary/10 border border-primary/30 grid place-items-center">
+                      <div className="h-9 w-9 shrink-0 rounded-lg bg-ink/10 border border-ink/20 grid place-items-center">
                         <Icon className="h-4 w-4 text-primary" />
                       </div>
                       <div className="min-w-0">
@@ -192,7 +192,7 @@ function SiteHeader() {
                 })}
                 <div className="col-span-3 mt-2 pt-4 border-t border-border flex items-center justify-between">
                   <p className="text-xs text-muted-foreground">All AI-powered. All measurable.</p>
-                  <Link to="/services" className="inline-flex items-center gap-1 text-xs text-primary hover:text-accent">
+                  <Link to="/services" className="inline-flex items-center gap-1 text-xs text-primary hover:underline">
                     View all services <ArrowRight className="h-3 w-3" />
                   </Link>
                 </div>
@@ -200,21 +200,21 @@ function SiteHeader() {
             </div>
           </div>
 
-          <Link to="/about" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-foreground" }}>About</Link>
-          <Link to="/blog" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-foreground" }}>Blog</Link>
-          <Link to="/contact" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-foreground" }}>Contact</Link>
+          <Link to="/about" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-white" }}>About</Link>
+          <Link to="/blog" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-white" }}>Blog</Link>
+          <Link to="/contact" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-white" }}>Contact</Link>
         </nav>
 
         <div className="flex items-center gap-3">
           <Link
             to="/contact"
-            className="hidden md:inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent transition-colors shadow-gold"
+            className="hidden md:inline-flex items-center gap-2 rounded-md bg-white text-ink px-4 py-2 text-sm font-medium hover:bg-white/90 transition-colors"
           >
             Hire me <ArrowRight className="h-3.5 w-3.5" />
           </Link>
           <button
             onClick={() => setMobileOpen((v) => !v)}
-            className="lg:hidden h-9 w-9 rounded-md border border-border grid place-items-center text-foreground"
+            className="lg:hidden h-9 w-9 rounded-md border border-white/20 grid place-items-center text-white"
             aria-label="Toggle menu"
           >
             {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
@@ -224,27 +224,27 @@ function SiteHeader() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-border bg-background/95 backdrop-blur-xl">
+        <div className="lg:hidden border-t border-white/10 bg-ink text-white backdrop-blur-xl">
           <div className="mx-auto max-w-7xl px-6 py-4 space-y-1">
-            <Link to="/" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Home</Link>
+            <Link to="/" onClick={() => setMobileOpen(false)} className="block py-2 text-white">Home</Link>
             <details className="group">
-              <summary className="flex items-center justify-between py-2 text-foreground cursor-pointer list-none">
+              <summary className="flex items-center justify-between py-2 text-white cursor-pointer list-none">
                 <span>Services</span>
                 <ChevronDown className="h-4 w-4 group-open:rotate-180 transition-transform" />
               </summary>
-              <div className="pl-3 mt-1 space-y-1 border-l border-border ml-1">
-                <Link to="/services" onClick={() => setMobileOpen(false)} className="block py-2 text-sm text-primary">All services</Link>
+              <div className="pl-3 mt-1 space-y-1 border-l border-white/20 ml-1">
+                <Link to="/services" onClick={() => setMobileOpen(false)} className="block py-2 text-sm text-white">All services</Link>
                 {services.map((s) => (
-                  <Link key={s.slug} to="/services/$slug" params={{ slug: s.slug }} onClick={() => setMobileOpen(false)} className="block py-2 text-sm text-muted-foreground hover:text-foreground">
+                  <Link key={s.slug} to="/services/$slug" params={{ slug: s.slug }} onClick={() => setMobileOpen(false)} className="block py-2 text-sm text-white/70 hover:text-white">
                     {s.title}
                   </Link>
                 ))}
               </div>
             </details>
-            <Link to="/about" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">About</Link>
-            <Link to="/blog" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Blog</Link>
-            <Link to="/contact" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Contact</Link>
-            <Link to="/contact" onClick={() => setMobileOpen(false)} className="mt-3 inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+            <Link to="/about" onClick={() => setMobileOpen(false)} className="block py-2 text-white">About</Link>
+            <Link to="/blog" onClick={() => setMobileOpen(false)} className="block py-2 text-white">Blog</Link>
+            <Link to="/contact" onClick={() => setMobileOpen(false)} className="block py-2 text-white">Contact</Link>
+            <Link to="/contact" onClick={() => setMobileOpen(false)} className="mt-3 inline-flex items-center gap-2 rounded-md bg-white text-ink px-4 py-2 text-sm font-medium">
               Hire me <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
@@ -258,57 +258,57 @@ function SiteFooter() {
   const fetchServices = useServerFn(listServices);
   const { data: services = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchServices() });
   return (
-    <footer className="border-t border-border mt-24 bg-aurora">
+    <footer className="mt-24 bg-ink text-white">
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid md:grid-cols-12 gap-10">
           <div className="md:col-span-4">
             <Link to="/" className="flex items-center gap-2 font-display font-bold tracking-tight">
-              <span className="h-8 w-8 rounded-md bg-gradient-to-br from-primary to-accent text-primary-foreground grid place-items-center text-xs shadow-gold">V</span>
-              <span className="text-foreground text-lg">vrseoguru</span>
+              <span className="h-8 w-8 rounded-md bg-white text-ink grid place-items-center text-xs">V</span>
+              <span className="text-white text-lg">vrseoguru</span>
             </Link>
-            <p className="mt-4 text-sm text-muted-foreground max-w-xs leading-relaxed">
+            <p className="mt-4 text-sm text-white/70 max-w-xs leading-relaxed">
               Freelance AI-powered digital marketing — SEO, PPC, performance marketing and beyond.
             </p>
             <div className="mt-6 flex gap-2">
-              <a href="mailto:hello@vrseoguru.com" className="h-9 w-9 rounded-md border border-border grid place-items-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"><Mail className="h-4 w-4" /></a>
-              <a href="#" aria-label="LinkedIn" className="h-9 w-9 rounded-md border border-border grid place-items-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"><Linkedin className="h-4 w-4" /></a>
-              <a href="#" aria-label="Twitter" className="h-9 w-9 rounded-md border border-border grid place-items-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"><Twitter className="h-4 w-4" /></a>
-              <a href="#" aria-label="GitHub" className="h-9 w-9 rounded-md border border-border grid place-items-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"><Github className="h-4 w-4" /></a>
+              <a href="mailto:hello@vrseoguru.com" className="h-9 w-9 rounded-md border border-white/20 grid place-items-center text-white/70 hover:text-white hover:border-white transition-colors"><Mail className="h-4 w-4" /></a>
+              <a href="#" aria-label="LinkedIn" className="h-9 w-9 rounded-md border border-white/20 grid place-items-center text-white/70 hover:text-white hover:border-white transition-colors"><Linkedin className="h-4 w-4" /></a>
+              <a href="#" aria-label="Twitter" className="h-9 w-9 rounded-md border border-white/20 grid place-items-center text-white/70 hover:text-white hover:border-white transition-colors"><Twitter className="h-4 w-4" /></a>
+              <a href="#" aria-label="GitHub" className="h-9 w-9 rounded-md border border-white/20 grid place-items-center text-white/70 hover:text-white hover:border-white transition-colors"><Github className="h-4 w-4" /></a>
             </div>
           </div>
           <div className="md:col-span-5 grid grid-cols-2 gap-6">
             <div>
-              <p className="text-xs uppercase tracking-widest text-primary mb-4">Services</p>
+              <p className="text-xs uppercase tracking-widest text-white/60 mb-4">Services</p>
               <ul className="space-y-2 text-sm">
                 {services.slice(0, Math.ceil(services.length / 2)).map((s) => (
                   <li key={s.slug}>
-                    <Link to="/services/$slug" params={{ slug: s.slug }} className="text-muted-foreground hover:text-foreground transition-colors">{s.title}</Link>
+                    <Link to="/services/$slug" params={{ slug: s.slug }} className="text-white/70 hover:text-white transition-colors">{s.title}</Link>
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-widest text-primary mb-4">More</p>
+              <p className="text-xs uppercase tracking-widest text-white/60 mb-4">More</p>
               <ul className="space-y-2 text-sm">
                 {services.slice(Math.ceil(services.length / 2)).map((s) => (
                   <li key={s.slug}>
-                    <Link to="/services/$slug" params={{ slug: s.slug }} className="text-muted-foreground hover:text-foreground transition-colors">{s.title}</Link>
+                    <Link to="/services/$slug" params={{ slug: s.slug }} className="text-white/70 hover:text-white transition-colors">{s.title}</Link>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
           <div className="md:col-span-3">
-            <p className="text-xs uppercase tracking-widest text-primary mb-4">Company</p>
+            <p className="text-xs uppercase tracking-widest text-white/60 mb-4">Company</p>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">About</Link></li>
-              <li><Link to="/services" className="text-muted-foreground hover:text-foreground transition-colors">All services</Link></li>
-             <li><Link to="/blog" className="text-muted-foreground hover:text-foreground transition-colors">Blog</Link></li>
-              <li><Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</Link></li>
+              <li><Link to="/about" className="text-white/70 hover:text-white transition-colors">About</Link></li>
+              <li><Link to="/services" className="text-white/70 hover:text-white transition-colors">All services</Link></li>
+              <li><Link to="/blog" className="text-white/70 hover:text-white transition-colors">Blog</Link></li>
+              <li><Link to="/contact" className="text-white/70 hover:text-white transition-colors">Contact</Link></li>
             </ul>
           </div>
         </div>
-        <div className="mt-12 pt-6 border-t border-border flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
+        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-white/60">
           <p>© {new Date().getFullYear()} vrseoguru. Crafted with AI &amp; obsession.</p>
           <p>Built on AI workflows. Backed by data.</p>
         </div>
