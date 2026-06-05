@@ -93,7 +93,7 @@ function Home() {
         <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
         <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
 
-        <div className="relative mx-auto max-w-7xl px-6 pt-16 pb-20 md:pt-24 md:pb-28 grid lg:grid-cols-12 gap-10 items-center">
+        <div className="relative mx-auto max-w-7xl px-6 pt-6 pb-16 md:pt-10 md:pb-20 grid lg:grid-cols-12 gap-10 items-center">
           {/* LEFT — details */}
           <div className="lg:col-span-7">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 backdrop-blur px-3 py-1 text-xs text-foreground">
