@@ -225,6 +225,15 @@ export const updateLead = createServerFn({ method: "POST" })
     const audits: Array<{ action: string; field: string; old_value: string; new_value: string }> = [];
 
     if (data.status !== undefined && data.status !== current.status) {
+      // Protect newly-created, unassigned leads from accidental status changes.
+      // Admin must assign the lead first (in same call or beforehand).
+      const willBeAssigned =
+        data.assignedTo !== undefined
+          ? Boolean(data.assignedTo)
+          : Boolean((current as any).assigned_to);
+      if (current.status === "new" && !willBeAssigned) {
+        throw new Error("Assign this lead to a team member before changing its status.");
+      }
       patch.status = data.status;
       audits.push({ action: "status_changed", field: "status", old_value: String(current.status ?? ""), new_value: data.status });
     }
