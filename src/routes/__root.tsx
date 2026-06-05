@@ -18,6 +18,7 @@ import { listServices } from "@/lib/services.functions";
 import { iconFor } from "@/lib/services.shared";
 import { Menu, X, ChevronDown, ArrowRight, Mail, Github, Linkedin, Twitter } from "lucide-react";
 import { useState } from "react";
+import { StickyWidgets } from "@/components/StickyWidgets";
 
 function NotFoundComponent() {
   return (
@@ -144,6 +145,7 @@ function SiteShell() {
         <Outlet />
       </main>
       {!isAdmin && <SiteFooter />}
+      {!isAdmin && <StickyWidgets />}
     </div>
   );
 }

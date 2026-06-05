@@ -85,6 +85,24 @@ function Home() {
       toast.error("Please fill name, phone and message");
       return;
     }
+    track("lead_submit", { source: `${waChannel}_form` });
+    // Route to CRM/inbox with timestamp + source
+    submitLead({
+      data: {
+        name,
+        email: `noreply+${waChannel}@vrseoguru.lead`,
+        phone,
+        service: `${waChannel}_form`,
+        budget: "",
+        message: `[${waChannel} • ${new Date().toISOString()}]\n${msg}`,
+        kind: "inquiry",
+        pageUrl: typeof window !== "undefined" ? window.location.href : "",
+        referrer: typeof document !== "undefined" ? document.referrer : "",
+        utmSource: `${waChannel}_form`,
+        utmMedium: waChannel,
+        utmCampaign: "homepage_widget",
+      },
+    }).catch(() => { /* non-blocking */ });
     const body = `Hi vrseoguru — I'm ${name} (${phone}). ${msg}`;
     const encoded = encodeURIComponent(body);
     const url = waChannel === "whatsapp"
@@ -113,18 +131,18 @@ function Home() {
   ];
 
   const AI_TOOLS = [
-    { name: "ChatGPT", sub: "OpenAI", emoji: "🤖" },
-    { name: "Claude", sub: "Anthropic", emoji: "🧠" },
-    { name: "Gemini", sub: "Google", emoji: "✨" },
-    { name: "Perplexity", sub: "Answer engine", emoji: "🔎" },
-    { name: "Midjourney", sub: "Image", emoji: "🎨" },
-    { name: "Runway", sub: "Video", emoji: "🎬" },
-    { name: "ElevenLabs", sub: "Voice", emoji: "🎙️" },
-    { name: "Sora", sub: "Video AI", emoji: "📽️" },
-    { name: "n8n", sub: "Agents", emoji: "🔗" },
-    { name: "LangChain", sub: "Orchestration", emoji: "⛓️" },
-    { name: "Zapier AI", sub: "Automation", emoji: "⚡" },
-    { name: "Cursor", sub: "Dev agent", emoji: "🧑‍💻" },
+    { name: "ChatGPT", sub: "OpenAI", slug: "openai", color: "10A37F" },
+    { name: "Claude", sub: "Anthropic", slug: "anthropic", color: "D97757" },
+    { name: "Gemini", sub: "Google", slug: "googlegemini", color: "8E75B2" },
+    { name: "Perplexity", sub: "Answer engine", slug: "perplexity", color: "20808D" },
+    { name: "Midjourney", sub: "Image", slug: "midjourney", color: "000000" },
+    { name: "Runway", sub: "Video", slug: "runway", color: "000000" },
+    { name: "ElevenLabs", sub: "Voice", slug: "elevenlabs", color: "000000" },
+    { name: "n8n", sub: "Agents", slug: "n8n", color: "EA4B71" },
+    { name: "LangChain", sub: "Orchestration", slug: "langchain", color: "1C3C3C" },
+    { name: "Zapier", sub: "Automation", slug: "zapier", color: "FF4F00" },
+    { name: "Cursor", sub: "Dev agent", slug: "cursor", color: "000000" },
+    { name: "HuggingFace", sub: "Models", slug: "huggingface", color: "FFD21E" },
   ];
 
   const inquirySchema = z.object({
@@ -186,6 +204,7 @@ function Home() {
       (e.target as HTMLFormElement).reset();
       setErrors({});
       setSubmitted({ name: result.data.name, email: result.data.email });
+      track("lead_submit", { source: "homepage_inquiry_form", service: result.data.service });
       toast.success("Inquiry sent — I'll reply within 24 hours.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to send inquiry.");
@@ -644,7 +663,7 @@ function Home() {
                 <button
                   key={n}
                   type="button"
-                  onClick={() => setOpenStep(n)}
+                  onClick={() => { setOpenStep(n); track("process_step_click", { step: n, title }); }}
                   className={`btn-fx group flex md:flex-col items-center gap-3 md:gap-2 rounded-2xl border p-3 md:p-4 text-left md:text-center transition-all ${active ? "border-primary bg-primary/10 shadow-gold" : "border-border bg-card hover:border-primary/60"}`}
                 >
                   <div className={`relative h-12 w-12 md:h-14 md:w-14 rounded-full grid place-items-center shrink-0 ${active ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary border border-primary/30"}`}>
@@ -706,42 +725,75 @@ function Home() {
               <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-10" />
               <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-3 -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {[...AI_TOOLS, ...AI_TOOLS].map((t, i) => (
-                  <div key={`${t.name}-${i}`} className="group snap-start shrink-0 w-40 rounded-2xl border border-border bg-card/80 backdrop-blur p-4 text-center hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all">
-                    <div className="mx-auto h-12 w-12 rounded-xl bg-primary/10 border border-primary/30 text-primary grid place-items-center text-2xl group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <span aria-hidden>{t.emoji}</span>
+                  <a
+                    key={`${t.name}-${i}`}
+                    href={`https://www.google.com/search?q=${encodeURIComponent(t.name)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track("tools_carousel_click", { tool: t.name, kind: "ai" })}
+                    className="group snap-start shrink-0 w-40 rounded-2xl border border-border bg-card/80 backdrop-blur p-4 text-center hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all"
+                  >
+                    <div className="mx-auto h-14 w-14 rounded-2xl bg-white border border-border grid place-items-center group-hover:scale-110 transition-transform shadow-sm">
+                      <img
+                        src={`https://cdn.simpleicons.org/${t.slug}/${t.color}`}
+                        alt={t.name}
+                        loading="lazy"
+                        className="h-8 w-8 object-contain"
+                      />
                     </div>
                     <div className="mt-3 font-display text-sm font-semibold">{t.name}</div>
                     <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t.sub}</div>
-                  </div>
+                  </a>
                 ))}
               </div>
             </div>
           </div>
 
           <div className="mt-12">
-            <p className="text-center text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-semibold">Marketing Platforms</p>
-            <div className="relative mt-4">
+            <div className="text-center">
+              <p className="text-[11px] uppercase tracking-[0.22em] text-primary font-bold">Marketing Platforms</p>
+              <h3 className="mt-2 text-2xl md:text-3xl font-display">The stack <span className="text-gradient-gold">we orchestrate</span></h3>
+            </div>
+            <div className="relative mt-6">
               <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent z-10" />
               <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-10" />
-              <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-3 -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {[
-                  { name: "Google Analytics", Icon: BarChart3 },
-                  { name: "Search Console", Icon: Search },
-                  { name: "Google Ads", Icon: Target },
-                  { name: "Bing Webmaster", Icon: Globe },
-                  { name: "Meta Ads", Icon: Megaphone },
-                  { name: "SE Ranking", Icon: LineChart },
-                  { name: "Canva", Icon: PenTool },
-                  { name: "Hootsuite", Icon: Share2 },
-                  { name: "Grammarly", Icon: CheckCircle2 },
-                  { name: "Moz / Ahrefs", Icon: TrendingUp },
-                ].map(({ name, Icon }) => (
-                  <div key={name} className="group snap-start shrink-0 w-56 rounded-2xl border border-border bg-card p-4 flex items-center gap-3 hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all">
-                    <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/30 text-primary grid place-items-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <Icon className="h-5 w-5" />
+                  { name: "Google Analytics", slug: "googleanalytics", color: "E37400" },
+                  { name: "Search Console", slug: "googlesearchconsole", color: "458CF5" },
+                  { name: "Google Ads", slug: "googleads", color: "4285F4" },
+                  { name: "Bing", slug: "microsoftbing", color: "008373" },
+                  { name: "Meta Ads", slug: "meta", color: "0467DF" },
+                  { name: "Instagram", slug: "instagram", color: "E4405F" },
+                  { name: "LinkedIn Ads", slug: "linkedin", color: "0A66C2" },
+                  { name: "YouTube", slug: "youtube", color: "FF0000" },
+                  { name: "Semrush", slug: "semrush", color: "FF642D" },
+                  { name: "Ahrefs", slug: "ahrefs", color: "0F66E9" },
+                  { name: "Canva", slug: "canva", color: "00C4CC" },
+                  { name: "Hootsuite", slug: "hootsuite", color: "143059" },
+                  { name: "Mailchimp", slug: "mailchimp", color: "FFE01B" },
+                  { name: "HubSpot", slug: "hubspot", color: "FF7A59" },
+                  { name: "Shopify", slug: "shopify", color: "7AB55C" },
+                  { name: "WordPress", slug: "wordpress", color: "21759B" },
+                ].map((t) => (
+                  <a
+                    key={t.name}
+                    href={`https://www.google.com/search?q=${encodeURIComponent(t.name)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track("tools_carousel_click", { tool: t.name, kind: "marketing" })}
+                    className="group snap-start shrink-0 w-44 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-4 flex flex-col items-center gap-2 hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all"
+                  >
+                    <div className="h-14 w-14 rounded-2xl bg-white border border-border grid place-items-center shrink-0 group-hover:scale-110 transition-transform shadow-sm">
+                      <img
+                        src={`https://cdn.simpleicons.org/${t.slug}/${t.color}`}
+                        alt={t.name}
+                        loading="lazy"
+                        className="h-8 w-8 object-contain"
+                      />
                     </div>
-                    <span className="font-display text-sm font-semibold leading-tight">{name}</span>
-                  </div>
+                    <span className="font-display text-sm font-semibold leading-tight text-center">{t.name}</span>
+                  </a>
                 ))}
               </div>
             </div>
