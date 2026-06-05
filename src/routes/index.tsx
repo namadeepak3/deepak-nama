@@ -541,6 +541,160 @@ function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="text-center max-w-2xl mx-auto mb-8">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Digital marketing services</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ AI-POWERED PROCESS ============ */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+        <div aria-hidden className="pointer-events-none absolute inset-0 bg-ai-grid opacity-40" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24">
+          <div className="text-center max-w-3xl mx-auto">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold inline-flex items-center gap-2 justify-center">
+              <Workflow className="h-3.5 w-3.5" /> Our AI agentic process
+            </p>
+            <h2 className="mt-3 text-3xl md:text-5xl font-display leading-[1.05]">
+              Our <span className="text-gradient-gold">Digital Marketing Process</span>
+            </h2>
+            <div className="mt-3 mx-auto h-1 w-16 rounded bg-primary" />
+            <p className="mt-4 text-muted-foreground">
+              A five-step AI-orchestrated workflow — from research to revenue — autonomous agents working alongside senior marketers.
+            </p>
+          </div>
+
+          {/* Wavy SVG path on desktop */}
+          <div className="relative mt-16 hidden md:block">
+            <svg className="absolute inset-x-0 top-1/2 -translate-y-1/2 w-full h-32" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden>
+              <defs>
+                <linearGradient id="processWave" x1="0" x2="1">
+                  <stop offset="0%" stopColor="oklch(0.55 0.20 245)" />
+                  <stop offset="50%" stopColor="oklch(0.68 0.16 237)" />
+                  <stop offset="100%" stopColor="oklch(0.82 0.10 232)" />
+                </linearGradient>
+              </defs>
+              <path d="M0,60 C150,10 250,110 400,60 C550,10 650,110 800,60 C950,10 1050,110 1200,60" fill="none" stroke="url(#processWave)" strokeWidth="3" strokeDasharray="6 6" />
+            </svg>
+
+            <div className="relative grid grid-cols-5 gap-4">
+              {[
+                { n: "1", Icon: LineChart, title: "Analyze Business Landscape", desc: "AI audits market, competitors and your data signals.", up: false },
+                { n: "2", Icon: Lightbulb, title: "Build Smart Strategies", desc: "Agent-generated channel mix, hypotheses and roadmap.", up: true },
+                { n: "3", Icon: PenTool, title: "Create Compelling Content", desc: "GenAI creative, copy and assets — at brand and at scale.", up: false },
+                { n: "4", Icon: Brain, title: "Derive Meaningful Insights", desc: "Live attribution, anomaly alerts and predictive next steps.", up: true },
+                { n: "5", Icon: Award, title: "Enrich Customer Experiences", desc: "Personalised journeys, lifecycle and CX automation.", up: false },
+              ].map(({ n, Icon, title, desc, up }) => (
+                <div key={n} className={`relative flex flex-col items-center text-center ${up ? "-translate-y-8" : "translate-y-8"}`}>
+                  <div className="relative h-20 w-20 rounded-full bg-card border-2 border-primary/30 grid place-items-center shadow-gold group hover:border-primary hover:-translate-y-1 transition-all">
+                    <Icon className="h-8 w-8 text-primary" />
+                    <span className="absolute -top-2 -right-2 h-7 w-7 rounded-full bg-primary text-primary-foreground text-xs font-bold grid place-items-center shadow-md">{n}</span>
+                  </div>
+                  <h3 className="mt-4 font-display text-sm font-semibold leading-tight max-w-[140px]">{title}</h3>
+                  <p className="mt-1 text-[11px] text-muted-foreground leading-snug max-w-[150px]">{desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile vertical timeline */}
+          <div className="mt-12 md:hidden relative">
+            <div aria-hidden className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-primary/60 via-primary/30 to-transparent" />
+            <div className="space-y-6">
+              {[
+                { n: "1", Icon: LineChart, title: "Analyze Business Landscape", desc: "AI audits market, competitors and your data signals." },
+                { n: "2", Icon: Lightbulb, title: "Build Smart Strategies", desc: "Agent-generated channel mix, hypotheses and roadmap." },
+                { n: "3", Icon: PenTool, title: "Create Compelling Content", desc: "GenAI creative, copy and assets — at brand and at scale." },
+                { n: "4", Icon: Brain, title: "Derive Meaningful Insights", desc: "Live attribution, anomaly alerts and predictive next steps." },
+                { n: "5", Icon: Award, title: "Enrich Customer Experiences", desc: "Personalised journeys, lifecycle and CX automation." },
+              ].map(({ n, Icon, title, desc }) => (
+                <div key={n} className="relative pl-16">
+                  <div className="absolute left-0 top-0 h-12 w-12 rounded-full bg-card border-2 border-primary/40 grid place-items-center shadow-gold">
+                    <Icon className="h-5 w-5 text-primary" />
+                    <span className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold grid place-items-center">{n}</span>
+                  </div>
+                  <h3 className="font-display text-base font-semibold">{title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ AI TOOLS WE USE ============ */}
+      <section className="relative overflow-hidden bg-background">
+        <div aria-hidden className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/10 blur-3xl" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24">
+          <div className="text-center max-w-3xl mx-auto">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold inline-flex items-center gap-2 justify-center">
+              <Cpu className="h-3.5 w-3.5" /> Our AI + Marketing Stack
+            </p>
+            <h2 className="mt-3 text-3xl md:text-5xl font-display leading-[1.05]">
+              Tools <span className="text-gradient-gold">We Use</span>
+            </h2>
+            <div className="mt-3 mx-auto h-1 w-16 rounded bg-primary" />
+            <p className="mt-4 text-muted-foreground">
+              Frontier AI models and best-in-class marketing platforms — orchestrated by custom agents.
+            </p>
+          </div>
+
+          <div className="mt-10">
+            <p className="text-center text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-semibold">AI Models & Agents</p>
+            <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+              {[
+                { name: "ChatGPT", sub: "OpenAI" },
+                { name: "Claude", sub: "Anthropic" },
+                { name: "Gemini", sub: "Google" },
+                { name: "Perplexity", sub: "Answer engine" },
+                { name: "Midjourney", sub: "Creative" },
+                { name: "Runway", sub: "Video" },
+                { name: "ElevenLabs", sub: "Voice" },
+                { name: "n8n", sub: "Agents" },
+                { name: "LangChain", sub: "Orchestration" },
+                { name: "Zapier AI", sub: "Automation" },
+              ].map((t) => (
+                <div key={t.name} className="group rounded-2xl border border-border bg-card/80 backdrop-blur p-4 text-center hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all">
+                  <div className="mx-auto h-10 w-10 rounded-xl bg-primary/10 border border-primary/30 text-primary grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                    <Sparkles className="h-5 w-5" />
+                  </div>
+                  <div className="mt-3 font-display text-sm font-semibold">{t.name}</div>
+                  <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t.sub}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-12">
+            <p className="text-center text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-semibold">Marketing Platforms</p>
+            <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+              {[
+                { name: "Google Analytics", Icon: BarChart3 },
+                { name: "Search Console", Icon: Search },
+                { name: "Google Ads", Icon: Target },
+                { name: "Bing Webmaster", Icon: Globe },
+                { name: "Meta Ads", Icon: Megaphone },
+                { name: "SE Ranking", Icon: LineChart },
+                { name: "Canva", Icon: PenTool },
+                { name: "Hootsuite", Icon: Share2 },
+                { name: "Grammarly", Icon: CheckCircle2 },
+                { name: "Moz / Ahrefs", Icon: TrendingUp },
+              ].map(({ name, Icon }) => (
+                <div key={name} className="group rounded-2xl border border-border bg-card p-4 flex items-center gap-3 hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all">
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/30 text-primary grid place-items-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <span className="font-display text-sm font-semibold leading-tight">{name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* (placeholder removed — section continues below) */}
+      <section className="hidden">
+        <div>
+          <div>
+            <p>
             <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">Every channel your brand <span className="text-gradient-gold">needs to grow.</span></h2>
             <p className="mt-4 text-muted-foreground">Senior specialists across SEO, paid media, social, content, email and web — all wired into our AI ops layer.</p>
             <Link to="/services" className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">All services <ArrowRight className="h-4 w-4"/></Link>
