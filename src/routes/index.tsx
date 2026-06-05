@@ -35,6 +35,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   const navigate = useNavigate();
   const submitLead = useServerFn(createLead);
+  const fetchAuditPreview = useServerFn(generateAuditPreview);
   const fetchCases = useServerFn(listCaseStudies);
   const { data: caseStudies = [] } = useQuery({ queryKey: ["case-studies", "home"], queryFn: () => fetchCases() });
   const [sending, setSending] = useState(false);
