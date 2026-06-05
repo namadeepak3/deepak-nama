@@ -537,14 +537,6 @@ function Home() {
         </div>
       </section>
 
-      <section className="bg-gradient-to-b from-background via-card/50 to-background">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Digital marketing services</p>
-          </div>
-        </div>
-      </section>
-
       {/* ============ AI-POWERED PROCESS ============ */}
       <section className="relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-ai-grid opacity-40" />
