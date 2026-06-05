@@ -8,11 +8,11 @@ import { generateAuditPreview, type AuditPreview } from "@/lib/audit-preview.fun
 import { listCaseStudies } from "@/lib/case-studies.functions";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { z } from "zod";
 import { track } from "@/lib/analytics";
+import { AuditPopup } from "@/components/audit-popup";
 import blogSeoAsset from "@/assets/blog-seo.jpg.asset.json";
 import blogPpcAsset from "@/assets/blog-ppc.jpg.asset.json";
 import blogContentAsset from "@/assets/blog-content.jpg.asset.json";
