@@ -131,7 +131,7 @@ function Home() {
           track("audit_popup_dismissed");
           try { sessionStorage.setItem("auditPopupShown", "1"); } catch { /* ignore */ }
         }}
-        onSubmit={async (values) => {
+        onSubmitLead={async (values) => {
           const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
           await submitLead({
             data: {
@@ -151,9 +151,10 @@ function Home() {
             has_website: Boolean(values.website),
           });
           try { sessionStorage.setItem("auditPopupShown", "1"); } catch { /* ignore */ }
-          const preview = await fetchAuditPreview({ data: { website: values.website, message: values.message } });
-          return preview;
         }}
+        onGeneratePreview={async (values) =>
+          fetchAuditPreview({ data: { website: values.website, message: values.message } })
+        }
         onViewFullResult={() => {
           setAuditOpen(false);
           navigate({ to: "/thank-you" });
