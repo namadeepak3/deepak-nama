@@ -231,21 +231,21 @@ function Home() {
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             {/* Left — copy */}
             <div className="lg:col-span-5">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
-                <Sparkles className="h-3.5 w-3.5" /> AI-native operating system
+              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground">
+                <Sparkles className="h-3.5 w-3.5" /> The AI Core
               </div>
               <h2 className="mt-5 text-4xl md:text-5xl font-display leading-[1.05]">
-                A marketing brain <span className="text-gradient-gold">trained on your data.</span>
+                Your <span className="text-gradient-gold">growth engine,</span> always on.
               </h2>
               <p className="mt-5 text-muted-foreground leading-relaxed">
-                We pair senior strategists with a proprietary AI stack — predictive bidding, generative creative, semantic SEO clusters and 24/7 anomaly detection. Decisions ship in hours, not weeks.
+                One AI core wired into every channel — bidding, creative, SEO and analytics — so your campaigns improve every hour, not every quarter.
               </p>
               <div className="mt-6 grid grid-cols-2 gap-3">
                 {[
-                  ["10x", "faster creative iteration"],
-                  ["24/7", "performance monitoring"],
-                  ["100%", "first-party data ready"],
-                  ["GEO", "AI-search optimized"],
+                  ["10x", "Faster creative"],
+                  ["24/7", "Live optimization"],
+                  ["-32%", "Lower CPA"],
+                  ["+58%", "More revenue"],
                 ].map(([k,v])=>(
                   <div key={v} className="rounded-2xl border border-border bg-card p-4">
                     <div className="text-2xl font-display text-gradient-gold leading-none">{k}</div>
@@ -253,6 +253,16 @@ function Home() {
                   </div>
                 ))}
               </div>
+              {/* CTAs */}
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-3 text-sm font-semibold hover:opacity-90 transition">
+                  Get my free AI audit <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground hover:border-foreground transition">
+                  See how it works
+                </Link>
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">Free 30-min audit · No obligation · Reply within 1 business day.</p>
             </div>
 
             {/* Right — AI orbit visual */}
