@@ -81,69 +81,55 @@ function Home() {
     <>
       <Toaster />
 
-      {/* ============ HERO — Bento Grid ============ */}
-      <section className="relative overflow-hidden bg-digital">
-        <div className="relative mx-auto max-w-7xl px-6 pt-14 pb-16 md:pt-20 md:pb-24">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-8">
-            <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span></span>
-            AI-native freelance studio · open for Q3 projects
-          </div>
+      {/* ============ HERO ============ */}
+      <section className="relative overflow-hidden border-b border-border">
+        {/* Digital background image */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroBg})` }}
+        />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
 
-          {/* Bento grid */}
-          <div className="grid grid-cols-12 auto-rows-[minmax(110px,auto)] gap-4">
-
-            {/* Headline — large */}
-            <div className="col-span-12 lg:col-span-8 row-span-2 rounded-3xl border border-border bg-card/60 backdrop-blur p-8 md:p-10 relative overflow-hidden">
-              <div className="absolute -top-32 -right-32 h-80 w-80 rounded-full bg-primary/20 blur-3xl" />
-              <p className="relative text-xs uppercase tracking-[0.25em] text-primary font-sans font-semibold">Digital marketing × AI · 2026</p>
-              <h1 className="relative mt-5 text-4xl md:text-6xl lg:text-7xl font-display uppercase leading-[0.95] tracking-tight">
-                Growth, <span className="text-gradient-gold">engineered</span><br/>by algorithms.
-              </h1>
-              <p className="relative mt-6 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed">
-                I&apos;m <span className="text-foreground font-semibold">vrseoguru</span> — a freelance partner fusing SEO, PPC, performance &amp; social into AI-driven systems that compound revenue, not vanity metrics.
-              </p>
-              <div className="relative mt-7 flex flex-wrap gap-3">
-                <Link to="/contact" className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
-                  Book strategy call <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-                <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary transition">
-                  <Play className="h-3.5 w-3.5" /> See services
-                </Link>
-              </div>
+        <div className="relative mx-auto max-w-7xl px-6 pt-16 pb-20 md:pt-24 md:pb-28 grid lg:grid-cols-12 gap-10 items-center">
+          {/* LEFT — details */}
+          <div className="lg:col-span-7">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 backdrop-blur px-3 py-1 text-xs text-foreground">
+              <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span></span>
+              AI-native freelance studio · open for projects
             </div>
-
-            {/* Live metric tile */}
-            <div className="col-span-6 lg:col-span-4 rounded-3xl border border-border bg-gradient-to-br from-primary/20 to-card p-6 relative overflow-hidden">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] uppercase tracking-widest text-primary font-semibold">Avg ROAS</span>
-                <Activity className="h-4 w-4 text-primary" />
-              </div>
-              <div className="mt-3 text-5xl font-display text-foreground">4.2x</div>
-              <div className="mt-2 flex items-end gap-1 h-10">
-                {[30,45,38,60,52,72,68,85,78,92].map((h,i)=>(
-                  <div key={i} className="flex-1 rounded-sm bg-primary/60" style={{height:`${h}%`}}/>
-                ))}
-              </div>
-              <p className="mt-2 text-xs text-muted-foreground">+38% vs. industry benchmark</p>
+            <h1 className="mt-6 text-5xl md:text-6xl lg:text-7xl font-display uppercase leading-[0.95] tracking-tight">
+              Growth, <span className="text-gradient-gold">engineered</span><br/>by algorithms.
+            </h1>
+            <p className="mt-6 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed">
+              I&apos;m <span className="text-foreground font-semibold">vrseoguru</span> — a freelance partner fusing SEO, PPC, performance marketing &amp; social into AI-driven systems that compound revenue, not vanity metrics.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link to="/contact" className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
+                Book strategy call <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary transition">
+                <Play className="h-3.5 w-3.5" /> See services
+              </Link>
             </div>
-
-            {/* Tag tile */}
-            <div className="col-span-6 lg:col-span-4 rounded-3xl border border-border bg-card p-6 flex flex-col justify-between">
-              <Bot className="h-6 w-6 text-primary" />
-              <div>
-                <p className="text-xs uppercase tracking-widest text-muted-foreground">Stack 2026</p>
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {["GPT-5","Claude","GA4","GSC","Looker","Meta CAPI"].map(t => (
-                    <span key={t} className="rounded-md bg-secondary border border-border px-2 py-0.5 text-[11px] text-foreground">{t}</span>
-                  ))}
+            <div className="mt-10 grid grid-cols-3 gap-6 max-w-lg">
+              {[["4.2x","Avg ROAS"],["120+","Campaigns"],["24h","Reply"]].map(([k,v])=>(
+                <div key={v}>
+                  <div className="text-2xl md:text-3xl font-display text-gradient-gold">{k}</div>
+                  <div className="mt-1 text-xs text-muted-foreground uppercase tracking-widest">{v}</div>
                 </div>
-              </div>
+              ))}
             </div>
-
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
+              <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary"/> Transparent reporting</div>
+              <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-primary"/> Ship in days</div>
+              <div className="flex items-center gap-2"><LineChart className="h-4 w-4 text-primary"/> Profit-first</div>
+            </div>
           </div>
 
-          {/* Inquiry strip */}
-          <div id="inquiry" className="mt-6">
+          {/* RIGHT — inquiry form */}
+          <div id="inquiry" className="lg:col-span-5">
             {submitted ? (
               <div className="rounded-3xl border border-border bg-card shadow-gold p-10 text-center">
                 <div className="mx-auto h-14 w-14 rounded-full bg-primary/15 grid place-items-center">
@@ -164,58 +150,56 @@ function Home() {
             ) : (
             <form
               onSubmit={onInquiry}
-              className="rounded-3xl border border-border bg-card/80 backdrop-blur p-6 md:p-8"
+              className="rounded-3xl border border-border bg-card/95 backdrop-blur shadow-gold p-6 md:p-7 space-y-4"
             >
-              <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Quick inquiry</p>
-                  <h3 className="mt-1 text-2xl md:text-3xl font-display uppercase">Get a free 30-day plan</h3>
-                </div>
-                <p className="text-xs text-muted-foreground">Reply within 24h · No spam</p>
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Quick inquiry</p>
+                <h3 className="mt-1 text-2xl font-display uppercase">Get a free 30-day plan</h3>
               </div>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
+              <div>
                   <input name="name" placeholder="Your name" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.name ? "border-red-400" : "border-border"}`} />
-                  {errors.name && <p className="mt-1 text-xs text-red-400">{errors.name}</p>}
-                </div>
-                <div>
+                  {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+              </div>
+              <div>
                   <input name="email" type="email" placeholder="Email address" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.email ? "border-red-400" : "border-border"}`} />
-                  {errors.email && <p className="mt-1 text-xs text-red-400">{errors.email}</p>}
-                </div>
+                  {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+              </div>
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <select name="service" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.service ? "border-red-400" : "border-border"}`}>
-                    <option value="">Select a service</option>
+                    <option value="">Service</option>
                     <option>SEO</option>
                     <option>Performance Marketing</option>
                     <option>PPC</option>
                     <option>Social Media (SMO)</option>
                     <option>AI Automation</option>
                   </select>
-                  {errors.service && <p className="mt-1 text-xs text-red-400">{errors.service}</p>}
+                  {errors.service && <p className="mt-1 text-xs text-red-500">{errors.service}</p>}
                 </div>
                 <div>
                   <select name="budget" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.budget ? "border-red-400" : "border-border"}`}>
-                    <option value="">Select budget range</option>
+                    <option value="">Budget</option>
                     <option>Under ₹10,000</option>
                     <option>₹10,000 – ₹50,000</option>
                     <option>₹50,000 – ₹1,00,000</option>
                     <option>₹1,00,000 – ₹5,00,000</option>
                     <option>₹5,00,000+</option>
                   </select>
-                  {errors.budget && <p className="mt-1 text-xs text-red-400">{errors.budget}</p>}
+                  {errors.budget && <p className="mt-1 text-xs text-red-500">{errors.budget}</p>}
                 </div>
-                <div className="md:col-span-2">
+              </div>
+              <div>
                   <textarea name="message" rows={3} placeholder="Tell me about your goals..." className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none ${errors.message ? "border-red-400" : "border-border"}`} />
-                  {errors.message && <p className="mt-1 text-xs text-red-400">{errors.message}</p>}
-                </div>
+                  {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message}</p>}
+              </div>
                 <button
                   type="submit"
                   disabled={sending}
-                  className="md:col-span-2 w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition disabled:opacity-60 shadow-gold"
+                  className="w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition disabled:opacity-60 shadow-gold"
                 >
                   {sending ? "Sending..." : <>Send inquiry <Send className="h-4 w-4" /></>}
                 </button>
-              </div>
+              <p className="text-[11px] text-muted-foreground text-center">Reply within 24 hours · No spam.</p>
             </form>
             )}
           </div>
