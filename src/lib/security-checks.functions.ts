@@ -64,6 +64,7 @@ export const runRlsChecks = createServerFn({ method: "GET" })
             expectation: "Call audit_rls_policies()",
             pass: false,
             details: error.message,
+            policies: [],
           },
         ],
       };
