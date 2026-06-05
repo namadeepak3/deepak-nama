@@ -396,6 +396,158 @@ function TabButton({
   );
 }
 
+type AdminTab = "services" | "analytics" | "blog" | "categories" | "users" | "audits" | "inquiries" | "settings";
+
+function AdminShell({
+  tab,
+  setTab,
+  canManage,
+  canAnalytics,
+  isAdmin,
+  roles,
+  onSignOut,
+  onNewService,
+  onNewPost,
+  children,
+}: {
+  tab: AdminTab;
+  setTab: (t: AdminTab) => void;
+  canManage: boolean;
+  canAnalytics: boolean;
+  isAdmin: boolean;
+  roles: string[];
+  onSignOut: () => void;
+  onNewService: () => void;
+  onNewPost: () => void;
+  children: React.ReactNode;
+}) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const items: { id: AdminTab; label: string; icon: React.ComponentType<{ className?: string }>; show: boolean }[] = [
+    { id: "services", label: "Services", icon: Settings2, show: canManage },
+    { id: "blog", label: "Blog", icon: FileText, show: canManage },
+    { id: "categories", label: "Categories", icon: Tags, show: canManage },
+    { id: "analytics", label: "Analytics", icon: BarChart3, show: canAnalytics },
+    { id: "inquiries", label: "Inquiries", icon: Inbox, show: isAdmin },
+    { id: "audits", label: "Website Audits", icon: Globe, show: isAdmin },
+    { id: "users", label: "Users", icon: UsersIcon, show: isAdmin },
+    { id: "settings", label: "Settings", icon: Settings2, show: isAdmin },
+  ];
+
+  const NavList = (
+    <nav className="flex flex-col gap-1">
+      {items.filter((i) => i.show).map((i) => {
+        const Icon = i.icon;
+        const active = tab === i.id;
+        return (
+          <button
+            key={i.id}
+            onClick={() => { setTab(i.id); setMobileOpen(false); }}
+            className={`group inline-flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
+              active
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            }`}
+          >
+            <Icon className="h-4 w-4" />
+            <span>{i.label}</span>
+          </button>
+        );
+      })}
+    </nav>
+  );
+
+  const Sidebar = (
+    <div className="flex h-full flex-col gap-4 p-4">
+      <div>
+        <Link to="/" className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-3 w-3" /> Back to site
+        </Link>
+        <h2 className="mt-3 text-lg font-display font-semibold">Admin</h2>
+        <p className="mt-1 text-xs text-muted-foreground inline-flex items-center gap-1">
+          <ShieldCheck className="h-3 w-3 text-primary" />
+          {roles.join(", ") || "no roles"}
+        </p>
+      </div>
+      <div className="flex-1 overflow-y-auto">{NavList}</div>
+      <div className="flex flex-col gap-1 border-t border-border pt-3">
+        <Link
+          to="/admin/security"
+          className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+        >
+          <ShieldCheck className="h-4 w-4" /> Security
+        </Link>
+        <button
+          onClick={onSignOut}
+          className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+        >
+          <LogOut className="h-4 w-4" /> Sign out
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen flex w-full bg-background">
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex md:flex-col w-60 shrink-0 border-r border-border bg-card sticky top-0 h-screen">
+        {Sidebar}
+      </aside>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-40">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} />
+          <aside className="absolute left-0 top-0 h-full w-64 bg-card border-r border-border">
+            {Sidebar}
+          </aside>
+        </div>
+      )}
+
+      {/* Main area */}
+      <div className="flex-1 min-w-0 flex flex-col">
+        <div className="md:hidden sticky top-0 z-30 flex items-center justify-between gap-2 border-b border-border bg-card px-4 py-3">
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="inline-flex items-center gap-2 rounded-md border border-border px-2.5 py-1.5 text-sm"
+            aria-label="Open menu"
+          >
+            <Menu className="h-4 w-4" /> Menu
+          </button>
+          <span className="text-sm font-medium capitalize">{tab}</span>
+          <span className="w-12" />
+        </div>
+
+        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl w-full mx-auto">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl font-display font-semibold capitalize">
+              {tab === "services" ? "Manage services" : tab}
+            </h1>
+            <div className="flex gap-2">
+              {canManage && tab === "services" && (
+                <button
+                  onClick={onNewService}
+                  className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent transition-colors"
+                >
+                  <Plus className="h-4 w-4" /> New service
+                </button>
+              )}
+              {canManage && tab === "blog" && (
+                <button
+                  onClick={onNewPost}
+                  className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent transition-colors"
+                >
+                  <Plus className="h-4 w-4" /> New post
+                </button>
+              )}
+            </div>
+          </div>
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
+
 function AnalyticsPanel({
   loading,
   data,
