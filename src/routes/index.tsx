@@ -298,7 +298,7 @@ function Home() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition disabled:opacity-60 shadow-gold"
+                  className="btn-fx w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60 shadow-gold"
                 >
                   {sending ? "Sending..." : <>Send inquiry <Send className="h-4 w-4" /></>}
                 </button>
