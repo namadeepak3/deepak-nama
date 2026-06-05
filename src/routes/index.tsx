@@ -632,65 +632,53 @@ function Home() {
             </h2>
             <div className="mt-3 mx-auto h-1 w-16 rounded bg-primary" />
             <p className="mt-4 text-muted-foreground">
-              A five-step AI-orchestrated workflow — from research to revenue — autonomous agents working alongside senior marketers.
+              Click any step to expand details and examples — autonomous agents working alongside senior marketers.
             </p>
           </div>
 
-          {/* Wavy SVG path on desktop */}
-          <div className="relative mt-16 hidden md:block">
-            <svg className="absolute inset-x-0 top-1/2 -translate-y-1/2 w-full h-32" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden>
-              <defs>
-                <linearGradient id="processWave" x1="0" x2="1">
-                  <stop offset="0%" stopColor="oklch(0.55 0.20 245)" />
-                  <stop offset="50%" stopColor="oklch(0.68 0.16 237)" />
-                  <stop offset="100%" stopColor="oklch(0.82 0.10 232)" />
-                </linearGradient>
-              </defs>
-              <path d="M0,60 C150,10 250,110 400,60 C550,10 650,110 800,60 C950,10 1050,110 1200,60" fill="none" stroke="url(#processWave)" strokeWidth="3" strokeDasharray="6 6" />
-            </svg>
-
-            <div className="relative grid grid-cols-5 gap-4">
-              {[
-                { n: "1", Icon: LineChart, title: "Analyze Business Landscape", desc: "AI audits market, competitors and your data signals.", up: false },
-                { n: "2", Icon: Lightbulb, title: "Build Smart Strategies", desc: "Agent-generated channel mix, hypotheses and roadmap.", up: true },
-                { n: "3", Icon: PenTool, title: "Create Compelling Content", desc: "GenAI creative, copy and assets — at brand and at scale.", up: false },
-                { n: "4", Icon: Brain, title: "Derive Meaningful Insights", desc: "Live attribution, anomaly alerts and predictive next steps.", up: true },
-                { n: "5", Icon: Award, title: "Enrich Customer Experiences", desc: "Personalised journeys, lifecycle and CX automation.", up: false },
-              ].map(({ n, Icon, title, desc, up }) => (
-                <div key={n} className={`relative flex flex-col items-center text-center ${up ? "-translate-y-8" : "translate-y-8"}`}>
-                  <div className="relative h-20 w-20 rounded-full bg-card border-2 border-primary/30 grid place-items-center shadow-gold group hover:border-primary hover:-translate-y-1 transition-all">
-                    <Icon className="h-8 w-8 text-primary" />
-                    <span className="absolute -top-2 -right-2 h-7 w-7 rounded-full bg-primary text-primary-foreground text-xs font-bold grid place-items-center shadow-md">{n}</span>
-                  </div>
-                  <h3 className="mt-4 font-display text-sm font-semibold leading-tight max-w-[140px]">{title}</h3>
-                  <p className="mt-1 text-[11px] text-muted-foreground leading-snug max-w-[150px]">{desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Mobile vertical timeline */}
-          <div className="mt-12 md:hidden relative">
-            <div aria-hidden className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-primary/60 via-primary/30 to-transparent" />
-            <div className="space-y-6">
-              {[
-                { n: "1", Icon: LineChart, title: "Analyze Business Landscape", desc: "AI audits market, competitors and your data signals." },
-                { n: "2", Icon: Lightbulb, title: "Build Smart Strategies", desc: "Agent-generated channel mix, hypotheses and roadmap." },
-                { n: "3", Icon: PenTool, title: "Create Compelling Content", desc: "GenAI creative, copy and assets — at brand and at scale." },
-                { n: "4", Icon: Brain, title: "Derive Meaningful Insights", desc: "Live attribution, anomaly alerts and predictive next steps." },
-                { n: "5", Icon: Award, title: "Enrich Customer Experiences", desc: "Personalised journeys, lifecycle and CX automation." },
-              ].map(({ n, Icon, title, desc }) => (
-                <div key={n} className="relative pl-16">
-                  <div className="absolute left-0 top-0 h-12 w-12 rounded-full bg-card border-2 border-primary/40 grid place-items-center shadow-gold">
-                    <Icon className="h-5 w-5 text-primary" />
+          {/* Expandable step rail */}
+          <div className="mt-12 grid md:grid-cols-5 gap-3">
+            {PROCESS_STEPS.map(({ n, Icon, title }) => {
+              const active = openStep === n;
+              return (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setOpenStep(n)}
+                  className={`btn-fx group flex md:flex-col items-center gap-3 md:gap-2 rounded-2xl border p-3 md:p-4 text-left md:text-center transition-all ${active ? "border-primary bg-primary/10 shadow-gold" : "border-border bg-card hover:border-primary/60"}`}
+                >
+                  <div className={`relative h-12 w-12 md:h-14 md:w-14 rounded-full grid place-items-center shrink-0 ${active ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary border border-primary/30"}`}>
+                    <Icon className="h-5 w-5 md:h-6 md:w-6" />
                     <span className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold grid place-items-center">{n}</span>
                   </div>
-                  <h3 className="font-display text-base font-semibold">{title}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
-                </div>
-              ))}
-            </div>
+                  <div className="font-display text-sm font-semibold leading-tight">{title}</div>
+                </button>
+              );
+            })}
           </div>
+
+          {/* Expanded panel */}
+          {PROCESS_STEPS.filter((s) => s.n === openStep).map((s) => (
+            <div key={s.n} className="mt-6 rounded-3xl border border-primary/30 bg-card/80 backdrop-blur p-6 md:p-10 animate-fade-in">
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="md:col-span-2">
+                  <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-primary font-semibold">
+                    <s.Icon className="h-4 w-4" /> Step {s.n}
+                  </div>
+                  <h3 className="mt-2 text-2xl md:text-3xl font-display">{s.title}</h3>
+                  <p className="mt-3 text-muted-foreground">{s.details}</p>
+                </div>
+                <ul className="space-y-2">
+                  {s.examples.map((ex) => (
+                    <li key={ex} className="flex items-start gap-2 rounded-xl border border-border bg-background/60 px-3 py-2 text-sm">
+                      <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                      <span>{ex}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -713,52 +701,173 @@ function Home() {
 
           <div className="mt-10">
             <p className="text-center text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-semibold">AI Models & Agents</p>
-            <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-              {[
-                { name: "ChatGPT", sub: "OpenAI" },
-                { name: "Claude", sub: "Anthropic" },
-                { name: "Gemini", sub: "Google" },
-                { name: "Perplexity", sub: "Answer engine" },
-                { name: "Midjourney", sub: "Creative" },
-                { name: "Runway", sub: "Video" },
-                { name: "ElevenLabs", sub: "Voice" },
-                { name: "n8n", sub: "Agents" },
-                { name: "LangChain", sub: "Orchestration" },
-                { name: "Zapier AI", sub: "Automation" },
-              ].map((t) => (
-                <div key={t.name} className="group rounded-2xl border border-border bg-card/80 backdrop-blur p-4 text-center hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all">
-                  <div className="mx-auto h-10 w-10 rounded-xl bg-primary/10 border border-primary/30 text-primary grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    <Sparkles className="h-5 w-5" />
+            <div className="relative mt-4">
+              <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent z-10" />
+              <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-10" />
+              <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-3 -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {[...AI_TOOLS, ...AI_TOOLS].map((t, i) => (
+                  <div key={`${t.name}-${i}`} className="group snap-start shrink-0 w-40 rounded-2xl border border-border bg-card/80 backdrop-blur p-4 text-center hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all">
+                    <div className="mx-auto h-12 w-12 rounded-xl bg-primary/10 border border-primary/30 text-primary grid place-items-center text-2xl group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                      <span aria-hidden>{t.emoji}</span>
+                    </div>
+                    <div className="mt-3 font-display text-sm font-semibold">{t.name}</div>
+                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t.sub}</div>
                   </div>
-                  <div className="mt-3 font-display text-sm font-semibold">{t.name}</div>
-                  <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t.sub}</div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
           <div className="mt-12">
             <p className="text-center text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-semibold">Marketing Platforms</p>
-            <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-              {[
-                { name: "Google Analytics", Icon: BarChart3 },
-                { name: "Search Console", Icon: Search },
-                { name: "Google Ads", Icon: Target },
-                { name: "Bing Webmaster", Icon: Globe },
-                { name: "Meta Ads", Icon: Megaphone },
-                { name: "SE Ranking", Icon: LineChart },
-                { name: "Canva", Icon: PenTool },
-                { name: "Hootsuite", Icon: Share2 },
-                { name: "Grammarly", Icon: CheckCircle2 },
-                { name: "Moz / Ahrefs", Icon: TrendingUp },
-              ].map(({ name, Icon }) => (
-                <div key={name} className="group rounded-2xl border border-border bg-card p-4 flex items-center gap-3 hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all">
-                  <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/30 text-primary grid place-items-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    <Icon className="h-5 w-5" />
+            <div className="relative mt-4">
+              <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent z-10" />
+              <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-10" />
+              <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-3 -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {[
+                  { name: "Google Analytics", Icon: BarChart3 },
+                  { name: "Search Console", Icon: Search },
+                  { name: "Google Ads", Icon: Target },
+                  { name: "Bing Webmaster", Icon: Globe },
+                  { name: "Meta Ads", Icon: Megaphone },
+                  { name: "SE Ranking", Icon: LineChart },
+                  { name: "Canva", Icon: PenTool },
+                  { name: "Hootsuite", Icon: Share2 },
+                  { name: "Grammarly", Icon: CheckCircle2 },
+                  { name: "Moz / Ahrefs", Icon: TrendingUp },
+                ].map(({ name, Icon }) => (
+                  <div key={name} className="group snap-start shrink-0 w-56 rounded-2xl border border-border bg-card p-4 flex items-center gap-3 hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all">
+                    <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/30 text-primary grid place-items-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <span className="font-display text-sm font-semibold leading-tight">{name}</span>
                   </div>
-                  <span className="font-display text-sm font-semibold leading-tight">{name}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ AI AGENT CHAT PREVIEW ============ */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+        <div aria-hidden className="pointer-events-none absolute inset-0 bg-ai-dots opacity-50" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24 grid lg:grid-cols-2 gap-10 items-center">
+          <div>
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold inline-flex items-center gap-2">
+              <Bot className="h-3.5 w-3.5" /> Meet your AI growth agent
+            </p>
+            <h2 className="mt-3 text-3xl md:text-5xl font-display leading-[1.05]">
+              Chat with an <span className="text-gradient-gold">AI strategist</span> — live.
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              Ask anything about SEO, ads, content or automation. Our agent drafts a plan in seconds and routes complex briefs to a senior human strategist within 24h.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {["Audit my SEO", "Improve my Google Ads", "Plan my content"].map((q) => (
+                <button key={q} type="button" onClick={() => { setChatInput(q); }} className="btn-fx rounded-full border border-border bg-card px-4 py-2 text-xs font-semibold hover:border-primary">
+                  {q}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative rounded-3xl border border-primary/30 bg-card/90 backdrop-blur shadow-gold overflow-hidden">
+            <div className="flex items-center gap-2 border-b border-border bg-background/80 px-4 py-3">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+              </span>
+              <span className="text-xs font-semibold uppercase tracking-widest">vrseoguru · AI agent</span>
+              <span className="ml-auto text-[10px] text-muted-foreground">online</span>
+            </div>
+            <div className="h-72 overflow-y-auto p-4 space-y-3">
+              {chatLog.map((m, i) => (
+                <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}>
+                  <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${m.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}>
+                    {m.text}
+                  </div>
                 </div>
               ))}
+            </div>
+            <form
+              onSubmit={(e) => { e.preventDefault(); sendChat(); }}
+              className="flex items-center gap-2 border-t border-border bg-background/80 p-3"
+            >
+              <input
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                placeholder="Ask the AI agent…"
+                maxLength={200}
+                className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+              />
+              <button type="submit" className="btn-fx h-9 px-3 rounded-md bg-primary text-primary-foreground inline-flex items-center gap-1 text-xs font-semibold">
+                Send <Send className="h-3.5 w-3.5" />
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ WHATSAPP & SMS LEAD FORM ============ */}
+      <section className="relative overflow-hidden bg-background">
+        <div aria-hidden className="pointer-events-none absolute -top-24 left-[-10%] h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
+        <div className="relative mx-auto max-w-5xl px-4 sm:px-6 py-16 md:py-24">
+          <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-card via-primary/5 to-card p-8 md:p-12 shadow-gold">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold inline-flex items-center gap-2">
+                  <MessageCircle className="h-3.5 w-3.5" /> Instant lead routing
+                </p>
+                <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">
+                  Talk on <span className="text-gradient-gold">WhatsApp</span> or SMS — now.
+                </h2>
+                <p className="mt-4 text-muted-foreground">
+                  Skip the inbox. Send a message and a senior strategist will reply within minutes during business hours.
+                </p>
+                <ul className="mt-5 space-y-2 text-sm">
+                  <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-primary mt-0.5" /> Average reply in &lt; 15 min</li>
+                  <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-primary mt-0.5" /> Free 20-min growth call</li>
+                  <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-primary mt-0.5" /> 100% confidential</li>
+                </ul>
+              </div>
+
+              <form onSubmit={launchWhatsApp} className="rounded-2xl border border-border bg-background/80 p-5 space-y-3">
+                <div className="inline-flex rounded-full border border-border bg-card p-1 text-xs font-semibold">
+                  <button type="button" onClick={() => setWaChannel("whatsapp")} className={`px-3 py-1.5 rounded-full inline-flex items-center gap-1 ${waChannel === "whatsapp" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}>
+                    <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
+                  </button>
+                  <button type="button" onClick={() => setWaChannel("sms")} className={`px-3 py-1.5 rounded-full inline-flex items-center gap-1 ${waChannel === "sms" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}>
+                    <Smartphone className="h-3.5 w-3.5" /> SMS
+                  </button>
+                </div>
+                <input
+                  value={waName}
+                  onChange={(e) => setWaName(e.target.value)}
+                  placeholder="Your name"
+                  maxLength={80}
+                  className="w-full h-10 rounded-md border border-border bg-card px-3 text-sm outline-none focus:border-primary"
+                />
+                <input
+                  value={waPhone}
+                  onChange={(e) => setWaPhone(e.target.value)}
+                  placeholder="Phone (with country code)"
+                  maxLength={20}
+                  className="w-full h-10 rounded-md border border-border bg-card px-3 text-sm outline-none focus:border-primary"
+                />
+                <textarea
+                  value={waMessage}
+                  onChange={(e) => setWaMessage(e.target.value)}
+                  placeholder="What do you need help with?"
+                  maxLength={500}
+                  rows={3}
+                  className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm outline-none focus:border-primary resize-none"
+                />
+                <button type="submit" className="btn-fx w-full h-11 rounded-md bg-primary text-primary-foreground font-semibold inline-flex items-center justify-center gap-2 shadow-gold">
+                  {waChannel === "whatsapp" ? <><MessageCircle className="h-4 w-4" /> Send on WhatsApp</> : <><Smartphone className="h-4 w-4" /> Send via SMS</>}
+                </button>
+                <p className="text-[10px] text-muted-foreground text-center">Opens your {waChannel === "whatsapp" ? "WhatsApp" : "SMS"} app with your message pre-filled.</p>
+              </form>
             </div>
           </div>
         </div>
