@@ -7,6 +7,7 @@ import { iconFor } from "@/lib/services.shared";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { z } from "zod";
 
 export const Route = createFileRoute("/")({
   head: () => ({
