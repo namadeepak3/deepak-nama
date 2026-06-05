@@ -1,17 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2, TrendingUp, Award, Star, Quote, Phone, Bot, Search, Megaphone, Target, BarChart3, Globe, Rocket, Activity, Play, MousePointerClick, Mail, ShoppingCart, Youtube } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2, TrendingUp, Award, Star, Quote, Phone, Bot, Search, Megaphone, Target, BarChart3, Globe, Rocket, Activity, Play, MousePointerClick, Mail, Cpu, Wand2, Compass, Hammer, FlaskConical, FileBarChart } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
-import { listServices } from "@/lib/services.functions";
 import { createLead } from "@/lib/leads.functions";
-import { iconFor } from "@/lib/services.shared";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { z } from "zod";
-import heroBg from "@/assets/hero-digital.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,8 +25,6 @@ export const Route = createFileRoute("/")({
 
 
 function Home() {
-  const fetchServices = useServerFn(listServices);
-  const { data: services = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchServices() });
   const submitLead = useServerFn(createLead);
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
