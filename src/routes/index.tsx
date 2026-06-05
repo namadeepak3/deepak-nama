@@ -589,13 +589,11 @@ function Home() {
 
       {/* ============ INDUSTRIES WE SERVE ============ */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
-        <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
-          <div className="max-w-2xl">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
-            <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
-            <p className="mt-4 text-muted-foreground">18+ industries shipped — every model, funnel and dashboard adapted to how your buyers actually convert.</p>
-          </div>
-          <Link to="/contact" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1">Talk to a strategist <ArrowRight className="h-4 w-4"/></Link>
+        <div className="text-center max-w-2xl mx-auto mb-8">
+          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
+          <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
+          <p className="mt-4 text-muted-foreground">18+ industries shipped — every model, funnel and dashboard adapted to how your buyers actually convert.</p>
+          <Link to="/contact" className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">Talk to a strategist <ArrowRight className="h-4 w-4"/></Link>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {[
