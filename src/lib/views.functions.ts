@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const viewInputSchema = z.object({
   target_type: z.enum(["blog", "service"]),
@@ -7,6 +8,7 @@ const viewInputSchema = z.object({
 });
 
 export const recordView = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => viewInputSchema.parse(input))
   .handler(async ({ data }): Promise<{ ok: true }> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
