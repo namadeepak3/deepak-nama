@@ -731,29 +731,50 @@ function Home() {
           </div>
 
           <div className="mt-12">
-            <p className="text-center text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-semibold">Marketing Platforms</p>
-            <div className="relative mt-4">
+            <div className="text-center">
+              <p className="text-[11px] uppercase tracking-[0.22em] text-primary font-bold">Marketing Platforms</p>
+              <h3 className="mt-2 text-2xl md:text-3xl font-display">The stack <span className="text-gradient-gold">we orchestrate</span></h3>
+            </div>
+            <div className="relative mt-6">
               <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent z-10" />
               <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-10" />
-              <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-3 -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {[
-                  { name: "Google Analytics", Icon: BarChart3 },
-                  { name: "Search Console", Icon: Search },
-                  { name: "Google Ads", Icon: Target },
-                  { name: "Bing Webmaster", Icon: Globe },
-                  { name: "Meta Ads", Icon: Megaphone },
-                  { name: "SE Ranking", Icon: LineChart },
-                  { name: "Canva", Icon: PenTool },
-                  { name: "Hootsuite", Icon: Share2 },
-                  { name: "Grammarly", Icon: CheckCircle2 },
-                  { name: "Moz / Ahrefs", Icon: TrendingUp },
-                ].map(({ name, Icon }) => (
-                  <div key={name} className="group snap-start shrink-0 w-56 rounded-2xl border border-border bg-card p-4 flex items-center gap-3 hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all">
-                    <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/30 text-primary grid place-items-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <Icon className="h-5 w-5" />
+                  { name: "Google Analytics", slug: "googleanalytics", color: "E37400" },
+                  { name: "Search Console", slug: "googlesearchconsole", color: "458CF5" },
+                  { name: "Google Ads", slug: "googleads", color: "4285F4" },
+                  { name: "Bing", slug: "microsoftbing", color: "008373" },
+                  { name: "Meta Ads", slug: "meta", color: "0467DF" },
+                  { name: "Instagram", slug: "instagram", color: "E4405F" },
+                  { name: "LinkedIn Ads", slug: "linkedin", color: "0A66C2" },
+                  { name: "YouTube", slug: "youtube", color: "FF0000" },
+                  { name: "Semrush", slug: "semrush", color: "FF642D" },
+                  { name: "Ahrefs", slug: "ahrefs", color: "0F66E9" },
+                  { name: "Canva", slug: "canva", color: "00C4CC" },
+                  { name: "Hootsuite", slug: "hootsuite", color: "143059" },
+                  { name: "Mailchimp", slug: "mailchimp", color: "FFE01B" },
+                  { name: "HubSpot", slug: "hubspot", color: "FF7A59" },
+                  { name: "Shopify", slug: "shopify", color: "7AB55C" },
+                  { name: "WordPress", slug: "wordpress", color: "21759B" },
+                ].map((t) => (
+                  <a
+                    key={t.name}
+                    href={`https://www.google.com/search?q=${encodeURIComponent(t.name)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track("tools_carousel_click", { tool: t.name, kind: "marketing" })}
+                    className="group snap-start shrink-0 w-44 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-4 flex flex-col items-center gap-2 hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all"
+                  >
+                    <div className="h-14 w-14 rounded-2xl bg-white border border-border grid place-items-center shrink-0 group-hover:scale-110 transition-transform shadow-sm">
+                      <img
+                        src={`https://cdn.simpleicons.org/${t.slug}/${t.color}`}
+                        alt={t.name}
+                        loading="lazy"
+                        className="h-8 w-8 object-contain"
+                      />
                     </div>
-                    <span className="font-display text-sm font-semibold leading-tight">{name}</span>
-                  </div>
+                    <span className="font-display text-sm font-semibold leading-tight text-center">{t.name}</span>
+                  </a>
                 ))}
               </div>
             </div>
