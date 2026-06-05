@@ -655,17 +655,17 @@ function Home() {
         </div>
         <Accordion type="single" collapsible className="space-y-3">
           {[
-            { q: "What services does the agency offer?", a: "Full-service digital marketing — SEO &amp; GEO, Google Ads, Meta &amp; LinkedIn paid social, performance creative, lifecycle/email, analytics, and AI-powered automation." },
+            { q: "What services does the agency offer?", a: "Full-service digital marketing — SEO & GEO, Google Ads, Meta & LinkedIn paid social, performance creative, lifecycle/email, analytics, and AI-powered automation." },
             { q: "How are engagements priced?", a: "Retainers typically range ₹50k–₹5L/mo depending on scope, channels and ad spend. Every proposal is custom — request a strategy call for a tailored quote." },
             { q: "How fast will we see results?", a: "Paid channels usually show signal within 2–3 weeks. SEO compounds over 3–6 months. We share a 30/60/90-day roadmap before kickoff so expectations are crystal clear." },
-            { q: "Do you work with our industry?", a: "We&apos;ve shipped campaigns across 18+ industries — ecommerce, SaaS, fintech, healthcare, real estate, education, D2C and B2B. If your funnel needs growth, we can help." },
-            { q: "Do you handle ad spend management?", a: "Yes. Our paid-media team manages Google, Meta, LinkedIn, Amazon &amp; YouTube ad accounts end-to-end — strategy, creative, bidding, tracking and weekly optimization." },
+            { q: "Do you work with our industry?", a: "We've shipped campaigns across 18+ industries — ecommerce, SaaS, fintech, healthcare, real estate, education, D2C and B2B. If your funnel needs growth, we can help." },
+            { q: "Do you handle ad spend management?", a: "Yes. Our paid-media team manages Google, Meta, LinkedIn, Amazon & YouTube ad accounts end-to-end — strategy, creative, bidding, tracking and weekly optimization." },
             { q: "How do you report on performance?", a: "Live Looker Studio dashboards tied to your GA4, ad accounts and CRM — plus a written monthly review with insights, learnings and next bets from your account lead." },
             { q: "Can we cancel anytime?", a: "Yes. Month-to-month retainers with 30-day notice. No long lock-ins, no hidden fees — performance keeps the partnership going." },
           ].map((f,i)=>(
             <AccordionItem key={i} value={`item-${i}`} className="rounded-2xl border border-border bg-card px-5 data-[state=open]:border-primary transition">
               <AccordionTrigger className="text-left text-base font-display hover:no-underline">{f.q}</AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground leading-relaxed" dangerouslySetInnerHTML={{__html: f.a}}/>
+              <AccordionContent className="text-sm text-muted-foreground leading-relaxed">{f.a}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
