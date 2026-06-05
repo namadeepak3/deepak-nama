@@ -57,6 +57,7 @@ import {
   Quote,
   Code,
   Image as ImagePlus,
+  Users as UsersIcon,
 } from "lucide-react";
 import { ExternalLink, Eye as EyeCount } from "lucide-react";
 
@@ -102,7 +103,7 @@ function AdminPage() {
   const canManage = !!capsQuery.data?.canManageServices;
   const canAnalytics = !!capsQuery.data?.canViewAnalytics;
 
-  type Tab = "services" | "analytics" | "blog" | "categories";
+  type Tab = "services" | "analytics" | "blog" | "categories" | "users";
   const defaultTab: Tab = canManage ? "services" : canAnalytics ? "analytics" : "services";
   const [tab, setTab] = useState<Tab>(defaultTab);
   useEffect(() => {
@@ -111,6 +112,7 @@ function AdminPage() {
     if (tab === "analytics" && !canAnalytics && canManage) setTab("services");
     if (tab === "blog" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "categories" && !canManage && canAnalytics) setTab("analytics");
+    if (tab === "users" && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
   }, [capsQuery.data, canManage, canAnalytics, tab]);
 
   const services = useQuery({ queryKey: ["services"], queryFn: () => list(), enabled: canManage });
@@ -244,6 +246,11 @@ function AdminPage() {
             Analytics
           </TabButton>
         )}
+        {(capsQuery.data?.roles ?? []).includes("admin") && (
+          <TabButton active={tab === "users"} onClick={() => setTab("users")} icon={UsersIcon}>
+            Users
+          </TabButton>
+        )}
       </nav>
 
       {tab === "services" && canManage && (
@@ -329,6 +336,10 @@ function AdminPage() {
 
       {tab === "categories" && canManage && (
         <CategoriesPanel />
+      )}
+
+      {tab === "users" && (capsQuery.data?.roles ?? []).includes("admin") && (
+        <UsersPanel />
       )}
 
       {editing && canManage && (
