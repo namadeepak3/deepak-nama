@@ -232,42 +232,105 @@ export type Database = {
         }
         Relationships: []
       }
+      lead_audit_log: {
+        Row: {
+          action: string
+          actor_email: string
+          actor_user_id: string
+          created_at: string
+          field: string
+          id: string
+          lead_id: string
+          new_value: string
+          old_value: string
+        }
+        Insert: {
+          action: string
+          actor_email?: string
+          actor_user_id: string
+          created_at?: string
+          field?: string
+          id?: string
+          lead_id: string
+          new_value?: string
+          old_value?: string
+        }
+        Update: {
+          action?: string
+          actor_email?: string
+          actor_user_id?: string
+          created_at?: string
+          field?: string
+          id?: string
+          lead_id?: string
+          new_value?: string
+          old_value?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           admin_notes: string
+          assigned_email: string
+          assigned_to: string | null
           budget: string
           created_at: string
           email: string
           id: string
+          ip_address: string
           message: string
           name: string
+          page_url: string
+          referrer: string
           service: string
           status: string
           updated_at: string
+          user_agent: string
+          utm_campaign: string
+          utm_medium: string
+          utm_source: string
         }
         Insert: {
           admin_notes?: string
+          assigned_email?: string
+          assigned_to?: string | null
           budget: string
           created_at?: string
           email: string
           id?: string
+          ip_address?: string
           message: string
           name: string
+          page_url?: string
+          referrer?: string
           service: string
           status?: string
           updated_at?: string
+          user_agent?: string
+          utm_campaign?: string
+          utm_medium?: string
+          utm_source?: string
         }
         Update: {
           admin_notes?: string
+          assigned_email?: string
+          assigned_to?: string | null
           budget?: string
           created_at?: string
           email?: string
           id?: string
+          ip_address?: string
           message?: string
           name?: string
+          page_url?: string
+          referrer?: string
           service?: string
           status?: string
           updated_at?: string
+          user_agent?: string
+          utm_campaign?: string
+          utm_medium?: string
+          utm_source?: string
         }
         Relationships: []
       }
