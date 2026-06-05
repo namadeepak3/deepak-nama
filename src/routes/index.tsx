@@ -257,42 +257,102 @@ function Home() {
 
             {/* Right — AI orbit visual */}
             <div className="lg:col-span-7">
-              <div className="relative aspect-square max-w-[560px] mx-auto">
+              <div className="relative aspect-square max-w-[600px] mx-auto">
                 {/* Concentric rings */}
-                <div aria-hidden className="absolute inset-0 rounded-full border border-primary/20 animate-ai-pulse" />
-                <div aria-hidden className="absolute inset-[10%] rounded-full border border-primary/25 animate-ai-pulse" style={{ animationDelay: "0.5s" }} />
-                <div aria-hidden className="absolute inset-[22%] rounded-full border border-primary/30 animate-ai-pulse" style={{ animationDelay: "1s" }} />
-                <div aria-hidden className="absolute inset-[34%] rounded-full border border-primary/40 animate-ai-pulse" style={{ animationDelay: "1.5s" }} />
+                <div aria-hidden className="absolute inset-0 rounded-full border border-foreground/10" />
+                <div aria-hidden className="absolute inset-[12%] rounded-full border border-dashed border-foreground/15" />
+                <div aria-hidden className="absolute inset-[26%] rounded-full border border-foreground/20" />
+                <div aria-hidden className="absolute inset-[40%] rounded-full border border-foreground/25" />
+
+                {/* SVG connection lines from core to each chip */}
+                <svg aria-hidden className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor="currentColor" stopOpacity="0" />
+                      <stop offset="50%" stopColor="currentColor" stopOpacity="0.5" />
+                      <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <g className="text-foreground" stroke="url(#beam)" strokeWidth="0.25" strokeDasharray="0.6 0.6">
+                    {[[50,4],[96,50],[50,96],[4,50],[82,18],[18,82],[82,82],[18,18]].map(([x,y],i)=>(
+                      <line key={i} x1="50" y1="50" x2={x} y2={y} />
+                    ))}
+                  </g>
+                </svg>
+
+                {/* Rotating tick ring */}
+                <div aria-hidden className="absolute inset-[6%] rounded-full" style={{ animation: "ai-orbit 40s linear infinite" }}>
+                  {Array.from({ length: 24 }).map((_, i) => (
+                    <span
+                      key={i}
+                      className="absolute left-1/2 top-0 -translate-x-1/2 block h-2 w-px bg-foreground/30"
+                      style={{ transform: `rotate(${i * 15}deg) translateY(-1px)`, transformOrigin: "50% 50vh" as never }}
+                    />
+                  ))}
+                </div>
 
                 {/* Center AI core */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-28 w-28 md:h-32 md:w-32 rounded-3xl bg-gradient-to-br from-primary to-[oklch(0.45_0.22_240)] grid place-items-center ring-ai">
-                  <Bot className="h-12 w-12 text-primary-foreground" />
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-32 w-32 md:h-36 md:w-36 rounded-3xl bg-foreground text-background grid place-items-center shadow-2xl ring-1 ring-foreground/20">
+                  <div aria-hidden className="absolute inset-0 rounded-3xl bg-ai-grid opacity-30" />
+                  <div aria-hidden className="absolute -inset-3 rounded-[2rem] border border-foreground/10 animate-ai-pulse" />
+                  <div className="relative flex flex-col items-center gap-1">
+                    <Bot className="h-10 w-10" />
+                    <div className="text-[9px] font-semibold uppercase tracking-[0.2em] opacity-80">AI Core</div>
+                  </div>
+                </div>
+
+                {/* Live status badge above core */}
+                <div className="absolute left-1/2 top-[12%] -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full border border-border bg-card/95 backdrop-blur px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-foreground shadow-sm">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-foreground opacity-60" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-foreground" />
+                  </span>
+                  Live · 24/7
                 </div>
 
                 {/* Orbiting capability chips */}
                 {[
-                  { Icon: Search,     label: "Semantic SEO",  pos: "top-0 left-1/2 -translate-x-1/2" },
-                  { Icon: Target,     label: "Predictive bids", pos: "top-1/2 right-0 -translate-y-1/2" },
-                  { Icon: Megaphone,  label: "GenAI creative", pos: "bottom-0 left-1/2 -translate-x-1/2" },
-                  { Icon: BarChart3,  label: "Live attribution", pos: "top-1/2 left-0 -translate-y-1/2" },
-                  { Icon: MousePointerClick, label: "GEO answers", pos: "top-[14%] right-[14%]" },
-                  { Icon: Activity,   label: "Anomaly alerts", pos: "bottom-[14%] left-[14%]" },
-                ].map(({Icon,label,pos},i)=>(
+                  { Icon: Search,     label: "Semantic SEO",    meta: "+38% CTR",   pos: "top-[2%] left-1/2 -translate-x-1/2" },
+                  { Icon: Target,     label: "Predictive bids", meta: "-27% CPA",   pos: "top-1/2 right-[2%] -translate-y-1/2" },
+                  { Icon: Megaphone,  label: "GenAI creative",  meta: "10x output", pos: "bottom-[2%] left-1/2 -translate-x-1/2" },
+                  { Icon: BarChart3,  label: "Live attribution",meta: "1st-party",  pos: "top-1/2 left-[2%] -translate-y-1/2" },
+                  { Icon: MousePointerClick, label: "GEO answers", meta: "AI search", pos: "top-[14%] right-[10%]" },
+                  { Icon: Activity,   label: "Anomaly alerts",  meta: "<60s", pos: "bottom-[14%] left-[10%]" },
+                  { Icon: Bot,        label: "Auto reports",    meta: "Daily", pos: "top-[14%] left-[10%]" },
+                  { Icon: Sparkles,   label: "Creative tests",  meta: "A/B/n", pos: "bottom-[14%] right-[10%]" },
+                ].map(({Icon,label,meta,pos},i)=>(
                   <div
                     key={label}
                     className={`absolute ${pos} animate-ai-float`}
-                    style={{ animationDelay: `${i * 0.4}s` }}
+                    style={{ animationDelay: `${i * 0.35}s` }}
                   >
-                    <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/95 backdrop-blur px-3 py-1.5 text-xs font-medium text-foreground shadow-sm hover:border-primary transition">
-                      <Icon className="h-3.5 w-3.5 text-primary" /> {label}
+                    <div className="inline-flex items-center gap-2 rounded-2xl border border-border bg-card/95 backdrop-blur pl-2 pr-3 py-1.5 text-xs font-medium text-foreground shadow-sm hover:border-foreground hover:-translate-y-0.5 transition">
+                      <span className="h-6 w-6 rounded-lg bg-foreground text-background grid place-items-center">
+                        <Icon className="h-3 w-3" />
+                      </span>
+                      <span className="flex flex-col leading-tight">
+                        <span>{label}</span>
+                        <span className="text-[9px] uppercase tracking-widest text-muted-foreground">{meta}</span>
+                      </span>
                     </div>
                   </div>
                 ))}
 
                 {/* Floating data points */}
-                <div aria-hidden className="absolute top-[28%] right-[34%] h-2 w-2 rounded-full bg-primary animate-ai-pulse" />
-                <div aria-hidden className="absolute bottom-[28%] left-[34%] h-2 w-2 rounded-full bg-[oklch(0.65_0.18_220)] animate-ai-pulse" style={{ animationDelay: "0.8s" }} />
-                <div aria-hidden className="absolute top-[44%] left-[22%] h-1.5 w-1.5 rounded-full bg-primary/70 animate-ai-pulse" style={{ animationDelay: "1.4s" }} />
+                <div aria-hidden className="absolute top-[30%] right-[36%] h-1.5 w-1.5 rounded-full bg-foreground animate-ai-pulse" />
+                <div aria-hidden className="absolute bottom-[30%] left-[36%] h-1.5 w-1.5 rounded-full bg-foreground/60 animate-ai-pulse" style={{ animationDelay: "0.8s" }} />
+                <div aria-hidden className="absolute top-[44%] left-[26%] h-1 w-1 rounded-full bg-foreground/50 animate-ai-pulse" style={{ animationDelay: "1.4s" }} />
+                <div aria-hidden className="absolute bottom-[42%] right-[28%] h-1 w-1 rounded-full bg-foreground/50 animate-ai-pulse" style={{ animationDelay: "1.8s" }} />
+              </div>
+
+              {/* Bottom stat strip */}
+              <div className="mt-6 grid grid-cols-3 gap-3 max-w-[600px] mx-auto">
+                {[["12k+","Decisions / day"],["<60s","Anomaly response"],["48","Data sources"]].map(([k,v])=>(
+                  <div key={v} className="rounded-2xl border border-border bg-card px-4 py-3 text-center">
+                    <div className="font-display text-lg text-foreground leading-none">{k}</div>
+                    <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">{v}</div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
