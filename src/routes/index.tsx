@@ -158,19 +158,33 @@ function Home() {
             ) : (
             <form
               onSubmit={onInquiry}
-              className="rounded-3xl border border-border bg-card/95 backdrop-blur shadow-gold p-6 md:p-7 space-y-4"
+              className="rounded-3xl border border-border bg-card/95 backdrop-blur shadow-gold p-6 md:p-7 space-y-3"
             >
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Start a project</p>
                 <h3 className="mt-1 text-2xl font-display">Request a free growth audit</h3>
+                <p className="mt-1 text-xs text-muted-foreground">Tell us a bit about your brand — a senior strategist replies in 1 business day.</p>
               </div>
-              <div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
                   <input name="name" placeholder="Your name" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.name ? "border-red-400" : "border-border"}`} />
                   {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+                </div>
+                <div>
+                  <input name="phone" placeholder="Phone (optional)" className="w-full rounded-xl bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary" />
+                </div>
               </div>
-              <div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
                   <input name="email" type="email" placeholder="Email address" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.email ? "border-red-400" : "border-border"}`} />
                   {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+                </div>
+                <div>
+                  <input name="company" placeholder="Company / Brand" className="w-full rounded-xl bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary" />
+                </div>
+              </div>
+              <div>
+                <input name="website" placeholder="Website (optional)" className="w-full rounded-xl bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -181,6 +195,9 @@ function Home() {
                     <option>PPC</option>
                     <option>Social Media (SMO)</option>
                     <option>AI Automation</option>
+                    <option>Content Marketing</option>
+                    <option>Email & Lifecycle</option>
+                    <option>Web & CRO</option>
                   </select>
                   {errors.service && <p className="mt-1 text-xs text-red-500">{errors.service}</p>}
                 </div>
@@ -197,7 +214,16 @@ function Home() {
                 </div>
               </div>
               <div>
-                  <textarea name="message" rows={3} placeholder="Tell me about your goals..." className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none ${errors.message ? "border-red-400" : "border-border"}`} />
+                <select name="timeline" className="w-full rounded-xl bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary">
+                  <option value="">When do you want to start?</option>
+                  <option>ASAP (within 2 weeks)</option>
+                  <option>Within 1 month</option>
+                  <option>1–3 months</option>
+                  <option>Just exploring</option>
+                </select>
+              </div>
+              <div>
+                  <textarea name="message" rows={3} placeholder="Tell us about your goals, current marketing & biggest challenge..." className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none ${errors.message ? "border-red-400" : "border-border"}`} />
                   {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message}</p>}
               </div>
                 <button
@@ -207,7 +233,7 @@ function Home() {
                 >
                   {sending ? "Sending..." : <>Send inquiry <Send className="h-4 w-4" /></>}
                 </button>
-              <p className="text-[11px] text-muted-foreground text-center">A strategist replies within 1 business day. No spam.</p>
+              <p className="text-[11px] text-muted-foreground text-center">🔒 Your details stay private. No spam, ever.</p>
             </form>
             )}
           </div>
