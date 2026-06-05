@@ -231,21 +231,21 @@ function Home() {
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             {/* Left — copy */}
             <div className="lg:col-span-5">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
-                <Sparkles className="h-3.5 w-3.5" /> AI-native operating system
+              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground">
+                <Sparkles className="h-3.5 w-3.5" /> The AI Core
               </div>
               <h2 className="mt-5 text-4xl md:text-5xl font-display leading-[1.05]">
-                A marketing brain <span className="text-gradient-gold">trained on your data.</span>
+                Your <span className="text-gradient-gold">growth engine,</span> always on.
               </h2>
               <p className="mt-5 text-muted-foreground leading-relaxed">
-                We pair senior strategists with a proprietary AI stack — predictive bidding, generative creative, semantic SEO clusters and 24/7 anomaly detection. Decisions ship in hours, not weeks.
+                One AI core wired into every channel — bidding, creative, SEO and analytics — so your campaigns improve every hour, not every quarter.
               </p>
               <div className="mt-6 grid grid-cols-2 gap-3">
                 {[
-                  ["10x", "faster creative iteration"],
-                  ["24/7", "performance monitoring"],
-                  ["100%", "first-party data ready"],
-                  ["GEO", "AI-search optimized"],
+                  ["10x", "Faster creative"],
+                  ["24/7", "Live optimization"],
+                  ["-32%", "Lower CPA"],
+                  ["+58%", "More revenue"],
                 ].map(([k,v])=>(
                   <div key={v} className="rounded-2xl border border-border bg-card p-4">
                     <div className="text-2xl font-display text-gradient-gold leading-none">{k}</div>
@@ -253,6 +253,16 @@ function Home() {
                   </div>
                 ))}
               </div>
+              {/* CTAs */}
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-3 text-sm font-semibold hover:opacity-90 transition">
+                  Get my free AI audit <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground hover:border-foreground transition">
+                  See how it works
+                </Link>
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">Free 30-min audit · No obligation · Reply within 1 business day.</p>
             </div>
 
             {/* Right — AI orbit visual */}
@@ -359,6 +369,59 @@ function Home() {
 
           {/* Animated beam separator */}
           <div aria-hidden className="mt-16 h-px w-full bg-gradient-to-r from-transparent via-primary to-transparent animate-ai-beam opacity-60" />
+        </div>
+      </section>
+
+      {/* ============ AI CORE PROOF STRIP ============ */}
+      <section className="border-b border-border bg-card/40">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <div className="grid lg:grid-cols-12 gap-6">
+            {/* Testimonial */}
+            <div className="lg:col-span-5 rounded-3xl border border-border bg-card p-7 flex flex-col">
+              <Quote className="h-6 w-6 text-foreground" />
+              <p className="mt-4 text-lg font-display leading-snug text-foreground">
+                &ldquo;Their AI core rebuilt our paid funnel in 6 weeks. CPL dropped 52% and MQLs doubled.&rdquo;
+              </p>
+              <div className="mt-5 flex items-center gap-1">
+                {Array.from({length:5}).map((_,i)=><Star key={i} className="h-4 w-4 fill-foreground text-foreground"/>)}
+              </div>
+              <div className="mt-5 pt-5 border-t border-border flex items-center justify-between">
+                <div>
+                  <div className="font-semibold text-sm">David Chen</div>
+                  <div className="text-xs text-muted-foreground">Founder, Velocity SaaS</div>
+                </div>
+                <span className="text-[10px] uppercase tracking-widest text-foreground font-semibold">Google · 4 mo</span>
+              </div>
+            </div>
+
+            {/* Case study highlights */}
+            <div className="lg:col-span-7 grid sm:grid-cols-2 gap-4">
+              {[
+                { tag: "D2C · Ecommerce", brand: "Lumen Skincare", k: "8.1x", kl: "Peak ROAS", note: "From ₹40L to ₹3.2Cr/mo in 9 months." },
+                { tag: "Fintech", brand: "Finovate", k: "+240%", kl: "Organic traffic", note: "#1 ranking on 14 money keywords." },
+                { tag: "B2B SaaS", brand: "Velocity SaaS", k: "-52%", kl: "CPL", note: "MQLs doubled in 4 months." },
+                { tag: "Real Estate", brand: "Harborline Homes", k: "5.8x", kl: "ROAS", note: "Regional to national in 12 months." },
+              ].map((c)=>(
+                <Link key={c.brand} to="/blog" className="group rounded-3xl border border-border bg-card p-5 hover:border-foreground transition">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{c.tag}</span>
+                  <div className="mt-2 font-display text-base text-foreground">{c.brand}</div>
+                  <div className="mt-3 flex items-baseline gap-2">
+                    <span className="text-2xl font-display text-gradient-gold leading-none">{c.k}</span>
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{c.kl}</span>
+                  </div>
+                  <p className="mt-3 text-xs text-muted-foreground leading-relaxed">{c.note}</p>
+                  <div className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-foreground">
+                    Read case study <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5"/>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div className="mt-8 text-center">
+            <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-6 py-3 text-sm font-semibold hover:opacity-90 transition">
+              See what AI can do for your brand <ArrowRight className="h-4 w-4"/>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -523,6 +586,44 @@ function Home() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ============ INDUSTRIES WE SERVE ============ */}
+      <section className="mx-auto max-w-7xl px-6 py-24">
+        <div className="flex items-end justify-between flex-wrap gap-6 mb-12">
+          <div className="max-w-2xl">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
+            <p className="mt-4 text-muted-foreground">18+ industries shipped — every model, funnel and dashboard adapted to how your buyers actually convert.</p>
+          </div>
+          <Link to="/contact" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1">Talk to a strategist <ArrowRight className="h-4 w-4"/></Link>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {[
+            { Icon: ShoppingCart, name: "Ecommerce & D2C", note: "Shopify, Amazon, marketplaces" },
+            { Icon: Bot, name: "SaaS & B2B", note: "Demand-gen & ABM pipelines" },
+            { Icon: LineChart, name: "Fintech", note: "Compliance-aware acquisition" },
+            { Icon: ShieldCheck, name: "Healthcare", note: "HIPAA-safe campaigns" },
+            { Icon: Globe, name: "Real Estate", note: "Geo-targeted lead funnels" },
+            { Icon: Award, name: "Education & EdTech", note: "Enrollment & retention" },
+            { Icon: Sparkles, name: "Beauty & Lifestyle", note: "Influencer + UGC engines" },
+            { Icon: Rocket, name: "Travel & Hospitality", note: "Seasonal demand modeling" },
+            { Icon: Target, name: "Automotive", note: "Local + national hybrid" },
+            { Icon: Megaphone, name: "Media & Publishing", note: "Audience growth + retention" },
+            { Icon: BarChart3, name: "Manufacturing & B2B", note: "Long-cycle attribution" },
+            { Icon: Mail, name: "Professional Services", note: "Authority + lead capture" },
+          ].map(({ Icon, name, note }) => (
+            <div key={name} className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-4 hover:border-foreground transition">
+              <div className="h-10 w-10 shrink-0 rounded-xl bg-foreground text-background grid place-items-center">
+                <Icon className="h-4 w-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="font-display text-sm text-foreground truncate">{name}</div>
+                <div className="text-[11px] text-muted-foreground truncate">{note}</div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
