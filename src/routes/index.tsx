@@ -373,40 +373,190 @@ function Home() {
         </div>
       </section>
 
-      {/* ============ WHY ME + STATS BENTO ============ */}
+      {/* ============ WHO I AM ============ */}
       <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="grid grid-cols-12 auto-rows-[minmax(140px,auto)] gap-4">
-          <div className="col-span-12 md:col-span-8 rounded-3xl border border-border bg-card p-8 md:p-10 relative overflow-hidden">
-            <div className="absolute -top-20 -left-20 h-64 w-64 rounded-full bg-primary/15 blur-3xl"/>
-            <p className="relative text-xs uppercase tracking-[0.25em] text-primary font-semibold">Who I am</p>
-            <h2 className="relative mt-3 text-3xl md:text-5xl font-display uppercase leading-[1.05]">Growth partner, not just <span className="text-gradient-gold">another freelancer.</span></h2>
-            <p className="relative mt-5 max-w-xl text-muted-foreground leading-relaxed">Senior strategy, certified specialists &amp; AI-powered frameworks — turning marketing into a predictable engine for revenue.</p>
-            <Link to="/about" className="relative mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
-              About me <ArrowRight className="h-4 w-4"/>
-            </Link>
+        <div className="grid lg:grid-cols-12 gap-10 items-center">
+          {/* Portrait / signature panel */}
+          <div className="lg:col-span-5 relative">
+            <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-border bg-gradient-to-br from-primary/25 via-card to-card">
+              <div className="absolute inset-0 opacity-60" style={{backgroundImage:`url(${heroBg})`, backgroundSize:"cover", backgroundPosition:"center"}}/>
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"/>
+              <div className="absolute top-5 left-5 right-5 flex items-center justify-between">
+                <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/90 backdrop-blur px-3 py-1 text-[11px] font-semibold text-foreground">
+                  <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span></span>
+                  Available · Q3 2026
+                </span>
+                <span className="rounded-full border border-border bg-card/90 backdrop-blur px-3 py-1 text-[11px] text-muted-foreground">Mumbai · IN</span>
+              </div>
+              <div className="absolute bottom-6 left-6 right-6">
+                <div className="text-7xl md:text-8xl font-display text-foreground leading-none">VR</div>
+                <div className="mt-2 text-sm font-semibold text-foreground">vrseoguru</div>
+                <div className="text-xs text-muted-foreground">Freelance Growth Partner</div>
+              </div>
+            </div>
+            {/* Floating mini-cards */}
+            <div className="absolute -top-4 -right-4 hidden md:block rounded-2xl border border-border bg-card shadow-gold p-3 w-44">
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-primary font-semibold"><Activity className="h-3 w-3"/> Live</div>
+              <div className="mt-1 text-2xl font-display text-gradient-gold leading-none">4.2x</div>
+              <div className="text-[11px] text-muted-foreground">Avg client ROAS</div>
+            </div>
+            <div className="absolute -bottom-4 -left-4 hidden md:block rounded-2xl border border-border bg-card shadow-gold p-3 w-48">
+              <div className="flex items-center gap-1 text-primary mb-1">{Array.from({length:5}).map((_,i)=><Star key={i} className="h-3 w-3 fill-primary text-primary"/>)}</div>
+              <div className="text-xs font-semibold">98% client retention</div>
+              <div className="text-[11px] text-muted-foreground">Across 120+ campaigns</div>
+            </div>
           </div>
-          {[
-            ["7+","Years"],
-            ["120+","Campaigns"],
-            ["4.2x","Avg ROAS"],
-            ["24h","Reply"],
-          ].map(([k,v])=>(
-            <div key={v} className="col-span-6 md:col-span-2 rounded-3xl border border-border bg-card p-6 flex flex-col justify-between">
-              <div className="text-3xl md:text-4xl font-display text-gradient-gold">{k}</div>
-              <div className="text-xs uppercase tracking-widest text-muted-foreground">{v}</div>
+
+          {/* Details */}
+          <div className="lg:col-span-7">
+            <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Who I am</p>
+            <h2 className="mt-3 text-4xl md:text-5xl lg:text-6xl font-display uppercase leading-[1.02]">A growth partner,<br/><span className="text-gradient-gold">not just another freelancer.</span></h2>
+            <p className="mt-5 text-muted-foreground leading-relaxed max-w-xl">
+              7+ years building revenue systems for ecommerce, SaaS &amp; D2C brands. I fuse senior strategy with AI-powered execution — every campaign engineered around your bottom line, not vanity metrics.
+            </p>
+
+            {/* Stat row */}
+            <div className="mt-8 grid grid-cols-4 gap-3">
+              {[["7+","Years"],["120+","Campaigns"],["4.2x","Avg ROAS"],["24h","Reply"]].map(([k,v])=>(
+                <div key={v} className="rounded-2xl border border-border bg-card p-4">
+                  <div className="text-2xl md:text-3xl font-display text-gradient-gold leading-none">{k}</div>
+                  <div className="mt-2 text-[11px] uppercase tracking-widest text-muted-foreground">{v}</div>
+                </div>
+              ))}
             </div>
-          ))}
-          {[
-            { Icon: TrendingUp, title: "ROI-Focused", desc: "Every campaign tied to return." },
-            { Icon: ShieldCheck, title: "Transparent", desc: "Real-time dashboards." },
-            { Icon: Award, title: "Certified", desc: "Google, Meta & Amazon." },
-            { Icon: Rocket, title: "Fast", desc: "Ship in days, not months." },
-          ].map(({Icon,title,desc})=>(
-            <div key={title} className="col-span-6 md:col-span-3 rounded-3xl border border-border bg-card p-6">
-              <Icon className="h-5 w-5 text-primary"/>
-              <h3 className="mt-3 font-display uppercase">{title}</h3>
-              <p className="mt-1 text-xs text-muted-foreground">{desc}</p>
+
+            {/* Pillars */}
+            <div className="mt-6 grid sm:grid-cols-2 gap-3">
+              {[
+                { Icon: TrendingUp, title: "ROI-Focused", desc: "Every campaign tied to revenue & return." },
+                { Icon: ShieldCheck, title: "Transparent", desc: "Live dashboards, weekly insights." },
+                { Icon: Award, title: "Certified", desc: "Google, Meta & Amazon partner-level." },
+                { Icon: Rocket, title: "Fast", desc: "First campaign live in under 14 days." },
+              ].map(({Icon,title,desc})=>(
+                <div key={title} className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4">
+                  <div className="h-9 w-9 shrink-0 rounded-lg bg-primary/15 border border-primary/30 grid place-items-center">
+                    <Icon className="h-4 w-4 text-primary"/>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-display uppercase">{title}</h3>
+                    <p className="text-xs text-muted-foreground mt-0.5">{desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link to="/about" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
+                About me <ArrowRight className="h-4 w-4"/>
+              </Link>
+              <Link to="/contact" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary transition">
+                Let&apos;s talk
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ RESULTS ============ */}
+      <section className="relative border-y border-border bg-gradient-to-br from-primary/10 via-card/30 to-card/30 overflow-hidden">
+        <div aria-hidden className="absolute -top-32 left-1/4 h-72 w-72 rounded-full bg-primary/20 blur-3xl"/>
+        <div aria-hidden className="absolute -bottom-32 right-1/4 h-72 w-72 rounded-full bg-primary/15 blur-3xl"/>
+        <div className="relative mx-auto max-w-7xl px-6 py-24">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Results that compound</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">Numbers do the talking</h2>
+            <p className="mt-4 text-muted-foreground">Aggregate impact across 120+ campaigns shipped in the last 24 months.</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { k: "₹84Cr+", v: "Revenue driven", Icon: TrendingUp },
+              { k: "4.2x", v: "Average ROAS", Icon: Activity },
+              { k: "-47%", v: "Avg CPA reduction", Icon: Target },
+              { k: "+240%", v: "Organic traffic lift", Icon: Search },
+              { k: "120+", v: "Campaigns shipped", Icon: Rocket },
+              { k: "32M+", v: "Ad impressions", Icon: MousePointerClick },
+              { k: "98%", v: "Client retention", Icon: ShieldCheck },
+              { k: "18", v: "Industries served", Icon: Globe },
+            ].map(({k,v,Icon})=>(
+              <div key={v} className="rounded-3xl border border-border bg-card p-6 hover:border-primary transition">
+                <Icon className="h-5 w-5 text-primary"/>
+                <div className="mt-4 text-3xl md:text-4xl font-display text-gradient-gold leading-none">{k}</div>
+                <div className="mt-2 text-xs uppercase tracking-widest text-muted-foreground">{v}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============ CASE STUDIES ============ */}
+      <section className="mx-auto max-w-7xl px-6 py-24">
+        <div className="flex items-end justify-between flex-wrap gap-6 mb-12">
+          <div className="max-w-2xl">
+            <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Case studies</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase leading-[1.05]">Brands I&apos;ve <span className="text-gradient-gold">scaled.</span></h2>
+            <p className="mt-4 text-muted-foreground">A few recent wins — full breakdowns inside.</p>
+          </div>
+          <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">View all <ArrowRight className="h-4 w-4"/></Link>
+        </div>
+        <div className="grid grid-cols-12 gap-4">
+          {[
+            {
+              span: "col-span-12 lg:col-span-7",
+              tag: "D2C · Ecommerce",
+              title: "Lumen Skincare — From ₹40L to ₹3.2Cr/mo in 9 months",
+              desc: "Rebuilt the Meta + Google funnel with creative iteration loops and server-side tracking. Profit-first scaling, not blended ROAS theatre.",
+              stats: [["8.1x","Peak ROAS"],["+312%","Revenue"],["-44%","CAC"]],
+              channels: ["Meta","Google","Email"],
+            },
+            {
+              span: "col-span-12 lg:col-span-5",
+              tag: "B2B SaaS",
+              title: "Velocity SaaS — CPL cut by 52% in 4 months",
+              desc: "Restructured Google Ads accounts, layered intent + LinkedIn retargeting, and built a content-led demo funnel.",
+              stats: [["-52%","CPL"],["2.1x","MQLs"]],
+              channels: ["Google","LinkedIn"],
+            },
+            {
+              span: "col-span-12 lg:col-span-5",
+              tag: "Fintech",
+              title: "Finovate — #1 ranking on 14 money keywords",
+              desc: "Technical SEO overhaul + topical authority programme. AI-search optimization (GEO) baked in from day one.",
+              stats: [["+240%","Organic"],["#1","SERP"]],
+              channels: ["SEO","Content"],
+            },
+            {
+              span: "col-span-12 lg:col-span-7",
+              tag: "Real Estate",
+              title: "Harborline Homes — Regional to national in 12 months",
+              desc: "Geo-expansion playbook with localized landing pages, performance creative testing, and a lifecycle engine that nurtures cold leads to booked tours.",
+              stats: [["5.8x","ROAS"],["+186%","Site visits"],["3.4x","Bookings"]],
+              channels: ["Google","Meta","SEO"],
+            },
+          ].map((c)=>(
+            <Link key={c.title} to="/blog" className={`${c.span} group relative rounded-3xl border border-border bg-card p-7 md:p-8 hover:border-primary transition overflow-hidden`}>
+              <div className="absolute -bottom-20 -right-20 h-56 w-56 rounded-full bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition"/>
+              <div className="relative flex items-center justify-between flex-wrap gap-2">
+                <span className="rounded-full bg-primary/15 border border-primary/30 px-3 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-widest">{c.tag}</span>
+                <div className="flex gap-1.5">
+                  {c.channels.map(ch=>(
+                    <span key={ch} className="rounded-md bg-secondary border border-border px-2 py-0.5 text-[10px] text-muted-foreground">{ch}</span>
+                  ))}
+                </div>
+              </div>
+              <h3 className="relative mt-5 text-2xl md:text-3xl font-display uppercase leading-tight">{c.title}</h3>
+              <p className="relative mt-3 text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
+              <div className="relative mt-6 grid grid-cols-3 gap-3">
+                {c.stats.map(([k,v])=>(
+                  <div key={v} className="rounded-2xl border border-border bg-background/40 p-3">
+                    <div className="text-xl md:text-2xl font-display text-gradient-gold leading-none">{k}</div>
+                    <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">{v}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="relative mt-5 inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                Read case study <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1"/>
+              </div>
+            </Link>
           ))}
         </div>
       </section>
