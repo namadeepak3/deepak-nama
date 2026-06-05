@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2, TrendingUp, Award, Star, Quote, Phone, Bot, Search, Megaphone, Target, BarChart3, Globe, Rocket, Activity, Play, MousePointerClick, Mail, Compass, Hammer, FlaskConical, FileBarChart, PenTool, Share2, Code2, ShoppingCart, Youtube, Linkedin } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2, TrendingUp, Award, Star, Quote, Phone, Bot, Search, Megaphone, Target, BarChart3, Globe, Rocket, Activity, Play, MousePointerClick, Mail, Compass, Hammer, FlaskConical, FileBarChart, PenTool, Share2, Code2, ShoppingCart, Youtube, Linkedin, MessageCircle, Smartphone, Database, Brain, Cpu, GitBranch, Layers, Workflow, Eye, Lightbulb } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { useServerFn } from "@tanstack/react-start";
 import { createLead } from "@/lib/leads.functions";
@@ -264,7 +264,7 @@ function Home() {
                     <option>Social Media (SMO)</option>
                     <option>AI Automation</option>
                     <option>Content Marketing</option>
-                    <option>Email & Lifecycle</option>
+                    <option>WhatsApp & SMS Marketing</option>
                     <option>Web & CRO</option>
                   </select>
                   {errors.service && <p className="mt-1 text-xs text-red-500">{errors.service}</p>}
@@ -321,7 +321,7 @@ function Home() {
               { Icon: BarChart3, label: "ML Attribution" },
               { Icon: Mail, label: "AI Lifecycle" },
             ].map(({Icon,label})=>(
-              <div key={label} className="min-w-0 flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-3 py-3 text-center text-xs sm:text-sm font-medium text-foreground hover:border-primary hover:text-primary transition">
+              <div key={label} className="btn-fx min-w-0 flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-3 py-3 text-center text-xs sm:text-sm font-medium text-foreground hover:border-primary hover:text-primary transition">
                 <Icon className="h-4 w-4 text-primary"/> {label}
               </div>
             ))}
@@ -474,6 +474,66 @@ function Home() {
 
       {/* ============ SERVICES — BENTO ============ */}
       {/* ============ DIGITAL MARKETING SERVICES ============ */}
+      {/* ============ EXPLORE DIGITAL MARKETING ============ */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+        <div aria-hidden className="pointer-events-none absolute -top-24 right-[-10%] h-80 w-80 rounded-full bg-primary/20 blur-3xl" />
+        <div aria-hidden className="pointer-events-none absolute -bottom-24 left-[-10%] h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-16">
+          <div className="text-center max-w-3xl mx-auto">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Explore digital marketing</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">
+              The <span className="text-gradient-gold">building blocks</span> of modern growth.
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              From the first impression to lifetime value — every discipline, framework and channel we orchestrate under one AI-powered roof.
+            </p>
+          </div>
+
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[
+              { Icon: Brain, title: "Strategy & Positioning", desc: "ICP research, message-market fit and category design." },
+              { Icon: Search, title: "Search & Discovery", desc: "SEO, GEO and answer-engine optimisation." },
+              { Icon: Target, title: "Paid Acquisition", desc: "Google, Meta, LinkedIn, TikTok — profit-modeled." },
+              { Icon: Sparkles, title: "Creative Production", desc: "GenAI-assisted statics, motion and UGC at scale." },
+              { Icon: MessageCircle, title: "Conversational", desc: "WhatsApp, SMS, chatbots and live concierge." },
+              { Icon: PenTool, title: "Content & SEO", desc: "Editorial, thought-leadership and topical authority." },
+              { Icon: Share2, title: "Social & Community", desc: "Reels, Shorts and community-led growth loops." },
+              { Icon: Workflow, title: "Lifecycle & CRM", desc: "Onboarding, retention and win-back orchestration." },
+              { Icon: BarChart3, title: "Analytics & Attribution", desc: "GA4, server-side, MMM and warehouse modelling." },
+              { Icon: Eye, title: "CRO & Experimentation", desc: "Hypothesis-led A/B testing and personalisation." },
+              { Icon: Cpu, title: "Marketing Automation", desc: "n8n, Zapier and AI agents wired to your stack." },
+              { Icon: Database, title: "Data & AI Layer", desc: "First-party data, CDP, RAG and predictive models." },
+            ].map(({ Icon, title, desc }) => (
+              <div
+                key={title}
+                className="group relative rounded-2xl border border-border bg-card/80 backdrop-blur p-5 hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all"
+              >
+                <div className="h-11 w-11 rounded-xl bg-primary/10 border border-primary/30 text-primary grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="mt-4 font-display text-base leading-tight">{title}</h3>
+                <p className="mt-2 text-xs text-muted-foreground leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/services"
+              className="btn-fx inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-gold"
+            >
+              Browse all services <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/contact"
+              className="btn-fx inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary"
+            >
+              <Lightbulb className="h-4 w-4 text-primary" /> Get a custom roadmap
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-gradient-to-b from-background via-card/50 to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
@@ -494,7 +554,7 @@ function Home() {
               { Icon: ShoppingCart, title: "Amazon & Marketplaces", desc: "Sponsored Ads, listing optimization and DSP for brands scaling on Amazon and Flipkart.", bullets: ["Sponsored Ads", "Listing SEO", "Amazon DSP"] },
               { Icon: Share2, title: "Social Media (SMO)", desc: "Organic content calendars, community management and short-form video that compounds reach.", bullets: ["Content calendar", "Community ops", "Reels & Shorts"] },
               { Icon: PenTool, title: "Content Marketing", desc: "SEO-led articles, thought-leadership and lead magnets built to convert, not just rank.", bullets: ["Editorial strategy", "Long-form content", "Lead magnets"] },
-              { Icon: Mail, title: "Email & Lifecycle", desc: "Klaviyo, HubSpot and Mailchimp flows that turn one-time buyers into repeat revenue.", bullets: ["Welcome flows", "Win-back", "Segmentation"] },
+              { Icon: MessageCircle, title: "WhatsApp & SMS Marketing", desc: "Two-way WhatsApp Business API and SMS journeys with 95%+ open rates — built for commerce, support and re-engagement.", bullets: ["WhatsApp API", "SMS broadcasts", "Drip & chatbot flows"] },
               { Icon: Youtube, title: "Video & YouTube Ads", desc: "Performance video production plus YouTube media buying for awareness and conversion.", bullets: ["Ad production", "YouTube Ads", "Connected TV"] },
               { Icon: Code2, title: "Web & CRO", desc: "Landing pages, Shopify and Webflow builds — designed and tested to lift conversion.", bullets: ["Landing pages", "A/B testing", "Page speed"] },
               { Icon: BarChart3, title: "Analytics & Tracking", desc: "GA4, server-side tracking, BigQuery and Looker dashboards you can actually trust.", bullets: ["GA4 setup", "Server-side CAPI", "Looker dashboards"] },
@@ -506,7 +566,7 @@ function Home() {
                 className="group relative rounded-3xl border border-border bg-card p-6 hover:border-foreground transition overflow-hidden"
               >
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl bg-foreground text-background grid place-items-center">
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary border border-primary/30 grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                     <Icon className="h-5 w-5" />
                   </div>
                   <h3 className="font-display text-lg">{title}</h3>
@@ -551,8 +611,8 @@ function Home() {
             { Icon: BarChart3, name: "Manufacturing & B2B", note: "Long-cycle attribution" },
             { Icon: Mail, name: "Professional Services", note: "Authority + lead capture" },
           ].map(({ Icon, name, note }) => (
-            <div key={name} className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-4 hover:border-foreground transition">
-              <div className="h-10 w-10 shrink-0 rounded-xl bg-foreground text-background grid place-items-center">
+            <div key={name} className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-4 hover:border-primary hover:shadow-gold transition">
+              <div className="h-10 w-10 shrink-0 rounded-xl bg-primary/10 text-primary border border-primary/30 grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                 <Icon className="h-4 w-4" />
               </div>
               <div className="min-w-0">
