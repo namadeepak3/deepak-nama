@@ -19,6 +19,16 @@ export type RlsCheck = {
   expectation: string;
   pass: boolean;
   details: string;
+  policies: RlsPolicyDetail[];
+};
+
+export type RlsPolicyDetail = {
+  name: string;
+  cmd: string;
+  roles: string[];
+  using: string | null;
+  with_check: string | null;
+  admin_scoped: boolean;
 };
 
 export type RlsCheckReport = {
@@ -32,7 +42,13 @@ export const runRlsChecks = createServerFn({ method: "GET" })
   .handler(async ({ context }): Promise<RlsCheckReport> => {
     await assertAdmin(context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    type Row = { table_name: string; expectation: string; pass: boolean; details: string };
+    type Row = {
+      table_name: string;
+      expectation: string;
+      pass: boolean;
+      details: string;
+      policies: RlsPolicyDetail[] | null;
+    };
     const { data, error } = await (
       supabaseAdmin.rpc as unknown as (
         fn: string,
@@ -57,6 +73,7 @@ export const runRlsChecks = createServerFn({ method: "GET" })
       expectation: r.expectation,
       pass: r.pass,
       details: r.details,
+      policies: r.policies ?? [],
     }));
     return {
       ranAt: new Date().toISOString(),
