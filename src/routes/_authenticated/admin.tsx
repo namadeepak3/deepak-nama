@@ -2415,6 +2415,25 @@ function InquiryRow({
 }) {
   const [notes, setNotes] = useState(lead.adminNotes);
   useEffect(() => setNotes(lead.adminNotes), [lead.adminNotes]);
+  const [editMode, setEditMode] = useState(false);
+  const [form, setForm] = useState({
+    name: lead.name,
+    email: lead.email,
+    phone: lead.phone,
+    website: lead.website,
+    company: lead.company,
+    message: lead.message,
+  });
+  useEffect(() => {
+    setForm({
+      name: lead.name,
+      email: lead.email,
+      phone: lead.phone,
+      website: lead.website,
+      company: lead.company,
+      message: lead.message,
+    });
+  }, [lead.id, lead.updatedAt]);
   const auditFn = useServerFn(listLeadAudit);
   const auditQuery = useQuery({
     queryKey: ["lead-audit", lead.id, lead.updatedAt],
@@ -2443,6 +2462,8 @@ function InquiryRow({
           </div>
           <p className="text-xs text-muted-foreground truncate">
             <a href={`mailto:${lead.email}`} className="hover:text-foreground">{lead.email}</a>
+            {lead.phone && <> · {lead.phone}</>}
+            {lead.website && <> · {lead.website}</>}
             {lead.service && <> · {lead.service}</>}
             {lead.budget && <> · {lead.budget}</>}
             <> · {new Date(lead.createdAt).toLocaleDateString()}</>
@@ -2491,6 +2512,14 @@ function InquiryRow({
       {open && (
         <div className="px-4 pb-4 border-t border-border bg-background/40 space-y-3">
           <div className="mt-3 grid sm:grid-cols-2 gap-2 text-xs">
+            <MetaRow label="Name" value={lead.name} />
+            <MetaRow label="Email" value={lead.email} />
+            <MetaRow label="Phone" value={lead.phone} />
+            <MetaRow label="Website" value={lead.website} />
+            <MetaRow label="Company" value={lead.company} />
+            <MetaRow label="Submitted" value={new Date(lead.createdAt).toLocaleString()} />
+          </div>
+          <div className="mt-3 grid sm:grid-cols-2 gap-2 text-xs">
             <MetaRow label="IP address" value={lead.ipAddress} />
             <MetaRow label="User agent" value={lead.userAgent} mono />
             <MetaRow label="Page URL" value={lead.pageUrl} mono />
@@ -2502,6 +2531,51 @@ function InquiryRow({
           <div>
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground mt-3">Message</p>
             <p className="mt-1 whitespace-pre-wrap text-sm text-foreground">{lead.message || "(empty)"}</p>
+          </div>
+          <div>
+            <div className="flex items-center justify-between">
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Edit submission</p>
+              <button
+                type="button"
+                onClick={() => setEditMode((v) => !v)}
+                className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-[11px] hover:border-primary"
+              >
+                <Pencil className="h-3 w-3" /> {editMode ? "Cancel" : "Edit"}
+              </button>
+            </div>
+            {editMode && (
+              <div className="mt-2 grid sm:grid-cols-2 gap-2">
+                {(["name","email","phone","website","company"] as const).map((f) => (
+                  <input
+                    key={f}
+                    value={(form as any)[f]}
+                    onChange={(e) => setForm({ ...form, [f]: e.target.value })}
+                    placeholder={f}
+                    className="rounded-md border border-border bg-background px-3 py-2 text-sm"
+                  />
+                ))}
+                <textarea
+                  rows={3}
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  placeholder="Message"
+                  className="sm:col-span-2 rounded-md border border-border bg-background px-3 py-2 text-sm"
+                />
+                <div className="sm:col-span-2 flex justify-end">
+                  <button
+                    type="button"
+                    disabled={pending}
+                    onClick={() => {
+                      onUpdate(form);
+                      setEditMode(false);
+                    }}
+                    className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-accent disabled:opacity-50"
+                  >
+                    <Save className="h-3 w-3" /> Save changes
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
           <div>
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Admin notes</p>
