@@ -612,29 +612,29 @@ function Home() {
 
       {/* ============ RESULTS ============ */}
       <section className="relative border-y border-border bg-gradient-to-br from-primary/10 via-card/30 to-card/30 overflow-hidden">
-        <div aria-hidden className="absolute -top-32 left-1/4 h-72 w-72 rounded-full bg-primary/20 blur-3xl"/>
-        <div aria-hidden className="absolute -bottom-32 right-1/4 h-72 w-72 rounded-full bg-primary/15 blur-3xl"/>
-        <div className="relative mx-auto max-w-7xl px-6 py-14">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Results that compound</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display">Numbers do the talking</h2>
-            <p className="mt-4 text-muted-foreground">Aggregate impact across 120+ client engagements shipped in the last 24 months.</p>
+        <div aria-hidden className="absolute -top-24 left-1/4 h-56 w-56 rounded-full bg-primary/20 blur-3xl"/>
+        <div className="relative mx-auto max-w-7xl px-6 py-10">
+          <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
+            <div>
+              <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Numbers do the talking</p>
+              <h2 className="mt-2 text-2xl md:text-3xl font-display">Impact across 120+ engagements</h2>
+            </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { k: "₹84Cr+", v: "Revenue driven", Icon: TrendingUp },
               { k: "4.2x", v: "Average ROAS", Icon: Activity },
               { k: "-47%", v: "Avg CPA reduction", Icon: Target },
-              { k: "+240%", v: "Organic traffic lift", Icon: Search },
-              { k: "120+", v: "Campaigns shipped", Icon: Rocket },
-              { k: "32M+", v: "Ad impressions", Icon: MousePointerClick },
-              { k: "98%", v: "Client retention", Icon: ShieldCheck },
-              { k: "18", v: "Industries served", Icon: Globe },
+              { k: "+240%", v: "Organic traffic", Icon: Search },
             ].map(({k,v,Icon})=>(
-              <div key={v} className="rounded-3xl border border-border bg-card p-6 hover:border-primary transition">
-                <Icon className="h-5 w-5 text-primary"/>
-                <div className="mt-4 text-3xl md:text-4xl font-display text-gradient-gold leading-none">{k}</div>
-                <div className="mt-2 text-xs uppercase tracking-widest text-muted-foreground">{v}</div>
+              <div key={v} className="rounded-2xl border border-border bg-card p-4 hover:border-primary transition flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-primary/15 border border-primary/30 grid place-items-center shrink-0">
+                  <Icon className="h-4 w-4 text-primary"/>
+                </div>
+                <div className="min-w-0">
+                  <div className="text-xl md:text-2xl font-display text-gradient-gold leading-none">{k}</div>
+                  <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground truncate">{v}</div>
+                </div>
               </div>
             ))}
           </div>
@@ -683,15 +683,31 @@ function Home() {
           </div>
           <div className="grid md:grid-cols-3 gap-4">
             {[
-              ["SEO","10 SEO Trends That Will Define 2026","AI search, entity optimization & what brands are doing to stay ahead.","May 28 · 8 min"],
-              ["PPC","Maximize ROI From Google Ads in 2026","Lower CPA and scale profitable campaigns with AI bidding.","May 14 · 6 min"],
-                ["Content","Content That Actually Converts","The framework our team uses to build assets that drive real revenue.","Apr 30 · 7 min"],
-            ].map(([tag,title,desc,meta])=>(
-              <article key={title} className="rounded-3xl border border-border bg-card p-6 flex flex-col hover:border-primary transition">
-                <span className="self-start rounded-full bg-primary/15 border border-primary/30 px-3 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-widest">{tag}</span>
-                <h3 className="mt-4 text-lg font-display leading-snug">{title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{desc}</p>
-                <p className="mt-5 text-xs text-muted-foreground">{meta}</p>
+              { tag: "SEO", title: "10 SEO Trends That Will Define 2026", desc: "AI search, entity optimization & what brands are doing to stay ahead.", meta: "May 28 · 8 min", Icon: Search, grad: "from-primary/30 via-primary/10 to-transparent" },
+              { tag: "PPC", title: "Maximize ROI From Google Ads in 2026", desc: "Lower CPA and scale profitable campaigns with AI bidding.", meta: "May 14 · 6 min", Icon: Target, grad: "from-foreground/20 via-foreground/5 to-transparent" },
+              { tag: "Content", title: "Content That Actually Converts", desc: "The framework our team uses to build assets that drive real revenue.", meta: "Apr 30 · 7 min", Icon: PenTool, grad: "from-primary/25 via-card to-transparent" },
+            ].map(({tag,title,desc,meta,Icon,grad})=>(
+              <article key={title} className="group rounded-3xl border border-border bg-card flex flex-col overflow-hidden hover:border-primary transition">
+                <div className={`relative aspect-[16/9] bg-gradient-to-br ${grad} border-b border-border overflow-hidden`}>
+                  <div aria-hidden className="absolute inset-0 bg-ai-grid opacity-40" />
+                  <div aria-hidden className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-primary/20 blur-2xl"/>
+                  <div className="absolute inset-0 grid place-items-center">
+                    <div className="h-16 w-16 rounded-2xl bg-foreground text-background grid place-items-center shadow-2xl ring-1 ring-foreground/20 group-hover:scale-110 transition-transform">
+                      <Icon className="h-7 w-7"/>
+                    </div>
+                  </div>
+                  <span className="absolute top-3 left-3 rounded-full bg-background/90 backdrop-blur border border-border px-3 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-widest">{tag}</span>
+                </div>
+                <div className="p-6 flex flex-col flex-1">
+                  <h3 className="text-lg font-display leading-snug">{title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{desc}</p>
+                  <div className="mt-5 flex items-center justify-between">
+                    <p className="text-xs text-muted-foreground">{meta}</p>
+                    <Link to="/blog" className="inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:text-primary transition">
+                      Read <ArrowRight className="h-3.5 w-3.5"/>
+                    </Link>
+                  </div>
+                </div>
               </article>
             ))}
           </div>
