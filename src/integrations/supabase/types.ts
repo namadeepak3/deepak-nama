@@ -531,6 +531,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      audit_rls_policies: {
+        Args: never
+        Returns: {
+          details: string
+          expectation: string
+          pass: boolean
+          table_name: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
