@@ -176,17 +176,17 @@ function Home() {
                   setAuditOpen(true);
                   track("audit_popup_opened", { source: "hero_cta" });
                 }}
-                className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold"
+                className="btn-fx group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 shadow-gold"
               >
                 <Search className="h-4 w-4" /> Free Website Audit
               </button>
               <a
                 href="#inquiry"
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary transition"
+                className="btn-fx inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary"
               >
                 <Send className="h-3.5 w-3.5" /> Send Inquiry
               </a>
-              <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary transition">
+              <Link to="/services" className="btn-fx inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary">
                 <Play className="h-3.5 w-3.5" /> Our services
               </Link>
             </div>
@@ -359,10 +359,10 @@ function Home() {
               </div>
               {/* CTAs */}
               <div className="mt-7 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-                <button onClick={() => setAuditOpen(true)} className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-3 text-sm font-semibold hover:opacity-90 transition">
+                <button onClick={() => setAuditOpen(true)} className="btn-fx inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-3 text-sm font-semibold hover:opacity-90">
                   Free Website Audit <ArrowRight className="h-4 w-4" />
                 </button>
-                <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground hover:border-foreground transition">
+                <Link to="/services" className="btn-fx inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground hover:border-foreground">
                   See how it works
                 </Link>
               </div>
@@ -661,10 +661,10 @@ function Home() {
           </div>
 
           <div className="mt-10 flex flex-wrap gap-3 justify-center">
-            <Link to="/about" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
+            <Link to="/about" className="btn-fx inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 shadow-gold">
               Meet the agency <ArrowRight className="h-4 w-4"/>
             </Link>
-            <Link to="/contact" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary transition">
+            <Link to="/contact" className="btn-fx inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary">
               Start a project
             </Link>
           </div>
