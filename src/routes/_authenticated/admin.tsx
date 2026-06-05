@@ -3119,3 +3119,269 @@ function AuditPdfButton({ lead }: { lead: LeadRow }) {
     </button>
   );
 }
+
+function SettingsPanel() {
+  const getTpl = useServerFn(getPdfTemplate);
+  const saveTpl = useServerFn(savePdfTemplate);
+  const qc = useQueryClient();
+  const tplQuery = useQuery({ queryKey: ["pdf-template"], queryFn: () => getTpl() });
+  const [draft, setDraft] = useState<PdfTemplateSettings | null>(null);
+  const { prefs, update: updatePrefs } = useAdminNotificationPrefs();
+
+  useEffect(() => {
+    if (tplQuery.data && !draft) setDraft(tplQuery.data);
+  }, [tplQuery.data, draft]);
+
+  const saveMutation = useMutation({
+    mutationFn: (input: Partial<PdfTemplateSettings>) => saveTpl({ data: input }),
+    onSuccess: () => {
+      toast.success("Template saved");
+      qc.invalidateQueries({ queryKey: ["pdf-template"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Save failed"),
+  });
+
+  function setField<K extends keyof PdfTemplateSettings>(key: K, val: PdfTemplateSettings[K]) {
+    setDraft((d) => (d ? { ...d, [key]: val } : d));
+  }
+
+  async function handleLogoUpload(file: File) {
+    if (file.size > 400_000) {
+      toast.error("Logo must be under 400KB. Try a smaller file or different format.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") setField("logoUrl", reader.result);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  if (tplQuery.isLoading || !draft) {
+    return <p className="mt-8 text-sm text-muted-foreground">Loading settings…</p>;
+  }
+
+  return (
+    <div className="mt-8 grid gap-6 md:grid-cols-2">
+      {/* Notification preferences */}
+      <div className="rounded-xl border border-border bg-card p-5">
+        <h2 className="text-lg font-display font-semibold">Realtime notifications</h2>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Controls toast pop-ups and drawer behavior when a new lead arrives.
+        </p>
+        <div className="mt-4 space-y-4">
+          <label className="flex items-center justify-between gap-3 text-sm">
+            <span>
+              <span className="font-medium">Enable pop-up toasts</span>
+              <span className="block text-xs text-muted-foreground">Show a toast for each new Audit / Inquiry lead.</span>
+            </span>
+            <input
+              type="checkbox"
+              checked={prefs.enabled}
+              onChange={(e) => updatePrefs({ enabled: e.target.checked })}
+              className="h-4 w-4"
+            />
+          </label>
+          <label className="flex items-center justify-between gap-3 text-sm">
+            <span>
+              <span className="font-medium">Play sound</span>
+              <span className="block text-xs text-muted-foreground">Brief chime on each new lead.</span>
+            </span>
+            <input
+              type="checkbox"
+              checked={prefs.soundEnabled}
+              onChange={(e) => updatePrefs({ soundEnabled: e.target.checked })}
+              className="h-4 w-4"
+            />
+          </label>
+          <div className="text-sm">
+            <span className="font-medium">Auto-focus the drawer</span>
+            <span className="block text-xs text-muted-foreground mb-2">When should the &ldquo;Open&rdquo; drawer auto-open?</span>
+            <div className="inline-flex rounded-md border border-border p-1 gap-1">
+              {(["off", "first", "always"] as const).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => updatePrefs({ autoFocusMode: m })}
+                  className={`px-3 py-1 text-xs rounded ${
+                    prefs.autoFocusMode === m
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {m === "off" ? "Off" : m === "first" ? "Only first" : "Every lead"}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* PDF template editor */}
+      <div className="rounded-xl border border-border bg-card p-5 md:col-span-2">
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h2 className="text-lg font-display font-semibold">Audit PDF template</h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Customize the branding, colors, and sections used on every downloaded audit PDF.
+            </p>
+          </div>
+          <button
+            onClick={() => saveMutation.mutate(draft)}
+            disabled={saveMutation.isPending}
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent disabled:opacity-50"
+          >
+            <Save className="h-4 w-4" /> {saveMutation.isPending ? "Saving…" : "Save template"}
+          </button>
+        </div>
+
+        <div className="mt-5 grid gap-5 md:grid-cols-2">
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold">Branding</h3>
+            <div>
+              <label className="text-xs text-muted-foreground">Company name</label>
+              <input
+                value={draft.companyName}
+                onChange={(e) => setField("companyName", e.target.value)}
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground">Tagline</label>
+              <input
+                value={draft.tagline}
+                onChange={(e) => setField("tagline", e.target.value)}
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground">Contact line (header)</label>
+              <input
+                value={draft.contactLine}
+                onChange={(e) => setField("contactLine", e.target.value)}
+                placeholder="hello@example.com · +1 555 0100"
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground">Footer text</label>
+              <textarea
+                value={draft.footerText}
+                onChange={(e) => setField("footerText", e.target.value)}
+                rows={3}
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground">Logo</label>
+              <div className="mt-1 flex items-center gap-3 flex-wrap">
+                {draft.logoUrl ? (
+                  <img
+                    src={draft.logoUrl}
+                    alt="Logo preview"
+                    className="h-12 w-auto rounded border border-border bg-white p-1 object-contain"
+                  />
+                ) : (
+                  <div className="h-12 w-12 rounded border border-dashed border-border grid place-items-center text-muted-foreground">
+                    <ImageIcon className="h-4 w-4" />
+                  </div>
+                )}
+                <label className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs cursor-pointer hover:border-primary">
+                  <Upload className="h-3 w-3" /> Upload
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/svg+xml,image/webp"
+                    className="hidden"
+                    onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (f) handleLogoUpload(f);
+                    }}
+                  />
+                </label>
+                {draft.logoUrl && (
+                  <button
+                    type="button"
+                    onClick={() => setField("logoUrl", "")}
+                    className="inline-flex items-center gap-1 rounded-md border border-destructive/40 text-destructive px-3 py-1.5 text-xs"
+                  >
+                    <X className="h-3 w-3" /> Remove
+                  </button>
+                )}
+              </div>
+              <p className="mt-1 text-[11px] text-muted-foreground">PNG / SVG / JPG, max 400KB.</p>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold">Colors</h3>
+            {([
+              ["colorPrimary", "Primary"],
+              ["colorAccent", "Accent"],
+              ["colorText", "Body text"],
+              ["colorMuted", "Muted text"],
+            ] as const).map(([key, label]) => (
+              <div key={key} className="flex items-center gap-3">
+                <label className="text-xs text-muted-foreground w-24">{label}</label>
+                <input
+                  type="color"
+                  value={draft[key]}
+                  onChange={(e) => setField(key, e.target.value)}
+                  className="h-9 w-12 rounded border border-border bg-background"
+                />
+                <input
+                  type="text"
+                  value={draft[key]}
+                  onChange={(e) => setField(key, e.target.value)}
+                  className="flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm font-mono"
+                />
+              </div>
+            ))}
+
+            <h3 className="mt-5 text-sm font-semibold">Sections</h3>
+            {([
+              ["showSummary", "Executive summary"],
+              ["showScore", "Overall score"],
+              ["showFindings", "Key findings"],
+              ["showNextActions", "Recommended next actions"],
+              ["showIntro", "Custom intro text"],
+              ["showOutro", "Custom outro text"],
+            ] as const).map(([key, label]) => (
+              <label key={key} className="flex items-center justify-between text-sm">
+                <span>{label}</span>
+                <input
+                  type="checkbox"
+                  checked={draft[key]}
+                  onChange={(e) => setField(key, e.target.checked)}
+                  className="h-4 w-4"
+                />
+              </label>
+            ))}
+
+            {draft.showIntro && (
+              <div>
+                <label className="text-xs text-muted-foreground">Intro text</label>
+                <textarea
+                  value={draft.introText}
+                  onChange={(e) => setField("introText", e.target.value)}
+                  rows={3}
+                  className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                />
+              </div>
+            )}
+            {draft.showOutro && (
+              <div>
+                <label className="text-xs text-muted-foreground">Outro text</label>
+                <textarea
+                  value={draft.outroText}
+                  onChange={(e) => setField("outroText", e.target.value)}
+                  rows={3}
+                  className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
