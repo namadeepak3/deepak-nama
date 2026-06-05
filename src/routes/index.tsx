@@ -488,7 +488,7 @@ function Home() {
       {/* ============ SERVICES — BENTO ============ */}
       {/* ============ DIGITAL MARKETING SERVICES ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
             <div className="max-w-2xl">
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Digital marketing services</p>
@@ -540,7 +540,7 @@ function Home() {
       </section>
 
       {/* ============ INDUSTRIES WE SERVE ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
@@ -578,7 +578,7 @@ function Home() {
       </section>
 
       {/* ============ PROCESS ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">End-to-end AI workflow</p>
           <h2 className="mt-3 text-3xl md:text-4xl font-display">Plan. Build. Launch. Optimize. Report.</h2>
@@ -632,14 +632,14 @@ function Home() {
       {/* ============ WHO I AM ============ */}
       <section className="relative border-y border-border bg-card/30 overflow-hidden">
         <div aria-hidden className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl"/>
-        <div className="relative mx-auto max-w-5xl px-6 py-8 md:py-12 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold text-foreground">
+        <div className="relative mx-auto max-w-5xl px-4 sm:px-6 py-8 md:py-12 text-center">
+          <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[10px] sm:text-[11px] font-semibold text-foreground">
             <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span></span>
-            Accepting Q3 2026 retainers · Headquartered in Mumbai, IN
+            Headquartered in Mumbai, IN
           </div>
           <p className="mt-6 text-xs uppercase tracking-[0.3em] text-primary font-semibold">About the agency</p>
           <h2 className="mt-4 text-3xl md:text-5xl font-display leading-[1.02]">
-            <span className="text-gradient-gold">vrseoguru</span> — an AI-powered<br/>digital marketing services agency.
+            <span className="text-gradient-gold">vrseoguru</span> — an AI-powered <br className="hidden sm:block"/>digital marketing services agency.
           </h2>
           <p className="mt-6 max-w-2xl mx-auto text-sm md:text-base text-muted-foreground leading-relaxed">
             For over seven years our team has built revenue systems for ecommerce, SaaS and D2C brands across India and abroad — pairing senior strategists and a proprietary AI stack with paid-media, SEO, creative and lifecycle specialists. Every engagement is engineered around your <span className="text-foreground font-semibold">bottom line</span>, not vanity metrics.
@@ -686,7 +686,7 @@ function Home() {
       {/* ============ RESULTS ============ */}
       <section className="relative border-y border-border bg-gradient-to-br from-primary/10 via-card/30 to-card/30 overflow-hidden">
         <div aria-hidden className="absolute -top-24 left-1/4 h-56 w-56 rounded-full bg-primary/20 blur-3xl"/>
-        <div className="relative mx-auto max-w-7xl px-6 py-8 md:py-12">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
             <div>
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Numbers do the talking</p>
@@ -715,7 +715,7 @@ function Home() {
       </section>
 
       {/* ============ CASE STUDIES ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
@@ -746,7 +746,7 @@ function Home() {
 
       {/* ============ INSIGHTS ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
             <div>
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Insights</p>
@@ -784,7 +784,7 @@ function Home() {
 
       {/* ============ TESTIMONIALS CAROUSEL ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="text-center max-w-2xl mx-auto mb-6">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Receipts</p>
             <h2 className="mt-3 text-3xl md:text-4xl font-display">What clients say</h2>
@@ -830,7 +830,7 @@ function Home() {
       </section>
 
       {/* ============ FAQ ============ */}
-      <section className="mx-auto max-w-4xl px-6 py-8 md:py-12">
+      <section className="mx-auto max-w-4xl px-4 sm:px-6 py-8 md:py-12">
         <div className="text-center mb-6">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">FAQs</p>
           <h2 className="mt-3 text-3xl md:text-4xl font-display">Common questions</h2>
