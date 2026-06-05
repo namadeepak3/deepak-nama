@@ -2853,6 +2853,7 @@ function LeadDrawer({
               >
                 {LEAD_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
+              {lead.kind === "audit" && <AuditPdfButton lead={lead} />}
               <button
                 type="button"
                 onClick={() => setEditMode((v) => !v)}
