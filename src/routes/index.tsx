@@ -10,6 +10,9 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { z } from "zod";
+import blogSeoAsset from "@/assets/blog-seo.jpg.asset.json";
+import blogPpcAsset from "@/assets/blog-ppc.jpg.asset.json";
+import blogContentAsset from "@/assets/blog-content.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
