@@ -2488,27 +2488,134 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
         </button>
       </div>
 
-      <p className="text-xs text-muted-foreground">{filtered.length} of {leads.length} inquiries</p>
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <p className="text-xs text-muted-foreground">
+          {sorted.length} of {leads.length} {kind === "audit" ? "audits" : "inquiries"}
+          {selected.size > 0 && <> · <span className="text-foreground font-medium">{selected.size} selected</span></>}
+        </p>
+        <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+          <span className="mr-1">Sort:</span>
+          {([
+            ["createdAt", "Date"],
+            ["name", "Name"],
+            ["email", "Email"],
+            ["status", "Status"],
+            ["assignedEmail", "Assignee"],
+          ] as const).map(([k, label]) => (
+            <button
+              key={k}
+              type="button"
+              onClick={() => toggleSort(k)}
+              className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 ${
+                sortKey === k ? "border-primary text-primary bg-primary/10" : "border-border hover:border-primary"
+              }`}
+            >
+              {label}
+              {sortKey === k ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowUpDown className="h-3 w-3 opacity-60" />}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {selected.size > 0 && (
+        <div className="sticky top-2 z-10 rounded-xl border border-primary/40 bg-primary/5 backdrop-blur p-3 flex flex-wrap items-center gap-2">
+          <span className="text-xs font-medium text-foreground">{selected.size} selected</span>
+          <select
+            defaultValue=""
+            onChange={(e) => {
+              const v = e.target.value as LeadStatus | "";
+              if (v) bulkUpdate({ status: v });
+              e.target.value = "";
+            }}
+            className="rounded-md border border-border bg-background px-2 py-1.5 text-xs"
+            aria-label="Bulk status update"
+          >
+            <option value="">Update status…</option>
+            {LEAD_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+          </select>
+          <select
+            defaultValue=""
+            onChange={(e) => {
+              const v = e.target.value;
+              if (v === "__none__") bulkUpdate({ assignedTo: null });
+              else if (v) bulkUpdate({ assignedTo: v });
+              e.target.value = "";
+            }}
+            className="rounded-md border border-border bg-background px-2 py-1.5 text-xs"
+            aria-label="Bulk assign"
+          >
+            <option value="">Assign to…</option>
+            <option value="__none__">Unassign</option>
+            {assignees.map((a) => <option key={a.userId} value={a.userId}>{a.email}</option>)}
+          </select>
+          <button
+            type="button"
+            onClick={() => {
+              const first = sorted.find((l) => selected.has(l.id));
+              if (first) { setOpenId(first.id); setEditRequested(false); }
+            }}
+            className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2 py-1.5 text-xs hover:border-primary"
+          >
+            <Eye className="h-3 w-3" /> View first
+          </button>
+          <button
+            type="button"
+            onClick={clearSelection}
+            className="ml-auto inline-flex items-center gap-1 rounded-md border border-border bg-card px-2 py-1.5 text-xs hover:border-primary"
+          >
+            <X className="h-3 w-3" /> Clear
+          </button>
+        </div>
+      )}
+
+      <div className="flex items-center gap-2 px-1 text-[11px] text-muted-foreground">
+        <button
+          type="button"
+          onClick={toggleSelectAll}
+          className="inline-flex items-center gap-1 hover:text-foreground"
+          aria-label="Select all visible"
+        >
+          {allVisibleSelected ? <CheckSquare className="h-4 w-4 text-primary" /> : <SquareIcon className="h-4 w-4" />}
+          Select all visible
+        </button>
+      </div>
 
       <div className="space-y-3">
-        {filtered.map((l) => (
+        {sorted.map((l) => (
           <InquiryRow
             key={l.id}
             lead={l}
             assignees={assignees}
-            open={openId === l.id}
-            onToggle={() => setOpenId(openId === l.id ? null : l.id)}
+            selected={selected.has(l.id)}
+            onSelectToggle={() => toggleSelect(l.id)}
+            onView={() => { setOpenId(l.id); setEditRequested(false); }}
+            onEdit={() => { setOpenId(l.id); setEditRequested(true); }}
             onUpdate={(patch) => updateMutation.mutate({ id: l.id, ...patch })}
             onDelete={() => {
-              if (confirm(`Delete inquiry from ${l.email}? This cannot be undone.`)) deleteMutation.mutate(l.id);
+              if (confirm(`Delete from ${l.email}? This cannot be undone.`)) deleteMutation.mutate(l.id);
             }}
             pending={updateMutation.isPending || deleteMutation.isPending}
           />
         ))}
-        {filtered.length === 0 && (
-          <p className="text-center text-sm text-muted-foreground py-10">No inquiries match these filters.</p>
+        {sorted.length === 0 && (
+          <p className="text-center text-sm text-muted-foreground py-10">No leads match these filters.</p>
         )}
       </div>
+
+      <LeadDrawer
+        lead={openLead}
+        assignees={assignees}
+        startInEdit={editRequested}
+        onClose={() => { setOpenId(null); setEditRequested(false); }}
+        onUpdate={(patch) => openLead && updateMutation.mutate({ id: openLead.id, ...patch })}
+        onDelete={() => {
+          if (openLead && confirm(`Delete from ${openLead.email}? This cannot be undone.`)) {
+            deleteMutation.mutate(openLead.id);
+            setOpenId(null);
+          }
+        }}
+        pending={updateMutation.isPending || deleteMutation.isPending}
+      />
     </div>
   );
 }
