@@ -2210,7 +2210,7 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
   }, []);
 
   const updateMutation = useMutation({
-    mutationFn: (v: { id: string; status?: LeadStatus; adminNotes?: string; assignedTo?: string | null }) =>
+    mutationFn: (v: { id: string; status?: LeadStatus; adminNotes?: string; assignedTo?: string | null; name?: string; email?: string; phone?: string; website?: string; company?: string; message?: string }) =>
       updateFn({ data: v }),
     onSuccess: () => {
       toast.success("Inquiry updated");
