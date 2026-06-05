@@ -24,8 +24,10 @@ import {
   listUsersWithRoles,
   setUserRole,
   removeUserRole,
+  listRoleAuditLog,
   type AdminUserRow,
   type AppRole,
+  type RoleAuditEntry,
 } from "@/lib/admin-users.functions";
 import type { BlogPost } from "@/lib/blog.shared";
 import {
@@ -65,6 +67,9 @@ import {
   Code,
   Image as ImagePlus,
   Users as UsersIcon,
+  Search as SearchIcon,
+  AlertTriangle,
+  History,
 } from "lucide-react";
 import { ExternalLink, Eye as EyeCount } from "lucide-react";
 
