@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2, TrendingUp, Award, Star, Quote, Phone } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { listServices } from "@/lib/services.functions";
@@ -244,6 +244,188 @@ function Home() {
             </p>
             <Link to="/contact" className="mt-8 inline-flex items-center gap-2 rounded-md bg-white text-ink px-6 py-3 text-sm font-medium hover:bg-white/90 transition-colors">
               Start the conversation <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Who We Are */}
+      <section className="mx-auto max-w-7xl px-6 py-24 grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <p className="text-xs uppercase tracking-widest text-foreground/70 font-medium">Who I am</p>
+          <h2 className="mt-4 text-4xl md:text-5xl font-display font-semibold leading-tight">A growth partner, not just another freelancer</h2>
+          <p className="mt-5 text-muted-foreground leading-relaxed">
+            vrseoguru is a freelance digital marketing practice built around one principle: measurable results.
+            Senior strategy, certified specialists, and proven frameworks — turning marketing into a predictable engine for revenue.
+          </p>
+          <ul className="mt-6 space-y-3 text-sm">
+            {["Senior, certified marketing expertise","Transparent reporting tied to revenue","Custom strategies built for your market"].map((t) => (
+              <li key={t} className="flex items-center gap-3"><CheckCircle2 className="h-5 w-5 text-foreground" /> {t}</li>
+            ))}
+          </ul>
+          <Link to="/about" className="mt-8 inline-flex items-center gap-2 rounded-md bg-ink px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-foreground transition-colors">
+            Learn more about me <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 gap-5">
+          {[
+            { Icon: TrendingUp, title: "ROI-Focused", desc: "Every campaign optimized for return." },
+            { Icon: ShieldCheck, title: "Transparent", desc: "Clear reporting, no surprises." },
+            { Icon: Award, title: "Certified", desc: "Google, Meta & Amazon experts." },
+            { Icon: Star, title: "Proven", desc: "120+ campaigns shipped." },
+          ].map(({ Icon, title, desc }) => (
+            <div key={title} className="rounded-2xl border border-border bg-white p-6">
+              <div className="h-11 w-11 rounded-lg bg-ink grid place-items-center">
+                <Icon className="h-5 w-5 text-white" />
+              </div>
+              <h3 className="mt-4 font-display font-semibold">{title}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="bg-secondary border-y border-border">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+          <div className="text-center max-w-2xl mx-auto">
+            <p className="text-xs uppercase tracking-widest text-foreground/70 font-medium">Why work with me</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display font-semibold">Built for results, trusted for the long term</h2>
+            <p className="mt-4 text-muted-foreground">Long-term partnerships through performance, transparency, and a relentless focus on your bottom line.</p>
+          </div>
+          <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              ["Proven Results","A track record of measurable growth across hundreds of campaigns and industries."],
+              ["Transparent Reporting","Real-time dashboards and clear monthly reports — you always know what's working."],
+              ["Certified Experts","Google, Meta, and Amazon certified specialists with deep platform expertise."],
+              ["Customized Strategies","No templates. Every strategy is engineered around your goals and market."],
+              ["Dedicated Partnership","A single point of contact who knows your business inside and out."],
+              ["ROI-Focused Campaigns","Every decision is tied to revenue and return — not vanity metrics."],
+            ].map(([title, desc]) => (
+              <div key={title} className="rounded-2xl border border-border bg-white p-6">
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-foreground mt-0.5 shrink-0" />
+                  <div>
+                    <h3 className="font-display font-semibold">{title}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{desc}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Our Process */}
+      <section className="bg-ink text-white">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+          <div className="text-center max-w-2xl mx-auto">
+            <p className="text-xs uppercase tracking-widest text-white/60 font-medium">My process</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display font-semibold">A proven path to growth</h2>
+            <p className="mt-4 text-white/70">A transparent, repeatable process that turns goals into measurable results.</p>
+          </div>
+          <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-5 gap-5">
+            {[
+              ["01","Discovery & Audit","Analyze your business, market, competitors, and current performance to find opportunities."],
+              ["02","Strategy Development","Build a custom, data-backed roadmap aligned with your growth goals."],
+              ["03","Implementation","Execute campaigns with precision across every channel."],
+              ["04","Optimization","Continuously test, refine, and scale what drives the best returns."],
+              ["05","Reporting & Growth","Transparent reporting and strategic reviews keep growth compounding."],
+            ].map(([num, title, desc]) => (
+              <div key={num} className="rounded-2xl border border-white/15 bg-white/[0.04] p-6">
+                <div className="text-3xl font-display font-semibold text-white">{num}</div>
+                <h3 className="mt-3 font-display font-semibold">{title}</h3>
+                <p className="mt-2 text-sm text-white/70 leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="mx-auto max-w-7xl px-6 py-24">
+        <div className="text-center max-w-2xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-display font-semibold">What clients say</h2>
+          <p className="mt-4 text-muted-foreground">Don&apos;t take my word for it — hear from the businesses I&apos;ve helped grow.</p>
+        </div>
+        <div className="mt-12 grid md:grid-cols-3 gap-5">
+          {[
+            ["\"Transformed our online presence. Organic traffic is up 240% and qualified leads have never been higher.\"","Sarah Mitchell","CEO, Northbridge Retail"],
+            ["\"PPC management cut our cost per lead in half while doubling volume. The transparency and reporting are unmatched.\"","David Chen","Founder, Velocity SaaS"],
+            ["\"We scaled from a regional player to a national brand. The strategy and execution made the difference.\"","Maria Lopez","CMO, Harborline Homes"],
+          ].map(([quote, name, role]) => (
+            <div key={name} className="rounded-2xl border border-border bg-white p-6">
+              <Quote className="h-6 w-6 text-foreground" />
+              <p className="mt-4 text-sm text-foreground leading-relaxed">{quote}</p>
+              <div className="mt-5 flex items-center gap-1">
+                {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-foreground text-foreground" />)}
+              </div>
+              <div className="mt-4">
+                <div className="font-semibold text-sm">{name}</div>
+                <div className="text-xs text-muted-foreground">{role}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Industries */}
+      <section className="bg-secondary border-y border-border">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+          <div className="text-center max-w-2xl mx-auto">
+            <p className="text-xs uppercase tracking-widest text-foreground/70 font-medium">Industries I serve</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display font-semibold">Expertise across every sector</h2>
+            <p className="mt-4 text-muted-foreground">Tailored strategies for the unique dynamics of your industry.</p>
+          </div>
+          <div className="mt-10 flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+            {["Ecommerce & Retail","SaaS & Technology","Healthcare","Real Estate","Professional Services","Finance & Insurance","Manufacturing","Hospitality & Travel","Education","Legal","Home Services","B2B & Industrial"].map((tag) => (
+              <span key={tag} className="rounded-full border border-border bg-white px-5 py-2 text-sm text-foreground">{tag}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Blog / Insights */}
+      <section className="mx-auto max-w-7xl px-6 py-24">
+        <div className="text-center max-w-2xl mx-auto">
+          <p className="text-xs uppercase tracking-widest text-foreground/70 font-medium">Insights</p>
+          <h2 className="mt-3 text-4xl md:text-5xl font-display font-semibold">Latest from the blog</h2>
+          <p className="mt-4 text-muted-foreground">Actionable strategies and trends to keep your marketing ahead of the curve.</p>
+        </div>
+        <div className="mt-12 grid md:grid-cols-3 gap-5">
+          {[
+            ["SEO","10 SEO Trends That Will Define 2026","From AI-driven search to entity optimization, here's what forward-thinking brands are doing to stay ahead.","May 28, 2026 · 8 min read"],
+            ["PPC","How to Maximize ROI From Google Ads in 2026","Practical strategies to lower your cost per acquisition and scale profitable campaigns.","May 14, 2026 · 6 min read"],
+            ["Content Marketing","The Anatomy of Content That Actually Converts","Why most content fails — and the framework I use to create assets that drive revenue.","April 30, 2026 · 7 min read"],
+          ].map(([tag, title, desc, meta]) => (
+            <article key={title} className="rounded-2xl border border-border bg-white p-6 flex flex-col">
+              <span className="self-start rounded-full bg-secondary border border-border px-3 py-1 text-xs font-medium">{tag}</span>
+              <h3 className="mt-4 text-lg font-display font-semibold leading-snug">{title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{desc}</p>
+              <p className="mt-5 text-xs text-muted-foreground">{meta}</p>
+            </article>
+          ))}
+        </div>
+        <div className="mt-10 text-center">
+          <Link to="/blog" className="inline-flex items-center gap-2 rounded-md border border-ink/30 bg-white px-6 py-3 text-sm font-medium text-foreground hover:border-ink transition-colors">
+            Read all articles <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="mx-auto max-w-7xl px-6 pb-24">
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-ink text-white p-12 md:p-16 text-center">
+          <h2 className="text-4xl md:text-5xl font-display font-semibold">Ready to accelerate your growth?</h2>
+          <p className="mt-4 max-w-2xl mx-auto text-white/70">
+            Book a free, no-obligation strategy call. I&apos;ll audit your current marketing and show you exactly where the biggest opportunities are.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3 justify-center">
+            <Link to="/contact" className="inline-flex items-center gap-2 rounded-md bg-white text-ink px-6 py-3 text-sm font-medium hover:bg-white/90 transition-colors">
+              Get Free Strategy Call <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link to="/services" className="inline-flex items-center gap-2 rounded-md border border-white/30 px-6 py-3 text-sm font-medium text-white hover:border-white transition-colors">
+              <Phone className="h-4 w-4" /> View Services
             </Link>
           </div>
         </div>
