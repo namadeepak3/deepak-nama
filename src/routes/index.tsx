@@ -172,11 +172,7 @@ function Home() {
         <div className="relative mx-auto max-w-7xl px-6 pt-4 pb-8 md:pt-8 md:pb-14 grid lg:grid-cols-12 gap-8 items-center">
           {/* LEFT — details */}
           <div className="lg:col-span-7">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 backdrop-blur px-3 py-1 text-xs text-foreground">
-              <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span></span>
-              AI-powered marketing agency · accepting Q3 retainers
-            </div>
-            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
               <Bot className="h-3.5 w-3.5" /> AI-powered digital marketing services
             </div>
             <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-display leading-[1.02] tracking-tight">
@@ -389,8 +385,8 @@ function Home() {
             </div>
 
             {/* Right — AI orbit visual */}
-            <div className="lg:col-span-7">
-              <div className="relative aspect-square max-w-[600px] mx-auto">
+            <div className="lg:col-span-7 overflow-hidden">
+              <div className="relative aspect-square max-w-[600px] mx-auto scale-[0.78] sm:scale-90 md:scale-100 origin-center">
                 {/* Concentric rings */}
                 <div aria-hidden className="absolute inset-0 rounded-full border border-foreground/10" />
                 <div aria-hidden className="absolute inset-[12%] rounded-full border border-dashed border-foreground/15" />

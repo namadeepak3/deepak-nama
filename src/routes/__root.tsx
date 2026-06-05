@@ -313,7 +313,12 @@ function SiteFooter() {
         </div>
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-white/60">
           <p>© {new Date().getFullYear()} vrseoguru. Crafted with AI &amp; obsession.</p>
-          <p>Built on AI workflows. Backed by data.</p>
+          <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            <Link to="/blog" className="hover:text-white transition-colors">Blog</Link>
+            <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link>
+            <Link to="/terms" className="hover:text-white transition-colors">Terms &amp; Conditions</Link>
+          </nav>
         </div>
       </div>
     </footer>
