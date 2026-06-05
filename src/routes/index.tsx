@@ -10,6 +10,9 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { z } from "zod";
+import blogSeoAsset from "@/assets/blog-seo.jpg.asset.json";
+import blogPpcAsset from "@/assets/blog-ppc.jpg.asset.json";
+import blogContentAsset from "@/assets/blog-content.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -269,7 +272,7 @@ function Home() {
       <section className="relative overflow-hidden border-b border-border bg-background">
         <div aria-hidden className="absolute inset-0 bg-ai-dots opacity-70" />
         <div aria-hidden className="absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-6 py-14">
+        <div className="relative mx-auto max-w-7xl px-6 py-10">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             {/* Left — copy */}
             <div className="lg:col-span-5">
@@ -415,8 +418,8 @@ function Home() {
       {/* ============ SERVICES — BENTO ============ */}
       {/* ============ DIGITAL MARKETING SERVICES ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-14">
-          <div className="flex items-end justify-between flex-wrap gap-6 mb-8">
+        <div className="mx-auto max-w-7xl px-6 py-10">
+          <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
             <div className="max-w-2xl">
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Digital marketing services</p>
               <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">Every channel your brand <span className="text-gradient-gold">needs to grow.</span></h2>
@@ -467,8 +470,8 @@ function Home() {
       </section>
 
       {/* ============ INDUSTRIES WE SERVE ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-14">
-        <div className="flex items-end justify-between flex-wrap gap-6 mb-8">
+      <section className="mx-auto max-w-7xl px-6 py-10">
+        <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
             <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
@@ -505,13 +508,13 @@ function Home() {
       </section>
 
       {/* ============ PROCESS ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-14">
+      <section className="mx-auto max-w-7xl px-6 py-10">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">End-to-end AI workflow</p>
           <h2 className="mt-3 text-4xl md:text-5xl font-display">Plan. Build. Launch. Optimize. Report.</h2>
           <p className="mt-4 text-muted-foreground">A repeatable AI-augmented system that moves from brief to booked revenue — with humans in the loop at every step.</p>
         </div>
-        <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-5 gap-4">
           {[
             {
               num: "01", title: "Plan", Icon: Compass,
@@ -559,7 +562,7 @@ function Home() {
       {/* ============ WHO I AM ============ */}
       <section className="relative border-y border-border bg-card/30 overflow-hidden">
         <div aria-hidden className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl"/>
-        <div className="relative mx-auto max-w-5xl px-6 py-14 text-center">
+        <div className="relative mx-auto max-w-5xl px-6 py-10 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold text-foreground">
             <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span></span>
             Accepting Q3 2026 retainers · Headquartered in Mumbai, IN
@@ -582,7 +585,7 @@ function Home() {
           </div>
 
           {/* Pillars */}
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
+          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
             {[
               { Icon: TrendingUp, title: "ROI-Focused", desc: "Every rupee tied to revenue." },
               { Icon: ShieldCheck, title: "Transparent", desc: "Live dashboards, no jargon." },
@@ -642,7 +645,7 @@ function Home() {
       </section>
 
       {/* ============ CASE STUDIES ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-14">
+      <section className="mx-auto max-w-7xl px-6 py-10">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
@@ -673,8 +676,8 @@ function Home() {
 
       {/* ============ INSIGHTS ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-14">
-          <div className="flex items-end justify-between flex-wrap gap-6 mb-8">
+        <div className="mx-auto max-w-7xl px-6 py-10">
+          <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
             <div>
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Insights</p>
               <h2 className="mt-3 text-4xl md:text-5xl font-display">Fresh from the blog</h2>
@@ -683,25 +686,20 @@ function Home() {
           </div>
           <div className="grid md:grid-cols-3 gap-4">
             {[
-              { tag: "SEO", title: "10 SEO Trends That Will Define 2026", desc: "AI search, entity optimization & what brands are doing to stay ahead.", meta: "May 28 · 8 min", Icon: Search, grad: "from-primary/30 via-primary/10 to-transparent" },
-              { tag: "PPC", title: "Maximize ROI From Google Ads in 2026", desc: "Lower CPA and scale profitable campaigns with AI bidding.", meta: "May 14 · 6 min", Icon: Target, grad: "from-foreground/20 via-foreground/5 to-transparent" },
-              { tag: "Content", title: "Content That Actually Converts", desc: "The framework our team uses to build assets that drive real revenue.", meta: "Apr 30 · 7 min", Icon: PenTool, grad: "from-primary/25 via-card to-transparent" },
-            ].map(({tag,title,desc,meta,Icon,grad})=>(
+              { tag: "SEO", title: "10 SEO Trends That Will Define 2026", desc: "AI search, entity optimization & what brands are doing to stay ahead.", meta: "May 28 · 8 min", img: blogSeoAsset.url },
+              { tag: "PPC", title: "Maximize ROI From Google Ads in 2026", desc: "Lower CPA and scale profitable campaigns with AI bidding.", meta: "May 14 · 6 min", img: blogPpcAsset.url },
+              { tag: "Content", title: "Content That Actually Converts", desc: "The framework our team uses to build assets that drive real revenue.", meta: "Apr 30 · 7 min", img: blogContentAsset.url },
+            ].map(({tag,title,desc,meta,img})=>(
               <article key={title} className="group rounded-3xl border border-border bg-card flex flex-col overflow-hidden hover:border-primary transition">
-                <div className={`relative aspect-[16/9] bg-gradient-to-br ${grad} border-b border-border overflow-hidden`}>
-                  <div aria-hidden className="absolute inset-0 bg-ai-grid opacity-40" />
-                  <div aria-hidden className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-primary/20 blur-2xl"/>
-                  <div className="absolute inset-0 grid place-items-center">
-                    <div className="h-16 w-16 rounded-2xl bg-foreground text-background grid place-items-center shadow-2xl ring-1 ring-foreground/20 group-hover:scale-110 transition-transform">
-                      <Icon className="h-7 w-7"/>
-                    </div>
-                  </div>
+                <div className="relative aspect-[16/9] border-b border-border overflow-hidden bg-secondary">
+                  <img src={img} alt={title} loading="lazy" width={1280} height={720} className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-card/90 via-card/20 to-transparent" />
                   <span className="absolute top-3 left-3 rounded-full bg-background/90 backdrop-blur border border-border px-3 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-widest">{tag}</span>
                 </div>
-                <div className="p-6 flex flex-col flex-1">
-                  <h3 className="text-lg font-display leading-snug">{title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{desc}</p>
-                  <div className="mt-5 flex items-center justify-between">
+                <div className="p-5 flex flex-col flex-1">
+                  <h3 className="text-base font-display leading-snug">{title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1 line-clamp-2">{desc}</p>
+                  <div className="mt-4 flex items-center justify-between">
                     <p className="text-xs text-muted-foreground">{meta}</p>
                     <Link to="/blog" className="inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:text-primary transition">
                       Read <ArrowRight className="h-3.5 w-3.5"/>
@@ -716,8 +714,8 @@ function Home() {
 
       {/* ============ TESTIMONIALS CAROUSEL ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-14">
-          <div className="text-center max-w-2xl mx-auto mb-8">
+        <div className="mx-auto max-w-7xl px-6 py-10">
+          <div className="text-center max-w-2xl mx-auto mb-6">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Receipts</p>
             <h2 className="mt-3 text-4xl md:text-5xl font-display">What clients say</h2>
             <p className="mt-4 text-muted-foreground">Real results from real brands — across SEO, paid media, social and lifecycle.</p>
@@ -762,8 +760,8 @@ function Home() {
       </section>
 
       {/* ============ FAQ ============ */}
-      <section className="mx-auto max-w-4xl px-6 py-14">
-        <div className="text-center mb-8">
+      <section className="mx-auto max-w-4xl px-6 py-10">
+        <div className="text-center mb-6">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">FAQs</p>
           <h2 className="mt-3 text-4xl md:text-5xl font-display">Common questions</h2>
           <p className="mt-4 text-muted-foreground">Everything you want to know before we kick off your engagement.</p>
@@ -787,7 +785,7 @@ function Home() {
       </section>
 
       {/* ============ FINAL CTA ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-14">
+      <section className="mx-auto max-w-7xl px-6 py-10">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/30 via-card to-card p-12 md:p-20 text-center">
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-primary/30 blur-3xl"/>
           <p className="relative text-xs tracking-[0.22em] uppercase text-primary font-semibold">Let&apos;s build</p>
