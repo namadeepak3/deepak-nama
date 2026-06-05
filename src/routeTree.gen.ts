@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WebsiteAuditRouteImport } from './routes/website-audit'
 import { Route as ThankYouRouteImport } from './routes/thank-you'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
@@ -37,6 +38,11 @@ const WebsiteAuditRoute = WebsiteAuditRouteImport.update({
 const ThankYouRoute = ThankYouRouteImport.update({
   id: '/thank-you',
   path: '/thank-you',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/thank-you': typeof ThankYouRoute
   '/website-audit': typeof WebsiteAuditRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -153,6 +160,7 @@ export interface FileRoutesByTo {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/thank-you': typeof ThankYouRoute
   '/website-audit': typeof WebsiteAuditRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -175,6 +183,7 @@ export interface FileRoutesById {
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/thank-you': typeof ThankYouRoute
   '/website-audit': typeof WebsiteAuditRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -197,6 +206,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/refund-policy'
     | '/sitemap.xml'
+    | '/terms'
     | '/thank-you'
     | '/website-audit'
     | '/admin'
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/refund-policy'
     | '/sitemap.xml'
+    | '/terms'
     | '/thank-you'
     | '/website-audit'
     | '/admin'
@@ -238,6 +249,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/refund-policy'
     | '/sitemap.xml'
+    | '/terms'
     | '/thank-you'
     | '/website-audit'
     | '/_authenticated/admin'
@@ -260,6 +272,7 @@ export interface RootRouteChildren {
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermsRoute: typeof TermsRoute
   ThankYouRoute: typeof ThankYouRoute
   WebsiteAuditRoute: typeof WebsiteAuditRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -285,6 +298,13 @@ declare module '@tanstack/react-router' {
       path: '/thank-you'
       fullPath: '/thank-you'
       preLoaderRoute: typeof ThankYouRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -440,6 +460,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermsRoute: TermsRoute,
   ThankYouRoute: ThankYouRoute,
   WebsiteAuditRoute: WebsiteAuditRoute,
   BlogSlugRoute: BlogSlugRoute,
