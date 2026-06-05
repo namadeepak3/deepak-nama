@@ -169,10 +169,10 @@ function Home() {
         <div aria-hidden className="pointer-events-none absolute top-20 right-[8%] h-72 w-72 rounded-full bg-foreground/[0.06] blur-3xl animate-ai-pulse" />
         <div aria-hidden className="pointer-events-none absolute bottom-10 left-[10%] h-56 w-56 rounded-full bg-foreground/[0.04] blur-3xl animate-ai-pulse" style={{ animationDelay: "1.2s" }} />
 
-        <div className="relative mx-auto max-w-7xl px-6 pt-4 pb-8 md:pt-8 md:pb-14 grid lg:grid-cols-12 gap-8 items-center">
+        <div className="relative mx-auto max-w-7xl overflow-x-clip px-4 sm:px-6 pt-4 pb-8 md:pt-8 md:pb-14 grid lg:grid-cols-12 gap-8 items-center">
           {/* LEFT — details */}
           <div className="lg:col-span-7">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+            <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] sm:tracking-[0.18em] text-primary">
               <Bot className="h-3.5 w-3.5" /> AI-powered digital marketing services
             </div>
             <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-display leading-[1.02] tracking-tight">
@@ -202,7 +202,7 @@ function Home() {
                 <Play className="h-3.5 w-3.5" /> Our services
               </Link>
             </div>
-            <div className="mt-10 grid grid-cols-3 gap-6 max-w-lg">
+            <div className="mt-10 grid grid-cols-3 gap-3 sm:gap-6 max-w-lg">
               {[["4.2x","Avg client ROAS"],["120+","Campaigns shipped"],["98%","Client retention"]].map(([k,v])=>(
                 <div key={v}>
                   <div className="text-2xl md:text-3xl font-display text-gradient-gold">{k}</div>
@@ -218,7 +218,7 @@ function Home() {
           </div>
 
           {/* RIGHT — inquiry form */}
-          <div id="inquiry" className="lg:col-span-5">
+            <div id="inquiry" className="min-w-0 lg:col-span-5">
             {submitted ? (
               <div className="rounded-3xl border border-border bg-card shadow-gold p-10 text-center">
                 <div className="mx-auto h-14 w-14 rounded-full bg-primary/15 grid place-items-center">
@@ -239,14 +239,14 @@ function Home() {
             ) : (
             <form
               onSubmit={onInquiry}
-              className="rounded-3xl border border-border bg-card/95 backdrop-blur shadow-gold p-6 md:p-7 space-y-3"
+              className="rounded-3xl border border-border bg-card/95 backdrop-blur shadow-gold p-4 sm:p-6 md:p-7 space-y-3"
             >
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Start a project</p>
                 <h3 className="mt-1 text-2xl font-display">Request a free growth audit</h3>
                 <p className="mt-1 text-xs text-muted-foreground">Tell us a bit about your brand — a senior strategist replies in 1 business day.</p>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <input name="name" placeholder="Your name" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.name ? "border-red-400" : "border-border"}`} />
                   {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
@@ -255,7 +255,7 @@ function Home() {
                   <input name="phone" placeholder="Phone (optional)" className="w-full rounded-xl bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary" />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <input name="email" type="email" placeholder="Email address" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.email ? "border-red-400" : "border-border"}`} />
                   {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
@@ -267,7 +267,7 @@ function Home() {
               <div>
                 <input name="website" placeholder="Website (optional)" className="w-full rounded-xl bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary" />
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <select name="service" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.service ? "border-red-400" : "border-border"}`}>
                     <option value="">Service</option>
