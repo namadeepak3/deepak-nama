@@ -789,37 +789,60 @@ function Home() {
       {/* ============ INSIGHTS ============ */}
       <section className="bg-gradient-to-b from-background via-card/50 to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
-          <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
-            <div>
-              <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Insights</p>
-              <h2 className="mt-3 text-3xl md:text-4xl font-display">Fresh from the blog</h2>
-            </div>
-            <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">All articles <ArrowRight className="h-4 w-4"/></Link>
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Insights</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-display">Fresh from the blog</h2>
+            <p className="mt-3 text-sm text-muted-foreground">The latest playbooks, frameworks and field notes from our team.</p>
+            <Link to="/blog" className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">All articles <ArrowRight className="h-4 w-4"/></Link>
           </div>
           <div className="grid md:grid-cols-3 gap-4">
-            {[
-              { tag: "SEO", title: "10 SEO Trends That Will Define 2026", desc: "AI search, entity optimization & what brands are doing to stay ahead.", meta: "May 28 · 8 min", img: blogSeoAsset.url },
-              { tag: "PPC", title: "Maximize ROI From Google Ads in 2026", desc: "Lower CPA and scale profitable campaigns with AI bidding.", meta: "May 14 · 6 min", img: blogPpcAsset.url },
-              { tag: "Content", title: "Content That Actually Converts", desc: "The framework our team uses to build assets that drive real revenue.", meta: "Apr 30 · 7 min", img: blogContentAsset.url },
-            ].map(({tag,title,desc,meta,img})=>(
-              <article key={title} className="group rounded-3xl border border-border bg-card flex flex-col overflow-hidden hover:border-primary transition">
-                <div className="relative aspect-[16/9] border-b border-border overflow-hidden bg-secondary">
-                  <img src={img} alt={title} loading="lazy" width={1280} height={720} className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-card/90 via-card/20 to-transparent" />
-                  <span className="absolute top-3 left-3 rounded-full bg-background/90 backdrop-blur border border-border px-3 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-widest">{tag}</span>
-                </div>
-                <div className="p-5 flex flex-col flex-1">
-                  <h3 className="text-base font-display leading-snug">{title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1 line-clamp-2">{desc}</p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <p className="text-xs text-muted-foreground">{meta}</p>
-                    <Link to="/blog" className="inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:text-primary transition">
-                      Read <ArrowRight className="h-3.5 w-3.5"/>
-                    </Link>
+            {(blogPosts.length > 0
+              ? blogPosts.slice(0, 3).map((p) => {
+                  const fallbackImgs = [blogSeoAsset.url, blogPpcAsset.url, blogContentAsset.url];
+                  return {
+                    slug: p.slug,
+                    tag: (p.category || (p.tags && p.tags[0]) || "Article") as string,
+                    title: p.title,
+                    desc: p.excerpt || "",
+                    img: p.coverImage || fallbackImgs[0],
+                    meta: `${p.publishedAt ? new Date(p.publishedAt).toLocaleDateString(undefined, { month: "short", day: "numeric" }) : ""}${p.readingMinutes ? ` · ${p.readingMinutes} min` : ""}`,
+                  };
+                })
+              : [
+                  { slug: "", tag: "SEO", title: "10 SEO Trends That Will Define 2026", desc: "AI search, entity optimization & what brands are doing to stay ahead.", meta: "May 28 · 8 min", img: blogSeoAsset.url },
+                  { slug: "", tag: "PPC", title: "Maximize ROI From Google Ads in 2026", desc: "Lower CPA and scale profitable campaigns with AI bidding.", meta: "May 14 · 6 min", img: blogPpcAsset.url },
+                  { slug: "", tag: "Content", title: "Content That Actually Converts", desc: "The framework our team uses to build assets that drive real revenue.", meta: "Apr 30 · 7 min", img: blogContentAsset.url },
+                ]
+            ).map(({ slug, tag, title, desc, meta, img }) => {
+              const CardInner = (
+                <>
+                  <div className="relative aspect-[16/9] border-b border-border overflow-hidden bg-secondary">
+                    {img && <img src={img} alt={title} loading="lazy" width={1280} height={720} className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />}
+                    <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-card/90 via-card/20 to-transparent" />
+                    <span className="absolute top-3 left-3 rounded-full bg-background/90 backdrop-blur border border-border px-3 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-widest">{tag}</span>
                   </div>
-                </div>
-              </article>
-            ))}
+                  <div className="p-5 flex flex-col flex-1">
+                    <h3 className="text-base font-display leading-snug line-clamp-2">{title}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1 line-clamp-2">{desc}</p>
+                    <div className="mt-4 flex items-center justify-between">
+                      <p className="text-xs text-muted-foreground">{meta}</p>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                        Read <ArrowRight className="h-3.5 w-3.5"/>
+                      </span>
+                    </div>
+                  </div>
+                </>
+              );
+              return slug ? (
+                <Link key={slug || title} to="/blog/$slug" params={{ slug }} className="group rounded-3xl border border-border bg-card flex flex-col overflow-hidden hover:border-primary transition">
+                  {CardInner}
+                </Link>
+              ) : (
+                <Link key={title} to="/blog" className="group rounded-3xl border border-border bg-card flex flex-col overflow-hidden hover:border-primary transition">
+                  {CardInner}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
