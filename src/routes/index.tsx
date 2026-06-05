@@ -7,7 +7,7 @@ import { createLead } from "@/lib/leads.functions";
 import { generateAuditPreview, type AuditPreview } from "@/lib/audit-preview.functions";
 import { listCaseStudies } from "@/lib/case-studies.functions";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { z } from "zod";
@@ -42,18 +42,6 @@ function Home() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<null | { name: string; email: string }>(null);
   const [auditOpen, setAuditOpen] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      if (sessionStorage.getItem("auditPopupShown") === "1") return;
-    } catch { /* ignore */ }
-    const t = setTimeout(() => {
-      setAuditOpen(true);
-      track("audit_popup_opened", { source: "auto" });
-    }, 1500);
-    return () => clearTimeout(t);
-  }, []);
 
   const inquirySchema = z.object({
     name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name is too long"),
