@@ -150,7 +150,7 @@ function Home() {
       />
 
       {/* ============ HERO ============ */}
-      <section className="relative overflow-hidden border-b border-border">
+      <section className="relative overflow-hidden">
         {/* Clean monochrome backdrop */}
         <div aria-hidden className="absolute inset-0 bg-background" />
         <div aria-hidden className="absolute inset-0 bg-ai-grid opacity-70" />
@@ -310,7 +310,7 @@ function Home() {
       </section>
 
       {/* ============ CHANNELS I RUN ============ */}
-      <section className="border-y border-border bg-card/40">
+      <section className="bg-gradient-to-b from-background via-card/60 to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
           <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">AI-powered channels we run</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
@@ -331,7 +331,7 @@ function Home() {
       </section>
 
       {/* ============ AI-POWERED STACK ============ */}
-      <section className="relative overflow-hidden border-b border-border bg-background">
+      <section className="relative overflow-hidden bg-background bg-ai-signal">
         <div aria-hidden className="absolute inset-0 bg-ai-dots opacity-70" />
         <div aria-hidden className="absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl" />
         <div className="relative mx-auto max-w-7xl overflow-x-clip px-4 sm:px-6 py-8 md:py-12">
@@ -475,7 +475,7 @@ function Home() {
 
       {/* ============ SERVICES — BENTO ============ */}
       {/* ============ DIGITAL MARKETING SERVICES ============ */}
-      <section className="border-y border-border bg-card/30">
+      <section className="bg-gradient-to-b from-background via-card/50 to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
             <div className="max-w-2xl">
@@ -618,7 +618,7 @@ function Home() {
       </section>
 
       {/* ============ WHO I AM ============ */}
-      <section className="relative border-y border-border bg-card/30 overflow-hidden">
+      <section className="relative bg-gradient-to-b from-background via-card/50 to-background overflow-hidden">
         <div aria-hidden className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl"/>
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 py-8 md:py-12 text-center">
           <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[10px] sm:text-[11px] font-semibold text-foreground">
@@ -672,7 +672,7 @@ function Home() {
       </section>
 
       {/* ============ RESULTS ============ */}
-      <section className="relative border-y border-border bg-gradient-to-br from-primary/10 via-card/30 to-card/30 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary/10 via-card/30 to-background overflow-hidden">
         <div aria-hidden className="absolute -top-24 left-1/4 h-56 w-56 rounded-full bg-primary/20 blur-3xl"/>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
@@ -733,7 +733,7 @@ function Home() {
       </section>
 
       {/* ============ INSIGHTS ============ */}
-      <section className="border-y border-border bg-card/30">
+      <section className="bg-gradient-to-b from-background via-card/50 to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
             <div>
@@ -771,7 +771,7 @@ function Home() {
       </section>
 
       {/* ============ TESTIMONIALS CAROUSEL ============ */}
-      <section className="border-y border-border bg-card/30">
+      <section className="bg-gradient-to-b from-background via-card/50 to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="text-center max-w-2xl mx-auto mb-6">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Receipts</p>
