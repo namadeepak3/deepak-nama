@@ -45,10 +45,6 @@ function Home() {
   const [submitted, setSubmitted] = useState<null | { name: string; email: string }>(null);
   const [auditOpen, setAuditOpen] = useState(false);
   const [openStep, setOpenStep] = useState<string>("1");
-  const [chatInput, setChatInput] = useState("");
-  const [chatLog, setChatLog] = useState<{ role: "user" | "agent"; text: string }[]>([
-    { role: "agent", text: "Hi 👋 I'm your AI growth agent. Ask me anything — SEO audits, ad spend, content plans…" },
-  ]);
   const [waName, setWaName] = useState("");
   const [waPhone, setWaPhone] = useState("");
   const [waChannel, setWaChannel] = useState<"whatsapp" | "sms">("whatsapp");
@@ -56,25 +52,6 @@ function Home() {
 
   const BUSINESS_WHATSAPP = "919999999999"; // E.164 without +
   const BUSINESS_SMS = "+919999999999";
-
-  const sendChat = () => {
-    const q = chatInput.trim();
-    if (!q) return;
-    setChatLog((l) => [...l, { role: "user", text: q }]);
-    setChatInput("");
-    setTimeout(() => {
-      const replies: Record<string, string> = {
-        seo: "I'll run a 50-point SEO audit, find quick wins, and ship a 90-day roadmap.",
-        ads: "I'll model your funnel, set target ROAS and launch Performance Max + Meta tests.",
-        content: "I'll build a topical map, publish 8 SEO-led posts/month and route leads to your CRM.",
-      };
-      const k = q.toLowerCase();
-      const answer =
-        Object.keys(replies).find((kw) => k.includes(kw)) ? replies[Object.keys(replies).find((kw) => k.includes(kw))!] :
-        "Got it. I'll route this to a human strategist and prep a tailored plan within 24h.";
-      setChatLog((l) => [...l, { role: "agent", text: answer }]);
-    }, 600);
-  };
 
   const launchWhatsApp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
