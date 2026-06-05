@@ -2267,6 +2267,10 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
   const updateFn = useServerFn(updateLead);
   const deleteFn = useServerFn(deleteLead);
   const assigneesFn = useServerFn(listAssignees);
+  const previewFn = useServerFn(generateAuditPreview);
+  const tplFn = useServerFn(getPdfTemplate);
+  const tplQuery = useQuery({ queryKey: ["pdf-template"], queryFn: () => tplFn() });
+  const { prefs } = useAdminNotificationPrefs();
   const leadsQuery = useQuery({ queryKey: ["admin-leads"], queryFn: () => listFn() });
   const assigneesQuery = useQuery({ queryKey: ["admin-assignees"], queryFn: () => assigneesFn() });
 
@@ -2288,6 +2292,7 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
 
   // Realtime: pop-up notification when a new audit/inquiry lead is created.
   useEffect(() => {
+    if (!prefs.enabled) return;
     const channel = supabase
       .channel(`leads-realtime-${kind}`)
       .on(
@@ -2296,6 +2301,11 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
         (payload) => {
           const row = payload.new as { id: string; name?: string; email?: string; website?: string };
           qc.invalidateQueries({ queryKey: ["admin-leads"] });
+          if (prefs.autoFocusMode === "always") {
+            setOpenId(row.id);
+          } else if (prefs.autoFocusMode === "first" && !openIdRef.current) {
+            setOpenId(row.id);
+          }
           toast.success(
             kind === "audit" ? "New Website Audit lead" : "New inquiry",
             {
@@ -2310,7 +2320,7 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [kind, qc]);
+  }, [kind, qc, prefs.enabled, prefs.autoFocusMode]);
 
   const updateMutation = useMutation({
     mutationFn: (v: { id: string; status?: LeadStatus; adminNotes?: string; assignedTo?: string | null; name?: string; email?: string; phone?: string; website?: string; company?: string; message?: string }) =>
