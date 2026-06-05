@@ -48,21 +48,17 @@ function SecurityPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="border-b bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <Link to="/admin" className="inline-flex items-center gap-1 text-sm text-slate-600 hover:text-slate-900">
-              <ArrowLeft className="h-4 w-4" /> Back to admin
-            </Link>
-          </div>
-          <h1 className="flex items-center gap-2 text-lg font-semibold">
+      <main className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6 py-8">
+        <section className="space-y-2">
+          <Link to="/admin" className="inline-flex items-center gap-1 text-sm text-slate-600 hover:text-slate-900">
+            <ArrowLeft className="h-4 w-4" /> Back to admin
+          </Link>
+          <h1 className="flex items-center gap-2 text-2xl font-semibold text-slate-900">
             <ShieldCheck className="h-5 w-5 text-emerald-600" />
             Security
           </h1>
-        </div>
-      </header>
+        </section>
 
-      <main className="mx-auto max-w-6xl space-y-8 px-6 py-8">
         <section className="rounded-lg border bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
             <div>
