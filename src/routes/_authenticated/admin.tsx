@@ -2276,6 +2276,32 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
     supabase.auth.getUser().then(({ data }) => setMeUserId(data.user?.id ?? null));
   }, []);
 
+  // Realtime: pop-up notification when a new audit/inquiry lead is created.
+  useEffect(() => {
+    const channel = supabase
+      .channel(`leads-realtime-${kind}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "leads", filter: `kind=eq.${kind}` },
+        (payload) => {
+          const row = payload.new as { id: string; name?: string; email?: string; website?: string };
+          qc.invalidateQueries({ queryKey: ["admin-leads"] });
+          toast.success(
+            kind === "audit" ? "New Website Audit lead" : "New inquiry",
+            {
+              description: `${row.name || "(no name)"} · ${row.email || ""}${row.website ? ` · ${row.website}` : ""}`,
+              action: { label: "Open", onClick: () => setOpenId(row.id) },
+              duration: 8000,
+            },
+          );
+        },
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [kind, qc]);
+
   const updateMutation = useMutation({
     mutationFn: (v: { id: string; status?: LeadStatus; adminNotes?: string; assignedTo?: string | null; name?: string; email?: string; phone?: string; website?: string; company?: string; message?: string }) =>
       updateFn({ data: v }),
