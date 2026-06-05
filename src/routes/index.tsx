@@ -706,13 +706,25 @@ function Home() {
               <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-10" />
               <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-3 -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {[...AI_TOOLS, ...AI_TOOLS].map((t, i) => (
-                  <div key={`${t.name}-${i}`} className="group snap-start shrink-0 w-40 rounded-2xl border border-border bg-card/80 backdrop-blur p-4 text-center hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all">
-                    <div className="mx-auto h-12 w-12 rounded-xl bg-primary/10 border border-primary/30 text-primary grid place-items-center text-2xl group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <span aria-hidden>{t.emoji}</span>
+                  <a
+                    key={`${t.name}-${i}`}
+                    href={`https://www.google.com/search?q=${encodeURIComponent(t.name)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track("tools_carousel_click", { tool: t.name, kind: "ai" })}
+                    className="group snap-start shrink-0 w-40 rounded-2xl border border-border bg-card/80 backdrop-blur p-4 text-center hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all"
+                  >
+                    <div className="mx-auto h-14 w-14 rounded-2xl bg-white border border-border grid place-items-center group-hover:scale-110 transition-transform shadow-sm">
+                      <img
+                        src={`https://cdn.simpleicons.org/${t.slug}/${t.color}`}
+                        alt={t.name}
+                        loading="lazy"
+                        className="h-8 w-8 object-contain"
+                      />
                     </div>
                     <div className="mt-3 font-display text-sm font-semibold">{t.name}</div>
                     <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t.sub}</div>
-                  </div>
+                  </a>
                 ))}
               </div>
             </div>
