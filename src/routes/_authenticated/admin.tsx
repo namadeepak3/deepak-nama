@@ -2280,6 +2280,8 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
+  const openIdRef = useRef<string | null>(null);
+  useEffect(() => { openIdRef.current = openId; }, [openId]);
   const [editRequested, setEditRequested] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   type SortKey = "createdAt" | "name" | "email" | "status" | "assignedEmail";
