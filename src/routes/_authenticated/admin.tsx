@@ -2623,51 +2623,35 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
 function InquiryRow({
   lead,
   assignees,
-  open,
-  onToggle,
+  selected,
+  onSelectToggle,
+  onView,
+  onEdit,
   onUpdate,
   onDelete,
   pending,
 }: {
   lead: LeadRow;
   assignees: AssigneeOption[];
-  open: boolean;
-  onToggle: () => void;
+  selected: boolean;
+  onSelectToggle: () => void;
+  onView: () => void;
+  onEdit: () => void;
   onUpdate: (patch: { status?: LeadStatus; adminNotes?: string; assignedTo?: string | null; name?: string; email?: string; phone?: string; website?: string; company?: string; message?: string }) => void;
   onDelete: () => void;
   pending: boolean;
 }) {
-  const [notes, setNotes] = useState(lead.adminNotes);
-  useEffect(() => setNotes(lead.adminNotes), [lead.adminNotes]);
-  const [editMode, setEditMode] = useState(false);
-  const [form, setForm] = useState({
-    name: lead.name,
-    email: lead.email,
-    phone: lead.phone,
-    website: lead.website,
-    company: lead.company,
-    message: lead.message,
-  });
-  useEffect(() => {
-    setForm({
-      name: lead.name,
-      email: lead.email,
-      phone: lead.phone,
-      website: lead.website,
-      company: lead.company,
-      message: lead.message,
-    });
-  }, [lead.id, lead.updatedAt]);
-  const auditFn = useServerFn(listLeadAudit);
-  const auditQuery = useQuery({
-    queryKey: ["lead-audit", lead.id, lead.updatedAt],
-    queryFn: () => auditFn({ data: { leadId: lead.id } }),
-    enabled: open,
-  });
-
   return (
     <div className="rounded-xl border border-border bg-card overflow-hidden">
       <div className="p-4 flex flex-col md:flex-row md:items-center gap-3">
+        <button
+          type="button"
+          onClick={onSelectToggle}
+          className="self-start md:self-center inline-flex h-6 w-6 items-center justify-center rounded-md border border-border hover:border-primary"
+          aria-label={selected ? "Unselect lead" : "Select lead"}
+        >
+          {selected ? <CheckSquare className="h-4 w-4 text-primary" /> : <SquareIcon className="h-4 w-4 text-muted-foreground" />}
+        </button>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <p className="font-medium text-foreground truncate">{lead.name || "(no name)"}</p>
@@ -2725,18 +2709,14 @@ function InquiryRow({
           </select>
           <button
             type="button"
-            onClick={onToggle}
+            onClick={onView}
             className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
           >
-            {open ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
-            {open ? "Hide" : "View Lead"}
+            <Eye className="h-3 w-3" /> View Lead
           </button>
           <button
             type="button"
-            onClick={() => {
-              if (!open) onToggle();
-              setEditMode(true);
-            }}
+            onClick={onEdit}
             className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
           >
             <Pencil className="h-3 w-3" /> Edit Lead
@@ -2750,133 +2730,6 @@ function InquiryRow({
           </button>
         </div>
       </div>
-      {open && (
-        <div className="px-4 pb-4 border-t border-border bg-background/40 space-y-3">
-          <div className="mt-3 grid sm:grid-cols-2 gap-2 text-xs">
-            <MetaRow label="Name" value={lead.name} />
-            <MetaRow label="Email" value={lead.email} />
-            <MetaRow label="Phone" value={lead.phone} />
-            <MetaRow label="Website" value={lead.website} />
-            <MetaRow label="Company" value={lead.company} />
-            <MetaRow label="Submitted" value={new Date(lead.createdAt).toLocaleString()} />
-          </div>
-          <div className="mt-3 grid sm:grid-cols-2 gap-2 text-xs">
-            <MetaRow label="IP address" value={lead.ipAddress} />
-            <MetaRow label="User agent" value={lead.userAgent} mono />
-            <MetaRow label="Page URL" value={lead.pageUrl} mono />
-            <MetaRow label="Referrer" value={lead.referrer} mono />
-            <MetaRow label="UTM source" value={lead.utmSource} />
-            <MetaRow label="UTM medium" value={lead.utmMedium} />
-            <MetaRow label="UTM campaign" value={lead.utmCampaign} />
-          </div>
-          <div>
-            <p className="text-[11px] uppercase tracking-wider text-muted-foreground mt-3">Message</p>
-            <p className="mt-1 whitespace-pre-wrap text-sm text-foreground">{lead.message || "(empty)"}</p>
-          </div>
-          <div>
-            <div className="flex items-center justify-between">
-              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Edit submission</p>
-              <button
-                type="button"
-                onClick={() => setEditMode((v) => !v)}
-                className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-[11px] hover:border-primary"
-              >
-                <Pencil className="h-3 w-3" /> {editMode ? "Cancel" : "Edit"}
-              </button>
-            </div>
-            {editMode && (
-              <div className="mt-2 grid sm:grid-cols-2 gap-2">
-                {(["name","email","phone","website","company"] as const).map((f) => (
-                  <input
-                    key={f}
-                    value={(form as any)[f]}
-                    onChange={(e) => setForm({ ...form, [f]: e.target.value })}
-                    placeholder={f}
-                    className="rounded-md border border-border bg-background px-3 py-2 text-sm"
-                  />
-                ))}
-                <textarea
-                  rows={3}
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  placeholder="Message"
-                  className="sm:col-span-2 rounded-md border border-border bg-background px-3 py-2 text-sm"
-                />
-                <div className="sm:col-span-2 flex justify-end">
-                  <button
-                    type="button"
-                    disabled={pending}
-                    onClick={() => {
-                      onUpdate(form);
-                      setEditMode(false);
-                    }}
-                    className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-accent disabled:opacity-50"
-                  >
-                    <Save className="h-3 w-3" /> Save changes
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-          <div>
-            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Admin notes</p>
-            <textarea
-              rows={3}
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Internal notes about this inquiry…"
-              className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
-            />
-            <div className="mt-2 flex justify-end">
-              <button
-                type="button"
-                disabled={pending || notes === lead.adminNotes}
-                onClick={() => onUpdate({ adminNotes: notes })}
-                className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-accent disabled:opacity-50"
-              >
-                <Save className="h-3 w-3" /> Save notes
-              </button>
-            </div>
-          </div>
-          <div>
-            <p className="text-[11px] uppercase tracking-wider text-muted-foreground flex items-center gap-1">
-              <History className="h-3 w-3" /> Audit trail
-            </p>
-            <div className="mt-2 rounded-md border border-border bg-card divide-y divide-border">
-              {auditQuery.isLoading && (
-                <p className="px-3 py-2 text-xs text-muted-foreground">Loading…</p>
-              )}
-              {!auditQuery.isLoading && (auditQuery.data?.length ?? 0) === 0 && (
-                <p className="px-3 py-2 text-xs text-muted-foreground">No changes yet.</p>
-              )}
-              {(auditQuery.data ?? []).map((e: LeadAuditEntry) => (
-                <div key={e.id} className="px-3 py-2 text-xs">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-medium text-foreground">{e.action.replace(/_/g, " ")}</span>
-                    <span className="text-muted-foreground tabular-nums">
-                      {new Date(e.createdAt).toLocaleString()}
-                    </span>
-                  </div>
-                  <p className="text-muted-foreground">
-                    by {e.actorEmail || "(unknown)"}
-                    {e.field && (
-                      <>
-                        {" · "}
-                        <span className="text-foreground">{e.oldValue || "—"}</span>
-                        {" → "}
-                        <span className="text-foreground">{e.newValue || "—"}</span>
-                      </>
-                    )}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <p className="text-[11px] text-muted-foreground">
-            Created {new Date(lead.createdAt).toLocaleString()} · Updated {new Date(lead.updatedAt).toLocaleString()}
-          </p>
-        </div>
-      )}
     </div>
   );
 }
@@ -2889,5 +2742,222 @@ function MetaRow({ label, value, mono }: { label: string; value: string; mono?: 
         {value || "—"}
       </p>
     </div>
+  );
+}
+
+function LeadDrawer({
+  lead,
+  assignees,
+  startInEdit,
+  onClose,
+  onUpdate,
+  onDelete,
+  pending,
+}: {
+  lead: LeadRow | null;
+  assignees: AssigneeOption[];
+  startInEdit: boolean;
+  onClose: () => void;
+  onUpdate: (patch: { status?: LeadStatus; adminNotes?: string; assignedTo?: string | null; name?: string; email?: string; phone?: string; website?: string; company?: string; message?: string }) => void;
+  onDelete: () => void;
+  pending: boolean;
+}) {
+  const open = !!lead;
+  const auditFn = useServerFn(listLeadAudit);
+  const auditQuery = useQuery({
+    queryKey: ["lead-audit", lead?.id, lead?.updatedAt],
+    queryFn: () => auditFn({ data: { leadId: lead!.id } }),
+    enabled: open,
+  });
+
+  const [editMode, setEditMode] = useState(false);
+  const [notes, setNotes] = useState("");
+  const [form, setForm] = useState({ name: "", email: "", phone: "", website: "", company: "", message: "" });
+
+  useEffect(() => {
+    if (!lead) return;
+    setEditMode(startInEdit);
+    setNotes(lead.adminNotes);
+    setForm({
+      name: lead.name, email: lead.email, phone: lead.phone,
+      website: lead.website, company: lead.company, message: lead.message,
+    });
+  }, [lead?.id, lead?.updatedAt, startInEdit]);
+
+  return (
+    <Sheet open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <SheetContent side="right" className="w-full sm:max-w-xl overflow-y-auto">
+        {lead && (
+          <>
+            <SheetHeader>
+              <SheetTitle className="flex items-center gap-2 flex-wrap">
+                <span>{lead.name || "(no name)"}</span>
+                <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wider ${LEAD_STATUS_STYLES[lead.status]}`}>
+                  {lead.status}
+                </span>
+              </SheetTitle>
+              <SheetDescription>
+                <a href={`mailto:${lead.email}`} className="hover:text-foreground">{lead.email}</a>
+                {" · "}{new Date(lead.createdAt).toLocaleString()}
+              </SheetDescription>
+            </SheetHeader>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <select
+                value={lead.assignedTo ?? ""}
+                disabled={pending}
+                onChange={(e) => onUpdate({ assignedTo: e.target.value ? e.target.value : null })}
+                className="rounded-md border border-border bg-background px-2 py-1.5 text-xs"
+                aria-label="Assign Lead"
+              >
+                <option value="">Unassigned</option>
+                {assignees.map((a) => <option key={a.userId} value={a.userId}>{a.email}</option>)}
+              </select>
+              <select
+                value={lead.status}
+                disabled={pending}
+                onChange={(e) => onUpdate({ status: e.target.value as LeadStatus })}
+                className="rounded-md border border-border bg-background px-2 py-1.5 text-xs"
+                aria-label="Status Update"
+              >
+                {LEAD_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+              <button
+                type="button"
+                onClick={() => setEditMode((v) => !v)}
+                className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
+              >
+                <Pencil className="h-3 w-3" /> {editMode ? "Cancel edit" : "Edit Lead"}
+              </button>
+              <button
+                type="button"
+                onClick={onDelete}
+                className="inline-flex items-center gap-1 rounded-md border border-destructive/40 text-destructive px-3 py-1.5 text-xs hover:bg-destructive/10"
+              >
+                <Trash2 className="h-3 w-3" /> Delete
+              </button>
+            </div>
+
+            <div className="mt-5 grid sm:grid-cols-2 gap-2 text-xs">
+              <MetaRow label="Phone" value={lead.phone} />
+              <MetaRow label="Website" value={lead.website} />
+              <MetaRow label="Company" value={lead.company} />
+              <MetaRow label="Service" value={lead.service} />
+              <MetaRow label="Budget" value={lead.budget} />
+              <MetaRow label="Assigned to" value={lead.assignedEmail || "Unassigned"} />
+            </div>
+
+            <div className="mt-3 grid sm:grid-cols-2 gap-2 text-xs">
+              <MetaRow label="IP address" value={lead.ipAddress} />
+              <MetaRow label="User agent" value={lead.userAgent} mono />
+              <MetaRow label="Page URL" value={lead.pageUrl} mono />
+              <MetaRow label="Referrer" value={lead.referrer} mono />
+              <MetaRow label="UTM source" value={lead.utmSource} />
+              <MetaRow label="UTM medium" value={lead.utmMedium} />
+              <MetaRow label="UTM campaign" value={lead.utmCampaign} />
+            </div>
+
+            <div className="mt-4">
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Message</p>
+              <p className="mt-1 whitespace-pre-wrap text-sm text-foreground">{lead.message || "(empty)"}</p>
+            </div>
+
+            {editMode && (
+              <div className="mt-4 rounded-md border border-border bg-card/50 p-3 space-y-2">
+                <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Edit submission</p>
+                <div className="grid sm:grid-cols-2 gap-2">
+                  {(["name","email","phone","website","company"] as const).map((f) => (
+                    <input
+                      key={f}
+                      value={(form as any)[f]}
+                      onChange={(e) => setForm({ ...form, [f]: e.target.value })}
+                      placeholder={f}
+                      className="rounded-md border border-border bg-background px-3 py-2 text-sm"
+                    />
+                  ))}
+                  <textarea
+                    rows={3}
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    placeholder="Message"
+                    className="sm:col-span-2 rounded-md border border-border bg-background px-3 py-2 text-sm"
+                  />
+                </div>
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    disabled={pending}
+                    onClick={() => { onUpdate(form); setEditMode(false); }}
+                    className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-accent disabled:opacity-50"
+                  >
+                    <Save className="h-3 w-3" /> Save changes
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div className="mt-4">
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Admin notes</p>
+              <textarea
+                rows={3}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Internal notes…"
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+              />
+              <div className="mt-2 flex justify-end">
+                <button
+                  type="button"
+                  disabled={pending || notes === lead.adminNotes}
+                  onClick={() => onUpdate({ adminNotes: notes })}
+                  className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-accent disabled:opacity-50"
+                >
+                  <Save className="h-3 w-3" /> Save notes
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground flex items-center gap-1">
+                <History className="h-3 w-3" /> Activity & history
+              </p>
+              <div className="mt-2 rounded-md border border-border bg-card divide-y divide-border">
+                {auditQuery.isLoading && (
+                  <p className="px-3 py-2 text-xs text-muted-foreground">Loading…</p>
+                )}
+                {!auditQuery.isLoading && (auditQuery.data?.length ?? 0) === 0 && (
+                  <p className="px-3 py-2 text-xs text-muted-foreground">No changes yet.</p>
+                )}
+                {(auditQuery.data ?? []).map((e: LeadAuditEntry) => (
+                  <div key={e.id} className="px-3 py-2 text-xs">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-medium text-foreground">{e.action.replace(/_/g, " ")}</span>
+                      <span className="text-muted-foreground tabular-nums">
+                        {new Date(e.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+                    <p className="text-muted-foreground">
+                      by {e.actorEmail || "(unknown)"}
+                      {e.field && (
+                        <>
+                          {" · "}
+                          <span className="text-foreground">{e.oldValue || "—"}</span>
+                          {" → "}
+                          <span className="text-foreground">{e.newValue || "—"}</span>
+                        </>
+                      )}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <p className="mt-4 text-[11px] text-muted-foreground">
+              Created {new Date(lead.createdAt).toLocaleString()} · Updated {new Date(lead.updatedAt).toLocaleString()}
+            </p>
+          </>
+        )}
+      </SheetContent>
+    </Sheet>
   );
 }
