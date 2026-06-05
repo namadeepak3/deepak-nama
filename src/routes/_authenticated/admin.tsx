@@ -2744,6 +2744,7 @@ function InquiryRow({
           >
             <Eye className="h-3 w-3" /> View Lead
           </button>
+          {lead.kind === "audit" && <AuditPdfButton lead={lead} />}
           <button
             type="button"
             onClick={onEdit}
