@@ -6,14 +6,21 @@ import { getRequestHeader, getRequestIP } from "@tanstack/react-start/server";
 export const LEAD_STATUSES = ["new", "contacted", "qualified", "won", "lost", "spam"] as const;
 export type LeadStatus = (typeof LEAD_STATUSES)[number];
 
+export const LEAD_KINDS = ["audit", "inquiry"] as const;
+export type LeadKind = (typeof LEAD_KINDS)[number];
+
 export type LeadRow = {
   id: string;
   name: string;
   email: string;
+  phone: string;
+  website: string;
+  company: string;
   service: string;
   budget: string;
   message: string;
   status: LeadStatus;
+  kind: LeadKind;
   adminNotes: string;
   createdAt: string;
   updatedAt: string;
@@ -66,9 +73,13 @@ export const createLead = createServerFn({ method: "POST" })
   .inputValidator((input: {
     name: string;
     email: string;
+    phone?: string;
+    website?: string;
+    company?: string;
     service: string;
     budget: string;
     message: string;
+    kind?: LeadKind;
     pageUrl?: string;
     referrer?: string;
     utmSource?: string;
@@ -79,9 +90,13 @@ export const createLead = createServerFn({ method: "POST" })
       .object({
         name: z.string().trim().min(2).max(100),
         email: z.string().trim().email().max(255),
-        service: z.string().min(1).max(100),
-        budget: z.string().min(1).max(100),
+        phone: z.string().trim().max(40).optional(),
+        website: z.string().trim().max(255).optional(),
+        company: z.string().trim().max(150).optional(),
+        service: z.string().max(100).optional().default(""),
+        budget: z.string().max(100).optional().default(""),
         message: z.string().trim().min(10).max(2000),
+        kind: z.enum(LEAD_KINDS).optional(),
         pageUrl: z.string().max(500).optional(),
         referrer: z.string().max(500).optional(),
         utmSource: z.string().max(120).optional(),
@@ -101,9 +116,13 @@ export const createLead = createServerFn({ method: "POST" })
     const { error } = await supabaseAdmin.from("leads").insert({
       name: data.name,
       email: data.email,
-      service: data.service,
-      budget: data.budget,
+      phone: data.phone ?? "",
+      website: data.website ?? "",
+      company: data.company ?? "",
+      service: data.service ?? "",
+      budget: data.budget ?? "",
       message: data.message,
+      kind: data.kind ?? "inquiry",
       page_url: data.pageUrl ?? "",
       referrer: data.referrer ?? "",
       utm_source: data.utmSource ?? "",
@@ -124,7 +143,7 @@ export const listLeads = createServerFn({ method: "GET" })
     const { data, error } = await supabaseAdmin
       .from("leads")
       .select(
-        "id, name, email, service, budget, message, status, admin_notes, created_at, updated_at, ip_address, user_agent, referrer, page_url, utm_source, utm_medium, utm_campaign, assigned_to, assigned_email",
+        "id, name, email, phone, website, company, service, budget, message, status, kind, admin_notes, created_at, updated_at, ip_address, user_agent, referrer, page_url, utm_source, utm_medium, utm_campaign, assigned_to, assigned_email",
       )
       .order("created_at", { ascending: false })
       .limit(500);
@@ -133,10 +152,14 @@ export const listLeads = createServerFn({ method: "GET" })
       id: r.id as string,
       name: (r.name as string) ?? "",
       email: (r.email as string) ?? "",
+      phone: ((r as any).phone as string) ?? "",
+      website: ((r as any).website as string) ?? "",
+      company: ((r as any).company as string) ?? "",
       service: (r.service as string) ?? "",
       budget: (r.budget as string) ?? "",
       message: (r.message as string) ?? "",
       status: ((r.status as string) || "new") as LeadStatus,
+      kind: (((r as any).kind as string) || "inquiry") as LeadKind,
       adminNotes: (r.admin_notes as string) ?? "",
       createdAt: r.created_at as string,
       updatedAt: (r.updated_at as string) ?? (r.created_at as string),
@@ -154,13 +177,19 @@ export const listLeads = createServerFn({ method: "GET" })
 
 export const updateLead = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string; status?: LeadStatus; adminNotes?: string; assignedTo?: string | null }) =>
+  .inputValidator((input: { id: string; status?: LeadStatus; adminNotes?: string; assignedTo?: string | null; name?: string; email?: string; phone?: string; website?: string; company?: string; message?: string }) =>
     z
       .object({
         id: z.string().uuid(),
         status: z.enum(LEAD_STATUSES).optional(),
         adminNotes: z.string().max(2000).optional(),
         assignedTo: z.string().uuid().nullable().optional(),
+        name: z.string().trim().max(100).optional(),
+        email: z.string().trim().email().max(255).optional(),
+        phone: z.string().trim().max(40).optional(),
+        website: z.string().trim().max(255).optional(),
+        company: z.string().trim().max(150).optional(),
+        message: z.string().trim().max(2000).optional(),
       })
       .parse(input),
   )
@@ -170,7 +199,7 @@ export const updateLead = createServerFn({ method: "POST" })
     // Load current row to diff for audit
     const { data: current, error: getErr } = await supabaseAdmin
       .from("leads")
-      .select("status, admin_notes, assigned_to, assigned_email")
+      .select("status, admin_notes, assigned_to, assigned_email, name, email, phone, website, company, message")
       .eq("id", data.id)
       .maybeSingle();
     if (getErr) throw new Error(getErr.message);
@@ -186,6 +215,14 @@ export const updateLead = createServerFn({ method: "POST" })
     if (data.adminNotes !== undefined && data.adminNotes !== (current.admin_notes ?? "")) {
       patch.admin_notes = data.adminNotes;
       audits.push({ action: "notes_edited", field: "admin_notes", old_value: String(current.admin_notes ?? ""), new_value: data.adminNotes });
+    }
+    const editable = ["name", "email", "phone", "website", "company", "message"] as const;
+    for (const f of editable) {
+      const next = (data as any)[f];
+      if (next !== undefined && next !== ((current as any)[f] ?? "")) {
+        patch[f] = next;
+        audits.push({ action: "field_edited", field: f, old_value: String((current as any)[f] ?? ""), new_value: String(next) });
+      }
     }
     if (data.assignedTo !== undefined && (data.assignedTo ?? null) !== ((current as any).assigned_to ?? null)) {
       let assignedEmail = "";

@@ -87,6 +87,7 @@ import {
   MailCheck,
   Inbox,
 } from "lucide-react";
+import { Globe } from "lucide-react";
 import { ExternalLink, Eye as EyeCount } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -131,7 +132,7 @@ function AdminPage() {
   const canManage = !!capsQuery.data?.canManageServices;
   const canAnalytics = !!capsQuery.data?.canViewAnalytics;
 
-  type Tab = "services" | "analytics" | "blog" | "categories" | "users" | "inquiries";
+  type Tab = "services" | "analytics" | "blog" | "categories" | "users" | "audits" | "inquiries";
   const defaultTab: Tab = canManage ? "services" : canAnalytics ? "analytics" : "services";
   const [tab, setTab] = useState<Tab>(defaultTab);
   useEffect(() => {
@@ -141,7 +142,7 @@ function AdminPage() {
     if (tab === "blog" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "categories" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "users" && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
-    if (tab === "inquiries" && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
+    if ((tab === "inquiries" || tab === "audits") && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
   }, [capsQuery.data, canManage, canAnalytics, tab]);
 
   const services = useQuery({ queryKey: ["services"], queryFn: () => list(), enabled: canManage });
@@ -281,8 +282,13 @@ function AdminPage() {
           </TabButton>
         )}
         {(capsQuery.data?.roles ?? []).includes("admin") && (
-          <TabButton active={tab === "inquiries"} onClick={() => setTab("inquiries")} icon={Inbox}>
+          <TabButton active={tab === "audits"} onClick={() => setTab("audits")} icon={Globe}>
             Website Audit
+          </TabButton>
+        )}
+        {(capsQuery.data?.roles ?? []).includes("admin") && (
+          <TabButton active={tab === "inquiries"} onClick={() => setTab("inquiries")} icon={Inbox}>
+            Inquiries
           </TabButton>
         )}
       </nav>
@@ -377,7 +383,11 @@ function AdminPage() {
       )}
 
       {tab === "inquiries" && (capsQuery.data?.roles ?? []).includes("admin") && (
-        <InquiriesPanel />
+        <InquiriesPanel kind="inquiry" />
+      )}
+
+      {tab === "audits" && (capsQuery.data?.roles ?? []).includes("admin") && (
+        <InquiriesPanel kind="audit" />
       )}
 
       {editing && canManage && (
@@ -2179,7 +2189,7 @@ const LEAD_STATUS_STYLES: Record<LeadStatus, string> = {
   spam: "border-destructive/30 bg-destructive/10 text-destructive",
 };
 
-function InquiriesPanel() {
+function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
   const qc = useQueryClient();
   const listFn = useServerFn(listLeads);
   const updateFn = useServerFn(updateLead);
@@ -2200,7 +2210,7 @@ function InquiriesPanel() {
   }, []);
 
   const updateMutation = useMutation({
-    mutationFn: (v: { id: string; status?: LeadStatus; adminNotes?: string; assignedTo?: string | null }) =>
+    mutationFn: (v: { id: string; status?: LeadStatus; adminNotes?: string; assignedTo?: string | null; name?: string; email?: string; phone?: string; website?: string; company?: string; message?: string }) =>
       updateFn({ data: v }),
     onSuccess: () => {
       toast.success("Inquiry updated");
@@ -2218,13 +2228,14 @@ function InquiriesPanel() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
   });
 
-  const leads = leadsQuery.data ?? [];
+  const allLeads = leadsQuery.data ?? [];
+  const leads = allLeads.filter((l) => (l.kind ?? "inquiry") === kind);
   const assignees = assigneesQuery.data ?? [];
   const filtered = leads.filter((l) => {
     const q = search.trim().toLowerCase();
     if (
       q &&
-      !`${l.name} ${l.email} ${l.service} ${l.message} ${l.ipAddress} ${l.pageUrl} ${l.utmSource} ${l.utmCampaign} ${l.assignedEmail}`
+      !`${l.name} ${l.email} ${l.phone} ${l.website} ${l.company} ${l.service} ${l.message} ${l.ipAddress} ${l.pageUrl} ${l.utmSource} ${l.utmCampaign} ${l.assignedEmail}`
         .toLowerCase()
         .includes(q)
     )
@@ -2290,8 +2301,9 @@ function InquiriesPanel() {
   return (
     <div className="mt-8 space-y-4">
       <div className="rounded-xl border border-border bg-card p-4 text-xs text-muted-foreground">
-        Every visitor inquiry with full visitor metadata (IP, user agent, referrer, UTM, page URL) plus
-        the contact form details. Update status, assign to an admin, and view the full audit trail.
+        {kind === "audit"
+          ? "Submissions from the homepage Website Audit popup. Name, website, phone, email and message plus visitor metadata. Assign, update status, edit, and view the full audit trail."
+          : "General inquiries from the contact form. Name, email, phone, company, service, budget and message plus visitor metadata. Assign, update status, edit, and view the full audit trail."}
       </div>
 
       <div className="grid grid-cols-3 sm:grid-cols-7 gap-2">
@@ -2397,12 +2409,31 @@ function InquiryRow({
   assignees: AssigneeOption[];
   open: boolean;
   onToggle: () => void;
-  onUpdate: (patch: { status?: LeadStatus; adminNotes?: string; assignedTo?: string | null }) => void;
+  onUpdate: (patch: { status?: LeadStatus; adminNotes?: string; assignedTo?: string | null; name?: string; email?: string; phone?: string; website?: string; company?: string; message?: string }) => void;
   onDelete: () => void;
   pending: boolean;
 }) {
   const [notes, setNotes] = useState(lead.adminNotes);
   useEffect(() => setNotes(lead.adminNotes), [lead.adminNotes]);
+  const [editMode, setEditMode] = useState(false);
+  const [form, setForm] = useState({
+    name: lead.name,
+    email: lead.email,
+    phone: lead.phone,
+    website: lead.website,
+    company: lead.company,
+    message: lead.message,
+  });
+  useEffect(() => {
+    setForm({
+      name: lead.name,
+      email: lead.email,
+      phone: lead.phone,
+      website: lead.website,
+      company: lead.company,
+      message: lead.message,
+    });
+  }, [lead.id, lead.updatedAt]);
   const auditFn = useServerFn(listLeadAudit);
   const auditQuery = useQuery({
     queryKey: ["lead-audit", lead.id, lead.updatedAt],
@@ -2431,6 +2462,8 @@ function InquiryRow({
           </div>
           <p className="text-xs text-muted-foreground truncate">
             <a href={`mailto:${lead.email}`} className="hover:text-foreground">{lead.email}</a>
+            {lead.phone && <> · {lead.phone}</>}
+            {lead.website && <> · {lead.website}</>}
             {lead.service && <> · {lead.service}</>}
             {lead.budget && <> · {lead.budget}</>}
             <> · {new Date(lead.createdAt).toLocaleDateString()}</>
@@ -2479,6 +2512,14 @@ function InquiryRow({
       {open && (
         <div className="px-4 pb-4 border-t border-border bg-background/40 space-y-3">
           <div className="mt-3 grid sm:grid-cols-2 gap-2 text-xs">
+            <MetaRow label="Name" value={lead.name} />
+            <MetaRow label="Email" value={lead.email} />
+            <MetaRow label="Phone" value={lead.phone} />
+            <MetaRow label="Website" value={lead.website} />
+            <MetaRow label="Company" value={lead.company} />
+            <MetaRow label="Submitted" value={new Date(lead.createdAt).toLocaleString()} />
+          </div>
+          <div className="mt-3 grid sm:grid-cols-2 gap-2 text-xs">
             <MetaRow label="IP address" value={lead.ipAddress} />
             <MetaRow label="User agent" value={lead.userAgent} mono />
             <MetaRow label="Page URL" value={lead.pageUrl} mono />
@@ -2490,6 +2531,51 @@ function InquiryRow({
           <div>
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground mt-3">Message</p>
             <p className="mt-1 whitespace-pre-wrap text-sm text-foreground">{lead.message || "(empty)"}</p>
+          </div>
+          <div>
+            <div className="flex items-center justify-between">
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Edit submission</p>
+              <button
+                type="button"
+                onClick={() => setEditMode((v) => !v)}
+                className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-[11px] hover:border-primary"
+              >
+                <Pencil className="h-3 w-3" /> {editMode ? "Cancel" : "Edit"}
+              </button>
+            </div>
+            {editMode && (
+              <div className="mt-2 grid sm:grid-cols-2 gap-2">
+                {(["name","email","phone","website","company"] as const).map((f) => (
+                  <input
+                    key={f}
+                    value={(form as any)[f]}
+                    onChange={(e) => setForm({ ...form, [f]: e.target.value })}
+                    placeholder={f}
+                    className="rounded-md border border-border bg-background px-3 py-2 text-sm"
+                  />
+                ))}
+                <textarea
+                  rows={3}
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  placeholder="Message"
+                  className="sm:col-span-2 rounded-md border border-border bg-background px-3 py-2 text-sm"
+                />
+                <div className="sm:col-span-2 flex justify-end">
+                  <button
+                    type="button"
+                    disabled={pending}
+                    onClick={() => {
+                      onUpdate(form);
+                      setEditMode(false);
+                    }}
+                    className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-accent disabled:opacity-50"
+                  >
+                    <Save className="h-3 w-3" /> Save changes
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
           <div>
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Admin notes</p>

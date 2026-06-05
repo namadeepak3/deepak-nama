@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2, TrendingUp, Award, Star, Quote, Phone, Bot, Search, Megaphone, Target, BarChart3, Globe, Rocket, Activity, Play, MousePointerClick, Mail, Compass, Hammer, FlaskConical, FileBarChart, PenTool, Share2, Code2, ShoppingCart, Youtube, Linkedin } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -6,7 +6,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { createLead } from "@/lib/leads.functions";
 import { listCaseStudies } from "@/lib/case-studies.functions";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { X } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { z } from "zod";
@@ -30,12 +31,23 @@ export const Route = createFileRoute("/")({
 
 
 function Home() {
+  const navigate = useNavigate();
   const submitLead = useServerFn(createLead);
   const fetchCases = useServerFn(listCaseStudies);
   const { data: caseStudies = [] } = useQuery({ queryKey: ["case-studies", "home"], queryFn: () => fetchCases() });
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<null | { name: string; email: string }>(null);
+  const [auditOpen, setAuditOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      if (sessionStorage.getItem("auditPopupShown") === "1") return;
+    } catch { /* ignore */ }
+    const t = setTimeout(() => setAuditOpen(true), 1500);
+    return () => clearTimeout(t);
+  }, []);
 
   const inquirySchema = z.object({
     name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name is too long"),
@@ -55,9 +67,6 @@ function Home() {
     const timeline = (formData.get("timeline") as string) || "";
     const messageBody = (formData.get("message") as string) || "";
     const composedMessage = [
-      company && `Company: ${company}`,
-      website && `Website: ${website}`,
-      phone && `Phone: ${phone}`,
       timeline && `Timeline: ${timeline}`,
       messageBody && `\n${messageBody}`,
     ].filter(Boolean).join("\n");
@@ -85,6 +94,10 @@ function Home() {
       await submitLead({
         data: {
           ...result.data,
+          phone,
+          website,
+          company,
+          kind: "inquiry",
           pageUrl: typeof window !== "undefined" ? window.location.href : "",
           referrer: typeof document !== "undefined" ? document.referrer : "",
           utmSource: params?.get("utm_source") ?? "",
@@ -105,6 +118,32 @@ function Home() {
   return (
     <>
       <Toaster />
+      <AuditPopup
+        open={auditOpen}
+        onClose={() => {
+          setAuditOpen(false);
+          try { sessionStorage.setItem("auditPopupShown", "1"); } catch { /* ignore */ }
+        }}
+        onSubmit={async (values) => {
+          const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+          await submitLead({
+            data: {
+              ...values,
+              kind: "audit",
+              service: "Website Audit",
+              budget: "",
+              pageUrl: typeof window !== "undefined" ? window.location.href : "",
+              referrer: typeof document !== "undefined" ? document.referrer : "",
+              utmSource: params?.get("utm_source") ?? "",
+              utmMedium: params?.get("utm_medium") ?? "",
+              utmCampaign: params?.get("utm_campaign") ?? "",
+            },
+          });
+          try { sessionStorage.setItem("auditPopupShown", "1"); } catch { /* ignore */ }
+          setAuditOpen(false);
+          navigate({ to: "/thank-you" });
+        }}
+      />
 
       {/* ============ HERO ============ */}
       <section className="relative overflow-hidden border-b border-border">
@@ -812,5 +851,131 @@ function Home() {
         </div>
       </section>
     </>
+  );
+}
+
+type AuditValues = {
+  name: string;
+  email: string;
+  phone: string;
+  website: string;
+  message: string;
+};
+
+function AuditPopup({
+  open,
+  onClose,
+  onSubmit,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onSubmit: (values: AuditValues) => Promise<void>;
+}) {
+  const [sending, setSending] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  const schema = z.object({
+    name: z.string().trim().min(2, "Enter your name").max(100),
+    email: z.string().trim().email("Enter a valid email").max(255),
+    phone: z.string().trim().min(6, "Enter a valid phone").max(40),
+    website: z.string().trim().min(3, "Enter your website").max(255),
+    message: z.string().trim().min(10, "Tell us a bit more").max(1000),
+  });
+
+  const handle = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setErrors({});
+    const fd = new FormData(e.currentTarget);
+    const raw: AuditValues = {
+      name: (fd.get("name") as string) || "",
+      email: (fd.get("email") as string) || "",
+      phone: (fd.get("phone") as string) || "",
+      website: (fd.get("website") as string) || "",
+      message: (fd.get("message") as string) || "",
+    };
+    const parsed = schema.safeParse(raw);
+    if (!parsed.success) {
+      const fe: Record<string, string> = {};
+      parsed.error.issues.forEach((i) => { const k = i.path[0] as string; if (!fe[k]) fe[k] = i.message; });
+      setErrors(fe);
+      return;
+    }
+    setSending(true);
+    try {
+      await onSubmit(parsed.data);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to submit");
+      setSending(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="audit-popup-title"
+    >
+      <div
+        className="relative w-full max-w-lg rounded-3xl border border-border bg-card shadow-gold p-6 md:p-7"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-secondary text-muted-foreground hover:text-foreground"
+        >
+          <X className="h-4 w-4" />
+        </button>
+        <p className="text-xs uppercase tracking-[0.22em] text-primary font-semibold">Free Website Audit</p>
+        <h3 id="audit-popup-title" className="mt-1 text-2xl font-display">Get a free website audit</h3>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Tell us about your site — a senior strategist replies within one business day.
+        </p>
+        <form onSubmit={handle} className="mt-4 space-y-3">
+          <div>
+            <input name="name" placeholder="Your name" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.name ? "border-red-400" : "border-border"}`} />
+            {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+          </div>
+          <div>
+            <input name="website" placeholder="Your website (e.g. example.com)" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.website ? "border-red-400" : "border-border"}`} />
+            {errors.website && <p className="mt-1 text-xs text-red-500">{errors.website}</p>}
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <input name="phone" placeholder="Phone number" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.phone ? "border-red-400" : "border-border"}`} />
+              {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone}</p>}
+            </div>
+            <div>
+              <input name="email" type="email" placeholder="Email address" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.email ? "border-red-400" : "border-border"}`} />
+              {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+            </div>
+          </div>
+          <div>
+            <textarea name="message" rows={3} placeholder="What would you like us to focus on?" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none ${errors.message ? "border-red-400" : "border-border"}`} />
+            {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message}</p>}
+          </div>
+          <button
+            type="submit"
+            disabled={sending}
+            className="w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition disabled:opacity-60 shadow-gold"
+          >
+            {sending ? "Sending..." : <>Request my free audit <Send className="h-4 w-4" /></>}
+          </button>
+          <p className="text-[11px] text-muted-foreground text-center">🔒 Your details stay private. We never spam.</p>
+        </form>
+      </div>
+    </div>
   );
 }

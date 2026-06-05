@@ -274,13 +274,16 @@ export type Database = {
           assigned_email: string
           assigned_to: string | null
           budget: string
+          company: string
           created_at: string
           email: string
           id: string
           ip_address: string
+          kind: string
           message: string
           name: string
           page_url: string
+          phone: string
           referrer: string
           service: string
           status: string
@@ -289,19 +292,23 @@ export type Database = {
           utm_campaign: string
           utm_medium: string
           utm_source: string
+          website: string
         }
         Insert: {
           admin_notes?: string
           assigned_email?: string
           assigned_to?: string | null
           budget: string
+          company?: string
           created_at?: string
           email: string
           id?: string
           ip_address?: string
+          kind?: string
           message: string
           name: string
           page_url?: string
+          phone?: string
           referrer?: string
           service: string
           status?: string
@@ -310,19 +317,23 @@ export type Database = {
           utm_campaign?: string
           utm_medium?: string
           utm_source?: string
+          website?: string
         }
         Update: {
           admin_notes?: string
           assigned_email?: string
           assigned_to?: string | null
           budget?: string
+          company?: string
           created_at?: string
           email?: string
           id?: string
           ip_address?: string
+          kind?: string
           message?: string
           name?: string
           page_url?: string
+          phone?: string
           referrer?: string
           service?: string
           status?: string
@@ -331,6 +342,7 @@ export type Database = {
           utm_campaign?: string
           utm_medium?: string
           utm_source?: string
+          website?: string
         }
         Relationships: []
       }
