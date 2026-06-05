@@ -87,6 +87,7 @@ import {
   MailCheck,
   Inbox,
 } from "lucide-react";
+import { Globe } from "lucide-react";
 import { ExternalLink, Eye as EyeCount } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -131,7 +132,7 @@ function AdminPage() {
   const canManage = !!capsQuery.data?.canManageServices;
   const canAnalytics = !!capsQuery.data?.canViewAnalytics;
 
-  type Tab = "services" | "analytics" | "blog" | "categories" | "users" | "inquiries";
+  type Tab = "services" | "analytics" | "blog" | "categories" | "users" | "audits" | "inquiries";
   const defaultTab: Tab = canManage ? "services" : canAnalytics ? "analytics" : "services";
   const [tab, setTab] = useState<Tab>(defaultTab);
   useEffect(() => {
@@ -141,7 +142,7 @@ function AdminPage() {
     if (tab === "blog" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "categories" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "users" && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
-    if (tab === "inquiries" && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
+    if ((tab === "inquiries" || tab === "audits") && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
   }, [capsQuery.data, canManage, canAnalytics, tab]);
 
   const services = useQuery({ queryKey: ["services"], queryFn: () => list(), enabled: canManage });
@@ -281,8 +282,13 @@ function AdminPage() {
           </TabButton>
         )}
         {(capsQuery.data?.roles ?? []).includes("admin") && (
-          <TabButton active={tab === "inquiries"} onClick={() => setTab("inquiries")} icon={Inbox}>
+          <TabButton active={tab === "audits"} onClick={() => setTab("audits")} icon={Globe}>
             Website Audit
+          </TabButton>
+        )}
+        {(capsQuery.data?.roles ?? []).includes("admin") && (
+          <TabButton active={tab === "inquiries"} onClick={() => setTab("inquiries")} icon={Inbox}>
+            Inquiries
           </TabButton>
         )}
       </nav>
@@ -377,7 +383,11 @@ function AdminPage() {
       )}
 
       {tab === "inquiries" && (capsQuery.data?.roles ?? []).includes("admin") && (
-        <InquiriesPanel />
+        <InquiriesPanel kind="inquiry" />
+      )}
+
+      {tab === "audits" && (capsQuery.data?.roles ?? []).includes("admin") && (
+        <InquiriesPanel kind="audit" />
       )}
 
       {editing && canManage && (
