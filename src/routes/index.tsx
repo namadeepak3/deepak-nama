@@ -99,7 +99,7 @@ function Home() {
               The <span className="text-gradient-gold">AI-powered</span> growth partner for ambitious modern brands.
             </h1>
             <p className="mt-6 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed">
-              We&apos;re <span className="text-foreground font-semibold">vrseoguru</span> — an AI-powered digital marketing services agency. AI agents, predictive media, generative creative and intelligent lifecycle — unified into one revenue engine. Senior strategists. Proprietary AI stack. Agency-scale execution.
+              We&apos;re <span className="text-foreground font-semibold">vrseoguru</span> — an AI-powered digital marketing agency. AI agents, predictive media buying, generative creative, AI search (GEO) and intelligent lifecycle — unified into one revenue engine, run by senior strategists.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/contact" className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
