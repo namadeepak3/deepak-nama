@@ -1,7 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2, TrendingUp, Award, Star, Quote, Phone, Bot, Search, Megaphone, Target, BarChart3, Globe, Rocket, Activity, Play, MousePointerClick, Mail, Compass, Hammer, FlaskConical, FileBarChart, PenTool, Share2, Code2, ShoppingCart, Youtube, Linkedin } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useServerFn } from "@tanstack/react-start";
 import { createLead } from "@/lib/leads.functions";
 import { generateAuditPreview, type AuditPreview } from "@/lib/audit-preview.functions";
@@ -410,7 +409,7 @@ function Home() {
                   <div aria-hidden className="absolute -inset-3 rounded-[2rem] border border-foreground/10 animate-ai-pulse" />
                   <div className="relative flex flex-col items-center gap-1">
                     <Bot className="h-10 w-10" />
-                    <div className="text-[9px] font-semibold uppercase tracking-[0.2em] opacity-80">AI Core</div>
+                    <div className="text-[9px] font-semibold uppercase tracking-[0.2em] opacity-80">AI</div>
                   </div>
                 </div>
 
@@ -815,31 +814,6 @@ function Home() {
             </div>
           </Carousel>
         </div>
-      </section>
-
-      {/* ============ FAQ ============ */}
-      <section className="mx-auto max-w-4xl px-4 sm:px-6 py-8 md:py-12">
-        <div className="text-center mb-6">
-          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">FAQs</p>
-          <h2 className="mt-3 text-3xl md:text-4xl font-display">Common questions</h2>
-          <p className="mt-4 text-muted-foreground">Everything you want to know before we kick off your engagement.</p>
-        </div>
-        <Accordion type="single" collapsible className="space-y-3">
-          {[
-            { q: "What services does the agency offer?", a: "Full-service digital marketing — SEO & GEO, Google Ads, Meta & LinkedIn paid social, performance creative, lifecycle/email, analytics, and AI-powered automation." },
-            { q: "How are engagements priced?", a: "Retainers typically range ₹50k–₹5L/mo depending on scope, channels and ad spend. Every proposal is custom — request a strategy call for a tailored quote." },
-            { q: "How fast will we see results?", a: "Paid channels usually show signal within 2–3 weeks. SEO compounds over 3–6 months. We share a 30/60/90-day roadmap before kickoff so expectations are crystal clear." },
-            { q: "Do you work with our industry?", a: "We've shipped campaigns across 18+ industries — ecommerce, SaaS, fintech, healthcare, real estate, education, D2C and B2B. If your funnel needs growth, we can help." },
-            { q: "Do you handle ad spend management?", a: "Yes. Our paid-media team manages Google, Meta, LinkedIn, Amazon & YouTube ad accounts end-to-end — strategy, creative, bidding, tracking and weekly optimization." },
-            { q: "How do you report on performance?", a: "Live Looker Studio dashboards tied to your GA4, ad accounts and CRM — plus a written monthly review with insights, learnings and next bets from your account lead." },
-            { q: "Can we cancel anytime?", a: "Yes. Month-to-month retainers with 30-day notice. No long lock-ins, no hidden fees — performance keeps the partnership going." },
-          ].map((f,i)=>(
-            <AccordionItem key={i} value={`item-${i}`} className="rounded-2xl border border-border bg-card px-5 data-[state=open]:border-primary transition">
-              <AccordionTrigger className="text-left text-base font-display hover:no-underline">{f.q}</AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground leading-relaxed">{f.a}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
       </section>
 
       {/* ============ FINAL CTA ============ */}

@@ -47,7 +47,7 @@ function ServicesPage() {
                 key={s.slug}
                 to="/services/$slug"
                 params={{ slug: s.slug }}
-                className="group rounded-2xl border border-border bg-card p-8 hover:border-primary/60 transition-colors block"
+                className="btn-fx group rounded-2xl border border-border bg-card p-8 hover:border-primary/60 transition-colors block"
               >
                 <div className="flex items-start justify-between">
                   <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/30 grid place-items-center">
@@ -76,7 +76,7 @@ function ServicesPage() {
         <div className="mt-20 rounded-2xl border border-border bg-card p-10 text-center">
           <h2 className="text-3xl md:text-4xl font-display font-semibold">Not sure where to start?</h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">Share your business goals and I&apos;ll recommend the highest-leverage services for your stage.</p>
-          <Link to="/contact" className="mt-6 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-gold hover:bg-accent transition-colors">
+          <Link to="/contact" className="btn-fx mt-6 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-gold hover:bg-accent transition-colors">
             Get a custom plan <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

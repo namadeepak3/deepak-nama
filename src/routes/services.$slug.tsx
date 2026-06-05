@@ -92,10 +92,10 @@ function ServiceDetail() {
           </div>
           <p className="mt-8 max-w-3xl text-lg md:text-xl text-muted-foreground">{svc.shortDesc}</p>
           <div className="mt-10 flex flex-wrap gap-4">
-            <Link to="/contact" className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-gold hover:bg-accent transition-colors">
+            <Link to="/contact" className="btn-fx inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-gold hover:bg-accent transition-colors">
               Get a proposal <ArrowRight className="h-4 w-4" />
             </Link>
-            <a href="#pricing" className="inline-flex items-center gap-2 rounded-md border border-border bg-card/60 px-6 py-3 text-sm font-medium text-foreground hover:border-primary transition-colors">
+            <a href="#pricing" className="btn-fx inline-flex items-center gap-2 rounded-md border border-border bg-card/60 px-6 py-3 text-sm font-medium text-foreground hover:border-primary transition-colors">
               See pricing
             </a>
           </div>
@@ -224,7 +224,7 @@ function ServiceDetail() {
               </ul>
               <Link
                 to="/contact"
-                className={`mt-8 inline-flex items-center justify-center gap-2 rounded-md px-4 py-3 text-sm font-medium transition-colors ${
+                className={`btn-fx mt-8 inline-flex items-center justify-center gap-2 rounded-md px-4 py-3 text-sm font-medium transition-colors ${
                   t.highlighted
                     ? "bg-primary text-primary-foreground hover:bg-accent"
                     : "border border-border bg-background hover:border-primary text-foreground"
@@ -251,7 +251,7 @@ function ServiceDetail() {
                 key={r.slug}
                 to="/services/$slug"
                 params={{ slug: r.slug }}
-                className="group rounded-2xl border border-border bg-card p-6 hover:border-primary/60 transition-colors"
+                className="btn-fx group rounded-2xl border border-border bg-card p-6 hover:border-primary/60 transition-colors"
               >
                 <div className="h-10 w-10 rounded-lg bg-primary/10 border border-primary/30 grid place-items-center">
                   <RIcon className="h-4 w-4 text-primary" />
@@ -276,7 +276,7 @@ function ServiceDetail() {
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
             Book a free 30-minute call. I'll audit your current setup and outline a path to compounding results.
           </p>
-          <Link to="/contact" className="mt-8 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-gold hover:bg-accent transition-colors">
+           <Link to="/contact" className="btn-fx mt-8 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-gold hover:bg-accent transition-colors">
             Book a strategy call <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

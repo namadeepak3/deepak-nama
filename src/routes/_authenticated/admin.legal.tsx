@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { ArrowLeft, Save, FileText, Eye, EyeOff } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { MarkdownEditor } from "@/components/MarkdownEditor";
 import {
   listLegalPagesAdmin,
   upsertLegalPage,
@@ -159,12 +160,12 @@ function AdminLegalPage() {
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{draft.content}</ReactMarkdown>
             </div>
           ) : (
-            <textarea
+            <MarkdownEditor
+              label="Page content"
               value={draft.content}
-              onChange={(e) => setDraft({ ...draft, content: e.target.value })}
+              onChange={(content) => setDraft({ ...draft, content })}
               rows={24}
-              placeholder="Write in Markdown. Use ## for headings, **bold**, _italic_, [links](url), etc."
-              className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm font-mono leading-6"
+              placeholder="Write in Markdown. Use headings, lists, links, quotes and images."
             />
           )}
 

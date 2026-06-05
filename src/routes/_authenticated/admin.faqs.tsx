@@ -4,6 +4,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { ArrowLeft, Plus, Trash2, Save, Eye, EyeOff } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { MarkdownEditor } from "@/components/MarkdownEditor";
 import {
   listAllFaqs,
   upsertFaq,
@@ -62,6 +65,7 @@ function AdminFaqsPage() {
   });
 
   const [editing, setEditing] = useState<Draft | null>(null);
+  const [preview, setPreview] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
@@ -125,9 +129,14 @@ function AdminFaqsPage() {
       {editing && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-0 sm:p-6">
           <div className="bg-card border border-border w-full sm:max-w-2xl sm:rounded-lg max-h-[92vh] overflow-y-auto">
-            <div className="sticky top-0 bg-card border-b border-border px-5 py-3 flex items-center justify-between">
+            <div className="sticky top-0 bg-card border-b border-border px-5 py-3 flex items-center justify-between gap-3">
               <h2 className="font-display text-lg">{editing.id ? "Edit FAQ" : "New FAQ"}</h2>
-              <button onClick={() => setEditing(null)} className="text-muted-foreground hover:text-foreground text-sm">Close</button>
+              <div className="flex items-center gap-2">
+                <button onClick={() => setPreview((v) => !v)} className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted">
+                  {preview ? "Edit" : "Preview"}
+                </button>
+                <button onClick={() => setEditing(null)} className="text-muted-foreground hover:text-foreground text-sm">Close</button>
+              </div>
             </div>
             <div className="p-5 space-y-4">
               <label className="block">
@@ -138,15 +147,20 @@ function AdminFaqsPage() {
                   className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
                 />
               </label>
-              <label className="block">
-                <span className="block text-xs font-medium text-muted-foreground mb-1">Answer (Markdown)</span>
-                <textarea
+              {preview ? (
+                <div className="rounded-md border border-border bg-background p-4 prose prose-sm max-w-none prose-headings:text-foreground prose-a:text-primary">
+                  <h3>{editing.question || "FAQ preview"}</h3>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{editing.answer || "Answer preview"}</ReactMarkdown>
+                </div>
+              ) : (
+                <MarkdownEditor
+                  label="Answer"
                   value={editing.answer}
-                  onChange={(e) => setEditing({ ...editing, answer: e.target.value })}
-                  rows={8}
-                  className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm font-mono"
+                  onChange={(answer) => setEditing({ ...editing, answer })}
+                  rows={10}
+                  placeholder="Write the FAQ answer in Markdown."
                 />
-              </label>
+              )}
               <div className="grid grid-cols-2 gap-3">
                 <label className="block">
                   <span className="block text-xs font-medium text-muted-foreground mb-1">Category</span>
