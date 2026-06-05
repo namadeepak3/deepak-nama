@@ -321,7 +321,7 @@ function Home() {
         <div className="flex items-end justify-between flex-wrap gap-6 mb-10">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">What we do</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">A full-service growth <span className="text-gradient-gold">engine.</span></h2>
+              <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">An <span className="text-gradient-gold">AI-powered</span> growth engine.</h2>
           </div>
           <Link to="/services" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">
             All services <ArrowRight className="h-4 w-4" />
@@ -394,16 +394,16 @@ function Home() {
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Our process</p>
-          <h2 className="mt-3 text-4xl md:text-5xl font-display">A proven path to growth</h2>
-          <p className="mt-4 text-muted-foreground">A transparent, repeatable system that turns goals into compounding revenue.</p>
+              <h2 className="mt-3 text-4xl md:text-5xl font-display">An <span className="text-gradient-gold">AI-augmented</span> growth process</h2>
+          <p className="mt-4 text-muted-foreground">Human strategy, AI velocity. A transparent system that compounds revenue.</p>
         </div>
         <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-5 gap-4">
           {[
-            ["01","Discovery & Audit","Deep market, competitor & funnel analysis."],
-            ["02","Strategy","Custom data-backed roadmap aligned to revenue."],
-            ["03","Implementation","Multi-channel execution with AI-assisted ops."],
-            ["04","Optimization","Continuous testing, learning, scaling."],
-            ["05","Reporting","Real-time dashboards. Monthly strategic reviews."],
+            ["01","AI Discovery","LLM-powered market, competitor & funnel intelligence."],
+            ["02","Strategy","Data-modeled roadmap aligned to revenue."],
+            ["03","AI Execution","Multi-channel ops run by agents + senior strategists."],
+            ["04","Predictive Optimization","ML bidding, creative iteration & 24/7 anomaly alerts."],
+            ["05","Live Reporting","Real-time AI dashboards. Monthly strategic reviews."],
           ].map(([num, title, desc]) => (
             <div key={num} className="rounded-3xl border border-border bg-card p-6 hover:border-primary transition">
               <div className="text-3xl font-display text-gradient-gold">{num}</div>
