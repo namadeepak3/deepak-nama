@@ -1729,14 +1729,38 @@ function UsersPanel() {
   const setFn = useServerFn(setUserRole);
   const removeFn = useServerFn(removeUserRole);
   const auditFn = useServerFn(listRoleAuditLog);
+  const resendFn = useServerFn(resendVerificationEmail);
 
   const usersQuery = useQuery({ queryKey: ["admin-users"], queryFn: () => listFn() });
-  const auditQuery = useQuery({ queryKey: ["role-audit-log"], queryFn: () => auditFn() });
 
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<"all" | AppRole | "none">("all");
   const [statusFilter, setStatusFilter] = useState<"all" | "verified" | "unverified">("all");
   const [showAudit, setShowAudit] = useState(false);
+
+  // Audit log filter state
+  const [auditAction, setAuditAction] = useState<"all" | "assigned" | "removed">("all");
+  const [auditRole, setAuditRole] = useState<"all" | AppRole>("all");
+  const [auditSearch, setAuditSearch] = useState("");
+  const [auditFrom, setAuditFrom] = useState("");
+  const [auditTo, setAuditTo] = useState("");
+
+  const auditParams = useMemo(
+    () => ({
+      action: auditAction,
+      role: auditRole,
+      search: auditSearch.trim() || undefined,
+      from: auditFrom ? new Date(auditFrom).toISOString() : undefined,
+      to: auditTo ? new Date(`${auditTo}T23:59:59`).toISOString() : undefined,
+      limit: 500,
+    }),
+    [auditAction, auditRole, auditSearch, auditFrom, auditTo],
+  );
+  const auditQuery = useQuery({
+    queryKey: ["role-audit-log", auditParams],
+    queryFn: () => auditFn({ data: auditParams }),
+    enabled: showAudit,
+  });
 
   const addMutation = useMutation({
     mutationFn: (v: { userId: string; role: AppRole }) => setFn({ data: v }),
@@ -1756,6 +1780,12 @@ function UsersPanel() {
       qc.invalidateQueries({ queryKey: ["role-audit-log"] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
+  });
+
+  const resendMutation = useMutation({
+    mutationFn: (userId: string) => resendFn({ data: { userId } }),
+    onSuccess: (r) => toast.success(`Verification email queued to ${r.email}`),
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Failed to send"),
   });
 
   if (usersQuery.isLoading) {
@@ -1849,6 +1879,8 @@ function UsersPanel() {
             isLastAdmin={u.roles.includes("admin") && adminCount <= 1}
             onAdd={(role) => addMutation.mutate({ userId: u.id, role })}
             onRemove={(role) => removeMutation.mutate({ userId: u.id, role })}
+            onResendVerification={() => resendMutation.mutate(u.id)}
+            resending={resendMutation.isPending && resendMutation.variables === u.id}
             pending={addMutation.isPending || removeMutation.isPending}
           />
         ))}
@@ -1858,7 +1890,20 @@ function UsersPanel() {
       </div>
 
       {showAudit && (
-        <AuditLogPanel loading={auditQuery.isLoading} entries={auditQuery.data ?? []} />
+        <AuditLogPanel
+          loading={auditQuery.isLoading}
+          entries={auditQuery.data ?? []}
+          action={auditAction}
+          onActionChange={setAuditAction}
+          role={auditRole}
+          onRoleChange={setAuditRole}
+          search={auditSearch}
+          onSearchChange={setAuditSearch}
+          from={auditFrom}
+          onFromChange={setAuditFrom}
+          to={auditTo}
+          onToChange={setAuditTo}
+        />
       )}
     </div>
   );
@@ -1869,12 +1914,16 @@ function UserRow({
   isLastAdmin,
   onAdd,
   onRemove,
+  onResendVerification,
+  resending,
   pending,
 }: {
   user: AdminUserRow;
   isLastAdmin: boolean;
   onAdd: (role: AppRole) => void;
   onRemove: (role: AppRole) => void;
+  onResendVerification: () => void;
+  resending: boolean;
   pending: boolean;
 }) {
   const [pick, setPick] = useState<AppRole>("editor");
@@ -1895,6 +1944,16 @@ function UserRow({
           >
             {verified ? "Verified" : "Unverified"}
           </span>
+          <button
+            type="button"
+            disabled={resending}
+            onClick={onResendVerification}
+            title={verified ? "Send a magic sign-in link" : "Resend verification email"}
+            className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-0.5 text-[10px] text-muted-foreground hover:text-foreground hover:border-primary disabled:opacity-50"
+          >
+            <MailCheck className="h-3 w-3" />
+            {resending ? "Sending…" : verified ? "Send magic link" : "Resend verification"}
+          </button>
         </div>
         <p className="text-xs text-muted-foreground truncate">
           Joined {new Date(user.createdAt).toLocaleDateString()}
