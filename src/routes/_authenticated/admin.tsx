@@ -2392,13 +2392,14 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
           value={assignedFilter}
           onChange={(e) => setAssignedFilter(e.target.value)}
           className="rounded-md border border-border bg-background px-3 py-2 text-sm"
-          aria-label="Filter by assignee"
+          aria-label="Manage Assigned Leads"
+          title="Manage Assigned Leads — filter by team member"
         >
-          <option value="all">All assignees</option>
+          <option value="all">Manage Assigned Leads: All</option>
           <option value="me">Assigned to me</option>
           <option value="unassigned">Unassigned</option>
           {assignees.map((a) => (
-            <option key={a.userId} value={a.userId}>{a.email}</option>
+            <option key={a.userId} value={a.userId}>Assigned to {a.email}</option>
           ))}
         </select>
         <input
