@@ -2392,13 +2392,14 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
           value={assignedFilter}
           onChange={(e) => setAssignedFilter(e.target.value)}
           className="rounded-md border border-border bg-background px-3 py-2 text-sm"
-          aria-label="Filter by assignee"
+          aria-label="Manage Assigned Leads"
+          title="Manage Assigned Leads — filter by team member"
         >
-          <option value="all">All assignees</option>
+          <option value="all">Manage Assigned Leads: All</option>
           <option value="me">Assigned to me</option>
           <option value="unassigned">Unassigned</option>
           {assignees.map((a) => (
-            <option key={a.userId} value={a.userId}>{a.email}</option>
+            <option key={a.userId} value={a.userId}>Assigned to {a.email}</option>
           ))}
         </select>
         <input
@@ -2524,23 +2525,30 @@ function InquiryRow({
           </p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
+          <label className="sr-only" htmlFor={`assign-${lead.id}`}>Assign Lead</label>
           <select
+            id={`assign-${lead.id}`}
             value={lead.assignedTo ?? ""}
             disabled={pending}
             onChange={(e) => onUpdate({ assignedTo: e.target.value ? e.target.value : null })}
-            className="rounded-md border border-border bg-background px-2 py-1.5 text-xs max-w-[160px]"
-            aria-label="Assign to admin"
+            className="rounded-md border border-border bg-background px-2 py-1.5 text-xs max-w-[180px]"
+            aria-label="Assign Lead"
+            title="Assign Lead"
           >
-            <option value="">Unassigned</option>
+            <option value="">Assign Lead…</option>
             {assignees.map((a) => (
               <option key={a.userId} value={a.userId}>{a.email}</option>
             ))}
           </select>
+          <label className="sr-only" htmlFor={`status-${lead.id}`}>Status Update</label>
           <select
+            id={`status-${lead.id}`}
             value={lead.status}
             disabled={pending}
             onChange={(e) => onUpdate({ status: e.target.value as LeadStatus })}
             className="rounded-md border border-border bg-background px-2 py-1.5 text-xs"
+            aria-label="Status Update"
+            title="Status Update"
           >
             {LEAD_STATUSES.map((s) => (
               <option key={s} value={s}>{s}</option>
@@ -2552,7 +2560,17 @@ function InquiryRow({
             className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
           >
             {open ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
-            {open ? "Hide" : "Details"}
+            {open ? "Hide" : "View Lead"}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (!open) onToggle();
+              setEditMode(true);
+            }}
+            className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
+          >
+            <Pencil className="h-3 w-3" /> Edit Lead
           </button>
           <button
             type="button"
