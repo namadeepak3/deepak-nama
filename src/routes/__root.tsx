@@ -201,6 +201,7 @@ function SiteHeader() {
           </div>
 
           <Link to="/about" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-white" }}>About</Link>
+          <Link to="/case-studies" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-white" }}>Case Studies</Link>
           <Link to="/blog" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-white" }}>Blog</Link>
           <Link to="/contact" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-white" }}>Contact</Link>
         </nav>
@@ -242,6 +243,7 @@ function SiteHeader() {
               </div>
             </details>
             <Link to="/about" onClick={() => setMobileOpen(false)} className="block py-2 text-white">About</Link>
+            <Link to="/case-studies" onClick={() => setMobileOpen(false)} className="block py-2 text-white">Case Studies</Link>
             <Link to="/blog" onClick={() => setMobileOpen(false)} className="block py-2 text-white">Blog</Link>
             <Link to="/contact" onClick={() => setMobileOpen(false)} className="block py-2 text-white">Contact</Link>
             <Link to="/contact" onClick={() => setMobileOpen(false)} className="mt-3 inline-flex items-center gap-2 rounded-md bg-white text-ink px-4 py-2 text-sm font-medium">
@@ -304,6 +306,7 @@ function SiteFooter() {
               <li><Link to="/about" className="text-white/70 hover:text-white transition-colors">About</Link></li>
               <li><Link to="/services" className="text-white/70 hover:text-white transition-colors">All services</Link></li>
               <li><Link to="/blog" className="text-white/70 hover:text-white transition-colors">Blog</Link></li>
+              <li><Link to="/case-studies" className="text-white/70 hover:text-white transition-colors">Case Studies</Link></li>
               <li><Link to="/contact" className="text-white/70 hover:text-white transition-colors">Contact</Link></li>
             </ul>
           </div>
