@@ -235,20 +235,6 @@ function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-24">
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-ink text-white p-12 md:p-16">
-          <div className="max-w-2xl">
-            <h2 className="text-4xl md:text-5xl font-display font-semibold">Ready to outgrow your competitors?</h2>
-            <p className="mt-4 text-white/70 text-lg">
-              Tell me about your goals. I&apos;ll send back a 30-day AI growth blueprint within 48 hours — free.
-            </p>
-            <Link to="/contact" className="mt-8 inline-flex items-center gap-2 rounded-md bg-white text-ink px-6 py-3 text-sm font-medium hover:bg-white/90 transition-colors">
-              Start the conversation <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* Who We Are */}
       <section className="mx-auto max-w-7xl px-6 py-24 grid lg:grid-cols-2 gap-12 items-center">
         <div>
