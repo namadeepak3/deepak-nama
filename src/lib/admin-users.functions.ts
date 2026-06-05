@@ -175,7 +175,7 @@ export const listRoleAuditLog = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false })
       .limit(data.limit ?? 200);
     if (data.action && data.action !== "all") q = q.eq("action", data.action);
-    if (data.role && data.role !== "all") q = q.eq("role", data.role);
+    if (data.role && data.role !== "all") q = q.eq("role", data.role as AppRole);
     if (data.from) q = q.gte("created_at", data.from);
     if (data.to) q = q.lte("created_at", data.to);
     if (data.search) {
@@ -206,11 +206,12 @@ export const resendVerificationEmail = createServerFn({ method: "POST" })
     if (getErr) throw new Error(getErr.message);
     const email = u.user?.email;
     if (!email) throw new Error("User has no email on file");
-    const linkType = u.user?.email_confirmed_at ? "magiclink" : "signup";
+    // Use magiclink for both confirmed and unconfirmed — clicking it confirms
+    // the email and signs the user in, which is the desired "resend verification" UX.
     const { error } = await supabaseAdmin.auth.admin.generateLink({
-      type: linkType,
+      type: "magiclink",
       email,
     });
     if (error) throw new Error(error.message);
-    return { ok: true, email, type: linkType };
+    return { ok: true, email };
   });

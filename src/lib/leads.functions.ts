@@ -30,6 +30,31 @@ async function assertAdmin(userId: string) {
   if (!data) throw new Error("Forbidden: admin role required");
 }
 
+export const createLead = createServerFn({ method: "POST" })
+  .inputValidator((input: {
+    name: string;
+    email: string;
+    service: string;
+    budget: string;
+    message: string;
+  }) =>
+    z
+      .object({
+        name: z.string().trim().min(2).max(100),
+        email: z.string().trim().email().max(255),
+        service: z.string().min(1).max(100),
+        budget: z.string().min(1).max(100),
+        message: z.string().trim().min(10).max(2000),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("leads").insert(data);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
 export const listLeads = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<LeadRow[]> => {
@@ -69,11 +94,11 @@ export const updateLead = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin(context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const patch: Record<string, unknown> = {};
+    const patch: { status?: string; admin_notes?: string } = {};
     if (data.status !== undefined) patch.status = data.status;
     if (data.adminNotes !== undefined) patch.admin_notes = data.adminNotes;
     if (Object.keys(patch).length === 0) return { ok: true };
-    const { error } = await supabaseAdmin.from("leads").update(patch).eq("id", data.id);
+    const { error } = await (supabaseAdmin.from("leads") as any).update(patch).eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
