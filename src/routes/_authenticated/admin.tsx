@@ -126,6 +126,7 @@ function emptyService(nextOrder: number): ServiceInput {
 function AdminPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
+  useIdleLogout(10 * 60 * 1000);
   const list = useServerFn(listServices);
   const caps = useServerFn(getMyCapabilities);
   const analytics = useServerFn(getServiceAnalytics);
