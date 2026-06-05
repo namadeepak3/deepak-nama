@@ -405,8 +405,6 @@ function Home() {
             </div>
           </div>
 
-          {/* Animated beam separator */}
-          <div aria-hidden className="mt-8 h-px w-full bg-gradient-to-r from-transparent via-primary to-transparent animate-ai-beam opacity-60" />
         </div>
       </section>
 
