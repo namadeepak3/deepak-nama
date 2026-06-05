@@ -417,22 +417,50 @@ function Home() {
       {/* ============ PROCESS ============ */}
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="text-center max-w-2xl mx-auto">
-          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Our process</p>
-              <h2 className="mt-3 text-4xl md:text-5xl font-display">An <span className="text-gradient-gold">AI-augmented</span> growth process</h2>
-          <p className="mt-4 text-muted-foreground">Human strategy, AI velocity. A transparent system that compounds revenue.</p>
+          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">End-to-end AI workflow</p>
+          <h2 className="mt-3 text-4xl md:text-5xl font-display">Plan. Build. Launch. Optimize. Report.</h2>
+          <p className="mt-4 text-muted-foreground">A repeatable AI-augmented system that moves from brief to booked revenue — with humans in the loop at every step.</p>
         </div>
         <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-5 gap-4">
           {[
-            ["01","AI Discovery","LLM-powered market, competitor & funnel intelligence."],
-            ["02","Strategy","Data-modeled roadmap aligned to revenue."],
-            ["03","AI Execution","Multi-channel ops run by agents + senior strategists."],
-            ["04","Predictive Optimization","ML bidding, creative iteration & 24/7 anomaly alerts."],
-            ["05","Live Reporting","Real-time AI dashboards. Monthly strategic reviews."],
-          ].map(([num, title, desc]) => (
-            <div key={num} className="rounded-3xl border border-border bg-card p-6 hover:border-primary transition">
-              <div className="text-3xl font-display text-gradient-gold">{num}</div>
-              <h3 className="mt-3 font-display">{title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
+            {
+              num: "01", title: "Plan", Icon: Compass,
+              desc: "LLM-powered audit of your market, competitors, funnel and account data. Output: a 90-day revenue roadmap.",
+              cta: "Book a free audit", href: "/contact",
+            },
+            {
+              num: "02", title: "Build", Icon: Hammer,
+              desc: "GenAI creative, GEO-ready content, tracking, dashboards and agent workflows — built and brand-tuned.",
+              cta: "See deliverables", href: "/services",
+            },
+            {
+              num: "03", title: "Launch", Icon: Rocket,
+              desc: "Multi-channel rollout across Google, Meta, LinkedIn, Amazon and AI search — live in under 14 days.",
+              cta: "Start a project", href: "/contact",
+            },
+            {
+              num: "04", title: "Optimize", Icon: FlaskConical,
+              desc: "ML bidding, predictive creative rotation and 24/7 anomaly agents tuning campaigns to your real margin.",
+              cta: "Our AI stack", href: "/services",
+            },
+            {
+              num: "05", title: "Report", Icon: FileBarChart,
+              desc: "Live executive dashboards plus a monthly strategic review from your senior account lead.",
+              cta: "View sample report", href: "/blog",
+            },
+          ].map(({ num, title, desc, Icon, cta, href }) => (
+            <div key={num} className="flex flex-col rounded-3xl border border-border bg-card p-6 hover:border-foreground transition">
+              <div className="flex items-center justify-between">
+                <div className="text-3xl font-display text-foreground/30">{num}</div>
+                <div className="h-10 w-10 rounded-xl bg-foreground text-background grid place-items-center">
+                  <Icon className="h-4 w-4" />
+                </div>
+              </div>
+              <h3 className="mt-4 font-display text-lg">{title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{desc}</p>
+              <Link to={href} className="mt-5 inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:opacity-70 transition">
+                {cta} <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
           ))}
         </div>
