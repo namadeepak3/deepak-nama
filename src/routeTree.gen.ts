@@ -29,6 +29,8 @@ import { Route as CaseStudiesSlugRouteImport } from './routes/case-studies.$slug
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
+import { Route as AuthenticatedAdminLegalRouteImport } from './routes/_authenticated/admin.legal'
+import { Route as AuthenticatedAdminFaqsRouteImport } from './routes/_authenticated/admin.faqs'
 import { Route as ApiPublicHealthRlsRouteImport } from './routes/api/public/health/rls'
 
 const WebsiteAuditRoute = WebsiteAuditRouteImport.update({
@@ -131,6 +133,16 @@ const AuthenticatedAdminSecurityRoute =
     path: '/security',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminLegalRoute = AuthenticatedAdminLegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminFaqsRoute = AuthenticatedAdminFaqsRouteImport.update({
+  id: '/faqs',
+  path: '/faqs',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const ApiPublicHealthRlsRoute = ApiPublicHealthRlsRouteImport.update({
   id: '/api/public/health/rls',
   path: '/api/public/health/rls',
@@ -156,6 +168,8 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/case-studies/': typeof CaseStudiesIndexRoute
   '/services/': typeof ServicesIndexRoute
+  '/admin/faqs': typeof AuthenticatedAdminFaqsRoute
+  '/admin/legal': typeof AuthenticatedAdminLegalRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/api/public/health/rls': typeof ApiPublicHealthRlsRoute
 }
@@ -178,6 +192,8 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/case-studies': typeof CaseStudiesIndexRoute
   '/services': typeof ServicesIndexRoute
+  '/admin/faqs': typeof AuthenticatedAdminFaqsRoute
+  '/admin/legal': typeof AuthenticatedAdminLegalRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/api/public/health/rls': typeof ApiPublicHealthRlsRoute
 }
@@ -202,6 +218,8 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/case-studies/': typeof CaseStudiesIndexRoute
   '/services/': typeof ServicesIndexRoute
+  '/_authenticated/admin/faqs': typeof AuthenticatedAdminFaqsRoute
+  '/_authenticated/admin/legal': typeof AuthenticatedAdminLegalRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/api/public/health/rls': typeof ApiPublicHealthRlsRoute
 }
@@ -226,6 +244,8 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/case-studies/'
     | '/services/'
+    | '/admin/faqs'
+    | '/admin/legal'
     | '/admin/security'
     | '/api/public/health/rls'
   fileRoutesByTo: FileRoutesByTo
@@ -248,6 +268,8 @@ export interface FileRouteTypes {
     | '/blog'
     | '/case-studies'
     | '/services'
+    | '/admin/faqs'
+    | '/admin/legal'
     | '/admin/security'
     | '/api/public/health/rls'
   id:
@@ -271,6 +293,8 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/case-studies/'
     | '/services/'
+    | '/_authenticated/admin/faqs'
+    | '/_authenticated/admin/legal'
     | '/_authenticated/admin/security'
     | '/api/public/health/rls'
   fileRoutesById: FileRoutesById
@@ -439,6 +463,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSecurityRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/legal': {
+      id: '/_authenticated/admin/legal'
+      path: '/legal'
+      fullPath: '/admin/legal'
+      preLoaderRoute: typeof AuthenticatedAdminLegalRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/faqs': {
+      id: '/_authenticated/admin/faqs'
+      path: '/faqs'
+      fullPath: '/admin/faqs'
+      preLoaderRoute: typeof AuthenticatedAdminFaqsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/api/public/health/rls': {
       id: '/api/public/health/rls'
       path: '/api/public/health/rls'
@@ -450,10 +488,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminFaqsRoute: typeof AuthenticatedAdminFaqsRoute
+  AuthenticatedAdminLegalRoute: typeof AuthenticatedAdminLegalRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminFaqsRoute: AuthenticatedAdminFaqsRoute,
+  AuthenticatedAdminLegalRoute: AuthenticatedAdminLegalRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
 }
 

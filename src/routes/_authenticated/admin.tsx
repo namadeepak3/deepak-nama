@@ -476,6 +476,18 @@ function AdminShell({
         >
           <ShieldCheck className="h-4 w-4" /> Security
         </Link>
+        <Link
+          to="/admin/legal"
+          className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+        >
+          <FileText className="h-4 w-4" /> Legal pages
+        </Link>
+        <Link
+          to="/admin/faqs"
+          className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+        >
+          <FileText className="h-4 w-4" /> FAQs
+        </Link>
         <button
           onClick={onSignOut}
           className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
