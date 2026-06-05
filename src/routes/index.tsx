@@ -113,7 +113,7 @@ function Home() {
               The <span className="text-gradient-gold">AI-powered</span> growth partner for ambitious modern brands.
             </h1>
             <p className="mt-6 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed">
-              We&apos;re <span className="text-foreground font-semibold">vrseoguru</span> — an AI-powered digital marketing services agency uniting SEO, paid media, performance creative and lifecycle into one revenue engine. Senior strategists. Proprietary AI stack. Agency-scale execution.
+              We&apos;re <span className="text-foreground font-semibold">vrseoguru</span> — an AI-powered digital marketing services agency. AI agents, predictive media, generative creative and intelligent lifecycle — unified into one revenue engine. Senior strategists. Proprietary AI stack. Agency-scale execution.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/contact" className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
@@ -219,15 +219,15 @@ function Home() {
       {/* ============ CHANNELS I RUN ============ */}
       <section className="border-y border-border bg-card/40">
         <div className="mx-auto max-w-7xl px-6 py-10">
-          <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">Channels we run</p>
+          <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">AI-powered channels we run</p>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
             {[
-              { Icon: Search, label: "Google Ads" },
-              { Icon: TrendingUp, label: "SEO / GEO" },
-              { Icon: Megaphone, label: "Meta Ads" },
-              { Icon: Youtube, label: "YouTube" },
-              { Icon: ShoppingCart, label: "Amazon" },
-              { Icon: Mail, label: "Email / CRM" },
+              { Icon: Bot, label: "AI Agents" },
+              { Icon: Sparkles, label: "GenAI Creative" },
+              { Icon: Target, label: "Predictive Ads" },
+              { Icon: Search, label: "AI Search / GEO" },
+              { Icon: BarChart3, label: "ML Attribution" },
+              { Icon: Mail, label: "AI Lifecycle" },
             ].map(({Icon,label})=>(
               <div key={label} className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-3 py-3 text-sm font-medium text-foreground hover:border-primary hover:text-primary transition">
                 <Icon className="h-4 w-4 text-primary"/> {label}
@@ -321,7 +321,7 @@ function Home() {
         <div className="flex items-end justify-between flex-wrap gap-6 mb-10">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">What we do</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">A full-service growth <span className="text-gradient-gold">engine.</span></h2>
+              <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">An <span className="text-gradient-gold">AI-powered</span> growth engine.</h2>
           </div>
           <Link to="/services" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">
             All services <ArrowRight className="h-4 w-4" />
@@ -394,16 +394,16 @@ function Home() {
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Our process</p>
-          <h2 className="mt-3 text-4xl md:text-5xl font-display">A proven path to growth</h2>
-          <p className="mt-4 text-muted-foreground">A transparent, repeatable system that turns goals into compounding revenue.</p>
+              <h2 className="mt-3 text-4xl md:text-5xl font-display">An <span className="text-gradient-gold">AI-augmented</span> growth process</h2>
+          <p className="mt-4 text-muted-foreground">Human strategy, AI velocity. A transparent system that compounds revenue.</p>
         </div>
         <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-5 gap-4">
           {[
-            ["01","Discovery & Audit","Deep market, competitor & funnel analysis."],
-            ["02","Strategy","Custom data-backed roadmap aligned to revenue."],
-            ["03","Implementation","Multi-channel execution with AI-assisted ops."],
-            ["04","Optimization","Continuous testing, learning, scaling."],
-            ["05","Reporting","Real-time dashboards. Monthly strategic reviews."],
+            ["01","AI Discovery","LLM-powered market, competitor & funnel intelligence."],
+            ["02","Strategy","Data-modeled roadmap aligned to revenue."],
+            ["03","AI Execution","Multi-channel ops run by agents + senior strategists."],
+            ["04","Predictive Optimization","ML bidding, creative iteration & 24/7 anomaly alerts."],
+            ["05","Live Reporting","Real-time AI dashboards. Monthly strategic reviews."],
           ].map(([num, title, desc]) => (
             <div key={num} className="rounded-3xl border border-border bg-card p-6 hover:border-primary transition">
               <div className="text-3xl font-display text-gradient-gold">{num}</div>
