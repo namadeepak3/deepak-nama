@@ -372,6 +372,59 @@ function Home() {
         </div>
       </section>
 
+      {/* ============ AI CORE PROOF STRIP ============ */}
+      <section className="border-b border-border bg-card/40">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <div className="grid lg:grid-cols-12 gap-6">
+            {/* Testimonial */}
+            <div className="lg:col-span-5 rounded-3xl border border-border bg-card p-7 flex flex-col">
+              <Quote className="h-6 w-6 text-foreground" />
+              <p className="mt-4 text-lg font-display leading-snug text-foreground">
+                &ldquo;Their AI core rebuilt our paid funnel in 6 weeks. CPL dropped 52% and MQLs doubled.&rdquo;
+              </p>
+              <div className="mt-5 flex items-center gap-1">
+                {Array.from({length:5}).map((_,i)=><Star key={i} className="h-4 w-4 fill-foreground text-foreground"/>)}
+              </div>
+              <div className="mt-5 pt-5 border-t border-border flex items-center justify-between">
+                <div>
+                  <div className="font-semibold text-sm">David Chen</div>
+                  <div className="text-xs text-muted-foreground">Founder, Velocity SaaS</div>
+                </div>
+                <span className="text-[10px] uppercase tracking-widest text-foreground font-semibold">Google · 4 mo</span>
+              </div>
+            </div>
+
+            {/* Case study highlights */}
+            <div className="lg:col-span-7 grid sm:grid-cols-2 gap-4">
+              {[
+                { tag: "D2C · Ecommerce", brand: "Lumen Skincare", k: "8.1x", kl: "Peak ROAS", note: "From ₹40L to ₹3.2Cr/mo in 9 months." },
+                { tag: "Fintech", brand: "Finovate", k: "+240%", kl: "Organic traffic", note: "#1 ranking on 14 money keywords." },
+                { tag: "B2B SaaS", brand: "Velocity SaaS", k: "-52%", kl: "CPL", note: "MQLs doubled in 4 months." },
+                { tag: "Real Estate", brand: "Harborline Homes", k: "5.8x", kl: "ROAS", note: "Regional to national in 12 months." },
+              ].map((c)=>(
+                <Link key={c.brand} to="/blog" className="group rounded-3xl border border-border bg-card p-5 hover:border-foreground transition">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{c.tag}</span>
+                  <div className="mt-2 font-display text-base text-foreground">{c.brand}</div>
+                  <div className="mt-3 flex items-baseline gap-2">
+                    <span className="text-2xl font-display text-gradient-gold leading-none">{c.k}</span>
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{c.kl}</span>
+                  </div>
+                  <p className="mt-3 text-xs text-muted-foreground leading-relaxed">{c.note}</p>
+                  <div className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-foreground">
+                    Read case study <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5"/>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div className="mt-8 text-center">
+            <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-6 py-3 text-sm font-semibold hover:opacity-90 transition">
+              See what AI can do for your brand <ArrowRight className="h-4 w-4"/>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ============ SERVICES — BENTO ============ */}
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-10">
