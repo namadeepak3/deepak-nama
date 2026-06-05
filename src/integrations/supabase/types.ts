@@ -139,6 +139,36 @@ export type Database = {
           },
         ]
       }
+      leads: {
+        Row: {
+          budget: string
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          service: string
+        }
+        Insert: {
+          budget: string
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          service: string
+        }
+        Update: {
+          budget?: string
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          service?: string
+        }
+        Relationships: []
+      }
       services: {
         Row: {
           ai_angle: string
