@@ -112,16 +112,46 @@ function Home() {
                 <p className="text-xs uppercase tracking-widest text-muted-foreground">Quick inquiry</p>
                 <h3 className="mt-1 text-xl font-display font-semibold">Get a free 30-day plan</h3>
               </div>
-              <input required name="name" placeholder="Your name" className="w-full rounded-md bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-ink" />
-              <input required name="email" type="email" placeholder="Email address" className="w-full rounded-md bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-ink" />
-              <select name="service" className="w-full rounded-md bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-ink">
-                <option>SEO</option>
-                <option>Performance Marketing</option>
-                <option>PPC</option>
-                <option>Social Media (SMO)</option>
-                <option>AI Automation</option>
-              </select>
-              <textarea name="message" rows={3} placeholder="Tell me about your goals..." className="w-full rounded-md bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-ink resize-none" />
+
+              <div>
+                <input name="name" placeholder="Your name" className={`w-full rounded-md bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-ink ${errors.name ? "border-red-400" : "border-border"}`} />
+                {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+              </div>
+
+              <div>
+                <input name="email" type="email" placeholder="Email address" className={`w-full rounded-md bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-ink ${errors.email ? "border-red-400" : "border-border"}`} />
+                {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+              </div>
+
+              <div>
+                <select name="service" className={`w-full rounded-md bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-ink ${errors.service ? "border-red-400" : "border-border"}`}>
+                  <option value="">Select a service</option>
+                  <option>SEO</option>
+                  <option>Performance Marketing</option>
+                  <option>PPC</option>
+                  <option>Social Media (SMO)</option>
+                  <option>AI Automation</option>
+                </select>
+                {errors.service && <p className="mt-1 text-xs text-red-500">{errors.service}</p>}
+              </div>
+
+              <div>
+                <select name="budget" className={`w-full rounded-md bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-ink ${errors.budget ? "border-red-400" : "border-border"}`}>
+                  <option value="">Select budget range</option>
+                  <option>Under ₹10,000</option>
+                  <option>₹10,000 – ₹50,000</option>
+                  <option>₹50,000 – ₹1,00,000</option>
+                  <option>₹1,00,000 – ₹5,00,000</option>
+                  <option>₹5,00,000+</option>
+                </select>
+                {errors.budget && <p className="mt-1 text-xs text-red-500">{errors.budget}</p>}
+              </div>
+
+              <div>
+                <textarea name="message" rows={3} placeholder="Tell me about your goals..." className={`w-full rounded-md bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-ink resize-none ${errors.message ? "border-red-400" : "border-border"}`} />
+                {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message}</p>}
+              </div>
+
               <button
                 type="submit"
                 disabled={sending}
