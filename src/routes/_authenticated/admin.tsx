@@ -34,9 +34,13 @@ import {
   listLeads,
   updateLead,
   deleteLead,
+  listLeadAudit,
+  listAssignees,
   LEAD_STATUSES,
   type LeadRow,
   type LeadStatus,
+  type LeadAuditEntry,
+  type AssigneeOption,
 } from "@/lib/leads.functions";
 import type { BlogPost } from "@/lib/blog.shared";
 import {
@@ -278,7 +282,7 @@ function AdminPage() {
         )}
         {(capsQuery.data?.roles ?? []).includes("admin") && (
           <TabButton active={tab === "inquiries"} onClick={() => setTab("inquiries")} icon={Inbox}>
-            Inquiries
+            Website Audit
           </TabButton>
         )}
       </nav>
@@ -2180,16 +2184,24 @@ function InquiriesPanel() {
   const listFn = useServerFn(listLeads);
   const updateFn = useServerFn(updateLead);
   const deleteFn = useServerFn(deleteLead);
+  const assigneesFn = useServerFn(listAssignees);
   const leadsQuery = useQuery({ queryKey: ["admin-leads"], queryFn: () => listFn() });
+  const assigneesQuery = useQuery({ queryKey: ["admin-assignees"], queryFn: () => assigneesFn() });
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | LeadStatus>("all");
+  const [assignedFilter, setAssignedFilter] = useState<"all" | "unassigned" | "me" | string>("all");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
+  const [meUserId, setMeUserId] = useState<string | null>(null);
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setMeUserId(data.user?.id ?? null));
+  }, []);
 
   const updateMutation = useMutation({
-    mutationFn: (v: { id: string; status?: LeadStatus; adminNotes?: string }) => updateFn({ data: v }),
+    mutationFn: (v: { id: string; status?: LeadStatus; adminNotes?: string; assignedTo?: string | null }) =>
+      updateFn({ data: v }),
     onSuccess: () => {
       toast.success("Inquiry updated");
       qc.invalidateQueries({ queryKey: ["admin-leads"] });
@@ -2207,10 +2219,26 @@ function InquiriesPanel() {
   });
 
   const leads = leadsQuery.data ?? [];
+  const assignees = assigneesQuery.data ?? [];
   const filtered = leads.filter((l) => {
     const q = search.trim().toLowerCase();
-    if (q && !`${l.name} ${l.email} ${l.service} ${l.message}`.toLowerCase().includes(q)) return false;
+    if (
+      q &&
+      !`${l.name} ${l.email} ${l.service} ${l.message} ${l.ipAddress} ${l.pageUrl} ${l.utmSource} ${l.utmCampaign} ${l.assignedEmail}`
+        .toLowerCase()
+        .includes(q)
+    )
+      return false;
     if (statusFilter !== "all" && l.status !== statusFilter) return false;
+    if (assignedFilter === "unassigned" && l.assignedTo) return false;
+    if (assignedFilter === "me" && l.assignedTo !== meUserId) return false;
+    if (
+      assignedFilter !== "all" &&
+      assignedFilter !== "unassigned" &&
+      assignedFilter !== "me" &&
+      l.assignedTo !== assignedFilter
+    )
+      return false;
     if (from && new Date(l.createdAt) < new Date(from)) return false;
     if (to && new Date(l.createdAt) > new Date(`${to}T23:59:59`)) return false;
     return true;
@@ -2221,9 +2249,17 @@ function InquiriesPanel() {
       const s = String(v ?? "").replace(/"/g, '""');
       return /[",\n]/.test(s) ? `"${s}"` : s;
     };
-    const header = ["created_at", "name", "email", "service", "budget", "status", "message", "admin_notes"];
+    const header = [
+      "created_at", "name", "email", "service", "budget", "status", "assigned_to",
+      "ip_address", "user_agent", "referrer", "page_url", "utm_source", "utm_medium", "utm_campaign",
+      "message", "admin_notes",
+    ];
     const rows = filtered.map((l) =>
-      [l.createdAt, l.name, l.email, l.service, l.budget, l.status, l.message, l.adminNotes].map(esc).join(","),
+      [
+        l.createdAt, l.name, l.email, l.service, l.budget, l.status, l.assignedEmail,
+        l.ipAddress, l.userAgent, l.referrer, l.pageUrl, l.utmSource, l.utmMedium, l.utmCampaign,
+        l.message, l.adminNotes,
+      ].map(esc).join(","),
     );
     const csv = [header.join(","), ...rows].join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
@@ -2254,7 +2290,8 @@ function InquiriesPanel() {
   return (
     <div className="mt-8 space-y-4">
       <div className="rounded-xl border border-border bg-card p-4 text-xs text-muted-foreground">
-        Inquiries submitted through the website contact form. Update status and add internal notes for follow-up.
+        Every visitor inquiry with full visitor metadata (IP, user agent, referrer, UTM, page URL) plus
+        the contact form details. Update status, assign to an admin, and view the full audit trail.
       </div>
 
       <div className="grid grid-cols-3 sm:grid-cols-7 gap-2">
@@ -2281,10 +2318,23 @@ function InquiriesPanel() {
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search name, email, service, message…"
+            placeholder="Search name, email, IP, UTM, assignee…"
             className="w-full rounded-md border border-border bg-background pl-9 pr-3 py-2 text-sm"
           />
         </div>
+        <select
+          value={assignedFilter}
+          onChange={(e) => setAssignedFilter(e.target.value)}
+          className="rounded-md border border-border bg-background px-3 py-2 text-sm"
+          aria-label="Filter by assignee"
+        >
+          <option value="all">All assignees</option>
+          <option value="me">Assigned to me</option>
+          <option value="unassigned">Unassigned</option>
+          {assignees.map((a) => (
+            <option key={a.userId} value={a.userId}>{a.email}</option>
+          ))}
+        </select>
         <input
           type="date"
           value={from}
@@ -2316,6 +2366,7 @@ function InquiriesPanel() {
           <InquiryRow
             key={l.id}
             lead={l}
+            assignees={assignees}
             open={openId === l.id}
             onToggle={() => setOpenId(openId === l.id ? null : l.id)}
             onUpdate={(patch) => updateMutation.mutate({ id: l.id, ...patch })}
@@ -2335,6 +2386,7 @@ function InquiriesPanel() {
 
 function InquiryRow({
   lead,
+  assignees,
   open,
   onToggle,
   onUpdate,
@@ -2342,14 +2394,21 @@ function InquiryRow({
   pending,
 }: {
   lead: LeadRow;
+  assignees: AssigneeOption[];
   open: boolean;
   onToggle: () => void;
-  onUpdate: (patch: { status?: LeadStatus; adminNotes?: string }) => void;
+  onUpdate: (patch: { status?: LeadStatus; adminNotes?: string; assignedTo?: string | null }) => void;
   onDelete: () => void;
   pending: boolean;
 }) {
   const [notes, setNotes] = useState(lead.adminNotes);
   useEffect(() => setNotes(lead.adminNotes), [lead.adminNotes]);
+  const auditFn = useServerFn(listLeadAudit);
+  const auditQuery = useQuery({
+    queryKey: ["lead-audit", lead.id, lead.updatedAt],
+    queryFn: () => auditFn({ data: { leadId: lead.id } }),
+    enabled: open,
+  });
 
   return (
     <div className="rounded-xl border border-border bg-card overflow-hidden">
@@ -2360,6 +2419,15 @@ function InquiryRow({
             <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wider ${LEAD_STATUS_STYLES[lead.status]}`}>
               {lead.status}
             </span>
+            {lead.assignedEmail ? (
+              <span className="inline-flex rounded-full border border-primary/40 text-primary px-2 py-0.5 text-[10px]">
+                → {lead.assignedEmail}
+              </span>
+            ) : (
+              <span className="inline-flex rounded-full border border-border text-muted-foreground px-2 py-0.5 text-[10px]">
+                unassigned
+              </span>
+            )}
           </div>
           <p className="text-xs text-muted-foreground truncate">
             <a href={`mailto:${lead.email}`} className="hover:text-foreground">{lead.email}</a>
@@ -2369,6 +2437,18 @@ function InquiryRow({
           </p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
+          <select
+            value={lead.assignedTo ?? ""}
+            disabled={pending}
+            onChange={(e) => onUpdate({ assignedTo: e.target.value ? e.target.value : null })}
+            className="rounded-md border border-border bg-background px-2 py-1.5 text-xs max-w-[160px]"
+            aria-label="Assign to admin"
+          >
+            <option value="">Unassigned</option>
+            {assignees.map((a) => (
+              <option key={a.userId} value={a.userId}>{a.email}</option>
+            ))}
+          </select>
           <select
             value={lead.status}
             disabled={pending}
@@ -2398,6 +2478,15 @@ function InquiryRow({
       </div>
       {open && (
         <div className="px-4 pb-4 border-t border-border bg-background/40 space-y-3">
+          <div className="mt-3 grid sm:grid-cols-2 gap-2 text-xs">
+            <MetaRow label="IP address" value={lead.ipAddress} />
+            <MetaRow label="User agent" value={lead.userAgent} mono />
+            <MetaRow label="Page URL" value={lead.pageUrl} mono />
+            <MetaRow label="Referrer" value={lead.referrer} mono />
+            <MetaRow label="UTM source" value={lead.utmSource} />
+            <MetaRow label="UTM medium" value={lead.utmMedium} />
+            <MetaRow label="UTM campaign" value={lead.utmCampaign} />
+          </div>
           <div>
             <p className="text-[11px] uppercase tracking-wider text-muted-foreground mt-3">Message</p>
             <p className="mt-1 whitespace-pre-wrap text-sm text-foreground">{lead.message || "(empty)"}</p>
@@ -2422,11 +2511,56 @@ function InquiryRow({
               </button>
             </div>
           </div>
+          <div>
+            <p className="text-[11px] uppercase tracking-wider text-muted-foreground flex items-center gap-1">
+              <History className="h-3 w-3" /> Audit trail
+            </p>
+            <div className="mt-2 rounded-md border border-border bg-card divide-y divide-border">
+              {auditQuery.isLoading && (
+                <p className="px-3 py-2 text-xs text-muted-foreground">Loading…</p>
+              )}
+              {!auditQuery.isLoading && (auditQuery.data?.length ?? 0) === 0 && (
+                <p className="px-3 py-2 text-xs text-muted-foreground">No changes yet.</p>
+              )}
+              {(auditQuery.data ?? []).map((e: LeadAuditEntry) => (
+                <div key={e.id} className="px-3 py-2 text-xs">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-medium text-foreground">{e.action.replace(/_/g, " ")}</span>
+                    <span className="text-muted-foreground tabular-nums">
+                      {new Date(e.createdAt).toLocaleString()}
+                    </span>
+                  </div>
+                  <p className="text-muted-foreground">
+                    by {e.actorEmail || "(unknown)"}
+                    {e.field && (
+                      <>
+                        {" · "}
+                        <span className="text-foreground">{e.oldValue || "—"}</span>
+                        {" → "}
+                        <span className="text-foreground">{e.newValue || "—"}</span>
+                      </>
+                    )}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
           <p className="text-[11px] text-muted-foreground">
             Created {new Date(lead.createdAt).toLocaleString()} · Updated {new Date(lead.updatedAt).toLocaleString()}
           </p>
         </div>
       )}
+    </div>
+  );
+}
+
+function MetaRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
+  return (
+    <div className="rounded-md border border-border bg-card px-2 py-1.5">
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <p className={`mt-0.5 break-all text-foreground ${mono ? "font-mono text-[11px]" : "text-xs"}`}>
+        {value || "—"}
+      </p>
     </div>
   );
 }
