@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ArrowLeft, Lock, Mail } from "lucide-react";
@@ -23,6 +23,8 @@ function AuthPage() {
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [resendIn, setResendIn] = useState(0);
+  const otpInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
@@ -34,6 +36,39 @@ function AuthPage() {
     return () => sub.subscription.unsubscribe();
   }, [navigate]);
 
+  // Resend cooldown countdown
+  useEffect(() => {
+    if (resendIn <= 0) return;
+    const t = setInterval(() => setResendIn((s) => Math.max(0, s - 1)), 1000);
+    return () => clearInterval(t);
+  }, [resendIn]);
+
+  // Auto-focus the code input when the OTP step opens
+  useEffect(() => {
+    if (otpSent && otpInputRef.current) {
+      const t = setTimeout(() => otpInputRef.current?.focus(), 50);
+      return () => clearTimeout(t);
+    }
+  }, [otpSent]);
+
+  function friendlyError(err: unknown, fallback: string): string {
+    const msg = err instanceof Error ? err.message : String(err ?? "");
+    const lower = msg.toLowerCase();
+    if (lower.includes("rate limit") || lower.includes("too many"))
+      return "Too many attempts. Please wait a minute and try again.";
+    if (lower.includes("expired"))
+      return "That code has expired. Tap “Resend code” to get a new one.";
+    if (lower.includes("invalid") && lower.includes("otp"))
+      return "That code doesn't match. Double-check the 6 digits and try again.";
+    if (lower.includes("invalid login"))
+      return "Email or password is incorrect.";
+    if (lower.includes("not confirmed"))
+      return "Your email isn't verified yet. Use the Email OTP tab to sign in.";
+    if (lower.includes("network"))
+      return "Network error. Check your connection and retry.";
+    return msg || fallback;
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
@@ -41,7 +76,7 @@ function AuthPage() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Authentication failed");
+      toast.error(friendlyError(err, "Authentication failed"));
     } finally {
       setBusy(false);
     }
@@ -58,9 +93,29 @@ function AuthPage() {
       });
       if (error) throw error;
       setOtpSent(true);
+      setResendIn(45);
       toast.success("We sent a 6-digit code to your email.");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to send code");
+      toast.error(friendlyError(err, "Failed to send code"));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleResendOtp() {
+    if (resendIn > 0 || !email) return;
+    setBusy(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { shouldCreateUser: true, emailRedirectTo: window.location.origin },
+      });
+      if (error) throw error;
+      setResendIn(45);
+      setOtp("");
+      toast.success("A new code is on its way.");
+    } catch (err) {
+      toast.error(friendlyError(err, "Couldn't resend code"));
     } finally {
       setBusy(false);
     }
@@ -68,6 +123,10 @@ function AuthPage() {
 
   async function handleVerifyOtp(e: React.FormEvent) {
     e.preventDefault();
+    if (otp.length !== 6) {
+      toast.error("Enter all 6 digits of the code.");
+      return;
+    }
     setBusy(true);
     try {
       const { error } = await supabase.auth.verifyOtp({
@@ -78,7 +137,9 @@ function AuthPage() {
       if (error) throw error;
       toast.success("Verified — signing you in…");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Invalid or expired code");
+      toast.error(friendlyError(err, "Invalid or expired code"));
+      setOtp("");
+      otpInputRef.current?.focus();
     } finally {
       setBusy(false);
     }
@@ -179,16 +240,31 @@ function AuthPage() {
               <div>
                 <label className="text-xs text-muted-foreground">6-digit code</label>
                 <input
+                  ref={otpInputRef}
                   type="text"
                   inputMode="numeric"
+                  autoComplete="one-time-code"
                   pattern="[0-9]{6}"
                   maxLength={6}
                   required
                   value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                  className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm tracking-[0.4em] text-center font-mono"
+                  onChange={(e) => {
+                    const v = e.target.value.replace(/\D/g, "").slice(0, 6);
+                    setOtp(v);
+                  }}
+                  onPaste={(e) => {
+                    const text = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+                    if (text) {
+                      e.preventDefault();
+                      setOtp(text);
+                    }
+                  }}
+                  className="mt-1 w-full rounded-md border border-border bg-background px-3 py-3 text-xl tracking-[0.5em] text-center font-mono"
                   placeholder="••••••"
                 />
+                <p className="mt-1.5 text-[11px] text-muted-foreground">
+                  Tip: paste the 6-digit code from your email.
+                </p>
               </div>
               <button
                 type="submit"
@@ -197,13 +273,23 @@ function AuthPage() {
               >
                 {busy ? "Verifying…" : "Verify & sign in"}
               </button>
-              <button
-                type="button"
-                onClick={() => { setOtpSent(false); setOtp(""); }}
-                className="w-full text-xs text-muted-foreground hover:text-foreground"
-              >
-                Use a different email
-              </button>
+              <div className="flex items-center justify-between text-xs">
+                <button
+                  type="button"
+                  onClick={() => { setOtpSent(false); setOtp(""); setResendIn(0); }}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Use a different email
+                </button>
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  disabled={busy || resendIn > 0}
+                  className="text-primary hover:underline disabled:text-muted-foreground disabled:no-underline disabled:cursor-not-allowed"
+                >
+                  {resendIn > 0 ? `Resend code in ${resendIn}s` : "Resend code"}
+                </button>
+              </div>
             </form>
           )}
         </div>
