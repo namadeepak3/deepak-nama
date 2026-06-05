@@ -321,7 +321,7 @@ function Home() {
               { Icon: BarChart3, label: "ML Attribution" },
               { Icon: Mail, label: "AI Lifecycle" },
             ].map(({Icon,label})=>(
-              <div key={label} className="min-w-0 flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-3 py-3 text-center text-xs sm:text-sm font-medium text-foreground hover:border-primary hover:text-primary transition">
+              <div key={label} className="btn-fx min-w-0 flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-3 py-3 text-center text-xs sm:text-sm font-medium text-foreground hover:border-primary hover:text-primary transition">
                 <Icon className="h-4 w-4 text-primary"/> {label}
               </div>
             ))}
@@ -551,8 +551,8 @@ function Home() {
             { Icon: BarChart3, name: "Manufacturing & B2B", note: "Long-cycle attribution" },
             { Icon: Mail, name: "Professional Services", note: "Authority + lead capture" },
           ].map(({ Icon, name, note }) => (
-            <div key={name} className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-4 hover:border-foreground transition">
-              <div className="h-10 w-10 shrink-0 rounded-xl bg-foreground text-background grid place-items-center">
+            <div key={name} className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-4 hover:border-primary hover:shadow-gold transition">
+              <div className="h-10 w-10 shrink-0 rounded-xl bg-primary/10 text-primary border border-primary/30 grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                 <Icon className="h-4 w-4" />
               </div>
               <div className="min-w-0">
