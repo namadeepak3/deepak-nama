@@ -147,16 +147,44 @@ export const removeUserRole = createServerFn({ method: "POST" })
 
 export const listRoleAuditLog = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<RoleAuditEntry[]> => {
+  .inputValidator((input?: {
+    action?: "all" | "assigned" | "removed";
+    role?: "all" | AppRole;
+    search?: string;
+    from?: string;
+    to?: string;
+    limit?: number;
+  }) =>
+    z
+      .object({
+        action: z.enum(["all", "assigned", "removed"]).optional(),
+        role: z.enum(["all", ...APP_ROLES] as [string, ...string[]]).optional(),
+        search: z.string().max(200).optional(),
+        from: z.string().optional(),
+        to: z.string().optional(),
+        limit: z.number().int().min(1).max(1000).optional(),
+      })
+      .parse(input ?? {}),
+  )
+  .handler(async ({ data, context }): Promise<RoleAuditEntry[]> => {
     await assertAdmin(context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data, error } = await supabaseAdmin
+    let q = supabaseAdmin
       .from("role_audit_log")
       .select("id, actor_email, target_email, role, action, created_at")
       .order("created_at", { ascending: false })
-      .limit(100);
+      .limit(data.limit ?? 200);
+    if (data.action && data.action !== "all") q = q.eq("action", data.action);
+    if (data.role && data.role !== "all") q = q.eq("role", data.role as AppRole);
+    if (data.from) q = q.gte("created_at", data.from);
+    if (data.to) q = q.lte("created_at", data.to);
+    if (data.search) {
+      const s = `%${data.search}%`;
+      q = q.or(`actor_email.ilike.${s},target_email.ilike.${s}`);
+    }
+    const { data: rows, error } = await q;
     if (error) throw new Error(error.message);
-    return (data ?? []).map((r) => ({
+    return (rows ?? []).map((r) => ({
       id: r.id as string,
       actorEmail: (r.actor_email as string) || "(unknown)",
       targetEmail: (r.target_email as string) || "(unknown)",
@@ -164,4 +192,26 @@ export const listRoleAuditLog = createServerFn({ method: "GET" })
       action: r.action as "assigned" | "removed",
       createdAt: r.created_at as string,
     }));
+  });
+
+export const resendVerificationEmail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { userId: string }) =>
+    z.object({ userId: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: u, error: getErr } = await supabaseAdmin.auth.admin.getUserById(data.userId);
+    if (getErr) throw new Error(getErr.message);
+    const email = u.user?.email;
+    if (!email) throw new Error("User has no email on file");
+    // Use magiclink for both confirmed and unconfirmed — clicking it confirms
+    // the email and signs the user in, which is the desired "resend verification" UX.
+    const { error } = await supabaseAdmin.auth.admin.generateLink({
+      type: "magiclink",
+      email,
+    });
+    if (error) throw new Error(error.message);
+    return { ok: true, email };
   });

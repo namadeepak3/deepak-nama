@@ -25,10 +25,19 @@ import {
   setUserRole,
   removeUserRole,
   listRoleAuditLog,
+  resendVerificationEmail,
   type AdminUserRow,
   type AppRole,
   type RoleAuditEntry,
 } from "@/lib/admin-users.functions";
+import {
+  listLeads,
+  updateLead,
+  deleteLead,
+  LEAD_STATUSES,
+  type LeadRow,
+  type LeadStatus,
+} from "@/lib/leads.functions";
 import type { BlogPost } from "@/lib/blog.shared";
 import {
   listCategories,
@@ -70,6 +79,9 @@ import {
   Search as SearchIcon,
   AlertTriangle,
   History,
+  Download,
+  MailCheck,
+  Inbox,
 } from "lucide-react";
 import { ExternalLink, Eye as EyeCount } from "lucide-react";
 
@@ -115,7 +127,7 @@ function AdminPage() {
   const canManage = !!capsQuery.data?.canManageServices;
   const canAnalytics = !!capsQuery.data?.canViewAnalytics;
 
-  type Tab = "services" | "analytics" | "blog" | "categories" | "users";
+  type Tab = "services" | "analytics" | "blog" | "categories" | "users" | "inquiries";
   const defaultTab: Tab = canManage ? "services" : canAnalytics ? "analytics" : "services";
   const [tab, setTab] = useState<Tab>(defaultTab);
   useEffect(() => {
@@ -125,6 +137,7 @@ function AdminPage() {
     if (tab === "blog" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "categories" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "users" && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
+    if (tab === "inquiries" && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
   }, [capsQuery.data, canManage, canAnalytics, tab]);
 
   const services = useQuery({ queryKey: ["services"], queryFn: () => list(), enabled: canManage });
@@ -263,6 +276,11 @@ function AdminPage() {
             Users
           </TabButton>
         )}
+        {(capsQuery.data?.roles ?? []).includes("admin") && (
+          <TabButton active={tab === "inquiries"} onClick={() => setTab("inquiries")} icon={Inbox}>
+            Inquiries
+          </TabButton>
+        )}
       </nav>
 
       {tab === "services" && canManage && (
@@ -352,6 +370,10 @@ function AdminPage() {
 
       {tab === "users" && (capsQuery.data?.roles ?? []).includes("admin") && (
         <UsersPanel />
+      )}
+
+      {tab === "inquiries" && (capsQuery.data?.roles ?? []).includes("admin") && (
+        <InquiriesPanel />
       )}
 
       {editing && canManage && (
@@ -1707,14 +1729,38 @@ function UsersPanel() {
   const setFn = useServerFn(setUserRole);
   const removeFn = useServerFn(removeUserRole);
   const auditFn = useServerFn(listRoleAuditLog);
+  const resendFn = useServerFn(resendVerificationEmail);
 
   const usersQuery = useQuery({ queryKey: ["admin-users"], queryFn: () => listFn() });
-  const auditQuery = useQuery({ queryKey: ["role-audit-log"], queryFn: () => auditFn() });
 
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<"all" | AppRole | "none">("all");
   const [statusFilter, setStatusFilter] = useState<"all" | "verified" | "unverified">("all");
   const [showAudit, setShowAudit] = useState(false);
+
+  // Audit log filter state
+  const [auditAction, setAuditAction] = useState<"all" | "assigned" | "removed">("all");
+  const [auditRole, setAuditRole] = useState<"all" | AppRole>("all");
+  const [auditSearch, setAuditSearch] = useState("");
+  const [auditFrom, setAuditFrom] = useState("");
+  const [auditTo, setAuditTo] = useState("");
+
+  const auditParams = useMemo(
+    () => ({
+      action: auditAction,
+      role: auditRole,
+      search: auditSearch.trim() || undefined,
+      from: auditFrom ? new Date(auditFrom).toISOString() : undefined,
+      to: auditTo ? new Date(`${auditTo}T23:59:59`).toISOString() : undefined,
+      limit: 500,
+    }),
+    [auditAction, auditRole, auditSearch, auditFrom, auditTo],
+  );
+  const auditQuery = useQuery({
+    queryKey: ["role-audit-log", auditParams],
+    queryFn: () => auditFn({ data: auditParams }),
+    enabled: showAudit,
+  });
 
   const addMutation = useMutation({
     mutationFn: (v: { userId: string; role: AppRole }) => setFn({ data: v }),
@@ -1734,6 +1780,12 @@ function UsersPanel() {
       qc.invalidateQueries({ queryKey: ["role-audit-log"] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
+  });
+
+  const resendMutation = useMutation({
+    mutationFn: (userId: string) => resendFn({ data: { userId } }),
+    onSuccess: (r) => toast.success(`Verification email queued to ${r.email}`),
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Failed to send"),
   });
 
   if (usersQuery.isLoading) {
@@ -1827,6 +1879,8 @@ function UsersPanel() {
             isLastAdmin={u.roles.includes("admin") && adminCount <= 1}
             onAdd={(role) => addMutation.mutate({ userId: u.id, role })}
             onRemove={(role) => removeMutation.mutate({ userId: u.id, role })}
+            onResendVerification={() => resendMutation.mutate(u.id)}
+            resending={resendMutation.isPending && resendMutation.variables === u.id}
             pending={addMutation.isPending || removeMutation.isPending}
           />
         ))}
@@ -1836,7 +1890,20 @@ function UsersPanel() {
       </div>
 
       {showAudit && (
-        <AuditLogPanel loading={auditQuery.isLoading} entries={auditQuery.data ?? []} />
+        <AuditLogPanel
+          loading={auditQuery.isLoading}
+          entries={auditQuery.data ?? []}
+          action={auditAction}
+          onActionChange={setAuditAction}
+          role={auditRole}
+          onRoleChange={setAuditRole}
+          search={auditSearch}
+          onSearchChange={setAuditSearch}
+          from={auditFrom}
+          onFromChange={setAuditFrom}
+          to={auditTo}
+          onToChange={setAuditTo}
+        />
       )}
     </div>
   );
@@ -1847,12 +1914,16 @@ function UserRow({
   isLastAdmin,
   onAdd,
   onRemove,
+  onResendVerification,
+  resending,
   pending,
 }: {
   user: AdminUserRow;
   isLastAdmin: boolean;
   onAdd: (role: AppRole) => void;
   onRemove: (role: AppRole) => void;
+  onResendVerification: () => void;
+  resending: boolean;
   pending: boolean;
 }) {
   const [pick, setPick] = useState<AppRole>("editor");
@@ -1873,6 +1944,16 @@ function UserRow({
           >
             {verified ? "Verified" : "Unverified"}
           </span>
+          <button
+            type="button"
+            disabled={resending}
+            onClick={onResendVerification}
+            title={verified ? "Send a magic sign-in link" : "Resend verification email"}
+            className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-0.5 text-[10px] text-muted-foreground hover:text-foreground hover:border-primary disabled:opacity-50"
+          >
+            <MailCheck className="h-3 w-3" />
+            {resending ? "Sending…" : verified ? "Send magic link" : "Resend verification"}
+          </button>
         </div>
         <p className="text-xs text-muted-foreground truncate">
           Joined {new Date(user.createdAt).toLocaleDateString()}
@@ -1940,14 +2021,115 @@ function UserRow({
   );
 }
 
-function AuditLogPanel({ loading, entries }: { loading: boolean; entries: RoleAuditEntry[] }) {
+function AuditLogPanel({
+  loading,
+  entries,
+  action,
+  onActionChange,
+  role,
+  onRoleChange,
+  search,
+  onSearchChange,
+  from,
+  onFromChange,
+  to,
+  onToChange,
+}: {
+  loading: boolean;
+  entries: RoleAuditEntry[];
+  action: "all" | "assigned" | "removed";
+  onActionChange: (v: "all" | "assigned" | "removed") => void;
+  role: "all" | AppRole;
+  onRoleChange: (v: "all" | AppRole) => void;
+  search: string;
+  onSearchChange: (v: string) => void;
+  from: string;
+  onFromChange: (v: string) => void;
+  to: string;
+  onToChange: (v: string) => void;
+}) {
+  function escapeCsv(v: string) {
+    if (v == null) return "";
+    const s = String(v).replace(/"/g, '""');
+    return /[",\n]/.test(s) ? `"${s}"` : s;
+  }
+  function downloadCsv() {
+    const header = ["timestamp", "actor_email", "action", "role", "target_email"];
+    const rows = entries.map((e) =>
+      [e.createdAt, e.actorEmail, e.action, e.role, e.targetEmail].map(escapeCsv).join(","),
+    );
+    const csv = [header.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `role-audit-log-${stamp}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className="rounded-xl border border-border bg-card p-4">
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center gap-2 mb-3 flex-wrap">
         <History className="h-4 w-4 text-primary" />
         <h3 className="text-sm font-medium text-foreground">Role change audit log</h3>
-        <span className="text-xs text-muted-foreground">(last 100 events)</span>
+        <span className="text-xs text-muted-foreground">({entries.length} events)</span>
+        <button
+          type="button"
+          onClick={downloadCsv}
+          disabled={entries.length === 0}
+          className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-[11px] hover:border-primary disabled:opacity-40"
+        >
+          <Download className="h-3 w-3" /> Export CSV
+        </button>
       </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-3">
+        <input
+          type="search"
+          value={search}
+          onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="Email…"
+          className="col-span-2 md:col-span-1 rounded-md border border-border bg-background px-2 py-1.5 text-xs"
+        />
+        <select
+          value={action}
+          onChange={(e) => onActionChange(e.target.value as typeof action)}
+          className="rounded-md border border-border bg-background px-2 py-1.5 text-xs"
+        >
+          <option value="all">All actions</option>
+          <option value="assigned">Assigned</option>
+          <option value="removed">Removed</option>
+        </select>
+        <select
+          value={role}
+          onChange={(e) => onRoleChange(e.target.value as typeof role)}
+          className="rounded-md border border-border bg-background px-2 py-1.5 text-xs"
+        >
+          <option value="all">All roles</option>
+          <option value="admin">Admin</option>
+          <option value="editor">Editor</option>
+          <option value="user">User</option>
+        </select>
+        <input
+          type="date"
+          value={from}
+          onChange={(e) => onFromChange(e.target.value)}
+          className="rounded-md border border-border bg-background px-2 py-1.5 text-xs"
+          aria-label="From date"
+        />
+        <input
+          type="date"
+          value={to}
+          onChange={(e) => onToChange(e.target.value)}
+          className="rounded-md border border-border bg-background px-2 py-1.5 text-xs"
+          aria-label="To date"
+        />
+      </div>
+
       {loading && <p className="text-xs text-muted-foreground">Loading…</p>}
       {!loading && entries.length === 0 && (
         <p className="text-xs text-muted-foreground italic">No role changes recorded yet.</p>
@@ -1979,6 +2161,271 @@ function AuditLogPanel({ loading, entries }: { loading: boolean; entries: RoleAu
             </li>
           ))}
         </ul>
+      )}
+    </div>
+  );
+}
+
+const LEAD_STATUS_STYLES: Record<LeadStatus, string> = {
+  new: "border-primary/40 bg-primary/10 text-primary",
+  contacted: "border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-300",
+  qualified: "border-violet-500/30 bg-violet-500/10 text-violet-600 dark:text-violet-300",
+  won: "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300",
+  lost: "border-muted-foreground/30 bg-muted text-muted-foreground",
+  spam: "border-destructive/30 bg-destructive/10 text-destructive",
+};
+
+function InquiriesPanel() {
+  const qc = useQueryClient();
+  const listFn = useServerFn(listLeads);
+  const updateFn = useServerFn(updateLead);
+  const deleteFn = useServerFn(deleteLead);
+  const leadsQuery = useQuery({ queryKey: ["admin-leads"], queryFn: () => listFn() });
+
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | LeadStatus>("all");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [openId, setOpenId] = useState<string | null>(null);
+
+  const updateMutation = useMutation({
+    mutationFn: (v: { id: string; status?: LeadStatus; adminNotes?: string }) => updateFn({ data: v }),
+    onSuccess: () => {
+      toast.success("Inquiry updated");
+      qc.invalidateQueries({ queryKey: ["admin-leads"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteFn({ data: { id } }),
+    onSuccess: () => {
+      toast.success("Inquiry deleted");
+      qc.invalidateQueries({ queryKey: ["admin-leads"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
+  });
+
+  const leads = leadsQuery.data ?? [];
+  const filtered = leads.filter((l) => {
+    const q = search.trim().toLowerCase();
+    if (q && !`${l.name} ${l.email} ${l.service} ${l.message}`.toLowerCase().includes(q)) return false;
+    if (statusFilter !== "all" && l.status !== statusFilter) return false;
+    if (from && new Date(l.createdAt) < new Date(from)) return false;
+    if (to && new Date(l.createdAt) > new Date(`${to}T23:59:59`)) return false;
+    return true;
+  });
+
+  function exportCsv() {
+    const esc = (v: string) => {
+      const s = String(v ?? "").replace(/"/g, '""');
+      return /[",\n]/.test(s) ? `"${s}"` : s;
+    };
+    const header = ["created_at", "name", "email", "service", "budget", "status", "message", "admin_notes"];
+    const rows = filtered.map((l) =>
+      [l.createdAt, l.name, l.email, l.service, l.budget, l.status, l.message, l.adminNotes].map(esc).join(","),
+    );
+    const csv = [header.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `inquiries-${stamp}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  if (leadsQuery.isLoading) {
+    return <p className="mt-10 text-center text-sm text-muted-foreground">Loading inquiries…</p>;
+  }
+  if (leadsQuery.error) {
+    return <p className="mt-10 text-center text-sm text-destructive">{(leadsQuery.error as Error).message}</p>;
+  }
+
+  const counts: Record<LeadStatus | "all", number> = {
+    all: leads.length,
+    new: 0, contacted: 0, qualified: 0, won: 0, lost: 0, spam: 0,
+  };
+  leads.forEach((l) => { counts[l.status] = (counts[l.status] ?? 0) + 1; });
+
+  return (
+    <div className="mt-8 space-y-4">
+      <div className="rounded-xl border border-border bg-card p-4 text-xs text-muted-foreground">
+        Inquiries submitted through the website contact form. Update status and add internal notes for follow-up.
+      </div>
+
+      <div className="grid grid-cols-3 sm:grid-cols-7 gap-2">
+        {(["all", ...LEAD_STATUSES] as const).map((s) => (
+          <button
+            key={s}
+            type="button"
+            onClick={() => setStatusFilter(s as typeof statusFilter)}
+            className={`rounded-lg border px-2 py-2 text-[11px] uppercase tracking-wider transition-colors ${
+              statusFilter === s
+                ? "border-primary bg-primary/10 text-primary"
+                : "border-border bg-card text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {s} <span className="tabular-nums">({counts[s as keyof typeof counts] ?? 0})</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-2">
+        <div className="relative flex-1">
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search name, email, service, message…"
+            className="w-full rounded-md border border-border bg-background pl-9 pr-3 py-2 text-sm"
+          />
+        </div>
+        <input
+          type="date"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+          className="rounded-md border border-border bg-background px-3 py-2 text-sm"
+          aria-label="From date"
+        />
+        <input
+          type="date"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+          className="rounded-md border border-border bg-background px-3 py-2 text-sm"
+          aria-label="To date"
+        />
+        <button
+          type="button"
+          onClick={exportCsv}
+          disabled={filtered.length === 0}
+          className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-xs hover:border-primary disabled:opacity-40"
+        >
+          <Download className="h-3.5 w-3.5" /> Export CSV
+        </button>
+      </div>
+
+      <p className="text-xs text-muted-foreground">{filtered.length} of {leads.length} inquiries</p>
+
+      <div className="space-y-3">
+        {filtered.map((l) => (
+          <InquiryRow
+            key={l.id}
+            lead={l}
+            open={openId === l.id}
+            onToggle={() => setOpenId(openId === l.id ? null : l.id)}
+            onUpdate={(patch) => updateMutation.mutate({ id: l.id, ...patch })}
+            onDelete={() => {
+              if (confirm(`Delete inquiry from ${l.email}? This cannot be undone.`)) deleteMutation.mutate(l.id);
+            }}
+            pending={updateMutation.isPending || deleteMutation.isPending}
+          />
+        ))}
+        {filtered.length === 0 && (
+          <p className="text-center text-sm text-muted-foreground py-10">No inquiries match these filters.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function InquiryRow({
+  lead,
+  open,
+  onToggle,
+  onUpdate,
+  onDelete,
+  pending,
+}: {
+  lead: LeadRow;
+  open: boolean;
+  onToggle: () => void;
+  onUpdate: (patch: { status?: LeadStatus; adminNotes?: string }) => void;
+  onDelete: () => void;
+  pending: boolean;
+}) {
+  const [notes, setNotes] = useState(lead.adminNotes);
+  useEffect(() => setNotes(lead.adminNotes), [lead.adminNotes]);
+
+  return (
+    <div className="rounded-xl border border-border bg-card overflow-hidden">
+      <div className="p-4 flex flex-col md:flex-row md:items-center gap-3">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <p className="font-medium text-foreground truncate">{lead.name || "(no name)"}</p>
+            <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wider ${LEAD_STATUS_STYLES[lead.status]}`}>
+              {lead.status}
+            </span>
+          </div>
+          <p className="text-xs text-muted-foreground truncate">
+            <a href={`mailto:${lead.email}`} className="hover:text-foreground">{lead.email}</a>
+            {lead.service && <> · {lead.service}</>}
+            {lead.budget && <> · {lead.budget}</>}
+            <> · {new Date(lead.createdAt).toLocaleDateString()}</>
+          </p>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <select
+            value={lead.status}
+            disabled={pending}
+            onChange={(e) => onUpdate({ status: e.target.value as LeadStatus })}
+            className="rounded-md border border-border bg-background px-2 py-1.5 text-xs"
+          >
+            {LEAD_STATUSES.map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+          <button
+            type="button"
+            onClick={onToggle}
+            className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs hover:border-primary"
+          >
+            {open ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+            {open ? "Hide" : "Details"}
+          </button>
+          <button
+            type="button"
+            onClick={onDelete}
+            className="inline-flex items-center gap-1 rounded-md border border-destructive/40 text-destructive px-3 py-1.5 text-xs hover:bg-destructive/10"
+          >
+            <Trash2 className="h-3 w-3" /> Delete
+          </button>
+        </div>
+      </div>
+      {open && (
+        <div className="px-4 pb-4 border-t border-border bg-background/40 space-y-3">
+          <div>
+            <p className="text-[11px] uppercase tracking-wider text-muted-foreground mt-3">Message</p>
+            <p className="mt-1 whitespace-pre-wrap text-sm text-foreground">{lead.message || "(empty)"}</p>
+          </div>
+          <div>
+            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Admin notes</p>
+            <textarea
+              rows={3}
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Internal notes about this inquiry…"
+              className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+            />
+            <div className="mt-2 flex justify-end">
+              <button
+                type="button"
+                disabled={pending || notes === lead.adminNotes}
+                onClick={() => onUpdate({ adminNotes: notes })}
+                className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-accent disabled:opacity-50"
+              >
+                <Save className="h-3 w-3" /> Save notes
+              </button>
+            </div>
+          </div>
+          <p className="text-[11px] text-muted-foreground">
+            Created {new Date(lead.createdAt).toLocaleString()} · Updated {new Date(lead.updatedAt).toLocaleString()}
+          </p>
+        </div>
       )}
     </div>
   );
