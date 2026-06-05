@@ -16,10 +16,10 @@ import heroBg from "@/assets/hero-digital.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "vrseoguru — AI-Powered Digital Marketing Freelancer" },
-      { name: "description", content: "SEO, PPC, performance marketing and SMO — engineered with AI to turn traffic into revenue." },
-      { property: "og:title", content: "vrseoguru — AI-Powered Digital Marketing" },
-      { property: "og:description", content: "SEO, PPC, performance marketing and SMO — engineered with AI." },
+      { title: "vrseoguru — Performance-Led Digital Marketing Agency" },
+      { name: "description", content: "An award-winning digital marketing agency delivering SEO, paid media, performance creative and lifecycle programs that compound revenue." },
+      { property: "og:title", content: "vrseoguru — Digital Marketing Agency" },
+      { property: "og:description", content: "SEO, paid media, performance creative and lifecycle — engineered for revenue." },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
@@ -99,24 +99,24 @@ function Home() {
           <div className="lg:col-span-7">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 backdrop-blur px-3 py-1 text-xs text-foreground">
               <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span></span>
-              AI-native freelance studio · open for projects
+              Performance marketing agency · accepting Q3 retainers
             </div>
-            <h1 className="mt-6 text-5xl md:text-6xl lg:text-7xl font-display leading-[0.95] tracking-tight">
-              Growth, <span className="text-gradient-gold">engineered</span><br/>by algorithms.
+            <h1 className="mt-6 text-5xl md:text-6xl lg:text-7xl font-display leading-[1.02] tracking-tight">
+              The growth partner for ambitious <span className="text-gradient-gold">modern brands.</span>
             </h1>
             <p className="mt-6 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed">
-              I&apos;m <span className="text-foreground font-semibold">vrseoguru</span> — a freelance partner fusing SEO, PPC, performance marketing &amp; social into AI-driven systems that compound revenue, not vanity metrics.
+              We&apos;re <span className="text-foreground font-semibold">vrseoguru</span> — a full-service digital marketing agency uniting SEO, paid media, performance creative and lifecycle into one revenue engine. Strategy from senior operators. Execution at agency scale.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/contact" className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
-                Book strategy call <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                Request a proposal <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary transition">
-                <Play className="h-3.5 w-3.5" /> See services
+                <Play className="h-3.5 w-3.5" /> Our services
               </Link>
             </div>
             <div className="mt-10 grid grid-cols-3 gap-6 max-w-lg">
-              {[["4.2x","Avg ROAS"],["120+","Campaigns"],["24h","Reply"]].map(([k,v])=>(
+              {[["4.2x","Avg client ROAS"],["120+","Campaigns shipped"],["98%","Client retention"]].map(([k,v])=>(
                 <div key={v}>
                   <div className="text-2xl md:text-3xl font-display text-gradient-gold">{k}</div>
                   <div className="mt-1 text-xs text-muted-foreground uppercase tracking-widest">{v}</div>
@@ -124,9 +124,9 @@ function Home() {
               ))}
             </div>
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
-              <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary"/> Transparent reporting</div>
-              <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-primary"/> Ship in days</div>
-              <div className="flex items-center gap-2"><LineChart className="h-4 w-4 text-primary"/> Profit-first</div>
+              <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary"/> Senior team, no juniors</div>
+              <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-primary"/> Onboard in 14 days</div>
+              <div className="flex items-center gap-2"><LineChart className="h-4 w-4 text-primary"/> Revenue-first reporting</div>
             </div>
           </div>
 
@@ -137,9 +137,9 @@ function Home() {
                 <div className="mx-auto h-14 w-14 rounded-full bg-primary/15 grid place-items-center">
                   <CheckCircle2 className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="mt-5 text-2xl font-display">Thanks, {submitted.name}!</h3>
+                <h3 className="mt-5 text-2xl font-display">Thanks, {submitted.name}.</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Your inquiry has been received. I&apos;ll reply to <span className="text-foreground font-medium">{submitted.email}</span> within 24 hours.
+                  Your brief is in. A strategist will reply to <span className="text-foreground font-medium">{submitted.email}</span> within one business day.
                 </p>
                 <button
                   type="button"
@@ -155,8 +155,8 @@ function Home() {
               className="rounded-3xl border border-border bg-card/95 backdrop-blur shadow-gold p-6 md:p-7 space-y-4"
             >
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Quick inquiry</p>
-                <h3 className="mt-1 text-2xl font-display">Get a free 30-day plan</h3>
+                <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Start a project</p>
+                <h3 className="mt-1 text-2xl font-display">Request a free growth audit</h3>
               </div>
               <div>
                   <input name="name" placeholder="Your name" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.name ? "border-red-400" : "border-border"}`} />
@@ -201,7 +201,7 @@ function Home() {
                 >
                   {sending ? "Sending..." : <>Send inquiry <Send className="h-4 w-4" /></>}
                 </button>
-              <p className="text-[11px] text-muted-foreground text-center">Reply within 24 hours · No spam.</p>
+              <p className="text-[11px] text-muted-foreground text-center">A strategist replies within 1 business day. No spam.</p>
             </form>
             )}
           </div>
@@ -211,7 +211,7 @@ function Home() {
       {/* ============ CHANNELS I RUN ============ */}
       <section className="border-y border-border bg-card/40">
         <div className="mx-auto max-w-7xl px-6 py-10">
-          <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">Channels I run</p>
+          <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">Channels we run</p>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
             {[
               { Icon: Search, label: "Google Ads" },
@@ -233,8 +233,8 @@ function Home() {
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-10">
           <div className="max-w-2xl">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">What I do</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">A full-stack growth <span className="text-gradient-gold">engine.</span></h2>
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">What we do</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">A full-service growth <span className="text-gradient-gold">engine.</span></h2>
           </div>
           <Link to="/services" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">
             All services <ArrowRight className="h-4 w-4" />
@@ -280,9 +280,9 @@ function Home() {
           <div className="grid lg:grid-cols-12 gap-10 items-end mb-12">
             <div className="lg:col-span-7">
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">2026 playbook</p>
-              <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">Marketing trends I&apos;m <span className="text-gradient-gold">building on.</span></h2>
+              <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">Marketing trends we&apos;re <span className="text-gradient-gold">building on.</span></h2>
             </div>
-            <p className="lg:col-span-5 text-muted-foreground">Every strategy I ship leans into where attention &amp; algorithms are heading next — not where they used to be.</p>
+            <p className="lg:col-span-5 text-muted-foreground">Every strategy we ship leans into where attention and algorithms are heading next — not where they used to be.</p>
           </div>
           <div className="grid grid-cols-12 auto-rows-[minmax(160px,auto)] gap-4">
             {[
@@ -306,7 +306,7 @@ function Home() {
       {/* ============ PROCESS ============ */}
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="text-center max-w-2xl mx-auto">
-          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">My process</p>
+          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Our process</p>
           <h2 className="mt-3 text-4xl md:text-5xl font-display">A proven path to growth</h2>
           <p className="mt-4 text-muted-foreground">A transparent, repeatable system that turns goals into compounding revenue.</p>
         </div>
@@ -333,14 +333,14 @@ function Home() {
         <div className="relative mx-auto max-w-5xl px-6 py-24 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold text-foreground">
             <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span></span>
-            Available · Q3 2026 · Mumbai, IN
+            Accepting Q3 2026 retainers · Headquartered in Mumbai, IN
           </div>
-          <p className="mt-6 text-xs uppercase tracking-[0.3em] text-primary font-semibold">Who I am</p>
+          <p className="mt-6 text-xs uppercase tracking-[0.3em] text-primary font-semibold">About the agency</p>
           <h2 className="mt-4 text-4xl md:text-6xl font-display leading-[1.02]">
-            Hi, I&apos;m <span className="text-gradient-gold">vrseoguru</span> —<br/>your freelance growth partner.
+            <span className="text-gradient-gold">vrseoguru</span> — a digital<br/>marketing agency built for outcomes.
           </h2>
           <p className="mt-6 max-w-2xl mx-auto text-base md:text-lg text-muted-foreground leading-relaxed">
-            For 7+ years I&apos;ve built revenue systems for ecommerce, SaaS &amp; D2C brands across India and abroad — fusing senior strategy with AI-powered execution. Every campaign engineered around your <span className="text-foreground font-semibold">bottom line</span>, not vanity metrics.
+            For over seven years our team has built revenue systems for ecommerce, SaaS and D2C brands across India and abroad — pairing senior strategists with paid-media, SEO, creative and lifecycle specialists. Every engagement is engineered around your <span className="text-foreground font-semibold">bottom line</span>, not vanity metrics.
           </p>
 
           {/* Certification chips */}
@@ -372,10 +372,10 @@ function Home() {
 
           <div className="mt-10 flex flex-wrap gap-3 justify-center">
             <Link to="/about" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
-              Full story <ArrowRight className="h-4 w-4"/>
+              Meet the agency <ArrowRight className="h-4 w-4"/>
             </Link>
             <Link to="/contact" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary transition">
-              Let&apos;s talk
+              Start a project
             </Link>
           </div>
         </div>
@@ -389,7 +389,7 @@ function Home() {
           <div className="text-center max-w-2xl mx-auto mb-14">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Results that compound</p>
             <h2 className="mt-3 text-4xl md:text-5xl font-display">Numbers do the talking</h2>
-            <p className="mt-4 text-muted-foreground">Aggregate impact across 120+ campaigns shipped in the last 24 months.</p>
+            <p className="mt-4 text-muted-foreground">Aggregate impact across 120+ client engagements shipped in the last 24 months.</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
@@ -417,7 +417,7 @@ function Home() {
         <div className="flex items-end justify-between flex-wrap gap-6 mb-12">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">Brands I&apos;ve <span className="text-gradient-gold">scaled.</span></h2>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">Brands we&apos;ve <span className="text-gradient-gold">scaled.</span></h2>
             <p className="mt-4 text-muted-foreground">A few recent wins — full breakdowns inside.</p>
           </div>
           <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">View all <ArrowRight className="h-4 w-4"/></Link>
@@ -499,7 +499,7 @@ function Home() {
             {[
               ["SEO","10 SEO Trends That Will Define 2026","AI search, entity optimization & what brands are doing to stay ahead.","May 28 · 8 min"],
               ["PPC","Maximize ROI From Google Ads in 2026","Lower CPA and scale profitable campaigns with AI bidding.","May 14 · 6 min"],
-              ["Content","Content That Actually Converts","The framework I use to build assets that drive real revenue.","Apr 30 · 7 min"],
+                ["Content","Content That Actually Converts","The framework our team uses to build assets that drive real revenue.","Apr 30 · 7 min"],
             ].map(([tag,title,desc,meta])=>(
               <article key={title} className="rounded-3xl border border-border bg-card p-6 flex flex-col hover:border-primary transition">
                 <span className="self-start rounded-full bg-primary/15 border border-primary/30 px-3 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-widest">{tag}</span>
@@ -518,7 +518,7 @@ function Home() {
           <div className="text-center max-w-2xl mx-auto mb-12">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Receipts</p>
             <h2 className="mt-3 text-4xl md:text-5xl font-display">What clients say</h2>
-            <p className="mt-4 text-muted-foreground">Real results from real brands — across SEO, paid, social &amp; lifecycle.</p>
+            <p className="mt-4 text-muted-foreground">Real results from real brands — across SEO, paid media, social and lifecycle.</p>
           </div>
           <Carousel opts={{ align: "start", loop: true }} className="relative">
             <CarouselContent className="-ml-4">
@@ -564,7 +564,7 @@ function Home() {
         <div className="text-center mb-12">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">FAQs</p>
           <h2 className="mt-3 text-4xl md:text-5xl font-display">Common questions</h2>
-          <p className="mt-4 text-muted-foreground">Everything you want to know before we kick off.</p>
+          <p className="mt-4 text-muted-foreground">Everything you want to know before we kick off your engagement.</p>
         </div>
         <Accordion type="single" collapsible className="space-y-3">
           {[
