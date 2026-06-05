@@ -2262,6 +2262,11 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
+  const [editRequested, setEditRequested] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  type SortKey = "createdAt" | "name" | "email" | "status" | "assignedEmail";
+  const [sortKey, setSortKey] = useState<SortKey>("createdAt");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [meUserId, setMeUserId] = useState<string | null>(null);
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setMeUserId(data.user?.id ?? null));
@@ -2312,6 +2317,59 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
     if (to && new Date(l.createdAt) > new Date(`${to}T23:59:59`)) return false;
     return true;
   });
+  const sorted = [...filtered].sort((a, b) => {
+    const av = (a as any)[sortKey] ?? "";
+    const bv = (b as any)[sortKey] ?? "";
+    if (sortKey === "createdAt") {
+      const diff = new Date(av).getTime() - new Date(bv).getTime();
+      return sortDir === "asc" ? diff : -diff;
+    }
+    const cmp = String(av).localeCompare(String(bv));
+    return sortDir === "asc" ? cmp : -cmp;
+  });
+
+  const toggleSelect = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+  const allVisibleSelected = sorted.length > 0 && sorted.every((l) => selected.has(l.id));
+  const toggleSelectAll = () => {
+    setSelected((prev) => {
+      if (allVisibleSelected) {
+        const next = new Set(prev);
+        sorted.forEach((l) => next.delete(l.id));
+        return next;
+      }
+      const next = new Set(prev);
+      sorted.forEach((l) => next.add(l.id));
+      return next;
+    });
+  };
+  const clearSelection = () => setSelected(new Set());
+
+  const bulkUpdate = async (patch: { status?: LeadStatus; assignedTo?: string | null }) => {
+    const ids = Array.from(selected);
+    if (ids.length === 0) return;
+    try {
+      await Promise.all(ids.map((id) => updateFn({ data: { id, ...patch } })));
+      toast.success(`Updated ${ids.length} lead${ids.length === 1 ? "" : "s"}`);
+      qc.invalidateQueries({ queryKey: ["admin-leads"] });
+      clearSelection();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Bulk update failed");
+    }
+  };
+
+  const toggleSort = (k: SortKey) => {
+    if (sortKey === k) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else { setSortKey(k); setSortDir(k === "createdAt" ? "desc" : "asc"); }
+  };
+
+  const openLead = sorted.find((l) => l.id === openId) ?? null;
 
   function exportCsv() {
     const esc = (v: string) => {
