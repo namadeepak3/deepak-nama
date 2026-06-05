@@ -512,8 +512,6 @@ function Home() {
         </div>
       </section>
 
-      {/* ============ FINAL CTA ============ */}
-
       {/* ============ TESTIMONIALS CAROUSEL ============ */}
       <section className="border-y border-border bg-card/30">
         <div className="mx-auto max-w-7xl px-6 py-24">
@@ -586,7 +584,7 @@ function Home() {
         </Accordion>
       </section>
 
-      {/* ============ FINAL CTA (moved label) ============ */}
+      {/* ============ FINAL CTA ============ */}
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/30 via-card to-card p-12 md:p-20 text-center">
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-primary/30 blur-3xl"/>
