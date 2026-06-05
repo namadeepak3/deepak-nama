@@ -625,7 +625,7 @@ function Home() {
                         <div className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">{t.kl}</div>
                       </div>
                     </div>
-                    <p className="mt-5 text-base leading-relaxed flex-1" dangerouslySetInnerHTML={{__html: `&ldquo;${t.q}&rdquo;`}} />
+                    <p className="mt-5 text-base leading-relaxed flex-1">{`“${t.q.replace(/&amp;/g, "&")}”`}</p>
                     <div className="mt-5 flex items-center gap-1">{Array.from({length:5}).map((_,i)=><Star key={i} className="h-4 w-4 fill-primary text-primary"/>)}</div>
                     <div className="mt-4 pt-4 border-t border-border flex items-center justify-between gap-2">
                       <div>
