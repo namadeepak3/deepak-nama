@@ -52,11 +52,12 @@ export const runRlsChecks = createServerFn({ method: "GET" })
   .handler(async ({ context }): Promise<RlsCheckReport> => {
     await assertAdmin(context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data, error } = await supabaseAdmin
-      .rpc("audit_rls_policies" as never)
-      .returns<
-        { table_name: string; expectation: string; pass: boolean; details: string }[]
-      >();
+    type Row = { table_name: string; expectation: string; pass: boolean; details: string };
+    const { data, error } = await (
+      supabaseAdmin.rpc as unknown as (
+        fn: string,
+      ) => Promise<{ data: Row[] | null; error: { message: string } | null }>
+    )("audit_rls_policies");
     if (error) {
       return {
         ranAt: new Date().toISOString(),
@@ -71,7 +72,7 @@ export const runRlsChecks = createServerFn({ method: "GET" })
         ],
       };
     }
-    const checks: RlsCheck[] = (data ?? []).map((r) => ({
+    const checks: RlsCheck[] = (data ?? []).map((r: Row) => ({
       table: r.table_name,
       expectation: r.expectation,
       pass: r.pass,
