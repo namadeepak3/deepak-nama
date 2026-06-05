@@ -2409,7 +2409,7 @@ function InquiryRow({
   assignees: AssigneeOption[];
   open: boolean;
   onToggle: () => void;
-  onUpdate: (patch: { status?: LeadStatus; adminNotes?: string; assignedTo?: string | null }) => void;
+  onUpdate: (patch: { status?: LeadStatus; adminNotes?: string; assignedTo?: string | null; name?: string; email?: string; phone?: string; website?: string; company?: string; message?: string }) => void;
   onDelete: () => void;
   pending: boolean;
 }) {
