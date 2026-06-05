@@ -2416,6 +2416,49 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
     }
   };
 
+  const [zipping, setZipping] = useState(false);
+  const bulkDownloadZip = async () => {
+    const ids = Array.from(selected);
+    const auditLeads = leads.filter((l) => ids.includes(l.id) && l.kind === "audit");
+    if (auditLeads.length === 0) {
+      toast.error("Select at least one audit lead.");
+      return;
+    }
+    const tpl = tplQuery.data;
+    if (!tpl) {
+      toast.error("Template still loading — try again.");
+      return;
+    }
+    setZipping(true);
+    const toastId = toast.loading(`Generating ${auditLeads.length} PDF${auditLeads.length === 1 ? "" : "s"}…`);
+    try {
+      const zip = new JSZip();
+      for (let i = 0; i < auditLeads.length; i++) {
+        const lead = auditLeads[i];
+        toast.loading(`Generating PDF ${i + 1} of ${auditLeads.length}…`, { id: toastId });
+        const preview = await previewFn({
+          data: { website: lead.website || lead.email, message: lead.message },
+        });
+        const doc = buildAuditPdf(lead, preview, tpl);
+        zip.file(pdfFilename(lead), doc.output("arraybuffer"));
+      }
+      const blob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `audits-${new Date().toISOString().slice(0, 10)}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast.success(`Downloaded ${auditLeads.length} PDF${auditLeads.length === 1 ? "" : "s"}`, { id: toastId });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Bulk ZIP failed", { id: toastId });
+    } finally {
+      setZipping(false);
+    }
+  };
+
   const toggleSort = (k: SortKey) => {
     if (sortKey === k) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
     else { setSortKey(k); setSortDir(k === "createdAt" ? "desc" : "asc"); }
