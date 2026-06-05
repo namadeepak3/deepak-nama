@@ -85,6 +85,24 @@ function Home() {
       toast.error("Please fill name, phone and message");
       return;
     }
+    track("lead_submit", { source: `${waChannel}_form` });
+    // Route to CRM/inbox with timestamp + source
+    submitLead({
+      data: {
+        name,
+        email: `noreply+${waChannel}@vrseoguru.lead`,
+        phone,
+        service: `${waChannel}_form`,
+        budget: "",
+        message: `[${waChannel} • ${new Date().toISOString()}]\n${msg}`,
+        kind: "inquiry",
+        pageUrl: typeof window !== "undefined" ? window.location.href : "",
+        referrer: typeof document !== "undefined" ? document.referrer : "",
+        utmSource: `${waChannel}_form`,
+        utmMedium: waChannel,
+        utmCampaign: "homepage_widget",
+      },
+    }).catch(() => { /* non-blocking */ });
     const body = `Hi vrseoguru — I'm ${name} (${phone}). ${msg}`;
     const encoded = encodeURIComponent(body);
     const url = waChannel === "whatsapp"
