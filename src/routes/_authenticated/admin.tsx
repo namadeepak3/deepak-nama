@@ -1847,6 +1847,45 @@ function UsersPanel() {
         <strong className="text-foreground">user</strong> = no admin access.
       </div>
 
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const email = inviteEmail.trim();
+          if (!email) return;
+          inviteMutation.mutate({ email, role: inviteRole });
+        }}
+        className="rounded-xl border border-border bg-card p-4 flex flex-col md:flex-row gap-2 md:items-center"
+      >
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-foreground">Add a user</p>
+          <p className="text-xs text-muted-foreground">Send an invite email and optionally assign a role.</p>
+        </div>
+        <input
+          type="email"
+          required
+          value={inviteEmail}
+          onChange={(e) => setInviteEmail(e.target.value)}
+          placeholder="teammate@brand.com"
+          className="rounded-md border border-border bg-background px-3 py-2 text-sm md:w-64"
+        />
+        <select
+          value={inviteRole}
+          onChange={(e) => setInviteRole(e.target.value as AppRole)}
+          className="rounded-md border border-border bg-background px-3 py-2 text-sm"
+        >
+          <option value="user">User</option>
+          <option value="editor">Editor</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button
+          type="submit"
+          disabled={inviteMutation.isPending}
+          className="inline-flex items-center justify-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-60"
+        >
+          {inviteMutation.isPending ? "Inviting…" : "Invite & assign"}
+        </button>
+      </form>
+
       {adminCount <= 1 && (
         <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-xs text-amber-700 dark:text-amber-300 flex items-start gap-2">
           <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
