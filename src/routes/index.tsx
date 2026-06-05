@@ -94,12 +94,20 @@ function Home() {
         <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
         <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
 
+        {/* AI grid + floating orbs */}
+        <div aria-hidden className="absolute inset-0 bg-ai-grid opacity-60" />
+        <div aria-hidden className="pointer-events-none absolute top-20 right-[8%] h-72 w-72 rounded-full bg-primary/25 blur-3xl animate-ai-pulse" />
+        <div aria-hidden className="pointer-events-none absolute bottom-10 left-[10%] h-56 w-56 rounded-full bg-[oklch(0.65_0.18_220/.25)] blur-3xl animate-ai-pulse" style={{ animationDelay: "1.2s" }} />
+
         <div className="relative mx-auto max-w-7xl px-6 pt-6 pb-16 md:pt-10 md:pb-20 grid lg:grid-cols-12 gap-10 items-center">
           {/* LEFT — details */}
           <div className="lg:col-span-7">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 backdrop-blur px-3 py-1 text-xs text-foreground">
               <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span></span>
               Performance marketing agency · accepting Q3 retainers
+            </div>
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+              <Bot className="h-3.5 w-3.5" /> AI-augmented strategists
             </div>
             <h1 className="mt-6 text-5xl md:text-6xl lg:text-7xl font-display leading-[1.02] tracking-tight">
               The growth partner for ambitious <span className="text-gradient-gold">modern brands.</span>
