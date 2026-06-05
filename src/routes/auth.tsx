@@ -1,8 +1,10 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ArrowLeft, Lock, Mail } from "lucide-react";
+import { checkEmailAllowed } from "@/lib/auth-allowlist.functions";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -17,6 +19,7 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
+  const allowedFn = useServerFn(checkEmailAllowed);
   const [mode, setMode] = useState<"password" | "otp">("password");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,6 +76,8 @@ function AuthPage() {
     e.preventDefault();
     setBusy(true);
     try {
+      const { allowed } = await allowedFn({ data: { email } });
+      if (!allowed) throw new Error("This email is not authorized to access the admin.");
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
     } catch (err) {
@@ -87,9 +92,11 @@ function AuthPage() {
     if (!email) return;
     setBusy(true);
     try {
+      const { allowed } = await allowedFn({ data: { email } });
+      if (!allowed) throw new Error("This email is not authorized to access the admin.");
       const { error } = await supabase.auth.signInWithOtp({
         email,
-        options: { shouldCreateUser: true, emailRedirectTo: window.location.origin },
+        options: { shouldCreateUser: false, emailRedirectTo: window.location.origin },
       });
       if (error) throw error;
       setOtpSent(true);
@@ -108,7 +115,7 @@ function AuthPage() {
     try {
       const { error } = await supabase.auth.signInWithOtp({
         email,
-        options: { shouldCreateUser: true, emailRedirectTo: window.location.origin },
+        options: { shouldCreateUser: false, emailRedirectTo: window.location.origin },
       });
       if (error) throw error;
       setResendIn(45);
