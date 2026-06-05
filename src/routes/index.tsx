@@ -763,8 +763,7 @@ function Home() {
         <div className="text-center max-w-2xl mx-auto mb-8">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
           <h2 className="mt-2 text-3xl md:text-4xl font-display leading-[1.05]">Brands we&apos;ve <span className="text-gradient-gold">scaled.</span></h2>
-        </div>
-          <Link to="/case-studies" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1">View all <ArrowRight className="h-4 w-4"/></Link>
+          <Link to="/case-studies" className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">View all <ArrowRight className="h-4 w-4"/></Link>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {caseStudies.slice(0, 3).map((c) => (
