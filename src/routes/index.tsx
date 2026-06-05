@@ -42,12 +42,24 @@ function Home() {
     e.preventDefault();
     setErrors({});
     const formData = new FormData(e.currentTarget);
+    const phone = (formData.get("phone") as string) || "";
+    const company = (formData.get("company") as string) || "";
+    const website = (formData.get("website") as string) || "";
+    const timeline = (formData.get("timeline") as string) || "";
+    const messageBody = (formData.get("message") as string) || "";
+    const composedMessage = [
+      company && `Company: ${company}`,
+      website && `Website: ${website}`,
+      phone && `Phone: ${phone}`,
+      timeline && `Timeline: ${timeline}`,
+      messageBody && `\n${messageBody}`,
+    ].filter(Boolean).join("\n");
     const raw = {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
       service: formData.get("service") as string,
       budget: formData.get("budget") as string,
-      message: formData.get("message") as string,
+      message: composedMessage || messageBody,
     };
     const result = inquirySchema.safeParse(raw);
     if (!result.success) {
