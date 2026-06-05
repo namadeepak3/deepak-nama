@@ -346,6 +346,75 @@ export type Database = {
         }
         Relationships: []
       }
+      pdf_template_settings: {
+        Row: {
+          color_accent: string
+          color_muted: string
+          color_primary: string
+          color_text: string
+          company_name: string
+          contact_line: string
+          created_at: string
+          footer_text: string
+          id: string
+          intro_text: string
+          logo_url: string
+          outro_text: string
+          show_findings: boolean
+          show_intro: boolean
+          show_next_actions: boolean
+          show_outro: boolean
+          show_score: boolean
+          show_summary: boolean
+          tagline: string
+          updated_at: string
+        }
+        Insert: {
+          color_accent?: string
+          color_muted?: string
+          color_primary?: string
+          color_text?: string
+          company_name?: string
+          contact_line?: string
+          created_at?: string
+          footer_text?: string
+          id?: string
+          intro_text?: string
+          logo_url?: string
+          outro_text?: string
+          show_findings?: boolean
+          show_intro?: boolean
+          show_next_actions?: boolean
+          show_outro?: boolean
+          show_score?: boolean
+          show_summary?: boolean
+          tagline?: string
+          updated_at?: string
+        }
+        Update: {
+          color_accent?: string
+          color_muted?: string
+          color_primary?: string
+          color_text?: string
+          company_name?: string
+          contact_line?: string
+          created_at?: string
+          footer_text?: string
+          id?: string
+          intro_text?: string
+          logo_url?: string
+          outro_text?: string
+          show_findings?: boolean
+          show_intro?: boolean
+          show_next_actions?: boolean
+          show_outro?: boolean
+          show_score?: boolean
+          show_summary?: boolean
+          tagline?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       role_audit_log: {
         Row: {
           action: string

@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import {
   listServices,
@@ -45,7 +45,17 @@ import {
   type AssigneeOption,
 } from "@/lib/leads.functions";
 import { generateAuditPreview, type AuditPreview } from "@/lib/audit-preview.functions";
-import jsPDF from "jspdf";
+import {
+  getPdfTemplate,
+  savePdfTemplate,
+  type PdfTemplateSettings,
+} from "@/lib/pdf-template.functions";
+import { buildAuditPdf, pdfFilename } from "@/lib/audit-pdf";
+import JSZip from "jszip";
+import {
+  useAdminNotificationPrefs,
+  type AdminNotificationPrefs,
+} from "@/hooks/use-admin-notification-prefs";
 import type { BlogPost } from "@/lib/blog.shared";
 import {
   listCategories,
@@ -2257,6 +2267,10 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
   const updateFn = useServerFn(updateLead);
   const deleteFn = useServerFn(deleteLead);
   const assigneesFn = useServerFn(listAssignees);
+  const previewFn = useServerFn(generateAuditPreview);
+  const tplFn = useServerFn(getPdfTemplate);
+  const tplQuery = useQuery({ queryKey: ["pdf-template"], queryFn: () => tplFn() });
+  const { prefs } = useAdminNotificationPrefs();
   const leadsQuery = useQuery({ queryKey: ["admin-leads"], queryFn: () => listFn() });
   const assigneesQuery = useQuery({ queryKey: ["admin-assignees"], queryFn: () => assigneesFn() });
 
@@ -2266,6 +2280,8 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
+  const openIdRef = useRef<string | null>(null);
+  useEffect(() => { openIdRef.current = openId; }, [openId]);
   const [editRequested, setEditRequested] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   type SortKey = "createdAt" | "name" | "email" | "status" | "assignedEmail";
@@ -2278,6 +2294,7 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
 
   // Realtime: pop-up notification when a new audit/inquiry lead is created.
   useEffect(() => {
+    if (!prefs.enabled) return;
     const channel = supabase
       .channel(`leads-realtime-${kind}`)
       .on(
@@ -2286,6 +2303,11 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
         (payload) => {
           const row = payload.new as { id: string; name?: string; email?: string; website?: string };
           qc.invalidateQueries({ queryKey: ["admin-leads"] });
+          if (prefs.autoFocusMode === "always") {
+            setOpenId(row.id);
+          } else if (prefs.autoFocusMode === "first" && !openIdRef.current) {
+            setOpenId(row.id);
+          }
           toast.success(
             kind === "audit" ? "New Website Audit lead" : "New inquiry",
             {
@@ -2300,7 +2322,7 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [kind, qc]);
+  }, [kind, qc, prefs.enabled, prefs.autoFocusMode]);
 
   const updateMutation = useMutation({
     mutationFn: (v: { id: string; status?: LeadStatus; adminNotes?: string; assignedTo?: string | null; name?: string; email?: string; phone?: string; website?: string; company?: string; message?: string }) =>
@@ -2391,6 +2413,49 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
       clearSelection();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Bulk update failed");
+    }
+  };
+
+  const [zipping, setZipping] = useState(false);
+  const bulkDownloadZip = async () => {
+    const ids = Array.from(selected);
+    const auditLeads = leads.filter((l) => ids.includes(l.id) && l.kind === "audit");
+    if (auditLeads.length === 0) {
+      toast.error("Select at least one audit lead.");
+      return;
+    }
+    const tpl = tplQuery.data;
+    if (!tpl) {
+      toast.error("Template still loading — try again.");
+      return;
+    }
+    setZipping(true);
+    const toastId = toast.loading(`Generating ${auditLeads.length} PDF${auditLeads.length === 1 ? "" : "s"}…`);
+    try {
+      const zip = new JSZip();
+      for (let i = 0; i < auditLeads.length; i++) {
+        const lead = auditLeads[i];
+        toast.loading(`Generating PDF ${i + 1} of ${auditLeads.length}…`, { id: toastId });
+        const preview = await previewFn({
+          data: { website: lead.website || lead.email, message: lead.message },
+        });
+        const doc = buildAuditPdf(lead, preview, tpl);
+        zip.file(pdfFilename(lead), doc.output("arraybuffer"));
+      }
+      const blob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `audits-${new Date().toISOString().slice(0, 10)}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast.success(`Downloaded ${auditLeads.length} PDF${auditLeads.length === 1 ? "" : "s"}`, { id: toastId });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Bulk ZIP failed", { id: toastId });
+    } finally {
+      setZipping(false);
     }
   };
 
@@ -2588,6 +2653,17 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
           >
             <Eye className="h-3 w-3" /> View first
           </button>
+          {kind === "audit" && (
+            <button
+              type="button"
+              onClick={bulkDownloadZip}
+              disabled={zipping}
+              className="inline-flex items-center gap-1 rounded-md border border-primary/40 bg-primary/10 text-primary px-2 py-1.5 text-xs hover:bg-primary/20 disabled:opacity-50"
+              title="Generate and download a ZIP of audit PDFs for the selected leads"
+            >
+              <Download className="h-3 w-3" /> {zipping ? "Zipping…" : "Download PDFs (ZIP)"}
+            </button>
+          )}
           <button
             type="button"
             onClick={clearSelection}
@@ -2997,6 +3073,8 @@ function LeadDrawer({
 function AuditPdfButton({ lead }: { lead: LeadRow }) {
   const [loading, setLoading] = useState(false);
   const previewFn = useServerFn(generateAuditPreview);
+  const tplFn = useServerFn(getPdfTemplate);
+  const tplQuery = useQuery({ queryKey: ["pdf-template"], queryFn: () => tplFn() });
 
   async function handleClick() {
     setLoading(true);
@@ -3004,53 +3082,13 @@ function AuditPdfButton({ lead }: { lead: LeadRow }) {
       const preview: AuditPreview = await previewFn({
         data: { website: lead.website || lead.email, message: lead.message },
       });
-      const doc = new jsPDF({ unit: "pt", format: "a4" });
-      const pageW = doc.internal.pageSize.getWidth();
-      const pageH = doc.internal.pageSize.getHeight();
-      const margin = 48;
-      let y = margin;
-
-      const writeLine = (text: string, opts: { size?: number; bold?: boolean; color?: [number, number, number]; gap?: number } = {}) => {
-        const { size = 11, bold = false, color = [30, 30, 30], gap = 4 } = opts;
-        doc.setFont("helvetica", bold ? "bold" : "normal");
-        doc.setFontSize(size);
-        doc.setTextColor(color[0], color[1], color[2]);
-        const lines = doc.splitTextToSize(text, pageW - margin * 2) as string[];
-        for (const line of lines) {
-          if (y > pageH - margin) { doc.addPage(); y = margin; }
-          doc.text(line, margin, y);
-          y += size + gap;
-        }
-      };
-
-      writeLine("Website Audit Preview", { size: 20, bold: true, gap: 8 });
-      writeLine(lead.website || "(no website)", { size: 12, color: [90, 90, 90], gap: 4 });
-      writeLine(`Generated ${new Date().toLocaleString()} · Prepared for ${lead.name || lead.email}`, {
-        size: 9, color: [120, 120, 120], gap: 12,
-      });
-
-      writeLine(`Overall score: ${preview.score}/100`, { size: 14, bold: true, gap: 8 });
-      writeLine(preview.summary, { size: 11, gap: 14 });
-
-      writeLine("Key findings", { size: 14, bold: true, gap: 6 });
-      preview.findings.forEach((f) => {
-        writeLine(`• [${f.severity.toUpperCase()}] ${f.area}`, { size: 11, bold: true, gap: 2 });
-        writeLine(`   ${f.finding}`, { size: 11, gap: 6 });
-      });
-
-      y += 4;
-      writeLine("Recommended next actions", { size: 14, bold: true, gap: 6 });
-      preview.nextActions.forEach((a, i) => {
-        writeLine(`${i + 1}. ${a}`, { size: 11, gap: 4 });
-      });
-
-      y += 12;
-      writeLine("This is a preliminary AI-generated preview. A senior strategist will deliver the full audit within one business day.", {
-        size: 9, color: [140, 140, 140], gap: 4,
-      });
-
-      const safe = (lead.website || lead.email || "audit").replace(/[^a-z0-9]+/gi, "-").toLowerCase();
-      doc.save(`audit-${safe}-${new Date().toISOString().slice(0, 10)}.pdf`);
+      const tpl = tplQuery.data;
+      if (!tpl) {
+        toast.error("Template settings still loading — try again.");
+        return;
+      }
+      const doc = buildAuditPdf(lead, preview, tpl);
+      doc.save(pdfFilename(lead));
       toast.success("PDF downloaded");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to generate PDF");
