@@ -662,7 +662,7 @@ function Home() {
                 <button
                   key={n}
                   type="button"
-                  onClick={() => setOpenStep(n)}
+                  onClick={() => { setOpenStep(n); track("process_step_click", { step: n, title }); }}
                   className={`btn-fx group flex md:flex-col items-center gap-3 md:gap-2 rounded-2xl border p-3 md:p-4 text-left md:text-center transition-all ${active ? "border-primary bg-primary/10 shadow-gold" : "border-border bg-card hover:border-primary/60"}`}
                 >
                   <div className={`relative h-12 w-12 md:h-14 md:w-14 rounded-full grid place-items-center shrink-0 ${active ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary border border-primary/30"}`}>
