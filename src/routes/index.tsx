@@ -28,12 +28,43 @@ function Home() {
   const fetchServices = useServerFn(listServices);
   const { data: services = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchServices() });
   const [sending, setSending] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const inquirySchema = z.object({
+    name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name is too long"),
+    email: z.string().trim().email("Enter a valid email address").max(255, "Email is too long"),
+    service: z.string().min(1, "Select a service"),
+    budget: z.string().min(1, "Select a budget range"),
+    message: z.string().trim().min(10, "Message must be at least 10 characters").max(1000, "Message is too long"),
+  });
+
   const onInquiry = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrors({});
+    const formData = new FormData(e.currentTarget);
+    const raw = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      service: formData.get("service") as string,
+      budget: formData.get("budget") as string,
+      message: formData.get("message") as string,
+    };
+    const result = inquirySchema.safeParse(raw);
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        const key = issue.path[0] as string;
+        if (!fieldErrors[key]) fieldErrors[key] = issue.message;
+      });
+      setErrors(fieldErrors);
+      toast.error("Please fix the form errors.");
+      return;
+    }
     setSending(true);
     setTimeout(() => {
       setSending(false);
       (e.target as HTMLFormElement).reset();
+      setErrors({});
       toast.success("Inquiry sent — I'll reply within 24 hours.");
     }, 600);
   };
