@@ -169,10 +169,10 @@ function Home() {
         <div aria-hidden className="pointer-events-none absolute top-20 right-[8%] h-72 w-72 rounded-full bg-foreground/[0.06] blur-3xl animate-ai-pulse" />
         <div aria-hidden className="pointer-events-none absolute bottom-10 left-[10%] h-56 w-56 rounded-full bg-foreground/[0.04] blur-3xl animate-ai-pulse" style={{ animationDelay: "1.2s" }} />
 
-        <div className="relative mx-auto max-w-7xl px-6 pt-4 pb-8 md:pt-8 md:pb-14 grid lg:grid-cols-12 gap-8 items-center">
+        <div className="relative mx-auto max-w-7xl overflow-x-clip px-4 sm:px-6 pt-4 pb-8 md:pt-8 md:pb-14 grid lg:grid-cols-12 gap-8 items-center">
           {/* LEFT — details */}
           <div className="lg:col-span-7">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+            <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] sm:tracking-[0.18em] text-primary">
               <Bot className="h-3.5 w-3.5" /> AI-powered digital marketing services
             </div>
             <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-display leading-[1.02] tracking-tight">
@@ -202,7 +202,7 @@ function Home() {
                 <Play className="h-3.5 w-3.5" /> Our services
               </Link>
             </div>
-            <div className="mt-10 grid grid-cols-3 gap-6 max-w-lg">
+            <div className="mt-10 grid grid-cols-3 gap-3 sm:gap-6 max-w-lg">
               {[["4.2x","Avg client ROAS"],["120+","Campaigns shipped"],["98%","Client retention"]].map(([k,v])=>(
                 <div key={v}>
                   <div className="text-2xl md:text-3xl font-display text-gradient-gold">{k}</div>
@@ -218,7 +218,7 @@ function Home() {
           </div>
 
           {/* RIGHT — inquiry form */}
-          <div id="inquiry" className="lg:col-span-5">
+            <div id="inquiry" className="min-w-0 lg:col-span-5">
             {submitted ? (
               <div className="rounded-3xl border border-border bg-card shadow-gold p-10 text-center">
                 <div className="mx-auto h-14 w-14 rounded-full bg-primary/15 grid place-items-center">
@@ -239,14 +239,14 @@ function Home() {
             ) : (
             <form
               onSubmit={onInquiry}
-              className="rounded-3xl border border-border bg-card/95 backdrop-blur shadow-gold p-6 md:p-7 space-y-3"
+              className="rounded-3xl border border-border bg-card/95 backdrop-blur shadow-gold p-4 sm:p-6 md:p-7 space-y-3"
             >
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Start a project</p>
                 <h3 className="mt-1 text-2xl font-display">Request a free growth audit</h3>
                 <p className="mt-1 text-xs text-muted-foreground">Tell us a bit about your brand — a senior strategist replies in 1 business day.</p>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <input name="name" placeholder="Your name" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.name ? "border-red-400" : "border-border"}`} />
                   {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
@@ -255,7 +255,7 @@ function Home() {
                   <input name="phone" placeholder="Phone (optional)" className="w-full rounded-xl bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary" />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <input name="email" type="email" placeholder="Email address" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.email ? "border-red-400" : "border-border"}`} />
                   {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
@@ -267,7 +267,7 @@ function Home() {
               <div>
                 <input name="website" placeholder="Website (optional)" className="w-full rounded-xl bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary" />
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <select name="service" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.service ? "border-red-400" : "border-border"}`}>
                     <option value="">Service</option>
@@ -323,9 +323,9 @@ function Home() {
 
       {/* ============ CHANNELS I RUN ============ */}
       <section className="border-y border-border bg-card/40">
-        <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
           <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">AI-powered channels we run</p>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
             {[
               { Icon: Bot, label: "AI Agents" },
               { Icon: Sparkles, label: "GenAI Creative" },
@@ -334,7 +334,7 @@ function Home() {
               { Icon: BarChart3, label: "ML Attribution" },
               { Icon: Mail, label: "AI Lifecycle" },
             ].map(({Icon,label})=>(
-              <div key={label} className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-3 py-3 text-sm font-medium text-foreground hover:border-primary hover:text-primary transition">
+              <div key={label} className="min-w-0 flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-3 py-3 text-center text-xs sm:text-sm font-medium text-foreground hover:border-primary hover:text-primary transition">
                 <Icon className="h-4 w-4 text-primary"/> {label}
               </div>
             ))}
@@ -346,7 +346,7 @@ function Home() {
       <section className="relative overflow-hidden border-b border-border bg-background">
         <div aria-hidden className="absolute inset-0 bg-ai-dots opacity-70" />
         <div aria-hidden className="absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-6 py-8 md:py-12">
+        <div className="relative mx-auto max-w-7xl overflow-x-clip px-4 sm:px-6 py-8 md:py-12">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             {/* Left — copy */}
             <div className="lg:col-span-5">
@@ -356,7 +356,7 @@ function Home() {
               <p className="mt-5 text-muted-foreground leading-relaxed">
                 One AI core wired into every channel — bidding, creative, SEO and analytics — so your campaigns improve every hour, not every quarter.
               </p>
-              <div className="mt-6 grid grid-cols-2 gap-3">
+              <div className="mt-6 grid grid-cols-2 gap-2 sm:gap-3">
                 {[
                   ["10x", "Faster creative"],
                   ["24/7", "Live optimization"],
@@ -370,7 +370,7 @@ function Home() {
                 ))}
               </div>
               {/* CTAs */}
-              <div className="mt-7 flex flex-wrap gap-3">
+              <div className="mt-7 flex flex-col sm:flex-row sm:flex-wrap gap-3">
                 <button onClick={() => setAuditOpen(true)} className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-3 text-sm font-semibold hover:opacity-90 transition">
                   Free Website Audit <ArrowRight className="h-4 w-4" />
                 </button>
@@ -381,8 +381,8 @@ function Home() {
             </div>
 
             {/* Right — AI orbit visual */}
-            <div className="lg:col-span-7 overflow-hidden">
-              <div className="relative aspect-square max-w-[600px] mx-auto scale-[0.78] sm:scale-90 md:scale-100 origin-center">
+            <div className="min-w-0 lg:col-span-7 overflow-hidden">
+              <div className="relative aspect-square max-w-[600px] w-full mx-auto scale-[0.68] sm:scale-90 md:scale-100 origin-center">
                 {/* Concentric rings */}
                 <div aria-hidden className="absolute inset-0 rounded-full border border-foreground/10" />
                 <div aria-hidden className="absolute inset-[12%] rounded-full border border-dashed border-foreground/15" />
@@ -451,12 +451,12 @@ function Home() {
                     className={`absolute ${pos} animate-ai-float`}
                     style={{ animationDelay: `${i * 0.35}s` }}
                   >
-                    <div className="inline-flex items-center gap-2 rounded-2xl border border-border bg-card/95 backdrop-blur pl-2 pr-3 py-1.5 text-xs font-medium text-foreground shadow-sm hover:border-foreground hover:-translate-y-0.5 transition">
+                    <div className="inline-flex max-w-[120px] sm:max-w-none items-center gap-2 rounded-2xl border border-border bg-card/95 backdrop-blur pl-2 pr-2 sm:pr-3 py-1.5 text-[10px] sm:text-xs font-medium text-foreground shadow-sm hover:border-foreground hover:-translate-y-0.5 transition">
                       <span className="h-6 w-6 rounded-lg bg-foreground text-background grid place-items-center">
                         <Icon className="h-3 w-3" />
                       </span>
-                      <span className="flex flex-col leading-tight">
-                        <span>{label}</span>
+                      <span className="flex min-w-0 flex-col leading-tight">
+                        <span className="truncate">{label}</span>
                         <span className="text-[9px] uppercase tracking-widest text-muted-foreground">{meta}</span>
                       </span>
                     </div>
@@ -471,7 +471,7 @@ function Home() {
               </div>
 
               {/* Bottom stat strip */}
-              <div className="mt-6 grid grid-cols-3 gap-3 max-w-[600px] mx-auto">
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-[600px] mx-auto">
                 {[["12k+","Decisions / day"],["<60s","Anomaly response"],["48","Data sources"]].map(([k,v])=>(
                   <div key={v} className="rounded-2xl border border-border bg-card px-4 py-3 text-center">
                     <div className="font-display text-lg text-foreground leading-none">{k}</div>
@@ -488,7 +488,7 @@ function Home() {
       {/* ============ SERVICES — BENTO ============ */}
       {/* ============ DIGITAL MARKETING SERVICES ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
             <div className="max-w-2xl">
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Digital marketing services</p>
@@ -540,7 +540,7 @@ function Home() {
       </section>
 
       {/* ============ INDUSTRIES WE SERVE ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
@@ -578,7 +578,7 @@ function Home() {
       </section>
 
       {/* ============ PROCESS ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">End-to-end AI workflow</p>
           <h2 className="mt-3 text-3xl md:text-4xl font-display">Plan. Build. Launch. Optimize. Report.</h2>
@@ -632,14 +632,14 @@ function Home() {
       {/* ============ WHO I AM ============ */}
       <section className="relative border-y border-border bg-card/30 overflow-hidden">
         <div aria-hidden className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl"/>
-        <div className="relative mx-auto max-w-5xl px-6 py-8 md:py-12 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold text-foreground">
+        <div className="relative mx-auto max-w-5xl px-4 sm:px-6 py-8 md:py-12 text-center">
+          <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[10px] sm:text-[11px] font-semibold text-foreground">
             <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span></span>
-            Accepting Q3 2026 retainers · Headquartered in Mumbai, IN
+            Headquartered in Mumbai, IN
           </div>
           <p className="mt-6 text-xs uppercase tracking-[0.3em] text-primary font-semibold">About the agency</p>
           <h2 className="mt-4 text-3xl md:text-5xl font-display leading-[1.02]">
-            <span className="text-gradient-gold">vrseoguru</span> — an AI-powered<br/>digital marketing services agency.
+            <span className="text-gradient-gold">vrseoguru</span> — an AI-powered <br className="hidden sm:block"/>digital marketing services agency.
           </h2>
           <p className="mt-6 max-w-2xl mx-auto text-sm md:text-base text-muted-foreground leading-relaxed">
             For over seven years our team has built revenue systems for ecommerce, SaaS and D2C brands across India and abroad — pairing senior strategists and a proprietary AI stack with paid-media, SEO, creative and lifecycle specialists. Every engagement is engineered around your <span className="text-foreground font-semibold">bottom line</span>, not vanity metrics.
@@ -686,7 +686,7 @@ function Home() {
       {/* ============ RESULTS ============ */}
       <section className="relative border-y border-border bg-gradient-to-br from-primary/10 via-card/30 to-card/30 overflow-hidden">
         <div aria-hidden className="absolute -top-24 left-1/4 h-56 w-56 rounded-full bg-primary/20 blur-3xl"/>
-        <div className="relative mx-auto max-w-7xl px-6 py-8 md:py-12">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
             <div>
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Numbers do the talking</p>
@@ -715,7 +715,7 @@ function Home() {
       </section>
 
       {/* ============ CASE STUDIES ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
@@ -746,7 +746,7 @@ function Home() {
 
       {/* ============ INSIGHTS ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
             <div>
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Insights</p>
@@ -784,7 +784,7 @@ function Home() {
 
       {/* ============ TESTIMONIALS CAROUSEL ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="text-center max-w-2xl mx-auto mb-6">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Receipts</p>
             <h2 className="mt-3 text-3xl md:text-4xl font-display">What clients say</h2>
@@ -830,7 +830,7 @@ function Home() {
       </section>
 
       {/* ============ FAQ ============ */}
-      <section className="mx-auto max-w-4xl px-6 py-8 md:py-12">
+      <section className="mx-auto max-w-4xl px-4 sm:px-6 py-8 md:py-12">
         <div className="text-center mb-6">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">FAQs</p>
           <h2 className="mt-3 text-3xl md:text-4xl font-display">Common questions</h2>
