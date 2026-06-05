@@ -104,7 +104,7 @@ function Home() {
         <div aria-hidden className="pointer-events-none absolute top-20 right-[8%] h-72 w-72 rounded-full bg-foreground/[0.06] blur-3xl animate-ai-pulse" />
         <div aria-hidden className="pointer-events-none absolute bottom-10 left-[10%] h-56 w-56 rounded-full bg-foreground/[0.04] blur-3xl animate-ai-pulse" style={{ animationDelay: "1.2s" }} />
 
-        <div className="relative mx-auto max-w-7xl px-6 pt-6 pb-10 md:pt-8 md:pb-14 grid lg:grid-cols-12 gap-8 items-center">
+        <div className="relative mx-auto max-w-7xl px-6 pt-4 pb-8 md:pt-8 md:pb-14 grid lg:grid-cols-12 gap-8 items-center">
           {/* LEFT — details */}
           <div className="lg:col-span-7">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 backdrop-blur px-3 py-1 text-xs text-foreground">
@@ -114,10 +114,10 @@ function Home() {
             <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
               <Bot className="h-3.5 w-3.5" /> AI-powered digital marketing services
             </div>
-            <h1 className="mt-6 text-5xl md:text-6xl lg:text-7xl font-display leading-[1.02] tracking-tight">
+            <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-display leading-[1.02] tracking-tight">
               The <span className="text-gradient-gold">AI-powered</span> growth partner for ambitious modern brands.
             </h1>
-            <p className="mt-6 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed">
+            <p className="mt-6 max-w-xl text-sm md:text-base text-muted-foreground leading-relaxed">
               We&apos;re <span className="text-foreground font-semibold">vrseoguru</span> — an AI-powered digital marketing agency. AI agents, predictive media buying, generative creative, AI search (GEO) and intelligent lifecycle — unified into one revenue engine, run by senior strategists.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -249,7 +249,7 @@ function Home() {
 
       {/* ============ CHANNELS I RUN ============ */}
       <section className="border-y border-border bg-card/40">
-        <div className="mx-auto max-w-7xl px-6 py-10">
+        <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
           <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">AI-powered channels we run</p>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
             {[
@@ -272,14 +272,14 @@ function Home() {
       <section className="relative overflow-hidden border-b border-border bg-background">
         <div aria-hidden className="absolute inset-0 bg-ai-dots opacity-70" />
         <div aria-hidden className="absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-6 py-10">
+        <div className="relative mx-auto max-w-7xl px-6 py-8 md:py-12">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             {/* Left — copy */}
             <div className="lg:col-span-5">
               <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground">
                 <Sparkles className="h-3.5 w-3.5" /> The AI Core
               </div>
-              <h2 className="mt-5 text-4xl md:text-5xl font-display leading-[1.05]">
+              <h2 className="mt-5 text-3xl md:text-4xl font-display leading-[1.05]">
                 Your <span className="text-gradient-gold">growth engine,</span> always on.
               </h2>
               <p className="mt-5 text-muted-foreground leading-relaxed">
@@ -418,11 +418,11 @@ function Home() {
       {/* ============ SERVICES — BENTO ============ */}
       {/* ============ DIGITAL MARKETING SERVICES ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-10">
+        <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
             <div className="max-w-2xl">
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Digital marketing services</p>
-              <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">Every channel your brand <span className="text-gradient-gold">needs to grow.</span></h2>
+              <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">Every channel your brand <span className="text-gradient-gold">needs to grow.</span></h2>
               <p className="mt-4 text-muted-foreground">Senior specialists across SEO, paid media, social, content, email and web — all wired into our AI ops layer.</p>
             </div>
             <Link to="/services" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1">All services <ArrowRight className="h-4 w-4"/></Link>
@@ -470,11 +470,11 @@ function Home() {
       </section>
 
       {/* ============ INDUSTRIES WE SERVE ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-10">
+      <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
+            <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
             <p className="mt-4 text-muted-foreground">18+ industries shipped — every model, funnel and dashboard adapted to how your buyers actually convert.</p>
           </div>
           <Link to="/contact" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1">Talk to a strategist <ArrowRight className="h-4 w-4"/></Link>
@@ -508,10 +508,10 @@ function Home() {
       </section>
 
       {/* ============ PROCESS ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-10">
+      <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">End-to-end AI workflow</p>
-          <h2 className="mt-3 text-4xl md:text-5xl font-display">Plan. Build. Launch. Optimize. Report.</h2>
+          <h2 className="mt-3 text-3xl md:text-4xl font-display">Plan. Build. Launch. Optimize. Report.</h2>
           <p className="mt-4 text-muted-foreground">A repeatable AI-augmented system that moves from brief to booked revenue — with humans in the loop at every step.</p>
         </div>
         <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -562,16 +562,16 @@ function Home() {
       {/* ============ WHO I AM ============ */}
       <section className="relative border-y border-border bg-card/30 overflow-hidden">
         <div aria-hidden className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl"/>
-        <div className="relative mx-auto max-w-5xl px-6 py-10 text-center">
+        <div className="relative mx-auto max-w-5xl px-6 py-8 md:py-12 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold text-foreground">
             <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span></span>
             Accepting Q3 2026 retainers · Headquartered in Mumbai, IN
           </div>
           <p className="mt-6 text-xs uppercase tracking-[0.3em] text-primary font-semibold">About the agency</p>
-          <h2 className="mt-4 text-4xl md:text-6xl font-display leading-[1.02]">
+          <h2 className="mt-4 text-3xl md:text-5xl font-display leading-[1.02]">
             <span className="text-gradient-gold">vrseoguru</span> — an AI-powered<br/>digital marketing services agency.
           </h2>
-          <p className="mt-6 max-w-2xl mx-auto text-base md:text-lg text-muted-foreground leading-relaxed">
+          <p className="mt-6 max-w-2xl mx-auto text-sm md:text-base text-muted-foreground leading-relaxed">
             For over seven years our team has built revenue systems for ecommerce, SaaS and D2C brands across India and abroad — pairing senior strategists and a proprietary AI stack with paid-media, SEO, creative and lifecycle specialists. Every engagement is engineered around your <span className="text-foreground font-semibold">bottom line</span>, not vanity metrics.
           </p>
 
@@ -616,7 +616,7 @@ function Home() {
       {/* ============ RESULTS ============ */}
       <section className="relative border-y border-border bg-gradient-to-br from-primary/10 via-card/30 to-card/30 overflow-hidden">
         <div aria-hidden className="absolute -top-24 left-1/4 h-56 w-56 rounded-full bg-primary/20 blur-3xl"/>
-        <div className="relative mx-auto max-w-7xl px-6 py-10">
+        <div className="relative mx-auto max-w-7xl px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
             <div>
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Numbers do the talking</p>
@@ -645,7 +645,7 @@ function Home() {
       </section>
 
       {/* ============ CASE STUDIES ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-10">
+      <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
@@ -676,11 +676,11 @@ function Home() {
 
       {/* ============ INSIGHTS ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-10">
+        <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
             <div>
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Insights</p>
-              <h2 className="mt-3 text-4xl md:text-5xl font-display">Fresh from the blog</h2>
+              <h2 className="mt-3 text-3xl md:text-4xl font-display">Fresh from the blog</h2>
             </div>
             <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">All articles <ArrowRight className="h-4 w-4"/></Link>
           </div>
@@ -714,10 +714,10 @@ function Home() {
 
       {/* ============ TESTIMONIALS CAROUSEL ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-10">
+        <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
           <div className="text-center max-w-2xl mx-auto mb-6">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Receipts</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display">What clients say</h2>
+            <h2 className="mt-3 text-3xl md:text-4xl font-display">What clients say</h2>
             <p className="mt-4 text-muted-foreground">Real results from real brands — across SEO, paid media, social and lifecycle.</p>
           </div>
           <Carousel opts={{ align: "start", loop: true }} className="relative">
@@ -760,10 +760,10 @@ function Home() {
       </section>
 
       {/* ============ FAQ ============ */}
-      <section className="mx-auto max-w-4xl px-6 py-10">
+      <section className="mx-auto max-w-4xl px-6 py-8 md:py-12">
         <div className="text-center mb-6">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">FAQs</p>
-          <h2 className="mt-3 text-4xl md:text-5xl font-display">Common questions</h2>
+          <h2 className="mt-3 text-3xl md:text-4xl font-display">Common questions</h2>
           <p className="mt-4 text-muted-foreground">Everything you want to know before we kick off your engagement.</p>
         </div>
         <Accordion type="single" collapsible className="space-y-3">
@@ -785,11 +785,11 @@ function Home() {
       </section>
 
       {/* ============ FINAL CTA ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-10">
+      <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/30 via-card to-card p-12 md:p-20 text-center">
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-primary/30 blur-3xl"/>
           <p className="relative text-xs tracking-[0.22em] uppercase text-primary font-semibold">Let&apos;s build</p>
-          <h2 className="relative mt-4 text-4xl md:text-6xl font-display leading-[1.02]">Ready to <span className="text-gradient-gold">accelerate</span><br/>your growth?</h2>
+          <h2 className="relative mt-4 text-3xl md:text-5xl font-display leading-[1.02]">Ready to <span className="text-gradient-gold">accelerate</span><br/>your growth?</h2>
           <p className="relative mt-5 max-w-xl mx-auto text-muted-foreground">Book a free, no-obligation strategy call. Our team will audit your marketing and show you the biggest opportunities.</p>
           <div className="relative mt-8 flex flex-wrap gap-3 justify-center">
             <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">

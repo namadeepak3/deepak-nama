@@ -20,6 +20,13 @@ import {
   deletePost,
   type BlogPostInput,
 } from "@/lib/blog.functions";
+import {
+  listUsersWithRoles,
+  setUserRole,
+  removeUserRole,
+  type AdminUserRow,
+  type AppRole,
+} from "@/lib/admin-users.functions";
 import type { BlogPost } from "@/lib/blog.shared";
 import {
   listCategories,
@@ -57,6 +64,7 @@ import {
   Quote,
   Code,
   Image as ImagePlus,
+  Users as UsersIcon,
 } from "lucide-react";
 import { ExternalLink, Eye as EyeCount } from "lucide-react";
 
@@ -102,7 +110,7 @@ function AdminPage() {
   const canManage = !!capsQuery.data?.canManageServices;
   const canAnalytics = !!capsQuery.data?.canViewAnalytics;
 
-  type Tab = "services" | "analytics" | "blog" | "categories";
+  type Tab = "services" | "analytics" | "blog" | "categories" | "users";
   const defaultTab: Tab = canManage ? "services" : canAnalytics ? "analytics" : "services";
   const [tab, setTab] = useState<Tab>(defaultTab);
   useEffect(() => {
@@ -111,6 +119,7 @@ function AdminPage() {
     if (tab === "analytics" && !canAnalytics && canManage) setTab("services");
     if (tab === "blog" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "categories" && !canManage && canAnalytics) setTab("analytics");
+    if (tab === "users" && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
   }, [capsQuery.data, canManage, canAnalytics, tab]);
 
   const services = useQuery({ queryKey: ["services"], queryFn: () => list(), enabled: canManage });
@@ -244,6 +253,11 @@ function AdminPage() {
             Analytics
           </TabButton>
         )}
+        {(capsQuery.data?.roles ?? []).includes("admin") && (
+          <TabButton active={tab === "users"} onClick={() => setTab("users")} icon={UsersIcon}>
+            Users
+          </TabButton>
+        )}
       </nav>
 
       {tab === "services" && canManage && (
@@ -329,6 +343,10 @@ function AdminPage() {
 
       {tab === "categories" && canManage && (
         <CategoriesPanel />
+      )}
+
+      {tab === "users" && (capsQuery.data?.roles ?? []).includes("admin") && (
+        <UsersPanel />
       )}
 
       {editing && canManage && (
@@ -1672,6 +1690,141 @@ function CategoryEditor({
           </button>
         </div>
       </form>
+    </div>
+  );
+}
+
+const ROLE_OPTIONS: AppRole[] = ["admin", "editor", "user"];
+
+function UsersPanel() {
+  const qc = useQueryClient();
+  const listFn = useServerFn(listUsersWithRoles);
+  const setFn = useServerFn(setUserRole);
+  const removeFn = useServerFn(removeUserRole);
+
+  const usersQuery = useQuery({ queryKey: ["admin-users"], queryFn: () => listFn() });
+
+  const addMutation = useMutation({
+    mutationFn: (v: { userId: string; role: AppRole }) => setFn({ data: v }),
+    onSuccess: () => {
+      toast.success("Role assigned");
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
+  });
+
+  const removeMutation = useMutation({
+    mutationFn: (v: { userId: string; role: AppRole }) => removeFn({ data: v }),
+    onSuccess: () => {
+      toast.success("Role removed");
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
+  });
+
+  if (usersQuery.isLoading) {
+    return <p className="mt-10 text-center text-sm text-muted-foreground">Loading users…</p>;
+  }
+  if (usersQuery.error) {
+    return <p className="mt-10 text-center text-sm text-destructive">{(usersQuery.error as Error).message}</p>;
+  }
+  const users = usersQuery.data ?? [];
+
+  return (
+    <div className="mt-8 space-y-3">
+      <div className="rounded-xl border border-border bg-card p-4 text-xs text-muted-foreground">
+        Assign roles to control admin panel access. <strong className="text-foreground">admin</strong> = full access including user management.{" "}
+        <strong className="text-foreground">editor</strong> = manage services, blog and categories.{" "}
+        <strong className="text-foreground">user</strong> = no admin access.
+      </div>
+      {users.map((u: AdminUserRow) => (
+        <UserRow
+          key={u.id}
+          user={u}
+          onAdd={(role) => addMutation.mutate({ userId: u.id, role })}
+          onRemove={(role) => removeMutation.mutate({ userId: u.id, role })}
+          pending={addMutation.isPending || removeMutation.isPending}
+        />
+      ))}
+      {users.length === 0 && (
+        <p className="text-center text-sm text-muted-foreground py-10">No users yet.</p>
+      )}
+    </div>
+  );
+}
+
+function UserRow({
+  user,
+  onAdd,
+  onRemove,
+  pending,
+}: {
+  user: AdminUserRow;
+  onAdd: (role: AppRole) => void;
+  onRemove: (role: AppRole) => void;
+  pending: boolean;
+}) {
+  const [pick, setPick] = useState<AppRole>("editor");
+  const available = ROLE_OPTIONS.filter((r) => !user.roles.includes(r));
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-4 flex flex-col md:flex-row md:items-center gap-4">
+      <div className="flex-1 min-w-0">
+        <p className="font-medium text-foreground truncate">{user.email}</p>
+        <p className="text-xs text-muted-foreground truncate">
+          Joined {new Date(user.createdAt).toLocaleDateString()}
+          {user.lastSignInAt ? ` · last seen ${new Date(user.lastSignInAt).toLocaleDateString()}` : ""}
+        </p>
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        {user.roles.length === 0 && (
+          <span className="text-xs text-muted-foreground italic">No roles</span>
+        )}
+        {user.roles.map((r) => (
+          <span
+            key={r}
+            className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] ${
+              r === "admin"
+                ? "border-primary/40 bg-primary/10 text-primary"
+                : "border-border bg-secondary text-foreground"
+            }`}
+          >
+            {r}
+            <button
+              type="button"
+              disabled={pending}
+              onClick={() => {
+                if (confirm(`Remove "${r}" role from ${user.email}?`)) onRemove(r);
+              }}
+              className="hover:text-destructive disabled:opacity-50"
+              aria-label={`Remove ${r} role`}
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </span>
+        ))}
+      </div>
+      {available.length > 0 && (
+        <div className="flex gap-2">
+          <select
+            value={available.includes(pick) ? pick : available[0]}
+            onChange={(e) => setPick(e.target.value as AppRole)}
+            className="rounded-md border border-border bg-background px-2 py-1.5 text-xs"
+          >
+            {available.map((r) => (
+              <option key={r} value={r}>{r}</option>
+            ))}
+          </select>
+          <button
+            type="button"
+            disabled={pending}
+            onClick={() => onAdd(available.includes(pick) ? pick : available[0])}
+            className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-accent disabled:opacity-50"
+          >
+            <Plus className="h-3 w-3" /> Assign
+          </button>
+        </div>
+      )}
     </div>
   );
 }
