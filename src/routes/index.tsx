@@ -170,9 +170,19 @@ function Home() {
               We&apos;re <span className="text-foreground font-semibold">vrseoguru</span> — an AI-powered digital marketing agency. AI agents, predictive media buying, generative creative, AI search (GEO) and intelligent lifecycle — unified into one revenue engine, run by senior strategists.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/contact" className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
-                Request a proposal <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
+              <button
+                type="button"
+                onClick={() => setAuditOpen(true)}
+                className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold"
+              >
+                <Search className="h-4 w-4" /> Free Website Audit
+              </button>
+              <a
+                href="#inquiry"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary transition"
+              >
+                <Send className="h-3.5 w-3.5" /> Send Inquiry
+              </a>
               <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary transition">
                 <Play className="h-3.5 w-3.5" /> Our services
               </Link>
