@@ -81,7 +81,17 @@ function Home() {
     }
     setSending(true);
     try {
-      await submitLead({ data: result.data });
+      const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+      await submitLead({
+        data: {
+          ...result.data,
+          pageUrl: typeof window !== "undefined" ? window.location.href : "",
+          referrer: typeof document !== "undefined" ? document.referrer : "",
+          utmSource: params?.get("utm_source") ?? "",
+          utmMedium: params?.get("utm_medium") ?? "",
+          utmCampaign: params?.get("utm_campaign") ?? "",
+        },
+      });
       (e.target as HTMLFormElement).reset();
       setErrors({});
       setSubmitted({ name: result.data.name, email: result.data.email });
