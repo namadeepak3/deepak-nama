@@ -45,7 +45,17 @@ import {
   type AssigneeOption,
 } from "@/lib/leads.functions";
 import { generateAuditPreview, type AuditPreview } from "@/lib/audit-preview.functions";
-import jsPDF from "jspdf";
+import {
+  getPdfTemplate,
+  savePdfTemplate,
+  type PdfTemplateSettings,
+} from "@/lib/pdf-template.functions";
+import { buildAuditPdf, pdfFilename } from "@/lib/audit-pdf";
+import JSZip from "jszip";
+import {
+  useAdminNotificationPrefs,
+  type AdminNotificationPrefs,
+} from "@/hooks/use-admin-notification-prefs";
 import type { BlogPost } from "@/lib/blog.shared";
 import {
   listCategories,
