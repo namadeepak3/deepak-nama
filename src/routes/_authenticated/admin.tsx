@@ -2411,7 +2411,7 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
       "ip_address", "user_agent", "referrer", "page_url", "utm_source", "utm_medium", "utm_campaign",
       "message", "admin_notes",
     ];
-    const rows = filtered.map((l) =>
+    const rows = sorted.map((l) =>
       [
         l.createdAt, l.name, l.email, l.service, l.budget, l.status, l.assignedEmail,
         l.ipAddress, l.userAgent, l.referrer, l.pageUrl, l.utmSource, l.utmMedium, l.utmCampaign,
@@ -2424,7 +2424,7 @@ function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
     const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
     const a = document.createElement("a");
     a.href = url;
-    a.download = `inquiries-${stamp}.csv`;
+    a.download = `${kind === "audit" ? "audits" : "inquiries"}-${stamp}.csv`;
     document.body.appendChild(a);
     a.click();
     a.remove();
