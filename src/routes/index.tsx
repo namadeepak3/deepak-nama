@@ -237,6 +237,85 @@ function Home() {
         </div>
       </section>
 
+      {/* ============ AI-POWERED STACK ============ */}
+      <section className="relative overflow-hidden border-b border-border bg-background">
+        <div aria-hidden className="absolute inset-0 bg-ai-dots opacity-70" />
+        <div aria-hidden className="absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl" />
+        <div className="relative mx-auto max-w-7xl px-6 py-24">
+          <div className="grid lg:grid-cols-12 gap-10 items-center">
+            {/* Left — copy */}
+            <div className="lg:col-span-5">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+                <Sparkles className="h-3.5 w-3.5" /> AI-native operating system
+              </div>
+              <h2 className="mt-5 text-4xl md:text-5xl font-display leading-[1.05]">
+                A marketing brain <span className="text-gradient-gold">trained on your data.</span>
+              </h2>
+              <p className="mt-5 text-muted-foreground leading-relaxed">
+                We pair senior strategists with a proprietary AI stack — predictive bidding, generative creative, semantic SEO clusters and 24/7 anomaly detection. Decisions ship in hours, not weeks.
+              </p>
+              <div className="mt-6 grid grid-cols-2 gap-3">
+                {[
+                  ["10x", "faster creative iteration"],
+                  ["24/7", "performance monitoring"],
+                  ["100%", "first-party data ready"],
+                  ["GEO", "AI-search optimized"],
+                ].map(([k,v])=>(
+                  <div key={v} className="rounded-2xl border border-border bg-card p-4">
+                    <div className="text-2xl font-display text-gradient-gold leading-none">{k}</div>
+                    <div className="mt-2 text-xs text-muted-foreground">{v}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right — AI orbit visual */}
+            <div className="lg:col-span-7">
+              <div className="relative aspect-square max-w-[560px] mx-auto">
+                {/* Concentric rings */}
+                <div aria-hidden className="absolute inset-0 rounded-full border border-primary/20 animate-ai-pulse" />
+                <div aria-hidden className="absolute inset-[10%] rounded-full border border-primary/25 animate-ai-pulse" style={{ animationDelay: "0.5s" }} />
+                <div aria-hidden className="absolute inset-[22%] rounded-full border border-primary/30 animate-ai-pulse" style={{ animationDelay: "1s" }} />
+                <div aria-hidden className="absolute inset-[34%] rounded-full border border-primary/40 animate-ai-pulse" style={{ animationDelay: "1.5s" }} />
+
+                {/* Center AI core */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-28 w-28 md:h-32 md:w-32 rounded-3xl bg-gradient-to-br from-primary to-[oklch(0.45_0.22_240)] grid place-items-center ring-ai">
+                  <Bot className="h-12 w-12 text-primary-foreground" />
+                </div>
+
+                {/* Orbiting capability chips */}
+                {[
+                  { Icon: Search,     label: "Semantic SEO",  pos: "top-0 left-1/2 -translate-x-1/2" },
+                  { Icon: Target,     label: "Predictive bids", pos: "top-1/2 right-0 -translate-y-1/2" },
+                  { Icon: Megaphone,  label: "GenAI creative", pos: "bottom-0 left-1/2 -translate-x-1/2" },
+                  { Icon: BarChart3,  label: "Live attribution", pos: "top-1/2 left-0 -translate-y-1/2" },
+                  { Icon: MousePointerClick, label: "GEO answers", pos: "top-[14%] right-[14%]" },
+                  { Icon: Activity,   label: "Anomaly alerts", pos: "bottom-[14%] left-[14%]" },
+                ].map(({Icon,label,pos},i)=>(
+                  <div
+                    key={label}
+                    className={`absolute ${pos} animate-ai-float`}
+                    style={{ animationDelay: `${i * 0.4}s` }}
+                  >
+                    <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/95 backdrop-blur px-3 py-1.5 text-xs font-medium text-foreground shadow-sm hover:border-primary transition">
+                      <Icon className="h-3.5 w-3.5 text-primary" /> {label}
+                    </div>
+                  </div>
+                ))}
+
+                {/* Floating data points */}
+                <div aria-hidden className="absolute top-[28%] right-[34%] h-2 w-2 rounded-full bg-primary animate-ai-pulse" />
+                <div aria-hidden className="absolute bottom-[28%] left-[34%] h-2 w-2 rounded-full bg-[oklch(0.65_0.18_220)] animate-ai-pulse" style={{ animationDelay: "0.8s" }} />
+                <div aria-hidden className="absolute top-[44%] left-[22%] h-1.5 w-1.5 rounded-full bg-primary/70 animate-ai-pulse" style={{ animationDelay: "1.4s" }} />
+              </div>
+            </div>
+          </div>
+
+          {/* Animated beam separator */}
+          <div aria-hidden className="mt-16 h-px w-full bg-gradient-to-r from-transparent via-primary to-transparent animate-ai-beam opacity-60" />
+        </div>
+      </section>
+
       {/* ============ SERVICES — BENTO ============ */}
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-10">
