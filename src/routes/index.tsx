@@ -589,6 +589,44 @@ function Home() {
         </div>
       </section>
 
+      {/* ============ INDUSTRIES WE SERVE ============ */}
+      <section className="mx-auto max-w-7xl px-6 py-24">
+        <div className="flex items-end justify-between flex-wrap gap-6 mb-12">
+          <div className="max-w-2xl">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
+            <p className="mt-4 text-muted-foreground">18+ industries shipped — every model, funnel and dashboard adapted to how your buyers actually convert.</p>
+          </div>
+          <Link to="/contact" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1">Talk to a strategist <ArrowRight className="h-4 w-4"/></Link>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {[
+            { Icon: ShoppingCart, name: "Ecommerce & D2C", note: "Shopify, Amazon, marketplaces" },
+            { Icon: Bot, name: "SaaS & B2B", note: "Demand-gen & ABM pipelines" },
+            { Icon: LineChart, name: "Fintech", note: "Compliance-aware acquisition" },
+            { Icon: ShieldCheck, name: "Healthcare", note: "HIPAA-safe campaigns" },
+            { Icon: Globe, name: "Real Estate", note: "Geo-targeted lead funnels" },
+            { Icon: Award, name: "Education & EdTech", note: "Enrollment & retention" },
+            { Icon: Sparkles, name: "Beauty & Lifestyle", note: "Influencer + UGC engines" },
+            { Icon: Rocket, name: "Travel & Hospitality", note: "Seasonal demand modeling" },
+            { Icon: Target, name: "Automotive", note: "Local + national hybrid" },
+            { Icon: Megaphone, name: "Media & Publishing", note: "Audience growth + retention" },
+            { Icon: BarChart3, name: "Manufacturing & B2B", note: "Long-cycle attribution" },
+            { Icon: Mail, name: "Professional Services", note: "Authority + lead capture" },
+          ].map(({ Icon, name, note }) => (
+            <div key={name} className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-4 hover:border-foreground transition">
+              <div className="h-10 w-10 shrink-0 rounded-xl bg-foreground text-background grid place-items-center">
+                <Icon className="h-4 w-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="font-display text-sm text-foreground truncate">{name}</div>
+                <div className="text-[11px] text-muted-foreground truncate">{note}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ============ PROCESS ============ */}
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="text-center max-w-2xl mx-auto">
