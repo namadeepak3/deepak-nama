@@ -44,6 +44,8 @@ import {
   type LeadAuditEntry,
   type AssigneeOption,
 } from "@/lib/leads.functions";
+import { generateAuditPreview, type AuditPreview } from "@/lib/audit-preview.functions";
+import jsPDF from "jspdf";
 import type { BlogPost } from "@/lib/blog.shared";
 import {
   listCategories,
