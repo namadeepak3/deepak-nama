@@ -274,6 +274,13 @@ function AdminPage() {
           </p>
         </div>
         <div className="flex gap-2">
+          <Link
+            to="/admin/security"
+            className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
+            title="Security scan results"
+          >
+            <ShieldCheck className="h-4 w-4" /> Security
+          </Link>
           {canManage && tab === "services" && (
             <button
               onClick={() => setEditing(emptyService(services.data?.length ?? 0))}
