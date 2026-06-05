@@ -350,10 +350,7 @@ function Home() {
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             {/* Left — copy */}
             <div className="lg:col-span-5">
-              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground">
-                <Sparkles className="h-3.5 w-3.5" /> The AI Core
-              </div>
-              <h2 className="mt-5 text-3xl md:text-4xl font-display leading-[1.05]">
+              <h2 className="text-3xl md:text-4xl font-display leading-[1.05]">
                 Your <span className="text-gradient-gold">growth engine,</span> always on.
               </h2>
               <p className="mt-5 text-muted-foreground leading-relaxed">
@@ -381,7 +378,6 @@ function Home() {
                   See how it works
                 </Link>
               </div>
-              <p className="mt-3 text-xs text-muted-foreground">Free 30-min audit · No obligation · Reply within 1 business day.</p>
             </div>
 
             {/* Right — AI orbit visual */}

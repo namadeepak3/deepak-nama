@@ -12,10 +12,10 @@ export const Route = createFileRoute("/refund-policy")({
 
 function RefundPolicy() {
   return (
-    <section className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-4xl font-display tracking-tight">Refund Policy</h1>
-      <p className="mt-2 text-sm text-muted-foreground">Last updated: {new Date().toLocaleDateString()}</p>
-      <div className="prose prose-neutral dark:prose-invert mt-8 max-w-none text-sm leading-relaxed text-muted-foreground">
+    <section className="mx-auto max-w-3xl px-5 sm:px-6 py-10 sm:py-16">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-display tracking-tight leading-tight">Refund Policy</h1>
+      <p className="mt-3 text-xs sm:text-sm text-muted-foreground">Last updated: {new Date().toLocaleDateString()}</p>
+      <div className="mt-8 sm:mt-10 space-y-6 text-[15px] sm:text-base leading-7 sm:leading-8 text-muted-foreground [&_h2]:mt-8 [&_h2]:text-lg sm:[&_h2]:text-xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_p]:break-words">
         <h2 className="text-foreground">1. Service-based engagements</h2>
         <p>Because our work involves senior strategist time and tooling allocated to your account from day one, fees for completed work are non-refundable.</p>
         <h2 className="text-foreground">2. Monthly retainers</h2>

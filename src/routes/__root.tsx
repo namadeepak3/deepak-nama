@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -134,13 +135,15 @@ function RootComponent() {
 }
 
 function SiteShell() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAdmin = pathname.startsWith("/admin");
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
-      <SiteHeader />
+      {!isAdmin && <SiteHeader />}
       <main className="flex-1">
         <Outlet />
       </main>
-      <SiteFooter />
+      {!isAdmin && <SiteFooter />}
     </div>
   );
 }
@@ -315,6 +318,7 @@ function SiteFooter() {
           <p>© {new Date().getFullYear()} vrseoguru. Crafted with AI &amp; obsession.</p>
           <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             <Link to="/blog" className="hover:text-white transition-colors">Blog</Link>
+            <Link to="/faqs" className="hover:text-white transition-colors">FAQs</Link>
             <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link to="/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link>
             <Link to="/terms" className="hover:text-white transition-colors">Terms &amp; Conditions</Link>
