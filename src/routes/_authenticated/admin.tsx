@@ -3007,6 +3007,8 @@ function LeadDrawer({
 function AuditPdfButton({ lead }: { lead: LeadRow }) {
   const [loading, setLoading] = useState(false);
   const previewFn = useServerFn(generateAuditPreview);
+  const tplFn = useServerFn(getPdfTemplate);
+  const tplQuery = useQuery({ queryKey: ["pdf-template"], queryFn: () => tplFn() });
 
   async function handleClick() {
     setLoading(true);
@@ -3014,53 +3016,13 @@ function AuditPdfButton({ lead }: { lead: LeadRow }) {
       const preview: AuditPreview = await previewFn({
         data: { website: lead.website || lead.email, message: lead.message },
       });
-      const doc = new jsPDF({ unit: "pt", format: "a4" });
-      const pageW = doc.internal.pageSize.getWidth();
-      const pageH = doc.internal.pageSize.getHeight();
-      const margin = 48;
-      let y = margin;
-
-      const writeLine = (text: string, opts: { size?: number; bold?: boolean; color?: [number, number, number]; gap?: number } = {}) => {
-        const { size = 11, bold = false, color = [30, 30, 30], gap = 4 } = opts;
-        doc.setFont("helvetica", bold ? "bold" : "normal");
-        doc.setFontSize(size);
-        doc.setTextColor(color[0], color[1], color[2]);
-        const lines = doc.splitTextToSize(text, pageW - margin * 2) as string[];
-        for (const line of lines) {
-          if (y > pageH - margin) { doc.addPage(); y = margin; }
-          doc.text(line, margin, y);
-          y += size + gap;
-        }
-      };
-
-      writeLine("Website Audit Preview", { size: 20, bold: true, gap: 8 });
-      writeLine(lead.website || "(no website)", { size: 12, color: [90, 90, 90], gap: 4 });
-      writeLine(`Generated ${new Date().toLocaleString()} · Prepared for ${lead.name || lead.email}`, {
-        size: 9, color: [120, 120, 120], gap: 12,
-      });
-
-      writeLine(`Overall score: ${preview.score}/100`, { size: 14, bold: true, gap: 8 });
-      writeLine(preview.summary, { size: 11, gap: 14 });
-
-      writeLine("Key findings", { size: 14, bold: true, gap: 6 });
-      preview.findings.forEach((f) => {
-        writeLine(`• [${f.severity.toUpperCase()}] ${f.area}`, { size: 11, bold: true, gap: 2 });
-        writeLine(`   ${f.finding}`, { size: 11, gap: 6 });
-      });
-
-      y += 4;
-      writeLine("Recommended next actions", { size: 14, bold: true, gap: 6 });
-      preview.nextActions.forEach((a, i) => {
-        writeLine(`${i + 1}. ${a}`, { size: 11, gap: 4 });
-      });
-
-      y += 12;
-      writeLine("This is a preliminary AI-generated preview. A senior strategist will deliver the full audit within one business day.", {
-        size: 9, color: [140, 140, 140], gap: 4,
-      });
-
-      const safe = (lead.website || lead.email || "audit").replace(/[^a-z0-9]+/gi, "-").toLowerCase();
-      doc.save(`audit-${safe}-${new Date().toISOString().slice(0, 10)}.pdf`);
+      const tpl = tplQuery.data;
+      if (!tpl) {
+        toast.error("Template settings still loading — try again.");
+        return;
+      }
+      const doc = buildAuditPdf(lead, preview, tpl);
+      doc.save(pdfFilename(lead));
       toast.success("PDF downloaded");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to generate PDF");
