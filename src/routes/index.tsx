@@ -9,6 +9,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { z } from "zod";
+import heroBg from "@/assets/hero-digital.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
