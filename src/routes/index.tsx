@@ -323,9 +323,9 @@ function Home() {
 
       {/* ============ CHANNELS I RUN ============ */}
       <section className="border-y border-border bg-card/40">
-        <div className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
           <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">AI-powered channels we run</p>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
             {[
               { Icon: Bot, label: "AI Agents" },
               { Icon: Sparkles, label: "GenAI Creative" },
@@ -334,7 +334,7 @@ function Home() {
               { Icon: BarChart3, label: "ML Attribution" },
               { Icon: Mail, label: "AI Lifecycle" },
             ].map(({Icon,label})=>(
-              <div key={label} className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-3 py-3 text-sm font-medium text-foreground hover:border-primary hover:text-primary transition">
+              <div key={label} className="min-w-0 flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-3 py-3 text-center text-xs sm:text-sm font-medium text-foreground hover:border-primary hover:text-primary transition">
                 <Icon className="h-4 w-4 text-primary"/> {label}
               </div>
             ))}
@@ -346,7 +346,7 @@ function Home() {
       <section className="relative overflow-hidden border-b border-border bg-background">
         <div aria-hidden className="absolute inset-0 bg-ai-dots opacity-70" />
         <div aria-hidden className="absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-6 py-8 md:py-12">
+        <div className="relative mx-auto max-w-7xl overflow-x-clip px-4 sm:px-6 py-8 md:py-12">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             {/* Left — copy */}
             <div className="lg:col-span-5">
@@ -356,7 +356,7 @@ function Home() {
               <p className="mt-5 text-muted-foreground leading-relaxed">
                 One AI core wired into every channel — bidding, creative, SEO and analytics — so your campaigns improve every hour, not every quarter.
               </p>
-              <div className="mt-6 grid grid-cols-2 gap-3">
+              <div className="mt-6 grid grid-cols-2 gap-2 sm:gap-3">
                 {[
                   ["10x", "Faster creative"],
                   ["24/7", "Live optimization"],
@@ -370,7 +370,7 @@ function Home() {
                 ))}
               </div>
               {/* CTAs */}
-              <div className="mt-7 flex flex-wrap gap-3">
+              <div className="mt-7 flex flex-col sm:flex-row sm:flex-wrap gap-3">
                 <button onClick={() => setAuditOpen(true)} className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-3 text-sm font-semibold hover:opacity-90 transition">
                   Free Website Audit <ArrowRight className="h-4 w-4" />
                 </button>
@@ -381,8 +381,8 @@ function Home() {
             </div>
 
             {/* Right — AI orbit visual */}
-            <div className="lg:col-span-7 overflow-hidden">
-              <div className="relative aspect-square max-w-[600px] mx-auto scale-[0.78] sm:scale-90 md:scale-100 origin-center">
+            <div className="min-w-0 lg:col-span-7 overflow-hidden">
+              <div className="relative aspect-square max-w-[600px] w-full mx-auto scale-[0.68] sm:scale-90 md:scale-100 origin-center">
                 {/* Concentric rings */}
                 <div aria-hidden className="absolute inset-0 rounded-full border border-foreground/10" />
                 <div aria-hidden className="absolute inset-[12%] rounded-full border border-dashed border-foreground/15" />
@@ -451,12 +451,12 @@ function Home() {
                     className={`absolute ${pos} animate-ai-float`}
                     style={{ animationDelay: `${i * 0.35}s` }}
                   >
-                    <div className="inline-flex items-center gap-2 rounded-2xl border border-border bg-card/95 backdrop-blur pl-2 pr-3 py-1.5 text-xs font-medium text-foreground shadow-sm hover:border-foreground hover:-translate-y-0.5 transition">
+                    <div className="inline-flex max-w-[120px] sm:max-w-none items-center gap-2 rounded-2xl border border-border bg-card/95 backdrop-blur pl-2 pr-2 sm:pr-3 py-1.5 text-[10px] sm:text-xs font-medium text-foreground shadow-sm hover:border-foreground hover:-translate-y-0.5 transition">
                       <span className="h-6 w-6 rounded-lg bg-foreground text-background grid place-items-center">
                         <Icon className="h-3 w-3" />
                       </span>
-                      <span className="flex flex-col leading-tight">
-                        <span>{label}</span>
+                      <span className="flex min-w-0 flex-col leading-tight">
+                        <span className="truncate">{label}</span>
                         <span className="text-[9px] uppercase tracking-widest text-muted-foreground">{meta}</span>
                       </span>
                     </div>
@@ -471,7 +471,7 @@ function Home() {
               </div>
 
               {/* Bottom stat strip */}
-              <div className="mt-6 grid grid-cols-3 gap-3 max-w-[600px] mx-auto">
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-[600px] mx-auto">
                 {[["12k+","Decisions / day"],["<60s","Anomaly response"],["48","Data sources"]].map(([k,v])=>(
                   <div key={v} className="rounded-2xl border border-border bg-card px-4 py-3 text-center">
                     <div className="font-display text-lg text-foreground leading-none">{k}</div>
