@@ -25,10 +25,19 @@ import {
   setUserRole,
   removeUserRole,
   listRoleAuditLog,
+  resendVerificationEmail,
   type AdminUserRow,
   type AppRole,
   type RoleAuditEntry,
 } from "@/lib/admin-users.functions";
+import {
+  listLeads,
+  updateLead,
+  deleteLead,
+  LEAD_STATUSES,
+  type LeadRow,
+  type LeadStatus,
+} from "@/lib/leads.functions";
 import type { BlogPost } from "@/lib/blog.shared";
 import {
   listCategories,
@@ -70,6 +79,9 @@ import {
   Search as SearchIcon,
   AlertTriangle,
   History,
+  Download,
+  MailCheck,
+  Inbox,
 } from "lucide-react";
 import { ExternalLink, Eye as EyeCount } from "lucide-react";
 
@@ -115,7 +127,7 @@ function AdminPage() {
   const canManage = !!capsQuery.data?.canManageServices;
   const canAnalytics = !!capsQuery.data?.canViewAnalytics;
 
-  type Tab = "services" | "analytics" | "blog" | "categories" | "users";
+  type Tab = "services" | "analytics" | "blog" | "categories" | "users" | "inquiries";
   const defaultTab: Tab = canManage ? "services" : canAnalytics ? "analytics" : "services";
   const [tab, setTab] = useState<Tab>(defaultTab);
   useEffect(() => {
@@ -125,6 +137,7 @@ function AdminPage() {
     if (tab === "blog" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "categories" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "users" && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
+    if (tab === "inquiries" && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
   }, [capsQuery.data, canManage, canAnalytics, tab]);
 
   const services = useQuery({ queryKey: ["services"], queryFn: () => list(), enabled: canManage });
@@ -263,6 +276,11 @@ function AdminPage() {
             Users
           </TabButton>
         )}
+        {(capsQuery.data?.roles ?? []).includes("admin") && (
+          <TabButton active={tab === "inquiries"} onClick={() => setTab("inquiries")} icon={Inbox}>
+            Inquiries
+          </TabButton>
+        )}
       </nav>
 
       {tab === "services" && canManage && (
@@ -352,6 +370,10 @@ function AdminPage() {
 
       {tab === "users" && (capsQuery.data?.roles ?? []).includes("admin") && (
         <UsersPanel />
+      )}
+
+      {tab === "inquiries" && (capsQuery.data?.roles ?? []).includes("admin") && (
+        <InquiriesPanel />
       )}
 
       {editing && canManage && (
