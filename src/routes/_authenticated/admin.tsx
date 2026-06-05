@@ -24,8 +24,10 @@ import {
   listUsersWithRoles,
   setUserRole,
   removeUserRole,
+  listRoleAuditLog,
   type AdminUserRow,
   type AppRole,
+  type RoleAuditEntry,
 } from "@/lib/admin-users.functions";
 import type { BlogPost } from "@/lib/blog.shared";
 import {
@@ -65,6 +67,9 @@ import {
   Code,
   Image as ImagePlus,
   Users as UsersIcon,
+  Search as SearchIcon,
+  AlertTriangle,
+  History,
 } from "lucide-react";
 import { ExternalLink, Eye as EyeCount } from "lucide-react";
 
@@ -1701,14 +1706,22 @@ function UsersPanel() {
   const listFn = useServerFn(listUsersWithRoles);
   const setFn = useServerFn(setUserRole);
   const removeFn = useServerFn(removeUserRole);
+  const auditFn = useServerFn(listRoleAuditLog);
 
   const usersQuery = useQuery({ queryKey: ["admin-users"], queryFn: () => listFn() });
+  const auditQuery = useQuery({ queryKey: ["role-audit-log"], queryFn: () => auditFn() });
+
+  const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState<"all" | AppRole | "none">("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | "verified" | "unverified">("all");
+  const [showAudit, setShowAudit] = useState(false);
 
   const addMutation = useMutation({
     mutationFn: (v: { userId: string; role: AppRole }) => setFn({ data: v }),
     onSuccess: () => {
       toast.success("Role assigned");
       qc.invalidateQueries({ queryKey: ["admin-users"] });
+      qc.invalidateQueries({ queryKey: ["role-audit-log"] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
   });
@@ -1718,6 +1731,7 @@ function UsersPanel() {
     onSuccess: () => {
       toast.success("Role removed");
       qc.invalidateQueries({ queryKey: ["admin-users"] });
+      qc.invalidateQueries({ queryKey: ["role-audit-log"] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
   });
@@ -1729,25 +1743,100 @@ function UsersPanel() {
     return <p className="mt-10 text-center text-sm text-destructive">{(usersQuery.error as Error).message}</p>;
   }
   const users = usersQuery.data ?? [];
+  const adminCount = users.filter((u) => u.roles.includes("admin")).length;
+
+  const filtered = users.filter((u) => {
+    const q = search.trim().toLowerCase();
+    if (q && !u.email.toLowerCase().includes(q)) return false;
+    if (roleFilter === "none") {
+      if (u.roles.length > 0) return false;
+    } else if (roleFilter !== "all") {
+      if (!u.roles.includes(roleFilter)) return false;
+    }
+    if (statusFilter === "verified" && !u.emailConfirmedAt) return false;
+    if (statusFilter === "unverified" && u.emailConfirmedAt) return false;
+    return true;
+  });
 
   return (
-    <div className="mt-8 space-y-3">
+    <div className="mt-8 space-y-4">
       <div className="rounded-xl border border-border bg-card p-4 text-xs text-muted-foreground">
         Assign roles to control admin panel access. <strong className="text-foreground">admin</strong> = full access including user management.{" "}
         <strong className="text-foreground">editor</strong> = manage services, blog and categories.{" "}
         <strong className="text-foreground">user</strong> = no admin access.
       </div>
-      {users.map((u: AdminUserRow) => (
-        <UserRow
-          key={u.id}
-          user={u}
-          onAdd={(role) => addMutation.mutate({ userId: u.id, role })}
-          onRemove={(role) => removeMutation.mutate({ userId: u.id, role })}
-          pending={addMutation.isPending || removeMutation.isPending}
-        />
-      ))}
-      {users.length === 0 && (
-        <p className="text-center text-sm text-muted-foreground py-10">No users yet.</p>
+
+      {adminCount <= 1 && (
+        <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-xs text-amber-700 dark:text-amber-300 flex items-start gap-2">
+          <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
+          <div>
+            <strong className="font-medium">Only one admin remaining.</strong> Removing the last admin role is blocked. Assign admin to another user first if you need to change it.
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-col md:flex-row gap-2">
+        <div className="relative flex-1">
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by email…"
+            className="w-full rounded-md border border-border bg-background pl-9 pr-3 py-2 text-sm"
+          />
+        </div>
+        <select
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value as typeof roleFilter)}
+          className="rounded-md border border-border bg-background px-3 py-2 text-sm"
+        >
+          <option value="all">All roles</option>
+          <option value="admin">Admin</option>
+          <option value="editor">Editor</option>
+          <option value="user">User</option>
+          <option value="none">No role</option>
+        </select>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
+          className="rounded-md border border-border bg-background px-3 py-2 text-sm"
+        >
+          <option value="all">Any status</option>
+          <option value="verified">Verified</option>
+          <option value="unverified">Unverified</option>
+        </select>
+        <button
+          type="button"
+          onClick={() => setShowAudit((s) => !s)}
+          className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-xs hover:border-primary"
+        >
+          <History className="h-3.5 w-3.5" /> {showAudit ? "Hide" : "Show"} audit log
+        </button>
+      </div>
+
+      <p className="text-xs text-muted-foreground">
+        {filtered.length} of {users.length} users
+      </p>
+
+      <div className="space-y-3">
+        {filtered.map((u: AdminUserRow) => (
+          <UserRow
+            key={u.id}
+            user={u}
+            isLastAdmin={u.roles.includes("admin") && adminCount <= 1}
+            onAdd={(role) => addMutation.mutate({ userId: u.id, role })}
+            onRemove={(role) => removeMutation.mutate({ userId: u.id, role })}
+            pending={addMutation.isPending || removeMutation.isPending}
+          />
+        ))}
+        {filtered.length === 0 && (
+          <p className="text-center text-sm text-muted-foreground py-10">No users match these filters.</p>
+        )}
+      </div>
+
+      {showAudit && (
+        <AuditLogPanel loading={auditQuery.isLoading} entries={auditQuery.data ?? []} />
       )}
     </div>
   );
@@ -1755,22 +1844,36 @@ function UsersPanel() {
 
 function UserRow({
   user,
+  isLastAdmin,
   onAdd,
   onRemove,
   pending,
 }: {
   user: AdminUserRow;
+  isLastAdmin: boolean;
   onAdd: (role: AppRole) => void;
   onRemove: (role: AppRole) => void;
   pending: boolean;
 }) {
   const [pick, setPick] = useState<AppRole>("editor");
   const available = ROLE_OPTIONS.filter((r) => !user.roles.includes(r));
+  const verified = !!user.emailConfirmedAt;
 
   return (
     <div className="rounded-xl border border-border bg-card p-4 flex flex-col md:flex-row md:items-center gap-4">
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-foreground truncate">{user.email}</p>
+        <div className="flex items-center gap-2 flex-wrap">
+          <p className="font-medium text-foreground truncate">{user.email}</p>
+          <span
+            className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wider ${
+              verified
+                ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300"
+                : "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-300"
+            }`}
+          >
+            {verified ? "Verified" : "Unverified"}
+          </span>
+        </div>
         <p className="text-xs text-muted-foreground truncate">
           Joined {new Date(user.createdAt).toLocaleDateString()}
           {user.lastSignInAt ? ` · last seen ${new Date(user.lastSignInAt).toLocaleDateString()}` : ""}
@@ -1780,29 +1883,37 @@ function UserRow({
         {user.roles.length === 0 && (
           <span className="text-xs text-muted-foreground italic">No roles</span>
         )}
-        {user.roles.map((r) => (
-          <span
-            key={r}
-            className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] ${
-              r === "admin"
-                ? "border-primary/40 bg-primary/10 text-primary"
-                : "border-border bg-secondary text-foreground"
-            }`}
-          >
-            {r}
-            <button
-              type="button"
-              disabled={pending}
-              onClick={() => {
-                if (confirm(`Remove "${r}" role from ${user.email}?`)) onRemove(r);
-              }}
-              className="hover:text-destructive disabled:opacity-50"
-              aria-label={`Remove ${r} role`}
+        {user.roles.map((r) => {
+          const blocked = r === "admin" && isLastAdmin;
+          return (
+            <span
+              key={r}
+              className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] ${
+                r === "admin"
+                  ? "border-primary/40 bg-primary/10 text-primary"
+                  : "border-border bg-secondary text-foreground"
+              }`}
             >
-              <X className="h-3 w-3" />
-            </button>
-          </span>
-        ))}
+              {r}
+              <button
+                type="button"
+                disabled={pending || blocked}
+                title={blocked ? "Cannot remove the last admin" : `Remove ${r} role`}
+                onClick={() => {
+                  if (blocked) {
+                    toast.error("Cannot remove the last admin — assign admin to another user first.");
+                    return;
+                  }
+                  if (confirm(`Remove "${r}" role from ${user.email}?`)) onRemove(r);
+                }}
+                className="hover:text-destructive disabled:opacity-40 disabled:cursor-not-allowed"
+                aria-label={`Remove ${r} role`}
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </span>
+          );
+        })}
       </div>
       {available.length > 0 && (
         <div className="flex gap-2">
@@ -1824,6 +1935,50 @@ function UserRow({
             <Plus className="h-3 w-3" /> Assign
           </button>
         </div>
+      )}
+    </div>
+  );
+}
+
+function AuditLogPanel({ loading, entries }: { loading: boolean; entries: RoleAuditEntry[] }) {
+  return (
+    <div className="rounded-xl border border-border bg-card p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <History className="h-4 w-4 text-primary" />
+        <h3 className="text-sm font-medium text-foreground">Role change audit log</h3>
+        <span className="text-xs text-muted-foreground">(last 100 events)</span>
+      </div>
+      {loading && <p className="text-xs text-muted-foreground">Loading…</p>}
+      {!loading && entries.length === 0 && (
+        <p className="text-xs text-muted-foreground italic">No role changes recorded yet.</p>
+      )}
+      {!loading && entries.length > 0 && (
+        <ul className="space-y-1.5 text-xs">
+          {entries.map((e) => (
+            <li key={e.id} className="flex flex-wrap items-center gap-2 py-1.5 border-b border-border/60 last:border-0">
+              <span className="text-muted-foreground tabular-nums">
+                {new Date(e.createdAt).toLocaleString()}
+              </span>
+              <span className="text-foreground font-medium">{e.actorEmail}</span>
+              <span
+                className={`rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wider ${
+                  e.action === "assigned"
+                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300"
+                    : "border-destructive/30 bg-destructive/10 text-destructive"
+                }`}
+              >
+                {e.action}
+              </span>
+              <span className="rounded-full border border-primary/40 bg-primary/10 text-primary px-2 py-0.5 text-[10px] uppercase tracking-wider">
+                {e.role}
+              </span>
+              <span className="text-muted-foreground">
+                {e.action === "assigned" ? "to" : "from"}
+              </span>
+              <span className="text-foreground">{e.targetEmail}</span>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
