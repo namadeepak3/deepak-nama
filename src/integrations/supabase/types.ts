@@ -537,6 +537,7 @@ export type Database = {
           details: string
           expectation: string
           pass: boolean
+          policies: Json
           table_name: string
         }[]
       }

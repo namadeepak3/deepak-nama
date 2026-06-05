@@ -23,7 +23,21 @@ export const Route = createFileRoute("/api/public/health/rls")({
         }
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          type Row = { table_name: string; expectation: string; pass: boolean; details: string };
+          type Policy = {
+            name: string;
+            cmd: string;
+            roles: string[];
+            using: string | null;
+            with_check: string | null;
+            admin_scoped: boolean;
+          };
+          type Row = {
+            table_name: string;
+            expectation: string;
+            pass: boolean;
+            details: string;
+            policies: Policy[] | null;
+          };
           const rpc = supabaseAdmin.rpc as unknown as (
             fn: string,
           ) => Promise<{ data: Row[] | null; error: { message: string } | null }>;
@@ -35,7 +49,12 @@ export const Route = createFileRoute("/api/public/health/rls")({
           return jsonResponse(ok ? 200 : 500, {
             ok,
             checked: rows.length,
-            failed: failed.map((r) => ({ table: r.table_name, details: r.details })),
+            failed: failed.map((r) => ({
+              table: r.table_name,
+              expectation: r.expectation,
+              details: r.details,
+              policies: r.policies ?? [],
+            })),
             ranAt: new Date().toISOString(),
           });
         } catch (e) {

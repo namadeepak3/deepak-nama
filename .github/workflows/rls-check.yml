@@ -1,0 +1,67 @@
+# Blocks deploys when any RLS policy on sensitive tables drifts away from
+# admin-only. Calls the public health endpoint exposed by the app.
+#
+# Required repository secrets:
+#   RLS_HEALTH_URL  e.g. https://project--<id>.lovable.app/api/public/health/rls
+#                   (use the stable preview URL for PRs, production URL for main)
+#   CRON_SECRET     same value as the CRON_SECRET runtime secret in Lovable Cloud
+#
+# Optional inputs:
+#   PROD_RLS_HEALTH_URL  production URL used by the post-deploy job
+#
+# The endpoint returns:
+#   200 + { ok: true,  checked, ranAt }                     -> pass
+#   500 + { ok: false, failed: [...], ranAt }               -> fail (job exits 1)
+
+name: RLS policy check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  # Run nightly to catch drift introduced by manual SQL edits in the dashboard
+  schedule:
+    - cron: "0 6 * * *"
+
+jobs:
+  rls-check:
+    name: Verify Supabase RLS policies
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ensure secrets are configured
+        env:
+          RLS_HEALTH_URL: ${{ secrets.RLS_HEALTH_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$RLS_HEALTH_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "::error::Missing repo secret RLS_HEALTH_URL or CRON_SECRET"
+            exit 1
+          fi
+
+      - name: Call /api/public/health/rls
+        env:
+          RLS_HEALTH_URL: ${{ secrets.RLS_HEALTH_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          tmp=$(mktemp)
+          status=$(curl -sS -o "$tmp" -w "%{http_code}" \
+            -H "x-cron-secret: ${CRON_SECRET}" \
+            "${RLS_HEALTH_URL}")
+          echo "HTTP $status"
+          echo "----- response body -----"
+          cat "$tmp"
+          echo
+          echo "-------------------------"
+          if [ "$status" != "200" ]; then
+            echo "::error::RLS health check failed (HTTP $status). Deploy blocked."
+            # Annotate each failed table in the GitHub UI
+            if command -v jq >/dev/null 2>&1; then
+              jq -r '.failed[]? | "::error title=RLS regression on \(.table)::\(.details)"' "$tmp" || true
+            fi
+            exit 1
+          fi
+          echo "::notice::All RLS checks passed."

@@ -2,9 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { ArrowLeft, ShieldCheck, ShieldAlert, RefreshCw, CheckCircle2, AlertTriangle, Info } from "lucide-react";
+import { ArrowLeft, ShieldCheck, ShieldAlert, RefreshCw, CheckCircle2, AlertTriangle, Info, ChevronDown, ChevronRight } from "lucide-react";
 import { getSecurityReport, runRlsChecks } from "@/lib/security-checks.functions";
 import type { FixStatus } from "@/lib/security-report";
+import type { RlsCheck } from "@/lib/security-checks.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/security")({
   head: () => ({
@@ -43,6 +44,7 @@ function SecurityPage() {
     queryKey: ["rls-checks", rlsKey],
     queryFn: () => fetchRls(),
   });
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -136,31 +138,99 @@ function SecurityPage() {
 
           <ul className="divide-y rounded-md border">
             {(rls.data?.checks ?? []).map((c, i) => (
-              <li key={i} className="flex items-start gap-3 px-4 py-3">
-                {c.pass ? (
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
-                ) : (
-                  <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
-                )}
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-baseline gap-2">
-                    <code className="text-sm font-semibold text-slate-900">{c.table}</code>
-                    <span className="text-xs text-slate-500">{c.expectation}</span>
-                  </div>
-                  <p className="text-sm text-slate-700">{c.details}</p>
-                </div>
-              </li>
+              <CheckRow
+                key={i}
+                check={c}
+                open={!!expanded[c.table]}
+                onToggle={() => setExpanded((e) => ({ ...e, [c.table]: !e[c.table] }))}
+              />
             ))}
           </ul>
 
           <p className="mt-4 flex items-start gap-2 text-xs text-slate-500">
             <Info className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />
-            CI / deploy hook: <code>GET /api/public/health/rls?token=&lt;CRON_SECRET&gt;</code>{" "}
-            returns HTTP 200 when all checks pass and 500 otherwise — wire it into your deploy
-            pipeline or a pg_cron job to get automated regressions alerts.
+            <span>
+              CI / deploy hook: <code>GET /api/public/health/rls?token=&lt;CRON_SECRET&gt;</code>{" "}
+              returns HTTP 200 when all checks pass and 500 otherwise. A ready-to-use GitHub
+              Actions workflow lives at <code>.github/workflows/rls-check.yml</code>. Add{" "}
+              <code>RLS_HEALTH_URL</code> and <code>CRON_SECRET</code> as repo secrets and the
+              workflow runs on every push, PR, and after deploy.
+            </span>
           </p>
         </section>
       </main>
     </div>
+  );
+}
+
+function CheckRow({
+  check,
+  open,
+  onToggle,
+}: {
+  check: RlsCheck;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  const hasPolicies = check.policies && check.policies.length > 0;
+  return (
+    <li className="px-4 py-3">
+      <button
+        onClick={onToggle}
+        className="flex w-full items-start gap-3 text-left"
+        disabled={!hasPolicies}
+      >
+        {check.pass ? (
+          <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
+        ) : (
+          <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
+        )}
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-baseline gap-2">
+            <code className="text-sm font-semibold text-slate-900">{check.table}</code>
+            <span className="text-xs text-slate-500">{check.expectation}</span>
+            {hasPolicies && (
+              <span className="ml-auto inline-flex items-center gap-1 text-xs text-slate-500">
+                {open ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
+                {check.policies.length} {check.policies.length === 1 ? "policy" : "policies"}
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-slate-700">{check.details}</p>
+        </div>
+      </button>
+
+      {open && hasPolicies && (
+        <div className="mt-3 ml-8 space-y-2">
+          {check.policies.map((p) => (
+            <div
+              key={p.name}
+              className={`rounded border p-3 text-xs ${p.admin_scoped ? "border-emerald-200 bg-emerald-50/40" : "border-amber-200 bg-amber-50/40"}`}
+            >
+              <div className="mb-1 flex flex-wrap items-center gap-2">
+                <code className="font-semibold text-slate-900">{p.name}</code>
+                <span className="rounded bg-slate-200 px-1.5 py-0.5 font-mono text-[10px] uppercase text-slate-700">
+                  {p.cmd}
+                </span>
+                <span className="text-slate-500">
+                  roles: {p.roles && p.roles.length > 0 ? p.roles.join(", ") : "—"}
+                </span>
+                <span
+                  className={`ml-auto rounded px-1.5 py-0.5 text-[10px] font-medium ${p.admin_scoped ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`}
+                >
+                  {p.admin_scoped ? "admin-scoped" : "permissive"}
+                </span>
+              </div>
+              <dl className="grid grid-cols-[5rem_1fr] gap-x-3 gap-y-1 font-mono text-[11px] text-slate-700">
+                <dt className="text-slate-500">USING</dt>
+                <dd className="break-all whitespace-pre-wrap">{p.using ?? <em className="text-slate-400">none</em>}</dd>
+                <dt className="text-slate-500">CHECK</dt>
+                <dd className="break-all whitespace-pre-wrap">{p.with_check ?? <em className="text-slate-400">none</em>}</dd>
+              </dl>
+            </div>
+          ))}
+        </div>
+      )}
+    </li>
   );
 }
