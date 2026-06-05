@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import type { AuditPreview } from "@/lib/audit-preview.functions";
 
-type AuditValues = {
+export type AuditValues = {
   name: string;
   email: string;
   phone: string;
