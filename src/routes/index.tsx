@@ -513,6 +513,80 @@ function Home() {
       </section>
 
       {/* ============ FINAL CTA ============ */}
+
+      {/* ============ TESTIMONIALS CAROUSEL ============ */}
+      <section className="border-y border-border bg-card/30">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Receipts</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">What clients say</h2>
+            <p className="mt-4 text-muted-foreground">Real results from real brands — across SEO, paid, social &amp; lifecycle.</p>
+          </div>
+          <Carousel opts={{ align: "start", loop: true }} className="relative">
+            <CarouselContent className="-ml-4">
+              {[
+                { q: "Organic traffic up 240% and qualified leads have never been higher.", n: "Sarah Mitchell", r: "CEO, Northbridge Retail", m: "SEO · 6 months", k: "+240%", kl: "Organic" },
+                { q: "PPC cut our CPL in half while doubling lead volume. Reporting is unmatched.", n: "David Chen", r: "Founder, Velocity SaaS", m: "Google Ads · 4 months", k: "-52%", kl: "CPL" },
+                { q: "We scaled from a regional player to a national brand. Strategy made the difference.", n: "Maria Lopez", r: "CMO, Harborline Homes", m: "Performance · 9 months", k: "5.8x", kl: "ROAS" },
+                { q: "Meta &amp; Google funnels now print revenue. Best marketing hire we&apos;ve made.", n: "Aarav Khanna", r: "Founder, Lumen D2C", m: "Paid Social · 5 months", k: "+312%", kl: "Revenue" },
+                { q: "Content + technical SEO finally clicked. We rank #1 on our money keywords.", n: "Priya Raman", r: "Head of Growth, Finovate", m: "SEO · 8 months", k: "#1", kl: "SERP" },
+              ].map((t) => (
+                <CarouselItem key={t.n} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                  <div className="h-full rounded-3xl border border-border bg-card p-7 flex flex-col">
+                    <div className="flex items-center justify-between">
+                      <Quote className="h-6 w-6 text-primary" />
+                      <div className="text-right">
+                        <div className="text-2xl font-display text-gradient-gold leading-none">{t.k}</div>
+                        <div className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">{t.kl}</div>
+                      </div>
+                    </div>
+                    <p className="mt-5 text-base leading-relaxed flex-1" dangerouslySetInnerHTML={{__html: `&ldquo;${t.q}&rdquo;`}} />
+                    <div className="mt-5 flex items-center gap-1">{Array.from({length:5}).map((_,i)=><Star key={i} className="h-4 w-4 fill-primary text-primary"/>)}</div>
+                    <div className="mt-4 pt-4 border-t border-border flex items-center justify-between gap-2">
+                      <div>
+                        <div className="font-semibold text-sm">{t.n}</div>
+                        <div className="text-xs text-muted-foreground">{t.r}</div>
+                      </div>
+                      <span className="text-[10px] uppercase tracking-widest text-primary font-semibold">{t.m}</span>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="flex justify-center gap-3 mt-8">
+              <CarouselPrevious className="static translate-y-0 h-10 w-10 border-border bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary" />
+              <CarouselNext className="static translate-y-0 h-10 w-10 border-border bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary" />
+            </div>
+          </Carousel>
+        </div>
+      </section>
+
+      {/* ============ FAQ ============ */}
+      <section className="mx-auto max-w-4xl px-6 py-24">
+        <div className="text-center mb-12">
+          <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">FAQs</p>
+          <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">Common questions</h2>
+          <p className="mt-4 text-muted-foreground">Everything you want to know before we kick off.</p>
+        </div>
+        <Accordion type="single" collapsible className="space-y-3">
+          {[
+            { q: "What services do you offer?", a: "Full-stack digital marketing — SEO &amp; GEO, Google Ads, Meta &amp; LinkedIn paid social, performance creative, lifecycle/email, analytics, and AI-powered automation." },
+            { q: "How much do you charge?", a: "Project retainers typically range ₹50k–₹5L/mo depending on scope, channels and ad spend. Every quote is custom — book a strategy call for a tailored proposal." },
+            { q: "How fast will I see results?", a: "Paid channels usually show signal within 2–3 weeks. SEO compounds over 3–6 months. I share a 30/60/90-day roadmap before we start so expectations are crystal clear." },
+            { q: "Do you work with my industry?", a: "I&apos;ve shipped campaigns across 18+ industries — ecommerce, SaaS, fintech, healthcare, real estate, education, D2C and B2B. If your funnel needs growth, I can help." },
+            { q: "Do you handle ad spend management?", a: "Yes. I manage Google, Meta, LinkedIn, Amazon &amp; YouTube ad accounts end-to-end — strategy, creative, bidding, tracking, and weekly optimization." },
+            { q: "How do you report on performance?", a: "Live Looker Studio dashboards tied to your GA4 + ad accounts + CRM. Plus a written monthly review with insights, learnings and next bets." },
+            { q: "Can I cancel anytime?", a: "Yes. Month-to-month retainers with 30-day notice. No long lock-ins, no hidden fees — performance keeps the partnership going." },
+          ].map((f,i)=>(
+            <AccordionItem key={i} value={`item-${i}`} className="rounded-2xl border border-border bg-card px-5 data-[state=open]:border-primary transition">
+              <AccordionTrigger className="text-left text-base font-display uppercase hover:no-underline">{f.q}</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground leading-relaxed" dangerouslySetInnerHTML={{__html: f.a}}/>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </section>
+
+      {/* ============ FINAL CTA (moved label) ============ */}
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/30 via-card to-card p-12 md:p-20 text-center">
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-primary/30 blur-3xl"/>
