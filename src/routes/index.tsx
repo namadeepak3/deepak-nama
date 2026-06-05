@@ -371,9 +371,9 @@ function Home() {
               </div>
               {/* CTAs */}
               <div className="mt-7 flex flex-wrap gap-3">
-                <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-3 text-sm font-semibold hover:opacity-90 transition">
-                  Get my free AI audit <ArrowRight className="h-4 w-4" />
-                </Link>
+                <button onClick={() => setAuditOpen(true)} className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-3 text-sm font-semibold hover:opacity-90 transition">
+                  Free Website Audit <ArrowRight className="h-4 w-4" />
+                </button>
                 <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground hover:border-foreground transition">
                   See how it works
                 </Link>
