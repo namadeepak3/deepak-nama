@@ -557,8 +557,8 @@ function Home() {
                 <Icon className="h-4 w-4" />
               </div>
               <div className="min-w-0">
-                <div className="font-display text-sm text-foreground truncate">{name}</div>
-                <div className="text-[11px] text-muted-foreground truncate">{note}</div>
+                <div className="font-display text-sm text-foreground break-words leading-tight">{name}</div>
+                <div className="mt-0.5 text-[11px] text-muted-foreground break-words leading-snug">{note}</div>
               </div>
             </div>
           ))}
