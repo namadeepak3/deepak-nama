@@ -16,10 +16,10 @@ import heroBg from "@/assets/hero-digital.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "vrseoguru — Performance-Led Digital Marketing Agency" },
-      { name: "description", content: "An award-winning digital marketing agency delivering SEO, paid media, performance creative and lifecycle programs that compound revenue." },
-      { property: "og:title", content: "vrseoguru — Digital Marketing Agency" },
-      { property: "og:description", content: "SEO, paid media, performance creative and lifecycle — engineered for revenue." },
+      { title: "vrseoguru — AI-Powered Digital Marketing Services Agency" },
+      { name: "description", content: "An AI-powered digital marketing services agency delivering SEO, paid media, performance creative and lifecycle programs that compound revenue." },
+      { property: "og:title", content: "vrseoguru — AI-Powered Digital Marketing Services Agency" },
+      { property: "og:description", content: "AI-powered SEO, paid media, performance creative and lifecycle — engineered for revenue." },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
@@ -104,16 +104,16 @@ function Home() {
           <div className="lg:col-span-7">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 backdrop-blur px-3 py-1 text-xs text-foreground">
               <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span></span>
-              Performance marketing agency · accepting Q3 retainers
+              AI-powered marketing agency · accepting Q3 retainers
             </div>
             <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
-              <Bot className="h-3.5 w-3.5" /> AI-augmented strategists
+              <Bot className="h-3.5 w-3.5" /> AI-powered digital marketing services
             </div>
             <h1 className="mt-6 text-5xl md:text-6xl lg:text-7xl font-display leading-[1.02] tracking-tight">
-              The growth partner for ambitious <span className="text-gradient-gold">modern brands.</span>
+              The <span className="text-gradient-gold">AI-powered</span> growth partner for ambitious modern brands.
             </h1>
             <p className="mt-6 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed">
-              We&apos;re <span className="text-foreground font-semibold">vrseoguru</span> — a full-service digital marketing agency uniting SEO, paid media, performance creative and lifecycle into one revenue engine. Strategy from senior operators. Execution at agency scale.
+              We&apos;re <span className="text-foreground font-semibold">vrseoguru</span> — an AI-powered digital marketing services agency uniting SEO, paid media, performance creative and lifecycle into one revenue engine. Senior strategists. Proprietary AI stack. Agency-scale execution.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/contact" className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
@@ -424,10 +424,10 @@ function Home() {
           </div>
           <p className="mt-6 text-xs uppercase tracking-[0.3em] text-primary font-semibold">About the agency</p>
           <h2 className="mt-4 text-4xl md:text-6xl font-display leading-[1.02]">
-            <span className="text-gradient-gold">vrseoguru</span> — a digital<br/>marketing agency built for outcomes.
+            <span className="text-gradient-gold">vrseoguru</span> — an AI-powered<br/>digital marketing services agency.
           </h2>
           <p className="mt-6 max-w-2xl mx-auto text-base md:text-lg text-muted-foreground leading-relaxed">
-            For over seven years our team has built revenue systems for ecommerce, SaaS and D2C brands across India and abroad — pairing senior strategists with paid-media, SEO, creative and lifecycle specialists. Every engagement is engineered around your <span className="text-foreground font-semibold">bottom line</span>, not vanity metrics.
+            For over seven years our team has built revenue systems for ecommerce, SaaS and D2C brands across India and abroad — pairing senior strategists and a proprietary AI stack with paid-media, SEO, creative and lifecycle specialists. Every engagement is engineered around your <span className="text-foreground font-semibold">bottom line</span>, not vanity metrics.
           </p>
 
           {/* Certification chips */}
