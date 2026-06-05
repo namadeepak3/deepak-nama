@@ -385,8 +385,8 @@ function Home() {
             </div>
 
             {/* Right — AI orbit visual */}
-            <div className="lg:col-span-7">
-              <div className="relative aspect-square max-w-[600px] mx-auto">
+            <div className="lg:col-span-7 overflow-hidden">
+              <div className="relative aspect-square max-w-[600px] mx-auto scale-[0.78] sm:scale-90 md:scale-100 origin-center">
                 {/* Concentric rings */}
                 <div aria-hidden className="absolute inset-0 rounded-full border border-foreground/10" />
                 <div aria-hidden className="absolute inset-[12%] rounded-full border border-dashed border-foreground/15" />
