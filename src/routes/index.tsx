@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2 } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { listServices } from "@/lib/services.functions";
+import { createLead } from "@/lib/leads.functions";
 import { iconFor } from "@/lib/services.shared";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -27,8 +28,10 @@ export const Route = createFileRoute("/")({
 function Home() {
   const fetchServices = useServerFn(listServices);
   const { data: services = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchServices() });
+  const submitLead = useServerFn(createLead);
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitted, setSubmitted] = useState<null | { name: string; email: string }>(null);
 
   const inquirySchema = z.object({
     name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name is too long"),
@@ -38,7 +41,7 @@ function Home() {
     message: z.string().trim().min(10, "Message must be at least 10 characters").max(1000, "Message is too long"),
   });
 
-  const onInquiry = (e: React.FormEvent<HTMLFormElement>) => {
+  const onInquiry = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrors({});
     const formData = new FormData(e.currentTarget);
@@ -61,12 +64,17 @@ function Home() {
       return;
     }
     setSending(true);
-    setTimeout(() => {
-      setSending(false);
+    try {
+      await submitLead({ data: result.data });
       (e.target as HTMLFormElement).reset();
       setErrors({});
+      setSubmitted({ name: result.data.name, email: result.data.email });
       toast.success("Inquiry sent — I'll reply within 24 hours.");
-    }, 600);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to send inquiry.");
+    } finally {
+      setSending(false);
+    }
   };
   return (
     <>
@@ -104,6 +112,24 @@ function Home() {
 
           {/* Inquiry form */}
           <div className="lg:col-span-5">
+            {submitted ? (
+              <div className="rounded-2xl border border-border bg-white shadow-gold p-8 text-center">
+                <div className="mx-auto h-14 w-14 rounded-full bg-ink/5 grid place-items-center">
+                  <CheckCircle2 className="h-8 w-8 text-ink" />
+                </div>
+                <h3 className="mt-5 text-2xl font-display font-semibold">Thanks, {submitted.name}!</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Your inquiry has been received. I&apos;ll reply to <span className="text-foreground font-medium">{submitted.email}</span> within 24 hours.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setSubmitted(null)}
+                  className="mt-6 inline-flex items-center gap-2 rounded-md border border-ink/30 bg-white px-5 py-2.5 text-sm font-medium text-foreground hover:border-ink transition-colors"
+                >
+                  Send another inquiry
+                </button>
+              </div>
+            ) : (
             <form
               onSubmit={onInquiry}
               className="rounded-2xl border border-border bg-white shadow-gold p-6 md:p-7 space-y-4"
@@ -161,6 +187,7 @@ function Home() {
               </button>
               <p className="text-[11px] text-muted-foreground text-center">Reply within 24 hours · No spam.</p>
             </form>
+            )}
           </div>
         </div>
 
