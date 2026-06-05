@@ -314,36 +314,74 @@ function Home() {
           </Link>
         </div>
         <div className="grid grid-cols-12 auto-rows-[minmax(180px,auto)] gap-4">
-          {services.map((s, i) => {
-            const Icon = iconFor(s.icon);
-            const sizes = [
-              "col-span-12 md:col-span-7",
-              "col-span-12 md:col-span-5",
-              "col-span-12 md:col-span-4",
-              "col-span-12 md:col-span-4",
-              "col-span-12 md:col-span-4",
-              "col-span-12 md:col-span-6",
-              "col-span-12 md:col-span-6",
-            ];
-            return (
-              <Link
-                key={s.slug}
-                to="/services/$slug"
-                params={{ slug: s.slug }}
-                className={`group relative ${sizes[i % sizes.length]} rounded-3xl border border-border bg-card p-7 hover:border-primary transition overflow-hidden`}
-              >
-                <div className="absolute -bottom-16 -right-16 h-44 w-44 rounded-full bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition" />
-                <div className="relative h-11 w-11 rounded-xl bg-primary/15 border border-primary/30 grid place-items-center mb-5">
-                  <Icon className="h-5 w-5 text-primary" />
+          {[
+            {
+              Icon: Bot,
+              tag: "Autonomous ops",
+              title: "AI Agents",
+              desc: "Always-on agents that monitor campaigns, draft briefs, send alerts and ship optimizations 24/7.",
+              deliverables: ["Custom GPT workflows", "Slack + email alerts", "Auto-pacing & budget guards"],
+              span: "col-span-12 md:col-span-7",
+            },
+            {
+              Icon: Sparkles,
+              tag: "Creative at scale",
+              title: "GenAI Creative",
+              desc: "Static, video and copy variants generated, tested and iterated in days — not months.",
+              deliverables: ["50+ ad variants / month", "AI video & UGC", "Brand-safe model tuning"],
+              span: "col-span-12 md:col-span-5",
+            },
+            {
+              Icon: Target,
+              tag: "Performance media",
+              title: "Predictive Ads",
+              desc: "ML bidding across Google, Meta, LinkedIn and Amazon — modeled to your real margin, not vanity ROAS.",
+              deliverables: ["MMM + geo-lift tests", "Server-side CAPI", "Profit-true bid models"],
+              span: "col-span-12 md:col-span-4",
+            },
+            {
+              Icon: Search,
+              tag: "Discovery",
+              title: "AI Search / GEO",
+              desc: "Get cited inside Google AI Overviews, Perplexity and ChatGPT with structured, entity-rich content.",
+              deliverables: ["GEO content clusters", "Schema + knowledge graph", "LLM citation tracking"],
+              span: "col-span-12 md:col-span-4",
+            },
+            {
+              Icon: BarChart3,
+              tag: "Measurement",
+              title: "ML Attribution",
+              desc: "Unified GA4 + warehouse + ad-platform data, modeled to show which channel really moved revenue.",
+              deliverables: ["BigQuery pipeline", "MTA + MMM blend", "Live executive dashboards"],
+              span: "col-span-12 md:col-span-4",
+            },
+          ].map(({ Icon, tag, title, desc, deliverables, span }) => (
+            <Link
+              key={title}
+              to="/services"
+              className={`group relative ${span} rounded-3xl border border-border bg-card p-7 hover:border-foreground transition overflow-hidden`}
+            >
+              <div className="absolute -bottom-16 -right-16 h-44 w-44 rounded-full bg-foreground/[0.05] blur-3xl opacity-0 group-hover:opacity-100 transition" />
+              <div className="relative flex items-center justify-between">
+                <div className="h-11 w-11 rounded-xl bg-foreground text-background grid place-items-center">
+                  <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="relative text-xl md:text-2xl font-display">{s.title}</h3>
-                <p className="relative mt-2 text-sm text-muted-foreground leading-relaxed">{s.shortDesc}</p>
-                <div className="relative mt-5 inline-flex items-center gap-1 text-xs font-semibold text-primary opacity-0 group-hover:opacity-100 transition">
-                  Learn more <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </Link>
-            );
-          })}
+                <span className="rounded-full border border-border bg-secondary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{tag}</span>
+              </div>
+              <h3 className="relative mt-5 text-xl md:text-2xl font-display">{title}</h3>
+              <p className="relative mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
+              <ul className="relative mt-5 space-y-1.5">
+                {deliverables.map((d) => (
+                  <li key={d} className="flex items-start gap-2 text-xs text-foreground/80">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-foreground mt-0.5 shrink-0" /> {d}
+                  </li>
+                ))}
+              </ul>
+              <div className="relative mt-5 inline-flex items-center gap-1 text-xs font-semibold text-foreground">
+                Explore service <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
