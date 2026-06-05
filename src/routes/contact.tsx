@@ -4,6 +4,8 @@ import { Mail, MessageSquare, Send, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { useServerFn } from "@tanstack/react-start";
+import { createLead } from "@/lib/leads.functions";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -21,15 +23,39 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const [sending, setSending] = useState(false);
+  const submitLead = useServerFn(createLead);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
     setSending(true);
-    setTimeout(() => {
-      setSending(false);
-      (e.target as HTMLFormElement).reset();
+    try {
+      const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+      await submitLead({
+        data: {
+          name: (fd.get("name") as string) || "",
+          email: (fd.get("email") as string) || "",
+          company: (fd.get("company") as string) || "",
+          website: (fd.get("company") as string) || "",
+          service: (fd.get("service") as string) || "",
+          budget: "",
+          message: (fd.get("message") as string) || "",
+          kind: "inquiry",
+          pageUrl: typeof window !== "undefined" ? window.location.href : "",
+          referrer: typeof document !== "undefined" ? document.referrer : "",
+          utmSource: params?.get("utm_source") ?? "",
+          utmMedium: params?.get("utm_medium") ?? "",
+          utmCampaign: params?.get("utm_campaign") ?? "",
+        },
+      });
+      form.reset();
       toast.success("Message sent — I'll reply within 24 hours.");
-    }, 700);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to send message");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
