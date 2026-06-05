@@ -207,13 +207,24 @@ function Home() {
         </div>
       </section>
 
-      {/* ============ MARQUEE / TRUST ============ */}
-      <section className="border-y border-border bg-card/40 overflow-hidden">
-        <div className="mx-auto max-w-7xl px-6 py-6 flex items-center gap-10 text-xs uppercase tracking-[0.25em] text-muted-foreground overflow-x-auto scrollbar-hide">
-          <span className="text-primary font-semibold whitespace-nowrap">Trusted across</span>
-          {["Ecommerce","SaaS","Fintech","Healthcare","D2C","Real Estate","Education","B2B"].map(t=>(
-            <span key={t} className="whitespace-nowrap">— {t}</span>
-          ))}
+      {/* ============ CHANNELS I RUN ============ */}
+      <section className="border-y border-border bg-card/40">
+        <div className="mx-auto max-w-7xl px-6 py-10">
+          <p className="text-center text-xs uppercase tracking-[0.25em] text-primary font-semibold mb-6">Channels I run</p>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+            {[
+              { Icon: Search, label: "Google Ads" },
+              { Icon: TrendingUp, label: "SEO / GEO" },
+              { Icon: Megaphone, label: "Meta Ads" },
+              { Icon: Youtube, label: "YouTube" },
+              { Icon: ShoppingCart, label: "Amazon" },
+              { Icon: Mail, label: "Email / CRM" },
+            ].map(({Icon,label})=>(
+              <div key={label} className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-3 py-3 text-sm font-medium text-foreground hover:border-primary hover:text-primary transition">
+                <Icon className="h-4 w-4 text-primary"/> {label}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
