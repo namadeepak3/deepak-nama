@@ -27,26 +27,6 @@ export type RlsCheckReport = {
   checks: RlsCheck[];
 };
 
-// Tables that must have RLS enabled AND only admin-readable.
-const ADMIN_ONLY_TABLES = [
-  "leads",
-  "lead_audit_log",
-  "role_audit_log",
-  "pdf_template_settings",
-] as const;
-
-type PolicyRow = {
-  schemaname: string;
-  tablename: string;
-  policyname: string;
-  cmd: string;
-  roles: string[];
-  qual: string | null;
-  with_check: string | null;
-};
-
-type RlsRow = { relname: string; relrowsecurity: boolean };
-
 export const runRlsChecks = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<RlsCheckReport> => {
