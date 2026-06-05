@@ -4,6 +4,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useServerFn } from "@tanstack/react-start";
 import { createLead } from "@/lib/leads.functions";
+import { generateAuditPreview, type AuditPreview } from "@/lib/audit-preview.functions";
 import { listCaseStudies } from "@/lib/case-studies.functions";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
