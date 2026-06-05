@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -134,13 +135,15 @@ function RootComponent() {
 }
 
 function SiteShell() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAdmin = pathname.startsWith("/admin");
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
-      <SiteHeader />
+      {!isAdmin && <SiteHeader />}
       <main className="flex-1">
         <Outlet />
       </main>
-      <SiteFooter />
+      {!isAdmin && <SiteFooter />}
     </div>
   );
 }
