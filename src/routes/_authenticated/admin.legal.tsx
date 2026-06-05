@@ -76,10 +76,12 @@ function AdminLegalPage() {
           <button
             onClick={() =>
               save.mutate({
-                slug: active,
-                title: draft.title,
-                content: draft.content,
-                status: draft.status,
+                data: {
+                  slug: active,
+                  title: draft.title,
+                  content: draft.content,
+                  status: draft.status,
+                },
               })
             }
             disabled={save.isPending}
