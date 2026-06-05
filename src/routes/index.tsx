@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { createLead } from "@/lib/leads.functions";
 import { generateAuditPreview, type AuditPreview } from "@/lib/audit-preview.functions";
 import { listCaseStudies } from "@/lib/case-studies.functions";
+import { listPublishedPosts } from "@/lib/blog.functions";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -37,6 +38,8 @@ function Home() {
   const fetchAuditPreview = useServerFn(generateAuditPreview);
   const fetchCases = useServerFn(listCaseStudies);
   const { data: caseStudies = [] } = useQuery({ queryKey: ["case-studies", "home"], queryFn: () => fetchCases() });
+  const fetchPosts = useServerFn(listPublishedPosts);
+  const { data: blogPosts = [] } = useQuery({ queryKey: ["blog-posts", "home"], queryFn: () => fetchPosts() });
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<null | { name: string; email: string }>(null);
@@ -536,13 +539,11 @@ function Home() {
 
       <section className="bg-gradient-to-b from-background via-card/50 to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
-          <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
-            <div className="max-w-2xl">
-              <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Digital marketing services</p>
-              <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">Every channel your brand <span className="text-gradient-gold">needs to grow.</span></h2>
-              <p className="mt-4 text-muted-foreground">Senior specialists across SEO, paid media, social, content, email and web — all wired into our AI ops layer.</p>
-            </div>
-            <Link to="/services" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1">All services <ArrowRight className="h-4 w-4"/></Link>
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Digital marketing services</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">Every channel your brand <span className="text-gradient-gold">needs to grow.</span></h2>
+            <p className="mt-4 text-muted-foreground">Senior specialists across SEO, paid media, social, content, email and web — all wired into our AI ops layer.</p>
+            <Link to="/services" className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">All services <ArrowRight className="h-4 w-4"/></Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
@@ -588,13 +589,11 @@ function Home() {
 
       {/* ============ INDUSTRIES WE SERVE ============ */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
-        <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
-          <div className="max-w-2xl">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
-            <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
-            <p className="mt-4 text-muted-foreground">18+ industries shipped — every model, funnel and dashboard adapted to how your buyers actually convert.</p>
-          </div>
-          <Link to="/contact" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1">Talk to a strategist <ArrowRight className="h-4 w-4"/></Link>
+        <div className="text-center max-w-2xl mx-auto mb-8">
+          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
+          <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
+          <p className="mt-4 text-muted-foreground">18+ industries shipped — every model, funnel and dashboard adapted to how your buyers actually convert.</p>
+          <Link to="/contact" className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">Talk to a strategist <ArrowRight className="h-4 w-4"/></Link>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {[
@@ -734,11 +733,9 @@ function Home() {
       <section className="relative bg-gradient-to-br from-primary/10 via-card/30 to-background overflow-hidden">
         <div aria-hidden className="absolute -top-24 left-1/4 h-56 w-56 rounded-full bg-primary/20 blur-3xl"/>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
-          <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
-            <div>
-              <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Numbers do the talking</p>
-              <h2 className="mt-2 text-2xl md:text-3xl font-display">Impact across 120+ engagements</h2>
-            </div>
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Numbers do the talking</p>
+            <h2 className="mt-2 text-2xl md:text-3xl font-display">Impact across 120+ engagements</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
@@ -763,12 +760,10 @@ function Home() {
 
       {/* ============ CASE STUDIES ============ */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
-        <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
-          <div className="max-w-2xl">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
-            <h2 className="mt-2 text-3xl md:text-4xl font-display leading-[1.05]">Brands we&apos;ve <span className="text-gradient-gold">scaled.</span></h2>
-          </div>
-          <Link to="/case-studies" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1">View all <ArrowRight className="h-4 w-4"/></Link>
+        <div className="text-center max-w-2xl mx-auto mb-8">
+          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
+          <h2 className="mt-2 text-3xl md:text-4xl font-display leading-[1.05]">Brands we&apos;ve <span className="text-gradient-gold">scaled.</span></h2>
+          <Link to="/case-studies" className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">View all <ArrowRight className="h-4 w-4"/></Link>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {caseStudies.slice(0, 3).map((c) => (
@@ -794,37 +789,60 @@ function Home() {
       {/* ============ INSIGHTS ============ */}
       <section className="bg-gradient-to-b from-background via-card/50 to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
-          <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
-            <div>
-              <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Insights</p>
-              <h2 className="mt-3 text-3xl md:text-4xl font-display">Fresh from the blog</h2>
-            </div>
-            <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">All articles <ArrowRight className="h-4 w-4"/></Link>
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Insights</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-display">Fresh from the blog</h2>
+            <p className="mt-3 text-sm text-muted-foreground">The latest playbooks, frameworks and field notes from our team.</p>
+            <Link to="/blog" className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">All articles <ArrowRight className="h-4 w-4"/></Link>
           </div>
           <div className="grid md:grid-cols-3 gap-4">
-            {[
-              { tag: "SEO", title: "10 SEO Trends That Will Define 2026", desc: "AI search, entity optimization & what brands are doing to stay ahead.", meta: "May 28 · 8 min", img: blogSeoAsset.url },
-              { tag: "PPC", title: "Maximize ROI From Google Ads in 2026", desc: "Lower CPA and scale profitable campaigns with AI bidding.", meta: "May 14 · 6 min", img: blogPpcAsset.url },
-              { tag: "Content", title: "Content That Actually Converts", desc: "The framework our team uses to build assets that drive real revenue.", meta: "Apr 30 · 7 min", img: blogContentAsset.url },
-            ].map(({tag,title,desc,meta,img})=>(
-              <article key={title} className="group rounded-3xl border border-border bg-card flex flex-col overflow-hidden hover:border-primary transition">
-                <div className="relative aspect-[16/9] border-b border-border overflow-hidden bg-secondary">
-                  <img src={img} alt={title} loading="lazy" width={1280} height={720} className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-card/90 via-card/20 to-transparent" />
-                  <span className="absolute top-3 left-3 rounded-full bg-background/90 backdrop-blur border border-border px-3 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-widest">{tag}</span>
-                </div>
-                <div className="p-5 flex flex-col flex-1">
-                  <h3 className="text-base font-display leading-snug">{title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1 line-clamp-2">{desc}</p>
-                  <div className="mt-4 flex items-center justify-between">
-                    <p className="text-xs text-muted-foreground">{meta}</p>
-                    <Link to="/blog" className="inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:text-primary transition">
-                      Read <ArrowRight className="h-3.5 w-3.5"/>
-                    </Link>
+            {(blogPosts.length > 0
+              ? blogPosts.slice(0, 3).map((p) => {
+                  const fallbackImgs = [blogSeoAsset.url, blogPpcAsset.url, blogContentAsset.url];
+                  return {
+                    slug: p.slug,
+                    tag: (p.category || (p.tags && p.tags[0]) || "Article") as string,
+                    title: p.title,
+                    desc: p.excerpt || "",
+                    img: p.coverImage || fallbackImgs[0],
+                    meta: `${p.publishedAt ? new Date(p.publishedAt).toLocaleDateString(undefined, { month: "short", day: "numeric" }) : ""}${p.readingMinutes ? ` · ${p.readingMinutes} min` : ""}`,
+                  };
+                })
+              : [
+                  { slug: "", tag: "SEO", title: "10 SEO Trends That Will Define 2026", desc: "AI search, entity optimization & what brands are doing to stay ahead.", meta: "May 28 · 8 min", img: blogSeoAsset.url },
+                  { slug: "", tag: "PPC", title: "Maximize ROI From Google Ads in 2026", desc: "Lower CPA and scale profitable campaigns with AI bidding.", meta: "May 14 · 6 min", img: blogPpcAsset.url },
+                  { slug: "", tag: "Content", title: "Content That Actually Converts", desc: "The framework our team uses to build assets that drive real revenue.", meta: "Apr 30 · 7 min", img: blogContentAsset.url },
+                ]
+            ).map(({ slug, tag, title, desc, meta, img }) => {
+              const CardInner = (
+                <>
+                  <div className="relative aspect-[16/9] border-b border-border overflow-hidden bg-secondary">
+                    {img && <img src={img} alt={title} loading="lazy" width={1280} height={720} className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />}
+                    <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-card/90 via-card/20 to-transparent" />
+                    <span className="absolute top-3 left-3 rounded-full bg-background/90 backdrop-blur border border-border px-3 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-widest">{tag}</span>
                   </div>
-                </div>
-              </article>
-            ))}
+                  <div className="p-5 flex flex-col flex-1">
+                    <h3 className="text-base font-display leading-snug line-clamp-2">{title}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1 line-clamp-2">{desc}</p>
+                    <div className="mt-4 flex items-center justify-between">
+                      <p className="text-xs text-muted-foreground">{meta}</p>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                        Read <ArrowRight className="h-3.5 w-3.5"/>
+                      </span>
+                    </div>
+                  </div>
+                </>
+              );
+              return slug ? (
+                <Link key={slug || title} to="/blog/$slug" params={{ slug }} className="group rounded-3xl border border-border bg-card flex flex-col overflow-hidden hover:border-primary transition">
+                  {CardInner}
+                </Link>
+              ) : (
+                <Link key={title} to="/blog" className="group rounded-3xl border border-border bg-card flex flex-col overflow-hidden hover:border-primary transition">
+                  {CardInner}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
