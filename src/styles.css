@@ -69,31 +69,31 @@
 
 :root {
   --radius: 0.75rem;
-  /* Agency — deep navy ink with electric blue accent */
-  --ink: oklch(0.18 0.04 255);
-  --ink-soft: oklch(0.32 0.05 255);
-  --gold: oklch(0.55 0.20 255);
-  --gold-soft: oklch(0.68 0.18 250);
+  /* Monochrome — light black & white */
+  --ink: oklch(0.16 0 0);
+  --ink-soft: oklch(0.32 0 0);
+  --gold: oklch(0.16 0 0);
+  --gold-soft: oklch(0.40 0 0);
 
-  --background: oklch(0.99 0.003 250);
-  --foreground: oklch(0.18 0.03 255);
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.16 0 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.03 255);
+  --card-foreground: oklch(0.16 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.03 255);
-  --primary: oklch(0.50 0.20 255);
-  --primary-foreground: oklch(0.99 0.003 250);
-  --secondary: oklch(0.965 0.008 250);
-  --secondary-foreground: oklch(0.18 0.03 255);
-  --muted: oklch(0.965 0.008 250);
-  --muted-foreground: oklch(0.42 0.025 255);
-  --accent: oklch(0.50 0.20 255);
-  --accent-foreground: oklch(0.99 0.003 250);
-  --destructive: oklch(0.62 0.22 25);
+  --popover-foreground: oklch(0.16 0 0);
+  --primary: oklch(0.18 0 0);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.965 0 0);
+  --secondary-foreground: oklch(0.16 0 0);
+  --muted: oklch(0.965 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.18 0 0);
+  --accent-foreground: oklch(0.99 0 0);
+  --destructive: oklch(0.55 0.20 25);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.91 0.01 250);
-  --input: oklch(0.94 0.01 250);
-  --ring: oklch(0.50 0.20 255);
+  --border: oklch(0.90 0 0);
+  --input: oklch(0.94 0 0);
+  --ring: oklch(0.18 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -166,7 +166,7 @@
 }
 
 @utility text-gradient-gold {
-  background: linear-gradient(135deg, oklch(0.55 0.22 255), oklch(0.62 0.20 235) 50%, oklch(0.70 0.18 215));
+  background: linear-gradient(135deg, oklch(0.16 0 0), oklch(0.32 0 0) 60%, oklch(0.48 0 0));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -174,30 +174,30 @@
 
 @utility bg-noir-grid {
   background-image:
-    linear-gradient(oklch(0.50 0.20 255 / 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(0.50 0.20 255 / 0.08) 1px, transparent 1px);
+    linear-gradient(oklch(0 0 0 / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0 0 0 / 0.06) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 64px 64px, 64px 64px;
   background-color: var(--background);
 }
 
 @utility bg-aurora {
   background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, oklch(0.50 0.20 255 / 0.30), transparent 60%),
-    radial-gradient(ellipse 50% 40% at 10% 80%, oklch(0.62 0.18 220 / 0.22), transparent 60%),
+    radial-gradient(ellipse 80% 50% at 50% -10%, oklch(0 0 0 / 0.10), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 80%, oklch(0 0 0 / 0.06), transparent 60%),
     var(--background);
 }
 
 @utility shadow-gold {
-  box-shadow: 0 20px 60px -20px oklch(0.50 0.20 255 / 0.35);
+  box-shadow: 0 20px 60px -20px oklch(0 0 0 / 0.18);
 }
 
 @utility bg-digital {
-  background-color: oklch(0.10 0.03 280);
+  background-color: oklch(0.10 0 0);
   background-image:
-    radial-gradient(ellipse 70% 60% at 80% 0%, oklch(0.58 0.22 285 / 0.30), transparent 60%),
-    radial-gradient(ellipse 60% 50% at 0% 100%, oklch(0.55 0.20 220 / 0.22), transparent 65%),
-    linear-gradient(oklch(0.58 0.22 285 / 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(0.58 0.22 285 / 0.06) 1px, transparent 1px);
+    radial-gradient(ellipse 70% 60% at 80% 0%, oklch(1 0 0 / 0.08), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 0% 100%, oklch(1 0 0 / 0.05), transparent 65%),
+    linear-gradient(oklch(1 0 0 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 0.05) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 56px 56px, 56px 56px;
 }
 
@@ -209,14 +209,14 @@
 /* ============ AI visual utilities ============ */
 @utility bg-ai-grid {
   background-image:
-    linear-gradient(oklch(0.50 0.20 255 / 0.10) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(0.50 0.20 255 / 0.10) 1px, transparent 1px);
+    linear-gradient(oklch(0 0 0 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0 0 0 / 0.07) 1px, transparent 1px);
   background-size: 48px 48px, 48px 48px;
   mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 80%);
 }
 
 @utility bg-ai-dots {
-  background-image: radial-gradient(oklch(0.50 0.20 255 / 0.25) 1px, transparent 1px);
+  background-image: radial-gradient(oklch(0 0 0 / 0.18) 1px, transparent 1px);
   background-size: 22px 22px;
   mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 30%, transparent 75%);
 }
@@ -247,7 +247,7 @@
 
 @utility ring-ai {
   box-shadow:
-    0 0 0 1px oklch(0.50 0.20 255 / 0.25),
-    0 0 24px oklch(0.50 0.20 255 / 0.35),
-    0 0 60px oklch(0.55 0.20 240 / 0.25);
+    0 0 0 1px oklch(0 0 0 / 0.20),
+    0 0 24px oklch(0 0 0 / 0.15),
+    0 0 60px oklch(0 0 0 / 0.10);
 }

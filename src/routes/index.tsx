@@ -1,17 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2, TrendingUp, Award, Star, Quote, Phone, Bot, Search, Megaphone, Target, BarChart3, Globe, Rocket, Activity, Play, MousePointerClick, Mail, ShoppingCart, Youtube } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2, TrendingUp, Award, Star, Quote, Phone, Bot, Search, Megaphone, Target, BarChart3, Globe, Rocket, Activity, Play, MousePointerClick, Mail, Compass, Hammer, FlaskConical, FileBarChart } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
-import { listServices } from "@/lib/services.functions";
 import { createLead } from "@/lib/leads.functions";
-import { iconFor } from "@/lib/services.shared";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { z } from "zod";
-import heroBg from "@/assets/hero-digital.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,8 +25,6 @@ export const Route = createFileRoute("/")({
 
 
 function Home() {
-  const fetchServices = useServerFn(listServices);
-  const { data: services = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchServices() });
   const submitLead = useServerFn(createLead);
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -85,19 +79,11 @@ function Home() {
 
       {/* ============ HERO ============ */}
       <section className="relative overflow-hidden border-b border-border">
-        {/* Digital background image */}
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroBg})` }}
-        />
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
-
-        {/* AI grid + floating orbs */}
-        <div aria-hidden className="absolute inset-0 bg-ai-grid opacity-60" />
-        <div aria-hidden className="pointer-events-none absolute top-20 right-[8%] h-72 w-72 rounded-full bg-primary/25 blur-3xl animate-ai-pulse" />
-        <div aria-hidden className="pointer-events-none absolute bottom-10 left-[10%] h-56 w-56 rounded-full bg-[oklch(0.65_0.18_220/.25)] blur-3xl animate-ai-pulse" style={{ animationDelay: "1.2s" }} />
+        {/* Clean monochrome backdrop */}
+        <div aria-hidden className="absolute inset-0 bg-background" />
+        <div aria-hidden className="absolute inset-0 bg-ai-grid opacity-70" />
+        <div aria-hidden className="pointer-events-none absolute top-20 right-[8%] h-72 w-72 rounded-full bg-foreground/[0.06] blur-3xl animate-ai-pulse" />
+        <div aria-hidden className="pointer-events-none absolute bottom-10 left-[10%] h-56 w-56 rounded-full bg-foreground/[0.04] blur-3xl animate-ai-pulse" style={{ animationDelay: "1.2s" }} />
 
         <div className="relative mx-auto max-w-7xl px-6 pt-6 pb-16 md:pt-10 md:pb-20 grid lg:grid-cols-12 gap-10 items-center">
           {/* LEFT — details */}
@@ -113,7 +99,7 @@ function Home() {
               The <span className="text-gradient-gold">AI-powered</span> growth partner for ambitious modern brands.
             </h1>
             <p className="mt-6 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed">
-              We&apos;re <span className="text-foreground font-semibold">vrseoguru</span> — an AI-powered digital marketing services agency. AI agents, predictive media, generative creative and intelligent lifecycle — unified into one revenue engine. Senior strategists. Proprietary AI stack. Agency-scale execution.
+              We&apos;re <span className="text-foreground font-semibold">vrseoguru</span> — an AI-powered digital marketing agency. AI agents, predictive media buying, generative creative, AI search (GEO) and intelligent lifecycle — unified into one revenue engine, run by senior strategists.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/contact" className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
@@ -328,36 +314,74 @@ function Home() {
           </Link>
         </div>
         <div className="grid grid-cols-12 auto-rows-[minmax(180px,auto)] gap-4">
-          {services.map((s, i) => {
-            const Icon = iconFor(s.icon);
-            const sizes = [
-              "col-span-12 md:col-span-7",
-              "col-span-12 md:col-span-5",
-              "col-span-12 md:col-span-4",
-              "col-span-12 md:col-span-4",
-              "col-span-12 md:col-span-4",
-              "col-span-12 md:col-span-6",
-              "col-span-12 md:col-span-6",
-            ];
-            return (
-              <Link
-                key={s.slug}
-                to="/services/$slug"
-                params={{ slug: s.slug }}
-                className={`group relative ${sizes[i % sizes.length]} rounded-3xl border border-border bg-card p-7 hover:border-primary transition overflow-hidden`}
-              >
-                <div className="absolute -bottom-16 -right-16 h-44 w-44 rounded-full bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition" />
-                <div className="relative h-11 w-11 rounded-xl bg-primary/15 border border-primary/30 grid place-items-center mb-5">
-                  <Icon className="h-5 w-5 text-primary" />
+          {[
+            {
+              Icon: Bot,
+              tag: "Autonomous ops",
+              title: "AI Agents",
+              desc: "Always-on agents that monitor campaigns, draft briefs, send alerts and ship optimizations 24/7.",
+              deliverables: ["Custom GPT workflows", "Slack + email alerts", "Auto-pacing & budget guards"],
+              span: "col-span-12 md:col-span-7",
+            },
+            {
+              Icon: Sparkles,
+              tag: "Creative at scale",
+              title: "GenAI Creative",
+              desc: "Static, video and copy variants generated, tested and iterated in days — not months.",
+              deliverables: ["50+ ad variants / month", "AI video & UGC", "Brand-safe model tuning"],
+              span: "col-span-12 md:col-span-5",
+            },
+            {
+              Icon: Target,
+              tag: "Performance media",
+              title: "Predictive Ads",
+              desc: "ML bidding across Google, Meta, LinkedIn and Amazon — modeled to your real margin, not vanity ROAS.",
+              deliverables: ["MMM + geo-lift tests", "Server-side CAPI", "Profit-true bid models"],
+              span: "col-span-12 md:col-span-4",
+            },
+            {
+              Icon: Search,
+              tag: "Discovery",
+              title: "AI Search / GEO",
+              desc: "Get cited inside Google AI Overviews, Perplexity and ChatGPT with structured, entity-rich content.",
+              deliverables: ["GEO content clusters", "Schema + knowledge graph", "LLM citation tracking"],
+              span: "col-span-12 md:col-span-4",
+            },
+            {
+              Icon: BarChart3,
+              tag: "Measurement",
+              title: "ML Attribution",
+              desc: "Unified GA4 + warehouse + ad-platform data, modeled to show which channel really moved revenue.",
+              deliverables: ["BigQuery pipeline", "MTA + MMM blend", "Live executive dashboards"],
+              span: "col-span-12 md:col-span-4",
+            },
+          ].map(({ Icon, tag, title, desc, deliverables, span }) => (
+            <Link
+              key={title}
+              to="/services"
+              className={`group relative ${span} rounded-3xl border border-border bg-card p-7 hover:border-foreground transition overflow-hidden`}
+            >
+              <div className="absolute -bottom-16 -right-16 h-44 w-44 rounded-full bg-foreground/[0.05] blur-3xl opacity-0 group-hover:opacity-100 transition" />
+              <div className="relative flex items-center justify-between">
+                <div className="h-11 w-11 rounded-xl bg-foreground text-background grid place-items-center">
+                  <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="relative text-xl md:text-2xl font-display">{s.title}</h3>
-                <p className="relative mt-2 text-sm text-muted-foreground leading-relaxed">{s.shortDesc}</p>
-                <div className="relative mt-5 inline-flex items-center gap-1 text-xs font-semibold text-primary opacity-0 group-hover:opacity-100 transition">
-                  Learn more <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </Link>
-            );
-          })}
+                <span className="rounded-full border border-border bg-secondary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{tag}</span>
+              </div>
+              <h3 className="relative mt-5 text-xl md:text-2xl font-display">{title}</h3>
+              <p className="relative mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
+              <ul className="relative mt-5 space-y-1.5">
+                {deliverables.map((d) => (
+                  <li key={d} className="flex items-start gap-2 text-xs text-foreground/80">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-foreground mt-0.5 shrink-0" /> {d}
+                  </li>
+                ))}
+              </ul>
+              <div className="relative mt-5 inline-flex items-center gap-1 text-xs font-semibold text-foreground">
+                Explore service <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -393,22 +417,50 @@ function Home() {
       {/* ============ PROCESS ============ */}
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="text-center max-w-2xl mx-auto">
-          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Our process</p>
-              <h2 className="mt-3 text-4xl md:text-5xl font-display">An <span className="text-gradient-gold">AI-augmented</span> growth process</h2>
-          <p className="mt-4 text-muted-foreground">Human strategy, AI velocity. A transparent system that compounds revenue.</p>
+          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">End-to-end AI workflow</p>
+          <h2 className="mt-3 text-4xl md:text-5xl font-display">Plan. Build. Launch. Optimize. Report.</h2>
+          <p className="mt-4 text-muted-foreground">A repeatable AI-augmented system that moves from brief to booked revenue — with humans in the loop at every step.</p>
         </div>
         <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-5 gap-4">
           {[
-            ["01","AI Discovery","LLM-powered market, competitor & funnel intelligence."],
-            ["02","Strategy","Data-modeled roadmap aligned to revenue."],
-            ["03","AI Execution","Multi-channel ops run by agents + senior strategists."],
-            ["04","Predictive Optimization","ML bidding, creative iteration & 24/7 anomaly alerts."],
-            ["05","Live Reporting","Real-time AI dashboards. Monthly strategic reviews."],
-          ].map(([num, title, desc]) => (
-            <div key={num} className="rounded-3xl border border-border bg-card p-6 hover:border-primary transition">
-              <div className="text-3xl font-display text-gradient-gold">{num}</div>
-              <h3 className="mt-3 font-display">{title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
+            {
+              num: "01", title: "Plan", Icon: Compass,
+              desc: "LLM-powered audit of your market, competitors, funnel and account data. Output: a 90-day revenue roadmap.",
+              cta: "Book a free audit", href: "/contact",
+            },
+            {
+              num: "02", title: "Build", Icon: Hammer,
+              desc: "GenAI creative, GEO-ready content, tracking, dashboards and agent workflows — built and brand-tuned.",
+              cta: "See deliverables", href: "/services",
+            },
+            {
+              num: "03", title: "Launch", Icon: Rocket,
+              desc: "Multi-channel rollout across Google, Meta, LinkedIn, Amazon and AI search — live in under 14 days.",
+              cta: "Start a project", href: "/contact",
+            },
+            {
+              num: "04", title: "Optimize", Icon: FlaskConical,
+              desc: "ML bidding, predictive creative rotation and 24/7 anomaly agents tuning campaigns to your real margin.",
+              cta: "Our AI stack", href: "/services",
+            },
+            {
+              num: "05", title: "Report", Icon: FileBarChart,
+              desc: "Live executive dashboards plus a monthly strategic review from your senior account lead.",
+              cta: "View sample report", href: "/blog",
+            },
+          ].map(({ num, title, desc, Icon, cta, href }) => (
+            <div key={num} className="flex flex-col rounded-3xl border border-border bg-card p-6 hover:border-foreground transition">
+              <div className="flex items-center justify-between">
+                <div className="text-3xl font-display text-foreground/30">{num}</div>
+                <div className="h-10 w-10 rounded-xl bg-foreground text-background grid place-items-center">
+                  <Icon className="h-4 w-4" />
+                </div>
+              </div>
+              <h3 className="mt-4 font-display text-lg">{title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{desc}</p>
+              <Link to={href} className="mt-5 inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:opacity-70 transition">
+                {cta} <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
           ))}
         </div>
