@@ -26,6 +26,7 @@ import {
   removeUserRole,
   listRoleAuditLog,
   resendVerificationEmail,
+  inviteUser,
   type AdminUserRow,
   type AppRole,
   type RoleAuditEntry,
@@ -1744,6 +1745,7 @@ function UsersPanel() {
   const removeFn = useServerFn(removeUserRole);
   const auditFn = useServerFn(listRoleAuditLog);
   const resendFn = useServerFn(resendVerificationEmail);
+  const inviteFn = useServerFn(inviteUser);
 
   const usersQuery = useQuery({ queryKey: ["admin-users"], queryFn: () => listFn() });
 
@@ -1800,6 +1802,19 @@ function UsersPanel() {
     mutationFn: (userId: string) => resendFn({ data: { userId } }),
     onSuccess: (r) => toast.success(`Verification email queued to ${r.email}`),
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed to send"),
+  });
+
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteRole, setInviteRole] = useState<AppRole>("user");
+  const inviteMutation = useMutation({
+    mutationFn: (v: { email: string; role: AppRole }) => inviteFn({ data: v }),
+    onSuccess: () => {
+      toast.success("Invitation sent");
+      setInviteEmail("");
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
+      qc.invalidateQueries({ queryKey: ["role-audit-log"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Failed to invite"),
   });
 
   if (usersQuery.isLoading) {
