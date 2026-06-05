@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2, TrendingUp, Award, Star, Quote, Phone, Bot, Search, Megaphone, Target, BarChart3, Globe, Rocket, Activity, Play, MousePointerClick, Mail, Compass, Hammer, FlaskConical, FileBarChart, PenTool, Share2, Code2, ShoppingCart, Youtube, Linkedin } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -6,7 +6,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { createLead } from "@/lib/leads.functions";
 import { listCaseStudies } from "@/lib/case-studies.functions";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { X } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { z } from "zod";
@@ -30,12 +31,23 @@ export const Route = createFileRoute("/")({
 
 
 function Home() {
+  const navigate = useNavigate();
   const submitLead = useServerFn(createLead);
   const fetchCases = useServerFn(listCaseStudies);
   const { data: caseStudies = [] } = useQuery({ queryKey: ["case-studies", "home"], queryFn: () => fetchCases() });
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<null | { name: string; email: string }>(null);
+  const [auditOpen, setAuditOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      if (sessionStorage.getItem("auditPopupShown") === "1") return;
+    } catch { /* ignore */ }
+    const t = setTimeout(() => setAuditOpen(true), 1500);
+    return () => clearTimeout(t);
+  }, []);
 
   const inquirySchema = z.object({
     name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name is too long"),
@@ -55,9 +67,6 @@ function Home() {
     const timeline = (formData.get("timeline") as string) || "";
     const messageBody = (formData.get("message") as string) || "";
     const composedMessage = [
-      company && `Company: ${company}`,
-      website && `Website: ${website}`,
-      phone && `Phone: ${phone}`,
       timeline && `Timeline: ${timeline}`,
       messageBody && `\n${messageBody}`,
     ].filter(Boolean).join("\n");
@@ -85,6 +94,10 @@ function Home() {
       await submitLead({
         data: {
           ...result.data,
+          phone,
+          website,
+          company,
+          kind: "inquiry",
           pageUrl: typeof window !== "undefined" ? window.location.href : "",
           referrer: typeof document !== "undefined" ? document.referrer : "",
           utmSource: params?.get("utm_source") ?? "",
@@ -105,6 +118,32 @@ function Home() {
   return (
     <>
       <Toaster />
+      <AuditPopup
+        open={auditOpen}
+        onClose={() => {
+          setAuditOpen(false);
+          try { sessionStorage.setItem("auditPopupShown", "1"); } catch { /* ignore */ }
+        }}
+        onSubmit={async (values) => {
+          const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+          await submitLead({
+            data: {
+              ...values,
+              kind: "audit",
+              service: "Website Audit",
+              budget: "",
+              pageUrl: typeof window !== "undefined" ? window.location.href : "",
+              referrer: typeof document !== "undefined" ? document.referrer : "",
+              utmSource: params?.get("utm_source") ?? "",
+              utmMedium: params?.get("utm_medium") ?? "",
+              utmCampaign: params?.get("utm_campaign") ?? "",
+            },
+          });
+          try { sessionStorage.setItem("auditPopupShown", "1"); } catch { /* ignore */ }
+          setAuditOpen(false);
+          navigate({ to: "/thank-you" });
+        }}
+      />
 
       {/* ============ HERO ============ */}
       <section className="relative overflow-hidden border-b border-border">
