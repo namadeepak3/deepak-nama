@@ -427,6 +427,7 @@ function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               { Icon: Search, title: "SEO & GEO", desc: "Technical SEO, topical authority and AI-search optimization to win Google + LLM citations.", bullets: ["Tech audits", "Content clusters", "AI Overviews"] },
+              { Icon: Globe, title: "Local SEO Growth", desc: "Win the Google Map Pack and ‘near me’ searches — calls, walk-ins and bookings from high-intent locals.", bullets: ["Map Pack", "GBP optimisation", "Local citations"] },
               { Icon: Target, title: "PPC / Google Ads", desc: "Search, Performance Max, Shopping and YouTube — profit-modeled and ML-bid.", bullets: ["Search & PMax", "Shopping feeds", "Conversion API"] },
               { Icon: Megaphone, title: "Meta & Paid Social", desc: "Facebook, Instagram, TikTok and Pinterest funnels engineered for return on ad spend.", bullets: ["Creative testing", "Retargeting", "UGC & influencers"] },
               { Icon: Linkedin, title: "LinkedIn & B2B", desc: "Account-based campaigns, demand-gen and pipeline programs for B2B SaaS and services.", bullets: ["ABM lists", "Demand gen", "Sales enablement"] },
