@@ -272,7 +272,7 @@ function Home() {
       <section className="relative overflow-hidden border-b border-border bg-background">
         <div aria-hidden className="absolute inset-0 bg-ai-dots opacity-70" />
         <div aria-hidden className="absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-6 py-14">
+        <div className="relative mx-auto max-w-7xl px-6 py-10">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             {/* Left — copy */}
             <div className="lg:col-span-5">
@@ -418,8 +418,8 @@ function Home() {
       {/* ============ SERVICES — BENTO ============ */}
       {/* ============ DIGITAL MARKETING SERVICES ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-14">
-          <div className="flex items-end justify-between flex-wrap gap-6 mb-8">
+        <div className="mx-auto max-w-7xl px-6 py-10">
+          <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
             <div className="max-w-2xl">
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Digital marketing services</p>
               <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">Every channel your brand <span className="text-gradient-gold">needs to grow.</span></h2>
@@ -470,8 +470,8 @@ function Home() {
       </section>
 
       {/* ============ INDUSTRIES WE SERVE ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-14">
-        <div className="flex items-end justify-between flex-wrap gap-6 mb-8">
+      <section className="mx-auto max-w-7xl px-6 py-10">
+        <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
             <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
@@ -508,13 +508,13 @@ function Home() {
       </section>
 
       {/* ============ PROCESS ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-14">
+      <section className="mx-auto max-w-7xl px-6 py-10">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">End-to-end AI workflow</p>
           <h2 className="mt-3 text-4xl md:text-5xl font-display">Plan. Build. Launch. Optimize. Report.</h2>
           <p className="mt-4 text-muted-foreground">A repeatable AI-augmented system that moves from brief to booked revenue — with humans in the loop at every step.</p>
         </div>
-        <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-5 gap-4">
           {[
             {
               num: "01", title: "Plan", Icon: Compass,
@@ -562,7 +562,7 @@ function Home() {
       {/* ============ WHO I AM ============ */}
       <section className="relative border-y border-border bg-card/30 overflow-hidden">
         <div aria-hidden className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl"/>
-        <div className="relative mx-auto max-w-5xl px-6 py-14 text-center">
+        <div className="relative mx-auto max-w-5xl px-6 py-10 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold text-foreground">
             <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span></span>
             Accepting Q3 2026 retainers · Headquartered in Mumbai, IN
@@ -585,7 +585,7 @@ function Home() {
           </div>
 
           {/* Pillars */}
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
+          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
             {[
               { Icon: TrendingUp, title: "ROI-Focused", desc: "Every rupee tied to revenue." },
               { Icon: ShieldCheck, title: "Transparent", desc: "Live dashboards, no jargon." },
@@ -645,7 +645,7 @@ function Home() {
       </section>
 
       {/* ============ CASE STUDIES ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-14">
+      <section className="mx-auto max-w-7xl px-6 py-10">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
@@ -676,8 +676,8 @@ function Home() {
 
       {/* ============ INSIGHTS ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-14">
-          <div className="flex items-end justify-between flex-wrap gap-6 mb-8">
+        <div className="mx-auto max-w-7xl px-6 py-10">
+          <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
             <div>
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Insights</p>
               <h2 className="mt-3 text-4xl md:text-5xl font-display">Fresh from the blog</h2>
@@ -719,8 +719,8 @@ function Home() {
 
       {/* ============ TESTIMONIALS CAROUSEL ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-14">
-          <div className="text-center max-w-2xl mx-auto mb-8">
+        <div className="mx-auto max-w-7xl px-6 py-10">
+          <div className="text-center max-w-2xl mx-auto mb-6">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Receipts</p>
             <h2 className="mt-3 text-4xl md:text-5xl font-display">What clients say</h2>
             <p className="mt-4 text-muted-foreground">Real results from real brands — across SEO, paid media, social and lifecycle.</p>
@@ -765,8 +765,8 @@ function Home() {
       </section>
 
       {/* ============ FAQ ============ */}
-      <section className="mx-auto max-w-4xl px-6 py-14">
-        <div className="text-center mb-8">
+      <section className="mx-auto max-w-4xl px-6 py-10">
+        <div className="text-center mb-6">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">FAQs</p>
           <h2 className="mt-3 text-4xl md:text-5xl font-display">Common questions</h2>
           <p className="mt-4 text-muted-foreground">Everything you want to know before we kick off your engagement.</p>
@@ -790,7 +790,7 @@ function Home() {
       </section>
 
       {/* ============ FINAL CTA ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-14">
+      <section className="mx-auto max-w-7xl px-6 py-10">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/30 via-card to-card p-12 md:p-20 text-center">
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-primary/30 blur-3xl"/>
           <p className="relative text-xs tracking-[0.22em] uppercase text-primary font-semibold">Let&apos;s build</p>
