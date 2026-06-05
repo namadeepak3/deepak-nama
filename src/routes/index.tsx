@@ -894,13 +894,17 @@ function AuditPopup({
   open,
   onClose,
   onSubmit,
+  onViewFullResult,
 }: {
   open: boolean;
   onClose: () => void;
-  onSubmit: (values: AuditValues) => Promise<void>;
+  onSubmit: (values: AuditValues) => Promise<AuditPreview>;
+  onViewFullResult: () => void;
 }) {
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [preview, setPreview] = useState<AuditPreview | null>(null);
+  const [submittedName, setSubmittedName] = useState("");
 
   useEffect(() => {
     if (!open) return;
@@ -908,6 +912,15 @@ function AuditPopup({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
+
+  useEffect(() => {
+    if (!open) {
+      setPreview(null);
+      setSending(false);
+      setErrors({});
+      setSubmittedName("");
+    }
+  }, [open]);
 
   if (!open) return null;
 
@@ -939,7 +952,10 @@ function AuditPopup({
     }
     setSending(true);
     try {
-      await onSubmit(parsed.data);
+      const result = await onSubmit(parsed.data);
+      setSubmittedName(parsed.data.name);
+      setPreview(result);
+      setSending(false);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to submit");
       setSending(false);
@@ -955,7 +971,7 @@ function AuditPopup({
       aria-labelledby="audit-popup-title"
     >
       <div
-        className="relative w-full max-w-lg rounded-3xl border border-border bg-card shadow-gold p-6 md:p-7"
+        className="relative w-full max-w-lg rounded-3xl border border-border bg-card shadow-gold p-6 md:p-7 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -966,6 +982,12 @@ function AuditPopup({
         >
           <X className="h-4 w-4" />
         </button>
+        {preview ? (
+          <AuditPreviewView preview={preview} name={submittedName} onViewFullResult={onViewFullResult} />
+        ) : sending ? (
+          <AuditAnalyzingView />
+        ) : (
+          <>
         <p className="text-xs uppercase tracking-[0.22em] text-primary font-semibold">Free Website Audit</p>
         <h3 id="audit-popup-title" className="mt-1 text-2xl font-display">Get a free website audit</h3>
         <p className="mt-1 text-xs text-muted-foreground">
@@ -1003,7 +1025,78 @@ function AuditPopup({
           </button>
           <p className="text-[11px] text-muted-foreground text-center">🔒 Your details stay private. We never spam.</p>
         </form>
+          </>
+        )}
       </div>
+    </div>
+  );
+}
+
+function AuditAnalyzingView() {
+  return (
+    <div className="py-8 text-center">
+      <div className="mx-auto h-12 w-12 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+      <p className="mt-4 text-xs uppercase tracking-[0.22em] text-primary font-semibold">Analyzing</p>
+      <h3 className="mt-1 text-xl font-display">Running your AI audit preview…</h3>
+      <p className="mt-2 text-xs text-muted-foreground">Scanning common SEO, performance, conversion and AI-search signals.</p>
+    </div>
+  );
+}
+
+function AuditPreviewView({ preview, name, onViewFullResult }: { preview: AuditPreview; name: string; onViewFullResult: () => void }) {
+  const sevColor = (s: "high" | "medium" | "low") =>
+    s === "high" ? "text-red-500 border-red-500/30 bg-red-500/10"
+    : s === "medium" ? "text-amber-500 border-amber-500/30 bg-amber-500/10"
+    : "text-emerald-500 border-emerald-500/30 bg-emerald-500/10";
+  return (
+    <div>
+      <p className="text-xs uppercase tracking-[0.22em] text-primary font-semibold">AI audit preview</p>
+      <h3 className="mt-1 text-2xl font-display">Thanks{name ? `, ${name.split(" ")[0]}` : ""} — here's an early look.</h3>
+      <div className="mt-4 flex items-center gap-4 rounded-2xl border border-border bg-secondary/50 p-4">
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-2 border-primary text-2xl font-display text-primary">
+          {Math.round(preview.score)}
+        </div>
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Preliminary score</p>
+          <p className="mt-0.5 text-sm text-foreground">{preview.summary}</p>
+        </div>
+      </div>
+
+      <div className="mt-5">
+        <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Key findings</p>
+        <ul className="mt-2 space-y-2">
+          {preview.findings.map((f, i) => (
+            <li key={i} className="rounded-xl border border-border bg-card p-3">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-sm font-semibold text-foreground">{f.area}</span>
+                <span className={`text-[10px] uppercase tracking-wider rounded-full border px-2 py-0.5 ${sevColor(f.severity)}`}>{f.severity}</span>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">{f.finding}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mt-5">
+        <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Recommended next actions</p>
+        <ul className="mt-2 space-y-1.5">
+          {preview.nextActions.map((a, i) => (
+            <li key={i} className="flex items-start gap-2 text-xs text-foreground">
+              <CheckCircle2 className="h-4 w-4 mt-0.5 text-primary shrink-0" />
+              <span>{a}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <button
+        type="button"
+        onClick={onViewFullResult}
+        className="mt-6 w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold"
+      >
+        View full audit details <ArrowRight className="h-4 w-4" />
+      </button>
+      <p className="mt-2 text-[11px] text-muted-foreground text-center">A senior strategist will email your complete audit within one business day.</p>
     </div>
   );
 }
