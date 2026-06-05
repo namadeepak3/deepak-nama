@@ -282,7 +282,7 @@ function AdminPage() {
         )}
         {(capsQuery.data?.roles ?? []).includes("admin") && (
           <TabButton active={tab === "inquiries"} onClick={() => setTab("inquiries")} icon={Inbox}>
-            Inquiries
+            Website Audit
           </TabButton>
         )}
       </nav>
