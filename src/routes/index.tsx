@@ -697,32 +697,28 @@ function Home() {
 
           <div className="mt-10">
             <p className="text-center text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-semibold">AI Models & Agents</p>
-            <div className="relative mt-4">
-              <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent z-10" />
-              <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-10" />
-              <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-3 -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {[...AI_TOOLS, ...AI_TOOLS].map((t, i) => (
-                  <a
-                    key={`${t.name}-${i}`}
-                    href={`https://www.google.com/search?q=${encodeURIComponent(t.name)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => track("tools_carousel_click", { tool: t.name, kind: "ai" })}
-                    className="group snap-start shrink-0 w-40 rounded-2xl border border-border bg-card/80 backdrop-blur p-4 text-center hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all"
-                  >
-                    <div className="mx-auto h-14 w-14 rounded-2xl bg-white border border-border grid place-items-center group-hover:scale-110 transition-transform shadow-sm">
-                      <img
-                        src={`https://cdn.simpleicons.org/${t.slug}/${t.color}`}
-                        alt={t.name}
-                        loading="lazy"
-                        className="h-8 w-8 object-contain"
-                      />
-                    </div>
-                    <div className="mt-3 font-display text-sm font-semibold">{t.name}</div>
-                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t.sub}</div>
-                  </a>
-                ))}
-              </div>
+            <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              {AI_TOOLS.map((t) => (
+                <a
+                  key={t.name}
+                  href={`https://www.google.com/search?q=${encodeURIComponent(t.name)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => track("tools_carousel_click", { tool: t.name, kind: "ai" })}
+                  className="group rounded-2xl border border-border bg-card/80 backdrop-blur p-4 text-center hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all"
+                >
+                  <div className="mx-auto h-14 w-14 rounded-2xl bg-white border border-border grid place-items-center group-hover:scale-110 transition-transform shadow-sm">
+                    <img
+                      src={`https://cdn.simpleicons.org/${t.slug}/${t.color}`}
+                      alt={t.name}
+                      loading="lazy"
+                      className="h-8 w-8 object-contain"
+                    />
+                  </div>
+                  <div className="mt-3 font-display text-sm font-semibold">{t.name}</div>
+                  <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t.sub}</div>
+                </a>
+              ))}
             </div>
           </div>
 
@@ -731,10 +727,7 @@ function Home() {
               <p className="text-[11px] uppercase tracking-[0.22em] text-primary font-bold">Marketing Platforms</p>
               <h3 className="mt-2 text-2xl md:text-3xl font-display">The stack <span className="text-gradient-gold">we orchestrate</span></h3>
             </div>
-            <div className="relative mt-6">
-              <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-background to-transparent z-10" />
-              <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-background to-transparent z-10" />
-              <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                 {[
                   { name: "Google Analytics", slug: "googleanalytics", color: "E37400" },
                   { name: "Search Console", slug: "googlesearchconsole", color: "458CF5" },
@@ -759,7 +752,7 @@ function Home() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => track("tools_carousel_click", { tool: t.name, kind: "marketing" })}
-                    className="group snap-start shrink-0 w-44 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-4 flex flex-col items-center gap-2 hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all"
+                    className="group rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-4 flex flex-col items-center gap-2 hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all"
                   >
                     <div className="h-14 w-14 rounded-2xl bg-white border border-border grid place-items-center shrink-0 group-hover:scale-110 transition-transform shadow-sm">
                       <img
@@ -772,7 +765,6 @@ function Home() {
                     <span className="font-display text-sm font-semibold leading-tight text-center">{t.name}</span>
                   </a>
                 ))}
-              </div>
             </div>
           </div>
         </div>
