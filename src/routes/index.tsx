@@ -45,10 +45,6 @@ function Home() {
   const [submitted, setSubmitted] = useState<null | { name: string; email: string }>(null);
   const [auditOpen, setAuditOpen] = useState(false);
   const [openStep, setOpenStep] = useState<string>("1");
-  const [chatInput, setChatInput] = useState("");
-  const [chatLog, setChatLog] = useState<{ role: "user" | "agent"; text: string }[]>([
-    { role: "agent", text: "Hi 👋 I'm your AI growth agent. Ask me anything — SEO audits, ad spend, content plans…" },
-  ]);
   const [waName, setWaName] = useState("");
   const [waPhone, setWaPhone] = useState("");
   const [waChannel, setWaChannel] = useState<"whatsapp" | "sms">("whatsapp");
@@ -56,25 +52,6 @@ function Home() {
 
   const BUSINESS_WHATSAPP = "919999999999"; // E.164 without +
   const BUSINESS_SMS = "+919999999999";
-
-  const sendChat = () => {
-    const q = chatInput.trim();
-    if (!q) return;
-    setChatLog((l) => [...l, { role: "user", text: q }]);
-    setChatInput("");
-    setTimeout(() => {
-      const replies: Record<string, string> = {
-        seo: "I'll run a 50-point SEO audit, find quick wins, and ship a 90-day roadmap.",
-        ads: "I'll model your funnel, set target ROAS and launch Performance Max + Meta tests.",
-        content: "I'll build a topical map, publish 8 SEO-led posts/month and route leads to your CRM.",
-      };
-      const k = q.toLowerCase();
-      const answer =
-        Object.keys(replies).find((kw) => k.includes(kw)) ? replies[Object.keys(replies).find((kw) => k.includes(kw))!] :
-        "Got it. I'll route this to a human strategist and prep a tailored plan within 24h.";
-      setChatLog((l) => [...l, { role: "agent", text: answer }]);
-    }, 600);
-  };
 
   const launchWhatsApp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -797,66 +774,6 @@ function Home() {
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============ AI AGENT CHAT PREVIEW ============ */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
-        <div aria-hidden className="pointer-events-none absolute inset-0 bg-ai-dots opacity-50" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24 grid lg:grid-cols-2 gap-10 items-center">
-          <div>
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold inline-flex items-center gap-2">
-              <Bot className="h-3.5 w-3.5" /> Meet your AI growth agent
-            </p>
-            <h2 className="mt-3 text-3xl md:text-5xl font-display leading-[1.05]">
-              Chat with an <span className="text-gradient-gold">AI strategist</span> — live.
-            </h2>
-            <p className="mt-4 text-muted-foreground">
-              Ask anything about SEO, ads, content or automation. Our agent drafts a plan in seconds and routes complex briefs to a senior human strategist within 24h.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-2">
-              {["Audit my SEO", "Improve my Google Ads", "Plan my content"].map((q) => (
-                <button key={q} type="button" onClick={() => { setChatInput(q); }} className="btn-fx rounded-full border border-border bg-card px-4 py-2 text-xs font-semibold hover:border-primary">
-                  {q}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative rounded-3xl border border-primary/30 bg-card/90 backdrop-blur shadow-gold overflow-hidden">
-            <div className="flex items-center gap-2 border-b border-border bg-background/80 px-4 py-3">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-              </span>
-              <span className="text-xs font-semibold uppercase tracking-widest">vrseoguru · AI agent</span>
-              <span className="ml-auto text-[10px] text-muted-foreground">online</span>
-            </div>
-            <div className="h-72 overflow-y-auto p-4 space-y-3">
-              {chatLog.map((m, i) => (
-                <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}>
-                  <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${m.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}>
-                    {m.text}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <form
-              onSubmit={(e) => { e.preventDefault(); sendChat(); }}
-              className="flex items-center gap-2 border-t border-border bg-background/80 p-3"
-            >
-              <input
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                placeholder="Ask the AI agent…"
-                maxLength={200}
-                className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-              />
-              <button type="submit" className="btn-fx h-9 px-3 rounded-md bg-primary text-primary-foreground inline-flex items-center gap-1 text-xs font-semibold">
-                Send <Send className="h-3.5 w-3.5" />
-              </button>
-            </form>
           </div>
         </div>
       </section>
