@@ -252,3 +252,20 @@
     0 0 24px oklch(0 0 0 / 0.15),
     0 0 60px oklch(0 0 0 / 0.10);
 }
+
+/* ============ Button micro-interactions ============ */
+@utility btn-fx {
+  transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease, background-color .2s ease, opacity .2s ease, border-color .2s ease;
+  will-change: transform;
+  &:hover { transform: translateY(-2px); box-shadow: 0 14px 36px -14px oklch(0 0 0 / .28); }
+  &:active { transform: translateY(0) scale(.97); }
+  &:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+}
+
+/* Soft AI-signal background for premium SaaS feel */
+@utility bg-ai-signal {
+  background-image:
+    radial-gradient(circle at 20% 10%, oklch(0 0 0 / 0.05), transparent 40%),
+    radial-gradient(circle at 85% 80%, oklch(0 0 0 / 0.04), transparent 45%),
+    radial-gradient(circle at 50% 100%, oklch(0 0 0 / 0.03), transparent 50%);
+}
