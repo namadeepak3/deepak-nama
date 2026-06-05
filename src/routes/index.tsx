@@ -101,7 +101,7 @@ function Home() {
               <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span></span>
               AI-native freelance studio · open for projects
             </div>
-            <h1 className="mt-6 text-5xl md:text-6xl lg:text-7xl font-display uppercase leading-[0.95] tracking-tight">
+            <h1 className="mt-6 text-5xl md:text-6xl lg:text-7xl font-display leading-[0.95] tracking-tight">
               Growth, <span className="text-gradient-gold">engineered</span><br/>by algorithms.
             </h1>
             <p className="mt-6 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed">
@@ -137,7 +137,7 @@ function Home() {
                 <div className="mx-auto h-14 w-14 rounded-full bg-primary/15 grid place-items-center">
                   <CheckCircle2 className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="mt-5 text-2xl font-display uppercase">Thanks, {submitted.name}!</h3>
+                <h3 className="mt-5 text-2xl font-display">Thanks, {submitted.name}!</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
                   Your inquiry has been received. I&apos;ll reply to <span className="text-foreground font-medium">{submitted.email}</span> within 24 hours.
                 </p>
@@ -156,7 +156,7 @@ function Home() {
             >
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Quick inquiry</p>
-                <h3 className="mt-1 text-2xl font-display uppercase">Get a free 30-day plan</h3>
+                <h3 className="mt-1 text-2xl font-display">Get a free 30-day plan</h3>
               </div>
               <div>
                   <input name="name" placeholder="Your name" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.name ? "border-red-400" : "border-border"}`} />
@@ -211,7 +211,7 @@ function Home() {
       {/* ============ CHANNELS I RUN ============ */}
       <section className="border-y border-border bg-card/40">
         <div className="mx-auto max-w-7xl px-6 py-10">
-          <p className="text-center text-xs uppercase tracking-[0.25em] text-primary font-semibold mb-6">Channels I run</p>
+          <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">Channels I run</p>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
             {[
               { Icon: Search, label: "Google Ads" },
@@ -233,8 +233,8 @@ function Home() {
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-10">
           <div className="max-w-2xl">
-            <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">What I do</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase leading-[1.05]">A full-stack growth <span className="text-gradient-gold">engine.</span></h2>
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">What I do</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">A full-stack growth <span className="text-gradient-gold">engine.</span></h2>
           </div>
           <Link to="/services" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">
             All services <ArrowRight className="h-4 w-4" />
@@ -263,7 +263,7 @@ function Home() {
                 <div className="relative h-11 w-11 rounded-xl bg-primary/15 border border-primary/30 grid place-items-center mb-5">
                   <Icon className="h-5 w-5 text-primary" />
                 </div>
-                <h3 className="relative text-xl md:text-2xl font-display uppercase">{s.title}</h3>
+                <h3 className="relative text-xl md:text-2xl font-display">{s.title}</h3>
                 <p className="relative mt-2 text-sm text-muted-foreground leading-relaxed">{s.shortDesc}</p>
                 <div className="relative mt-5 inline-flex items-center gap-1 text-xs font-semibold text-primary opacity-0 group-hover:opacity-100 transition">
                   Learn more <ArrowRight className="h-3.5 w-3.5" />
@@ -279,8 +279,8 @@ function Home() {
         <div className="mx-auto max-w-7xl px-6 py-24">
           <div className="grid lg:grid-cols-12 gap-10 items-end mb-12">
             <div className="lg:col-span-7">
-              <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">2026 playbook</p>
-              <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase leading-[1.05]">Marketing trends I&apos;m <span className="text-gradient-gold">building on.</span></h2>
+              <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">2026 playbook</p>
+              <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">Marketing trends I&apos;m <span className="text-gradient-gold">building on.</span></h2>
             </div>
             <p className="lg:col-span-5 text-muted-foreground">Every strategy I ship leans into where attention &amp; algorithms are heading next — not where they used to be.</p>
           </div>
@@ -295,7 +295,7 @@ function Home() {
             ].map(({ Icon, title, desc, span }) => (
               <div key={title} className={`${span} rounded-3xl border border-border bg-card p-7 hover:border-primary transition`}>
                 <Icon className="h-6 w-6 text-primary" />
-                <h3 className="mt-4 text-lg md:text-xl font-display uppercase">{title}</h3>
+                <h3 className="mt-4 text-lg md:text-xl font-display">{title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
               </div>
             ))}
@@ -306,8 +306,8 @@ function Home() {
       {/* ============ PROCESS ============ */}
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="text-center max-w-2xl mx-auto">
-          <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">My process</p>
-          <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">A proven path to growth</h2>
+          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">My process</p>
+          <h2 className="mt-3 text-4xl md:text-5xl font-display">A proven path to growth</h2>
           <p className="mt-4 text-muted-foreground">A transparent, repeatable system that turns goals into compounding revenue.</p>
         </div>
         <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -320,7 +320,7 @@ function Home() {
           ].map(([num, title, desc]) => (
             <div key={num} className="rounded-3xl border border-border bg-card p-6 hover:border-primary transition">
               <div className="text-3xl font-display text-gradient-gold">{num}</div>
-              <h3 className="mt-3 font-display uppercase">{title}</h3>
+              <h3 className="mt-3 font-display">{title}</h3>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
             </div>
           ))}
@@ -336,7 +336,7 @@ function Home() {
             Available · Q3 2026 · Mumbai, IN
           </div>
           <p className="mt-6 text-xs uppercase tracking-[0.3em] text-primary font-semibold">Who I am</p>
-          <h2 className="mt-4 text-4xl md:text-6xl font-display uppercase leading-[1.02]">
+          <h2 className="mt-4 text-4xl md:text-6xl font-display leading-[1.02]">
             Hi, I&apos;m <span className="text-gradient-gold">vrseoguru</span> —<br/>your freelance growth partner.
           </h2>
           <p className="mt-6 max-w-2xl mx-auto text-base md:text-lg text-muted-foreground leading-relaxed">
@@ -364,7 +364,7 @@ function Home() {
                 <div className="h-10 w-10 rounded-xl bg-primary/15 border border-primary/30 grid place-items-center">
                   <Icon className="h-5 w-5 text-primary"/>
                 </div>
-                <h3 className="mt-4 text-sm font-display uppercase">{title}</h3>
+                <h3 className="mt-4 text-sm font-display">{title}</h3>
                 <p className="mt-1 text-xs text-muted-foreground">{desc}</p>
               </div>
             ))}
@@ -387,8 +387,8 @@ function Home() {
         <div aria-hidden className="absolute -bottom-32 right-1/4 h-72 w-72 rounded-full bg-primary/15 blur-3xl"/>
         <div className="relative mx-auto max-w-7xl px-6 py-24">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Results that compound</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">Numbers do the talking</h2>
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Results that compound</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display">Numbers do the talking</h2>
             <p className="mt-4 text-muted-foreground">Aggregate impact across 120+ campaigns shipped in the last 24 months.</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -416,8 +416,8 @@ function Home() {
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-12">
           <div className="max-w-2xl">
-            <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Case studies</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase leading-[1.05]">Brands I&apos;ve <span className="text-gradient-gold">scaled.</span></h2>
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">Brands I&apos;ve <span className="text-gradient-gold">scaled.</span></h2>
             <p className="mt-4 text-muted-foreground">A few recent wins — full breakdowns inside.</p>
           </div>
           <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">View all <ArrowRight className="h-4 w-4"/></Link>
@@ -467,7 +467,7 @@ function Home() {
                   ))}
                 </div>
               </div>
-              <h3 className="relative mt-5 text-2xl md:text-3xl font-display uppercase leading-tight">{c.title}</h3>
+              <h3 className="relative mt-5 text-2xl md:text-3xl font-display leading-tight">{c.title}</h3>
               <p className="relative mt-3 text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
               <div className="relative mt-6 grid grid-cols-3 gap-3">
                 {c.stats.map(([k,v])=>(
@@ -490,8 +490,8 @@ function Home() {
         <div className="mx-auto max-w-7xl px-6 py-24">
           <div className="flex items-end justify-between flex-wrap gap-6 mb-12">
             <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Insights</p>
-              <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">Fresh from the blog</h2>
+              <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Insights</p>
+              <h2 className="mt-3 text-4xl md:text-5xl font-display">Fresh from the blog</h2>
             </div>
             <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">All articles <ArrowRight className="h-4 w-4"/></Link>
           </div>
@@ -503,7 +503,7 @@ function Home() {
             ].map(([tag,title,desc,meta])=>(
               <article key={title} className="rounded-3xl border border-border bg-card p-6 flex flex-col hover:border-primary transition">
                 <span className="self-start rounded-full bg-primary/15 border border-primary/30 px-3 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-widest">{tag}</span>
-                <h3 className="mt-4 text-lg font-display uppercase leading-snug">{title}</h3>
+                <h3 className="mt-4 text-lg font-display leading-snug">{title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{desc}</p>
                 <p className="mt-5 text-xs text-muted-foreground">{meta}</p>
               </article>
@@ -516,8 +516,8 @@ function Home() {
       <section className="border-y border-border bg-card/30">
         <div className="mx-auto max-w-7xl px-6 py-24">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Receipts</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">What clients say</h2>
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Receipts</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display">What clients say</h2>
             <p className="mt-4 text-muted-foreground">Real results from real brands — across SEO, paid, social &amp; lifecycle.</p>
           </div>
           <Carousel opts={{ align: "start", loop: true }} className="relative">
@@ -562,8 +562,8 @@ function Home() {
       {/* ============ FAQ ============ */}
       <section className="mx-auto max-w-4xl px-6 py-24">
         <div className="text-center mb-12">
-          <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">FAQs</p>
-          <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">Common questions</h2>
+          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">FAQs</p>
+          <h2 className="mt-3 text-4xl md:text-5xl font-display">Common questions</h2>
           <p className="mt-4 text-muted-foreground">Everything you want to know before we kick off.</p>
         </div>
         <Accordion type="single" collapsible className="space-y-3">
@@ -577,7 +577,7 @@ function Home() {
             { q: "Can I cancel anytime?", a: "Yes. Month-to-month retainers with 30-day notice. No long lock-ins, no hidden fees — performance keeps the partnership going." },
           ].map((f,i)=>(
             <AccordionItem key={i} value={`item-${i}`} className="rounded-2xl border border-border bg-card px-5 data-[state=open]:border-primary transition">
-              <AccordionTrigger className="text-left text-base font-display uppercase hover:no-underline">{f.q}</AccordionTrigger>
+              <AccordionTrigger className="text-left text-base font-display hover:no-underline">{f.q}</AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground leading-relaxed" dangerouslySetInnerHTML={{__html: f.a}}/>
             </AccordionItem>
           ))}
@@ -588,8 +588,8 @@ function Home() {
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/30 via-card to-card p-12 md:p-20 text-center">
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-primary/30 blur-3xl"/>
-          <p className="relative text-xs uppercase tracking-[0.25em] text-primary font-semibold">Let&apos;s build</p>
-          <h2 className="relative mt-4 text-4xl md:text-6xl font-display uppercase leading-[1.02]">Ready to <span className="text-gradient-gold">accelerate</span><br/>your growth?</h2>
+          <p className="relative text-xs tracking-[0.22em] uppercase text-primary font-semibold">Let&apos;s build</p>
+          <h2 className="relative mt-4 text-4xl md:text-6xl font-display leading-[1.02]">Ready to <span className="text-gradient-gold">accelerate</span><br/>your growth?</h2>
           <p className="relative mt-5 max-w-xl mx-auto text-muted-foreground">Free, no-obligation strategy call. I&apos;ll audit your marketing &amp; show you the biggest opportunities.</p>
           <div className="relative mt-8 flex flex-wrap gap-3 justify-center">
             <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
