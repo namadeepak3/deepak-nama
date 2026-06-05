@@ -151,7 +151,7 @@ function AdminPage() {
   const canManage = !!capsQuery.data?.canManageServices;
   const canAnalytics = !!capsQuery.data?.canViewAnalytics;
 
-  type Tab = "services" | "analytics" | "blog" | "categories" | "users" | "audits" | "inquiries";
+  type Tab = "services" | "analytics" | "blog" | "categories" | "users" | "audits" | "inquiries" | "settings";
   const defaultTab: Tab = canManage ? "services" : canAnalytics ? "analytics" : "services";
   const [tab, setTab] = useState<Tab>(defaultTab);
   useEffect(() => {
@@ -162,6 +162,7 @@ function AdminPage() {
     if (tab === "categories" && !canManage && canAnalytics) setTab("analytics");
     if (tab === "users" && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
     if ((tab === "inquiries" || tab === "audits") && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
+    if (tab === "settings" && !(capsQuery.data?.roles ?? []).includes("admin")) setTab(canManage ? "services" : "analytics");
   }, [capsQuery.data, canManage, canAnalytics, tab]);
 
   const services = useQuery({ queryKey: ["services"], queryFn: () => list(), enabled: canManage });
@@ -274,7 +275,7 @@ function AdminPage() {
         </div>
       </div>
 
-      <nav role="tablist" className="mt-8 inline-flex rounded-lg border border-border bg-card p-1 gap-1">
+      <nav role="tablist" className="mt-8 flex flex-wrap rounded-lg border border-border bg-card p-1 gap-1 max-w-full overflow-x-auto">
         {canManage && (
           <TabButton active={tab === "services"} onClick={() => setTab("services")} icon={Settings2}>
             Manage services
@@ -308,6 +309,11 @@ function AdminPage() {
         {(capsQuery.data?.roles ?? []).includes("admin") && (
           <TabButton active={tab === "inquiries"} onClick={() => setTab("inquiries")} icon={Inbox}>
             Inquiries
+          </TabButton>
+        )}
+        {(capsQuery.data?.roles ?? []).includes("admin") && (
+          <TabButton active={tab === "settings"} onClick={() => setTab("settings")} icon={Settings2}>
+            Settings
           </TabButton>
         )}
       </nav>
@@ -407,6 +413,10 @@ function AdminPage() {
 
       {tab === "audits" && (capsQuery.data?.roles ?? []).includes("admin") && (
         <InquiriesPanel kind="audit" />
+      )}
+
+      {tab === "settings" && (capsQuery.data?.roles ?? []).includes("admin") && (
+        <SettingsPanel />
       )}
 
       {editing && canManage && (
