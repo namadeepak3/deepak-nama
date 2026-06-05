@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { getRequestHeader, getRequestIP } from "@tanstack/react-start/server";
+import { rateLimit, sweep } from "./rate-limit";
 
 export const LEAD_STATUSES = ["new", "contacted", "qualified", "won", "lost", "spam"] as const;
 export type LeadStatus = (typeof LEAD_STATUSES)[number];
@@ -113,6 +114,11 @@ export const createLead = createServerFn({ method: "POST" })
       ip = getRequestIP({ xForwardedFor: true }) ?? "";
       ua = getRequestHeader("user-agent") ?? "";
     } catch { /* not in request scope */ }
+    sweep();
+    const rl = rateLimit(`lead:${ip || "anon"}`, { limit: 5, windowMs: 60_000 });
+    if (!rl.ok) {
+      throw new Error(`Too many submissions. Try again in ${rl.retryAfterSec}s.`);
+    }
     const kind = data.kind ?? "inquiry";
     const { data: inserted, error } = await supabaseAdmin.from("leads").insert({
       name: data.name,

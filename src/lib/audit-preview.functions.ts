@@ -1,5 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { getRequestIP } from "@tanstack/react-start/server";
+import { rateLimit, sweep } from "./rate-limit";
 
 export type AuditFinding = {
   area: string;
@@ -42,6 +44,13 @@ export const generateAuditPreview = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data }): Promise<AuditPreview> => {
+    sweep();
+    let ip = "anon";
+    try { ip = getRequestIP({ xForwardedFor: true }) ?? "anon"; } catch { /* not in request scope */ }
+    const rl = rateLimit(`audit:${ip}`, { limit: 5, windowMs: 60_000 });
+    if (!rl.ok) {
+      throw new Error(`Too many audit requests. Try again in ${rl.retryAfterSec}s.`);
+    }
     const apiKey = process.env.LOVABLE_API_KEY;
     if (!apiKey) return FALLBACK;
 

@@ -1,34 +1,20 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-// Public server fn: returns whether an email is allowed to sign in.
-// An email is allowed when an auth user with that address exists AND has at
-// least one role row in user_roles. Used as a pre-check before sending an
-// OTP / accepting a password so unknown emails can't trigger emails or
-// account creation.
+// Public server fn used as a pre-check by the sign-in form.
+//
+// SECURITY: This endpoint MUST NOT leak whether a given email belongs to an
+// admin/editor. Previously it returned { allowed: true/false } based on
+// user_roles membership, which allowed unauthenticated visitors to enumerate
+// admin email addresses. It now always returns { allowed: true } so the
+// response is uniform, and the actual authorization happens server-side after
+// sign-in via the role checks in every admin server function (assertAdmin)
+// and the _authenticated route guard. Supabase Auth itself rejects unknown
+// emails for password sign-in; for OTP, sign-up is disabled in Auth settings.
 export const checkEmailAllowed = createServerFn({ method: "POST" })
   .inputValidator((input: { email: string }) =>
     z.object({ email: z.string().trim().email().max(255) }).parse(input),
   )
-  .handler(async ({ data }): Promise<{ allowed: boolean }> => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const target = data.email.toLowerCase();
-    // Page through users (200 per page is the API max) to find a match.
-    for (let page = 1; page <= 5; page++) {
-      const { data: list, error } = await supabaseAdmin.auth.admin.listUsers({
-        page,
-        perPage: 200,
-      });
-      if (error) return { allowed: false };
-      const user = list.users.find((u) => (u.email ?? "").toLowerCase() === target);
-      if (user) {
-        const { count } = await supabaseAdmin
-          .from("user_roles")
-          .select("*", { count: "exact", head: true })
-          .eq("user_id", user.id);
-        return { allowed: (count ?? 0) > 0 };
-      }
-      if (list.users.length < 200) break;
-    }
-    return { allowed: false };
+  .handler(async (): Promise<{ allowed: boolean }> => {
+    return { allowed: true };
   });
