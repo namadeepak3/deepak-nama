@@ -234,6 +234,7 @@ export type Database = {
       }
       leads: {
         Row: {
+          admin_notes: string
           budget: string
           created_at: string
           email: string
@@ -241,8 +242,11 @@ export type Database = {
           message: string
           name: string
           service: string
+          status: string
+          updated_at: string
         }
         Insert: {
+          admin_notes?: string
           budget: string
           created_at?: string
           email: string
@@ -250,8 +254,11 @@ export type Database = {
           message: string
           name: string
           service: string
+          status?: string
+          updated_at?: string
         }
         Update: {
+          admin_notes?: string
           budget?: string
           created_at?: string
           email?: string
@@ -259,6 +266,8 @@ export type Database = {
           message?: string
           name?: string
           service?: string
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }
