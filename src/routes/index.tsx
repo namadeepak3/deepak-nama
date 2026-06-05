@@ -474,6 +474,66 @@ function Home() {
 
       {/* ============ SERVICES — BENTO ============ */}
       {/* ============ DIGITAL MARKETING SERVICES ============ */}
+      {/* ============ EXPLORE DIGITAL MARKETING ============ */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+        <div aria-hidden className="pointer-events-none absolute -top-24 right-[-10%] h-80 w-80 rounded-full bg-primary/20 blur-3xl" />
+        <div aria-hidden className="pointer-events-none absolute -bottom-24 left-[-10%] h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-16">
+          <div className="text-center max-w-3xl mx-auto">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Explore digital marketing</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">
+              The <span className="text-gradient-gold">building blocks</span> of modern growth.
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              From the first impression to lifetime value — every discipline, framework and channel we orchestrate under one AI-powered roof.
+            </p>
+          </div>
+
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[
+              { Icon: Brain, title: "Strategy & Positioning", desc: "ICP research, message-market fit and category design." },
+              { Icon: Search, title: "Search & Discovery", desc: "SEO, GEO and answer-engine optimisation." },
+              { Icon: Target, title: "Paid Acquisition", desc: "Google, Meta, LinkedIn, TikTok — profit-modeled." },
+              { Icon: Sparkles, title: "Creative Production", desc: "GenAI-assisted statics, motion and UGC at scale." },
+              { Icon: MessageCircle, title: "Conversational", desc: "WhatsApp, SMS, chatbots and live concierge." },
+              { Icon: PenTool, title: "Content & SEO", desc: "Editorial, thought-leadership and topical authority." },
+              { Icon: Share2, title: "Social & Community", desc: "Reels, Shorts and community-led growth loops." },
+              { Icon: Workflow, title: "Lifecycle & CRM", desc: "Onboarding, retention and win-back orchestration." },
+              { Icon: BarChart3, title: "Analytics & Attribution", desc: "GA4, server-side, MMM and warehouse modelling." },
+              { Icon: Eye, title: "CRO & Experimentation", desc: "Hypothesis-led A/B testing and personalisation." },
+              { Icon: Cpu, title: "Marketing Automation", desc: "n8n, Zapier and AI agents wired to your stack." },
+              { Icon: Database, title: "Data & AI Layer", desc: "First-party data, CDP, RAG and predictive models." },
+            ].map(({ Icon, title, desc }) => (
+              <div
+                key={title}
+                className="group relative rounded-2xl border border-border bg-card/80 backdrop-blur p-5 hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all"
+              >
+                <div className="h-11 w-11 rounded-xl bg-primary/10 border border-primary/30 text-primary grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="mt-4 font-display text-base leading-tight">{title}</h3>
+                <p className="mt-2 text-xs text-muted-foreground leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/services"
+              className="btn-fx inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-gold"
+            >
+              Browse all services <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/contact"
+              className="btn-fx inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary"
+            >
+              <Lightbulb className="h-4 w-4 text-primary" /> Get a custom roadmap
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-gradient-to-b from-background via-card/50 to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="flex items-end justify-between flex-wrap gap-6 mb-6">
