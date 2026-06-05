@@ -238,94 +238,17 @@ function AdminPage() {
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-4 sm:px-6 py-8 sm:py-12">
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div>
-          <Link to="/" className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-3 w-3" /> Back to site
-          </Link>
-          <h1 className="mt-2 text-3xl font-display font-semibold">Admin dashboard</h1>
-          <p className="mt-1 text-sm text-muted-foreground flex items-center gap-2 flex-wrap">
-            Signed in as{" "}
-            <span className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-2 py-0.5 text-xs">
-              <ShieldCheck className="h-3 w-3 text-primary" />
-              {(capsQuery.data?.roles ?? []).join(", ") || "no roles"}
-            </span>
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Link
-            to="/admin/security"
-            className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
-            title="Security scan results"
-          >
-            <ShieldCheck className="h-4 w-4" /> Security
-          </Link>
-          {canManage && tab === "services" && (
-            <button
-              onClick={() => setEditing(emptyService(services.data?.length ?? 0))}
-              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent"
-            >
-              <Plus className="h-4 w-4" /> New service
-            </button>
-          )}
-          {canManage && tab === "blog" && (
-            <button
-              onClick={() => setEditingPost(emptyPost())}
-              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-accent"
-            >
-              <Plus className="h-4 w-4" /> New post
-            </button>
-          )}
-          <button onClick={handleSignOut} className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground">
-            <LogOut className="h-4 w-4" /> Sign out
-          </button>
-        </div>
-      </div>
-
-      <nav role="tablist" className="mt-8 flex flex-wrap rounded-lg border border-border bg-card p-1 gap-1 max-w-full overflow-x-auto">
-        {canManage && (
-          <TabButton active={tab === "services"} onClick={() => setTab("services")} icon={Settings2}>
-            Manage services
-          </TabButton>
-        )}
-        {canManage && (
-          <TabButton active={tab === "blog"} onClick={() => setTab("blog")} icon={FileText}>
-            Blog
-          </TabButton>
-        )}
-        {canManage && (
-          <TabButton active={tab === "categories"} onClick={() => setTab("categories")} icon={Tags}>
-            Categories
-          </TabButton>
-        )}
-        {canAnalytics && (
-          <TabButton active={tab === "analytics"} onClick={() => setTab("analytics")} icon={BarChart3}>
-            Analytics
-          </TabButton>
-        )}
-        {(capsQuery.data?.roles ?? []).includes("admin") && (
-          <TabButton active={tab === "users"} onClick={() => setTab("users")} icon={UsersIcon}>
-            Users
-          </TabButton>
-        )}
-        {(capsQuery.data?.roles ?? []).includes("admin") && (
-          <TabButton active={tab === "audits"} onClick={() => setTab("audits")} icon={Globe}>
-            Website Audit
-          </TabButton>
-        )}
-        {(capsQuery.data?.roles ?? []).includes("admin") && (
-          <TabButton active={tab === "inquiries"} onClick={() => setTab("inquiries")} icon={Inbox}>
-            Inquiries
-          </TabButton>
-        )}
-        {(capsQuery.data?.roles ?? []).includes("admin") && (
-          <TabButton active={tab === "settings"} onClick={() => setTab("settings")} icon={Settings2}>
-            Settings
-          </TabButton>
-        )}
-      </nav>
-
+    <AdminShell
+      tab={tab}
+      setTab={setTab}
+      canManage={canManage}
+      canAnalytics={canAnalytics}
+      isAdmin={(capsQuery.data?.roles ?? []).includes("admin")}
+      roles={capsQuery.data?.roles ?? []}
+      onSignOut={handleSignOut}
+      onNewService={() => setEditing(emptyService(services.data?.length ?? 0))}
+      onNewPost={() => setEditingPost(emptyPost())}
+    >
       {tab === "services" && canManage && (
       <div className="mt-8 space-y-3">
         {(services.data ?? []).map((s, i) => {
@@ -443,7 +366,7 @@ function AdminPage() {
           onSaved={() => setEditingPost(null)}
         />
       )}
-    </section>
+    </AdminShell>
   );
 }
 
