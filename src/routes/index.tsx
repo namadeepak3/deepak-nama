@@ -686,25 +686,20 @@ function Home() {
           </div>
           <div className="grid md:grid-cols-3 gap-4">
             {[
-              { tag: "SEO", title: "10 SEO Trends That Will Define 2026", desc: "AI search, entity optimization & what brands are doing to stay ahead.", meta: "May 28 · 8 min", Icon: Search, grad: "from-primary/30 via-primary/10 to-transparent" },
-              { tag: "PPC", title: "Maximize ROI From Google Ads in 2026", desc: "Lower CPA and scale profitable campaigns with AI bidding.", meta: "May 14 · 6 min", Icon: Target, grad: "from-foreground/20 via-foreground/5 to-transparent" },
-              { tag: "Content", title: "Content That Actually Converts", desc: "The framework our team uses to build assets that drive real revenue.", meta: "Apr 30 · 7 min", Icon: PenTool, grad: "from-primary/25 via-card to-transparent" },
-            ].map(({tag,title,desc,meta,Icon,grad})=>(
+              { tag: "SEO", title: "10 SEO Trends That Will Define 2026", desc: "AI search, entity optimization & what brands are doing to stay ahead.", meta: "May 28 · 8 min", img: blogSeoAsset.url },
+              { tag: "PPC", title: "Maximize ROI From Google Ads in 2026", desc: "Lower CPA and scale profitable campaigns with AI bidding.", meta: "May 14 · 6 min", img: blogPpcAsset.url },
+              { tag: "Content", title: "Content That Actually Converts", desc: "The framework our team uses to build assets that drive real revenue.", meta: "Apr 30 · 7 min", img: blogContentAsset.url },
+            ].map(({tag,title,desc,meta,img})=>(
               <article key={title} className="group rounded-3xl border border-border bg-card flex flex-col overflow-hidden hover:border-primary transition">
-                <div className={`relative aspect-[16/9] bg-gradient-to-br ${grad} border-b border-border overflow-hidden`}>
-                  <div aria-hidden className="absolute inset-0 bg-ai-grid opacity-40" />
-                  <div aria-hidden className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-primary/20 blur-2xl"/>
-                  <div className="absolute inset-0 grid place-items-center">
-                    <div className="h-16 w-16 rounded-2xl bg-foreground text-background grid place-items-center shadow-2xl ring-1 ring-foreground/20 group-hover:scale-110 transition-transform">
-                      <Icon className="h-7 w-7"/>
-                    </div>
-                  </div>
+                <div className="relative aspect-[16/9] border-b border-border overflow-hidden bg-secondary">
+                  <img src={img} alt={title} loading="lazy" width={1280} height={720} className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-card/90 via-card/20 to-transparent" />
                   <span className="absolute top-3 left-3 rounded-full bg-background/90 backdrop-blur border border-border px-3 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-widest">{tag}</span>
                 </div>
-                <div className="p-6 flex flex-col flex-1">
-                  <h3 className="text-lg font-display leading-snug">{title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{desc}</p>
-                  <div className="mt-5 flex items-center justify-between">
+                <div className="p-5 flex flex-col flex-1">
+                  <h3 className="text-base font-display leading-snug">{title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1 line-clamp-2">{desc}</p>
+                  <div className="mt-4 flex items-center justify-between">
                     <p className="text-xs text-muted-foreground">{meta}</p>
                     <Link to="/blog" className="inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:text-primary transition">
                       Read <ArrowRight className="h-3.5 w-3.5"/>
