@@ -11,6 +11,7 @@ import { X } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { z } from "zod";
+import { track } from "@/lib/analytics";
 import blogSeoAsset from "@/assets/blog-seo.jpg.asset.json";
 import blogPpcAsset from "@/assets/blog-ppc.jpg.asset.json";
 import blogContentAsset from "@/assets/blog-content.jpg.asset.json";
@@ -45,7 +46,10 @@ function Home() {
     try {
       if (sessionStorage.getItem("auditPopupShown") === "1") return;
     } catch { /* ignore */ }
-    const t = setTimeout(() => setAuditOpen(true), 1500);
+    const t = setTimeout(() => {
+      setAuditOpen(true);
+      track("audit_popup_opened", { source: "auto" });
+    }, 1500);
     return () => clearTimeout(t);
   }, []);
 
@@ -122,6 +126,7 @@ function Home() {
         open={auditOpen}
         onClose={() => {
           setAuditOpen(false);
+          track("audit_popup_dismissed");
           try { sessionStorage.setItem("auditPopupShown", "1"); } catch { /* ignore */ }
         }}
         onSubmit={async (values) => {
@@ -138,6 +143,10 @@ function Home() {
               utmMedium: params?.get("utm_medium") ?? "",
               utmCampaign: params?.get("utm_campaign") ?? "",
             },
+          });
+          track("audit_popup_submitted", {
+            has_phone: Boolean(values.phone),
+            has_website: Boolean(values.website),
           });
           try { sessionStorage.setItem("auditPopupShown", "1"); } catch { /* ignore */ }
           setAuditOpen(false);
@@ -172,7 +181,10 @@ function Home() {
             <div className="mt-8 flex flex-wrap gap-3">
               <button
                 type="button"
-                onClick={() => setAuditOpen(true)}
+                onClick={() => {
+                  setAuditOpen(true);
+                  track("audit_popup_opened", { source: "hero_cta" });
+                }}
                 className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold"
               >
                 <Search className="h-4 w-4" /> Free Website Audit
