@@ -139,6 +139,99 @@ export type Database = {
           },
         ]
       }
+      case_studies: {
+        Row: {
+          approach: string
+          challenge: string
+          channels: Json
+          client: string
+          content: string
+          cover_image: string
+          created_at: string
+          duration: string
+          featured: boolean
+          hero_stats: Json
+          id: string
+          industry: string
+          meta_description: string
+          meta_title: string
+          og_image: string
+          published_at: string | null
+          results: string
+          slug: string
+          sort_order: number
+          status: string
+          summary: string
+          tag: string
+          testimonial_author: string
+          testimonial_quote: string
+          testimonial_role: string
+          title: string
+          updated_at: string
+          view_count: number
+        }
+        Insert: {
+          approach?: string
+          challenge?: string
+          channels?: Json
+          client?: string
+          content?: string
+          cover_image?: string
+          created_at?: string
+          duration?: string
+          featured?: boolean
+          hero_stats?: Json
+          id?: string
+          industry?: string
+          meta_description?: string
+          meta_title?: string
+          og_image?: string
+          published_at?: string | null
+          results?: string
+          slug: string
+          sort_order?: number
+          status?: string
+          summary?: string
+          tag?: string
+          testimonial_author?: string
+          testimonial_quote?: string
+          testimonial_role?: string
+          title: string
+          updated_at?: string
+          view_count?: number
+        }
+        Update: {
+          approach?: string
+          challenge?: string
+          channels?: Json
+          client?: string
+          content?: string
+          cover_image?: string
+          created_at?: string
+          duration?: string
+          featured?: boolean
+          hero_stats?: Json
+          id?: string
+          industry?: string
+          meta_description?: string
+          meta_title?: string
+          og_image?: string
+          published_at?: string | null
+          results?: string
+          slug?: string
+          sort_order?: number
+          status?: string
+          summary?: string
+          tag?: string
+          testimonial_author?: string
+          testimonial_quote?: string
+          testimonial_role?: string
+          title?: string
+          updated_at?: string
+          view_count?: number
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           budget: string
