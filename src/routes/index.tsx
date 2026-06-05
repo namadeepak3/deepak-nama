@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { createLead } from "@/lib/leads.functions";
 import { generateAuditPreview, type AuditPreview } from "@/lib/audit-preview.functions";
 import { listCaseStudies } from "@/lib/case-studies.functions";
+import { listPublishedPosts } from "@/lib/blog.functions";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -37,6 +38,8 @@ function Home() {
   const fetchAuditPreview = useServerFn(generateAuditPreview);
   const fetchCases = useServerFn(listCaseStudies);
   const { data: caseStudies = [] } = useQuery({ queryKey: ["case-studies", "home"], queryFn: () => fetchCases() });
+  const fetchPosts = useServerFn(listPublishedPosts);
+  const { data: blogPosts = [] } = useQuery({ queryKey: ["blog-posts", "home"], queryFn: () => fetchPosts() });
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<null | { name: string; email: string }>(null);
