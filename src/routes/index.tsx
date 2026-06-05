@@ -204,6 +204,7 @@ function Home() {
       (e.target as HTMLFormElement).reset();
       setErrors({});
       setSubmitted({ name: result.data.name, email: result.data.email });
+      track("lead_submit", { source: "homepage_inquiry_form", service: result.data.service });
       toast.success("Inquiry sent — I'll reply within 24 hours.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to send inquiry.");
