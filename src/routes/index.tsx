@@ -44,6 +44,88 @@ function Home() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<null | { name: string; email: string }>(null);
   const [auditOpen, setAuditOpen] = useState(false);
+  const [openStep, setOpenStep] = useState<string>("1");
+  const [chatInput, setChatInput] = useState("");
+  const [chatLog, setChatLog] = useState<{ role: "user" | "agent"; text: string }[]>([
+    { role: "agent", text: "Hi 👋 I'm your AI growth agent. Ask me anything — SEO audits, ad spend, content plans…" },
+  ]);
+  const [waName, setWaName] = useState("");
+  const [waPhone, setWaPhone] = useState("");
+  const [waChannel, setWaChannel] = useState<"whatsapp" | "sms">("whatsapp");
+  const [waMessage, setWaMessage] = useState("");
+
+  const BUSINESS_WHATSAPP = "919999999999"; // E.164 without +
+  const BUSINESS_SMS = "+919999999999";
+
+  const sendChat = () => {
+    const q = chatInput.trim();
+    if (!q) return;
+    setChatLog((l) => [...l, { role: "user", text: q }]);
+    setChatInput("");
+    setTimeout(() => {
+      const replies: Record<string, string> = {
+        seo: "I'll run a 50-point SEO audit, find quick wins, and ship a 90-day roadmap.",
+        ads: "I'll model your funnel, set target ROAS and launch Performance Max + Meta tests.",
+        content: "I'll build a topical map, publish 8 SEO-led posts/month and route leads to your CRM.",
+      };
+      const k = q.toLowerCase();
+      const answer =
+        Object.keys(replies).find((kw) => k.includes(kw)) ? replies[Object.keys(replies).find((kw) => k.includes(kw))!] :
+        "Got it. I'll route this to a human strategist and prep a tailored plan within 24h.";
+      setChatLog((l) => [...l, { role: "agent", text: answer }]);
+    }, 600);
+  };
+
+  const launchWhatsApp = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const name = waName.trim();
+    const phone = waPhone.trim();
+    const msg = waMessage.trim();
+    if (!name || !phone || !msg) {
+      toast.error("Please fill name, phone and message");
+      return;
+    }
+    const body = `Hi vrseoguru — I'm ${name} (${phone}). ${msg}`;
+    const encoded = encodeURIComponent(body);
+    const url = waChannel === "whatsapp"
+      ? `https://wa.me/${BUSINESS_WHATSAPP}?text=${encoded}`
+      : `sms:${BUSINESS_SMS}?&body=${encoded}`;
+    window.open(url, "_blank");
+    toast.success(`Opening ${waChannel === "whatsapp" ? "WhatsApp" : "SMS"}…`);
+  };
+
+  const PROCESS_STEPS = [
+    { n: "1", Icon: LineChart, title: "Analyze Business Landscape", desc: "AI audits market, competitors and your data signals.",
+      details: "We ingest GA4, GSC, CRM and competitor data. AI agents identify positioning gaps, demand signals and revenue leaks.",
+      examples: ["50-point SEO + UX audit", "Competitor share-of-search", "ICP & jobs-to-be-done synthesis"] },
+    { n: "2", Icon: Lightbulb, title: "Build Smart Strategies", desc: "Agent-generated channel mix, hypotheses and roadmap.",
+      details: "GPT-class models propose channel mix, KPIs and a 90-day roadmap. Senior strategists approve before launch.",
+      examples: ["Channel mix model", "Quarterly OKRs & KPIs", "Budget pacing plan"] },
+    { n: "3", Icon: PenTool, title: "Create Compelling Content", desc: "GenAI creative, copy and assets — at brand and at scale.",
+      details: "Brand-trained models produce on-message copy, statics, motion and UGC briefs — reviewed by editors.",
+      examples: ["SEO articles & landing pages", "Ad creative + variants", "Short-form video scripts"] },
+    { n: "4", Icon: Brain, title: "Derive Meaningful Insights", desc: "Live attribution, anomaly alerts and predictive next steps.",
+      details: "Warehouse-grade attribution with anomaly detection. AI summarises wins, losses and the next best action — daily.",
+      examples: ["GA4 + server-side CAPI", "Daily Slack digests", "Predictive LTV & churn"] },
+    { n: "5", Icon: Award, title: "Enrich Customer Experiences", desc: "Personalised journeys, lifecycle and CX automation.",
+      details: "Lifecycle automations across WhatsApp, SMS, email and on-site — personalised by AI segments.",
+      examples: ["WhatsApp & SMS journeys", "On-site personalisation", "Win-back & loyalty flows"] },
+  ];
+
+  const AI_TOOLS = [
+    { name: "ChatGPT", sub: "OpenAI", emoji: "🤖" },
+    { name: "Claude", sub: "Anthropic", emoji: "🧠" },
+    { name: "Gemini", sub: "Google", emoji: "✨" },
+    { name: "Perplexity", sub: "Answer engine", emoji: "🔎" },
+    { name: "Midjourney", sub: "Image", emoji: "🎨" },
+    { name: "Runway", sub: "Video", emoji: "🎬" },
+    { name: "ElevenLabs", sub: "Voice", emoji: "🎙️" },
+    { name: "Sora", sub: "Video AI", emoji: "📽️" },
+    { name: "n8n", sub: "Agents", emoji: "🔗" },
+    { name: "LangChain", sub: "Orchestration", emoji: "⛓️" },
+    { name: "Zapier AI", sub: "Automation", emoji: "⚡" },
+    { name: "Cursor", sub: "Dev agent", emoji: "🧑‍💻" },
+  ];
 
   const inquirySchema = z.object({
     name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name is too long"),
