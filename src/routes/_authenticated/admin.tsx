@@ -20,6 +20,13 @@ import {
   deletePost,
   type BlogPostInput,
 } from "@/lib/blog.functions";
+import {
+  listUsersWithRoles,
+  setUserRole,
+  removeUserRole,
+  type AdminUserRow,
+  type AppRole,
+} from "@/lib/admin-users.functions";
 import type { BlogPost } from "@/lib/blog.shared";
 import {
   listCategories,
