@@ -237,28 +237,7 @@ function AdminPage() {
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-6 py-12">
-      <div className="mb-8 rounded-2xl border border-border bg-gradient-to-r from-primary/10 via-card to-accent/10 px-4 sm:px-6 py-4 flex items-center justify-between gap-3 sm:gap-6 shadow-sm">
-        <Link to="/" className="flex items-center gap-2 shrink-0" title="Back to site">
-          <span className="h-9 w-9 sm:h-10 sm:w-10 rounded-lg bg-foreground text-background grid place-items-center font-display font-bold text-sm shadow-sm">
-            V
-          </span>
-        </Link>
-        <div className="flex-1 min-w-0 text-center">
-          <h1 className="font-display font-semibold tracking-tight text-lg sm:text-2xl truncate">
-            <span className="text-foreground">vrseoguru</span>
-            <span className="hidden sm:inline text-muted-foreground"> — </span>
-            <span className="block sm:inline text-xs sm:text-base font-medium text-primary">
-              Admin Panel
-            </span>
-          </h1>
-        </div>
-        <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-border bg-background/70 px-2.5 py-1 text-[11px] shrink-0">
-          <ShieldCheck className="h-3 w-3 text-primary" />
-          {(capsQuery.data?.roles ?? []).join(", ") || "no roles"}
-        </span>
-      </div>
-
+    <section className="mx-auto max-w-6xl px-4 sm:px-6 py-8 sm:py-12">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
           <Link to="/" className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground">
