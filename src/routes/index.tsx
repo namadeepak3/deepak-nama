@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2, TrendingUp, Award, Star, Quote, Phone, Bot, Search, Megaphone, Target, BarChart3, Globe, Rocket, Activity, Play, MousePointerClick, Mail, Compass, Hammer, FlaskConical, FileBarChart, PenTool, Share2, Code2, ShoppingCart, Youtube, Linkedin } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2, TrendingUp, Award, Star, Quote, Phone, Bot, Search, Megaphone, Target, BarChart3, Globe, Rocket, Activity, Play, MousePointerClick, Mail, Compass, Hammer, FlaskConical, FileBarChart, PenTool, Share2, Code2, ShoppingCart, Youtube, Linkedin, MessageCircle, Smartphone, Database, Brain, Cpu, GitBranch, Layers, Workflow, Eye, Lightbulb } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { useServerFn } from "@tanstack/react-start";
 import { createLead } from "@/lib/leads.functions";
@@ -264,7 +264,7 @@ function Home() {
                     <option>Social Media (SMO)</option>
                     <option>AI Automation</option>
                     <option>Content Marketing</option>
-                    <option>Email & Lifecycle</option>
+                    <option>WhatsApp & SMS Marketing</option>
                     <option>Web & CRO</option>
                   </select>
                   {errors.service && <p className="mt-1 text-xs text-red-500">{errors.service}</p>}
