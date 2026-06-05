@@ -315,32 +315,50 @@ function Home() {
         </div>
       </section>
 
-      {/* ============ TESTIMONIALS BENTO ============ */}
+      {/* ============ TESTIMONIALS CAROUSEL ============ */}
       <section className="border-y border-border bg-card/30">
         <div className="mx-auto max-w-7xl px-6 py-24">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Receipts</p>
             <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">What clients say</h2>
+            <p className="mt-4 text-muted-foreground">Real results from real brands — across SEO, paid, social &amp; lifecycle.</p>
           </div>
-          <div className="grid grid-cols-12 auto-rows-[minmax(160px,auto)] gap-4">
-            <div className="col-span-12 md:col-span-7 rounded-3xl border border-border bg-card p-8">
-              <Quote className="h-7 w-7 text-primary" />
-              <p className="mt-4 text-xl md:text-2xl font-display leading-snug">&ldquo;Organic traffic up <span className="text-gradient-gold">240%</span> and qualified leads have never been higher.&rdquo;</p>
-              <div className="mt-6 flex items-center gap-1">{Array.from({length:5}).map((_,i)=><Star key={i} className="h-4 w-4 fill-primary text-primary"/>)}</div>
-              <div className="mt-3"><div className="font-semibold text-sm">Sarah Mitchell</div><div className="text-xs text-muted-foreground">CEO, Northbridge Retail</div></div>
-            </div>
-            <div className="col-span-12 md:col-span-5 grid grid-rows-2 gap-4">
+          <Carousel opts={{ align: "start", loop: true }} className="relative">
+            <CarouselContent className="-ml-4">
               {[
-                ["\"PPC cut our CPL in half while doubling volume.\"","David Chen","Founder, Velocity SaaS"],
-                ["\"We scaled from regional to national. Strategy made the difference.\"","Maria Lopez","CMO, Harborline Homes"],
-              ].map(([q,n,r])=>(
-                <div key={n} className="rounded-3xl border border-border bg-card p-6">
-                  <p className="text-sm leading-relaxed">{q}</p>
-                  <div className="mt-3"><div className="font-semibold text-sm">{n}</div><div className="text-xs text-muted-foreground">{r}</div></div>
-                </div>
+                { q: "Organic traffic up 240% and qualified leads have never been higher.", n: "Sarah Mitchell", r: "CEO, Northbridge Retail", m: "SEO · 6 months", k: "+240%", kl: "Organic" },
+                { q: "PPC cut our CPL in half while doubling lead volume. Reporting is unmatched.", n: "David Chen", r: "Founder, Velocity SaaS", m: "Google Ads · 4 months", k: "-52%", kl: "CPL" },
+                { q: "We scaled from a regional player to a national brand. Strategy made the difference.", n: "Maria Lopez", r: "CMO, Harborline Homes", m: "Performance · 9 months", k: "5.8x", kl: "ROAS" },
+                { q: "Meta &amp; Google funnels now print revenue. Best marketing hire we&apos;ve made.", n: "Aarav Khanna", r: "Founder, Lumen D2C", m: "Paid Social · 5 months", k: "+312%", kl: "Revenue" },
+                { q: "Content + technical SEO finally clicked. We rank #1 on our money keywords.", n: "Priya Raman", r: "Head of Growth, Finovate", m: "SEO · 8 months", k: "#1", kl: "SERP" },
+              ].map((t) => (
+                <CarouselItem key={t.n} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                  <div className="h-full rounded-3xl border border-border bg-card p-7 flex flex-col">
+                    <div className="flex items-center justify-between">
+                      <Quote className="h-6 w-6 text-primary" />
+                      <div className="text-right">
+                        <div className="text-2xl font-display text-gradient-gold leading-none">{t.k}</div>
+                        <div className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">{t.kl}</div>
+                      </div>
+                    </div>
+                    <p className="mt-5 text-base leading-relaxed flex-1" dangerouslySetInnerHTML={{__html: `&ldquo;${t.q}&rdquo;`}} />
+                    <div className="mt-5 flex items-center gap-1">{Array.from({length:5}).map((_,i)=><Star key={i} className="h-4 w-4 fill-primary text-primary"/>)}</div>
+                    <div className="mt-4 pt-4 border-t border-border flex items-center justify-between gap-2">
+                      <div>
+                        <div className="font-semibold text-sm">{t.n}</div>
+                        <div className="text-xs text-muted-foreground">{t.r}</div>
+                      </div>
+                      <span className="text-[10px] uppercase tracking-widest text-primary font-semibold">{t.m}</span>
+                    </div>
+                  </div>
+                </CarouselItem>
               ))}
+            </CarouselContent>
+            <div className="flex justify-center gap-3 mt-8">
+              <CarouselPrevious className="static translate-y-0 h-10 w-10 border-border bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary" />
+              <CarouselNext className="static translate-y-0 h-10 w-10 border-border bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary" />
             </div>
-          </div>
+          </Carousel>
         </div>
       </section>
 
