@@ -494,7 +494,7 @@ function Home() {
               { Icon: ShoppingCart, title: "Amazon & Marketplaces", desc: "Sponsored Ads, listing optimization and DSP for brands scaling on Amazon and Flipkart.", bullets: ["Sponsored Ads", "Listing SEO", "Amazon DSP"] },
               { Icon: Share2, title: "Social Media (SMO)", desc: "Organic content calendars, community management and short-form video that compounds reach.", bullets: ["Content calendar", "Community ops", "Reels & Shorts"] },
               { Icon: PenTool, title: "Content Marketing", desc: "SEO-led articles, thought-leadership and lead magnets built to convert, not just rank.", bullets: ["Editorial strategy", "Long-form content", "Lead magnets"] },
-              { Icon: Mail, title: "Email & Lifecycle", desc: "Klaviyo, HubSpot and Mailchimp flows that turn one-time buyers into repeat revenue.", bullets: ["Welcome flows", "Win-back", "Segmentation"] },
+              { Icon: MessageCircle, title: "WhatsApp & SMS Marketing", desc: "Two-way WhatsApp Business API and SMS journeys with 95%+ open rates — built for commerce, support and re-engagement.", bullets: ["WhatsApp API", "SMS broadcasts", "Drip & chatbot flows"] },
               { Icon: Youtube, title: "Video & YouTube Ads", desc: "Performance video production plus YouTube media buying for awareness and conversion.", bullets: ["Ad production", "YouTube Ads", "Connected TV"] },
               { Icon: Code2, title: "Web & CRO", desc: "Landing pages, Shopify and Webflow builds — designed and tested to lift conversion.", bullets: ["Landing pages", "A/B testing", "Page speed"] },
               { Icon: BarChart3, title: "Analytics & Tracking", desc: "GA4, server-side tracking, BigQuery and Looker dashboards you can actually trust.", bullets: ["GA4 setup", "Server-side CAPI", "Looker dashboards"] },
@@ -506,7 +506,7 @@ function Home() {
                 className="group relative rounded-3xl border border-border bg-card p-6 hover:border-foreground transition overflow-hidden"
               >
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl bg-foreground text-background grid place-items-center">
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary border border-primary/30 grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                     <Icon className="h-5 w-5" />
                   </div>
                   <h3 className="font-display text-lg">{title}</h3>
