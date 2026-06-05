@@ -215,3 +215,47 @@ export const resendVerificationEmail = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true, email };
   });
+
+export const inviteUser = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { email: string; role?: AppRole }) =>
+    z
+      .object({
+        email: z.string().trim().email().max(255),
+        role: z.enum(APP_ROLES).optional(),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    // Try invite; if user already exists, fall back to magic link so we don't error
+    let userId: string | null = null;
+    const invite = await supabaseAdmin.auth.admin.inviteUserByEmail(data.email);
+    if (invite.error) {
+      // Look up existing user
+      const { data: list } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 200 });
+      const existing = list.users.find((u) => (u.email ?? "").toLowerCase() === data.email.toLowerCase());
+      if (!existing) throw new Error(invite.error.message);
+      userId = existing.id;
+      await supabaseAdmin.auth.admin.generateLink({ type: "magiclink", email: data.email });
+    } else {
+      userId = invite.data.user?.id ?? null;
+    }
+    if (userId && data.role) {
+      const { error } = await supabaseAdmin
+        .from("user_roles")
+        .upsert({ user_id: userId, role: data.role }, { onConflict: "user_id,role" });
+      if (error) throw new Error(error.message);
+      const actorEmail = await getActorEmail(context.userId);
+      await supabaseAdmin.from("role_audit_log").insert({
+        actor_user_id: context.userId,
+        actor_email: actorEmail,
+        target_user_id: userId,
+        target_email: data.email,
+        role: data.role,
+        action: "assigned",
+      });
+    }
+    return { ok: true, userId };
+  });
