@@ -14,6 +14,7 @@ import {
 } from "@/lib/services.functions";
 import { ICON_OPTIONS, iconFor, type Service } from "@/lib/services.shared";
 import { supabase } from "@/integrations/supabase/client";
+import { useIdleLogout } from "@/hooks/use-idle-logout";
 import {
   listAllPosts,
   upsertPost,
@@ -126,6 +127,7 @@ function emptyService(nextOrder: number): ServiceInput {
 function AdminPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
+  useIdleLogout(10 * 60 * 1000);
   const list = useServerFn(listServices);
   const caps = useServerFn(getMyCapabilities);
   const analytics = useServerFn(getServiceAnalytics);
