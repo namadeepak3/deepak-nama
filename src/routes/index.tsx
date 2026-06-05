@@ -79,52 +79,83 @@ function Home() {
   return (
     <>
       <Toaster />
-      <section className="relative overflow-hidden bg-digital border-b border-border">
-        <div className="relative mx-auto max-w-7xl px-6 pt-16 pb-20 md:pt-24 md:pb-28 grid lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-7">
-            <div className="inline-flex items-center gap-2 rounded-full border border-ink/20 bg-white/70 backdrop-blur px-3 py-1 text-xs text-foreground">
-              <Sparkles className="h-3 w-3" />
-              AI-native freelance studio · open for projects
-            </div>
-            <h1 className="mt-6 text-5xl md:text-6xl font-display font-semibold leading-[1.04] tracking-tight">
-              Digital marketing,<br />
-              <span className="text-gradient-gold">engineered with AI.</span>
-            </h1>
-            <p className="mt-6 max-w-xl text-lg text-muted-foreground leading-relaxed">
-              I&apos;m <span className="text-foreground font-medium">vrseoguru</span> — a freelance growth partner blending SEO, PPC,
-              performance marketing and SMO with AI workflows that compound revenue.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/contact" className="group inline-flex items-center gap-2 rounded-md bg-ink px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-foreground transition-colors">
-                Book a free strategy call
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link to="/services" className="inline-flex items-center gap-2 rounded-md border border-ink/30 bg-white px-6 py-3 text-sm font-medium text-foreground hover:border-ink transition-colors">
-                Explore services
-              </Link>
-            </div>
-            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs text-muted-foreground">
-              <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4" /> Transparent reporting</div>
-              <div className="flex items-center gap-2"><Zap className="h-4 w-4" /> Ship in days, not months</div>
-              <div className="flex items-center gap-2"><LineChart className="h-4 w-4" /> Profit-first metrics</div>
-            </div>
+
+      {/* ============ HERO — Bento Grid ============ */}
+      <section className="relative overflow-hidden bg-digital">
+        <div className="relative mx-auto max-w-7xl px-6 pt-14 pb-16 md:pt-20 md:pb-24">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-8">
+            <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span></span>
+            AI-native freelance studio · open for Q3 projects
           </div>
 
-          {/* Inquiry form */}
-          <div className="lg:col-span-5">
-            {submitted ? (
-              <div className="rounded-2xl border border-border bg-white shadow-gold p-8 text-center">
-                <div className="mx-auto h-14 w-14 rounded-full bg-ink/5 grid place-items-center">
-                  <CheckCircle2 className="h-8 w-8 text-ink" />
+          {/* Bento grid */}
+          <div className="grid grid-cols-12 auto-rows-[minmax(110px,auto)] gap-4">
+
+            {/* Headline — large */}
+            <div className="col-span-12 lg:col-span-8 row-span-2 rounded-3xl border border-border bg-card/60 backdrop-blur p-8 md:p-10 relative overflow-hidden">
+              <div className="absolute -top-32 -right-32 h-80 w-80 rounded-full bg-primary/20 blur-3xl" />
+              <p className="relative text-xs uppercase tracking-[0.25em] text-primary font-sans font-semibold">Digital marketing × AI · 2026</p>
+              <h1 className="relative mt-5 text-4xl md:text-6xl lg:text-7xl font-display uppercase leading-[0.95] tracking-tight">
+                Growth, <span className="text-gradient-gold">engineered</span><br/>by algorithms.
+              </h1>
+              <p className="relative mt-6 max-w-xl text-base md:text-lg text-muted-foreground leading-relaxed">
+                I&apos;m <span className="text-foreground font-semibold">vrseoguru</span> — a freelance partner fusing SEO, PPC, performance &amp; social into AI-driven systems that compound revenue, not vanity metrics.
+              </p>
+              <div className="relative mt-7 flex flex-wrap gap-3">
+                <Link to="/contact" className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
+                  Book strategy call <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+                <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary transition">
+                  <Play className="h-3.5 w-3.5" /> See services
+                </Link>
+              </div>
+            </div>
+
+            {/* Live metric tile */}
+            <div className="col-span-6 lg:col-span-4 rounded-3xl border border-border bg-gradient-to-br from-primary/20 to-card p-6 relative overflow-hidden">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase tracking-widest text-primary font-semibold">Avg ROAS</span>
+                <Activity className="h-4 w-4 text-primary" />
+              </div>
+              <div className="mt-3 text-5xl font-display text-foreground">4.2x</div>
+              <div className="mt-2 flex items-end gap-1 h-10">
+                {[30,45,38,60,52,72,68,85,78,92].map((h,i)=>(
+                  <div key={i} className="flex-1 rounded-sm bg-primary/60" style={{height:`${h}%`}}/>
+                ))}
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">+38% vs. industry benchmark</p>
+            </div>
+
+            {/* Tag tile */}
+            <div className="col-span-6 lg:col-span-4 rounded-3xl border border-border bg-card p-6 flex flex-col justify-between">
+              <Bot className="h-6 w-6 text-primary" />
+              <div>
+                <p className="text-xs uppercase tracking-widest text-muted-foreground">Stack 2026</p>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {["GPT-5","Claude","GA4","GSC","Looker","Meta CAPI"].map(t => (
+                    <span key={t} className="rounded-md bg-secondary border border-border px-2 py-0.5 text-[11px] text-foreground">{t}</span>
+                  ))}
                 </div>
-                <h3 className="mt-5 text-2xl font-display font-semibold">Thanks, {submitted.name}!</h3>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Inquiry strip */}
+          <div id="inquiry" className="mt-6">
+            {submitted ? (
+              <div className="rounded-3xl border border-border bg-card shadow-gold p-10 text-center">
+                <div className="mx-auto h-14 w-14 rounded-full bg-primary/15 grid place-items-center">
+                  <CheckCircle2 className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="mt-5 text-2xl font-display uppercase">Thanks, {submitted.name}!</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
                   Your inquiry has been received. I&apos;ll reply to <span className="text-foreground font-medium">{submitted.email}</span> within 24 hours.
                 </p>
                 <button
                   type="button"
                   onClick={() => setSubmitted(null)}
-                  className="mt-6 inline-flex items-center gap-2 rounded-md border border-ink/30 bg-white px-5 py-2.5 text-sm font-medium text-foreground hover:border-ink transition-colors"
+                  className="mt-6 inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-5 py-2.5 text-sm font-medium text-foreground hover:border-primary transition"
                 >
                   Send another inquiry
                 </button>
@@ -132,286 +163,279 @@ function Home() {
             ) : (
             <form
               onSubmit={onInquiry}
-              className="rounded-2xl border border-border bg-white shadow-gold p-6 md:p-7 space-y-4"
+              className="rounded-3xl border border-border bg-card/80 backdrop-blur p-6 md:p-8"
             >
-              <div>
-                <p className="text-xs uppercase tracking-widest text-muted-foreground">Quick inquiry</p>
-                <h3 className="mt-1 text-xl font-display font-semibold">Get a free 30-day plan</h3>
+              <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Quick inquiry</p>
+                  <h3 className="mt-1 text-2xl md:text-3xl font-display uppercase">Get a free 30-day plan</h3>
+                </div>
+                <p className="text-xs text-muted-foreground">Reply within 24h · No spam</p>
               </div>
-
-              <div>
-                <input name="name" placeholder="Your name" className={`w-full rounded-md bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-ink ${errors.name ? "border-red-400" : "border-border"}`} />
-                {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <input name="name" placeholder="Your name" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.name ? "border-red-400" : "border-border"}`} />
+                  {errors.name && <p className="mt-1 text-xs text-red-400">{errors.name}</p>}
+                </div>
+                <div>
+                  <input name="email" type="email" placeholder="Email address" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.email ? "border-red-400" : "border-border"}`} />
+                  {errors.email && <p className="mt-1 text-xs text-red-400">{errors.email}</p>}
+                </div>
+                <div>
+                  <select name="service" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.service ? "border-red-400" : "border-border"}`}>
+                    <option value="">Select a service</option>
+                    <option>SEO</option>
+                    <option>Performance Marketing</option>
+                    <option>PPC</option>
+                    <option>Social Media (SMO)</option>
+                    <option>AI Automation</option>
+                  </select>
+                  {errors.service && <p className="mt-1 text-xs text-red-400">{errors.service}</p>}
+                </div>
+                <div>
+                  <select name="budget" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.budget ? "border-red-400" : "border-border"}`}>
+                    <option value="">Select budget range</option>
+                    <option>Under ₹10,000</option>
+                    <option>₹10,000 – ₹50,000</option>
+                    <option>₹50,000 – ₹1,00,000</option>
+                    <option>₹1,00,000 – ₹5,00,000</option>
+                    <option>₹5,00,000+</option>
+                  </select>
+                  {errors.budget && <p className="mt-1 text-xs text-red-400">{errors.budget}</p>}
+                </div>
+                <div className="md:col-span-2">
+                  <textarea name="message" rows={3} placeholder="Tell me about your goals..." className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none ${errors.message ? "border-red-400" : "border-border"}`} />
+                  {errors.message && <p className="mt-1 text-xs text-red-400">{errors.message}</p>}
+                </div>
+                <button
+                  type="submit"
+                  disabled={sending}
+                  className="md:col-span-2 w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition disabled:opacity-60 shadow-gold"
+                >
+                  {sending ? "Sending..." : <>Send inquiry <Send className="h-4 w-4" /></>}
+                </button>
               </div>
-
-              <div>
-                <input name="email" type="email" placeholder="Email address" className={`w-full rounded-md bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-ink ${errors.email ? "border-red-400" : "border-border"}`} />
-                {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
-              </div>
-
-              <div>
-                <select name="service" className={`w-full rounded-md bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-ink ${errors.service ? "border-red-400" : "border-border"}`}>
-                  <option value="">Select a service</option>
-                  <option>SEO</option>
-                  <option>Performance Marketing</option>
-                  <option>PPC</option>
-                  <option>Social Media (SMO)</option>
-                  <option>AI Automation</option>
-                </select>
-                {errors.service && <p className="mt-1 text-xs text-red-500">{errors.service}</p>}
-              </div>
-
-              <div>
-                <select name="budget" className={`w-full rounded-md bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-ink ${errors.budget ? "border-red-400" : "border-border"}`}>
-                  <option value="">Select budget range</option>
-                  <option>Under ₹10,000</option>
-                  <option>₹10,000 – ₹50,000</option>
-                  <option>₹50,000 – ₹1,00,000</option>
-                  <option>₹1,00,000 – ₹5,00,000</option>
-                  <option>₹5,00,000+</option>
-                </select>
-                {errors.budget && <p className="mt-1 text-xs text-red-500">{errors.budget}</p>}
-              </div>
-
-              <div>
-                <textarea name="message" rows={3} placeholder="Tell me about your goals..." className={`w-full rounded-md bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-ink resize-none ${errors.message ? "border-red-400" : "border-border"}`} />
-                {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message}</p>}
-              </div>
-
-              <button
-                type="submit"
-                disabled={sending}
-                className="w-full inline-flex justify-center items-center gap-2 rounded-md bg-ink px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-foreground transition-colors disabled:opacity-60"
-              >
-                {sending ? "Sending..." : <>Send inquiry <Send className="h-4 w-4" /></>}
-              </button>
-              <p className="text-[11px] text-muted-foreground text-center">Reply within 24 hours · No spam.</p>
             </form>
             )}
           </div>
         </div>
+      </section>
 
-        {/* Stats below hero */}
-        <div className="relative mx-auto max-w-7xl px-6 pb-16">
-          <dl className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[["7+ yrs", "Marketing craft"],["120+", "Campaigns shipped"],["4.2x", "Avg. ROAS lift"],["24h", "Reply window"]].map(([k, v]) => (
-              <div key={v}>
-                <dt className="text-3xl font-display font-semibold text-foreground">{k}</dt>
-                <dd className="mt-1 text-sm text-muted-foreground">{v}</dd>
-              </div>
-            ))}
-          </dl>
+      {/* ============ MARQUEE / TRUST ============ */}
+      <section className="border-y border-border bg-card/40 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-6 py-6 flex items-center gap-10 text-xs uppercase tracking-[0.25em] text-muted-foreground overflow-x-auto scrollbar-hide">
+          <span className="text-primary font-semibold whitespace-nowrap">Trusted across</span>
+          {["Ecommerce","SaaS","Fintech","Healthcare","D2C","Real Estate","Education","B2B"].map(t=>(
+            <span key={t} className="whitespace-nowrap">— {t}</span>
+          ))}
         </div>
       </section>
 
+      {/* ============ SERVICES — BENTO ============ */}
       <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="flex items-end justify-between flex-wrap gap-6 mb-12">
-          <div>
-            <p className="text-sm text-primary uppercase tracking-widest">What I do</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display font-semibold max-w-2xl">A full-stack growth engine for ambitious brands.</h2>
+        <div className="flex items-end justify-between flex-wrap gap-6 mb-10">
+          <div className="max-w-2xl">
+            <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">What I do</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase leading-[1.05]">A full-stack growth <span className="text-gradient-gold">engine.</span></h2>
           </div>
           <Link to="/services" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">
             All services <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-border rounded-2xl overflow-hidden border border-border">
-          {services.map((s) => {
+        <div className="grid grid-cols-12 auto-rows-[minmax(180px,auto)] gap-4">
+          {services.map((s, i) => {
             const Icon = iconFor(s.icon);
+            const sizes = [
+              "col-span-12 md:col-span-7",
+              "col-span-12 md:col-span-5",
+              "col-span-12 md:col-span-4",
+              "col-span-12 md:col-span-4",
+              "col-span-12 md:col-span-4",
+              "col-span-12 md:col-span-6",
+              "col-span-12 md:col-span-6",
+            ];
             return (
               <Link
                 key={s.slug}
                 to="/services/$slug"
                 params={{ slug: s.slug }}
-                className="group bg-card p-8 hover:bg-secondary transition-colors block"
+                className={`group relative ${sizes[i % sizes.length]} rounded-3xl border border-border bg-card p-7 hover:border-primary transition overflow-hidden`}
               >
-                <div className="h-11 w-11 rounded-lg bg-primary/10 border border-primary/30 grid place-items-center mb-5">
+                <div className="absolute -bottom-16 -right-16 h-44 w-44 rounded-full bg-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition" />
+                <div className="relative h-11 w-11 rounded-xl bg-primary/15 border border-primary/30 grid place-items-center mb-5">
                   <Icon className="h-5 w-5 text-primary" />
                 </div>
-                <h3 className="text-xl font-display font-semibold">{s.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.shortDesc}</p>
+                <h3 className="relative text-xl md:text-2xl font-display uppercase">{s.title}</h3>
+                <p className="relative mt-2 text-sm text-muted-foreground leading-relaxed">{s.shortDesc}</p>
+                <div className="relative mt-5 inline-flex items-center gap-1 text-xs font-semibold text-primary opacity-0 group-hover:opacity-100 transition">
+                  Learn more <ArrowRight className="h-3.5 w-3.5" />
+                </div>
               </Link>
             );
           })}
         </div>
       </section>
 
-      {/* Who We Are */}
-      <section className="mx-auto max-w-7xl px-6 py-24 grid lg:grid-cols-2 gap-12 items-center">
-        <div>
-          <p className="text-xs uppercase tracking-widest text-foreground/70 font-medium">Who I am</p>
-          <h2 className="mt-4 text-4xl md:text-5xl font-display font-semibold leading-tight">A growth partner, not just another freelancer</h2>
-          <p className="mt-5 text-muted-foreground leading-relaxed">
-            vrseoguru is a freelance digital marketing practice built around one principle: measurable results.
-            Senior strategy, certified specialists, and proven frameworks — turning marketing into a predictable engine for revenue.
-          </p>
-          <ul className="mt-6 space-y-3 text-sm">
-            {["Senior, certified marketing expertise","Transparent reporting tied to revenue","Custom strategies built for your market"].map((t) => (
-              <li key={t} className="flex items-center gap-3"><CheckCircle2 className="h-5 w-5 text-foreground" /> {t}</li>
-            ))}
-          </ul>
-          <Link to="/about" className="mt-8 inline-flex items-center gap-2 rounded-md bg-ink px-6 py-3 text-sm font-medium text-primary-foreground hover:bg-foreground transition-colors">
-            Learn more about me <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 gap-5">
-          {[
-            { Icon: TrendingUp, title: "ROI-Focused", desc: "Every campaign optimized for return." },
-            { Icon: ShieldCheck, title: "Transparent", desc: "Clear reporting, no surprises." },
-            { Icon: Award, title: "Certified", desc: "Google, Meta & Amazon experts." },
-            { Icon: Star, title: "Proven", desc: "120+ campaigns shipped." },
-          ].map(({ Icon, title, desc }) => (
-            <div key={title} className="rounded-2xl border border-border bg-white p-6">
-              <div className="h-11 w-11 rounded-lg bg-ink grid place-items-center">
-                <Icon className="h-5 w-5 text-white" />
+      {/* ============ 2026 TRENDS ============ */}
+      <section className="border-y border-border bg-card/30">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+          <div className="grid lg:grid-cols-12 gap-10 items-end mb-12">
+            <div className="lg:col-span-7">
+              <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">2026 playbook</p>
+              <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase leading-[1.05]">Marketing trends I&apos;m <span className="text-gradient-gold">building on.</span></h2>
+            </div>
+            <p className="lg:col-span-5 text-muted-foreground">Every strategy I ship leans into where attention &amp; algorithms are heading next — not where they used to be.</p>
+          </div>
+          <div className="grid grid-cols-12 auto-rows-[minmax(160px,auto)] gap-4">
+            {[
+              { Icon: Search, title: "AI Search (SGE & GEO)", desc: "Optimizing for Google AI Overviews, Perplexity & ChatGPT citations.", span: "col-span-12 md:col-span-6 lg:col-span-5" },
+              { Icon: Bot, title: "Agentic Automation", desc: "AI agents handling reporting, bidding & creative iteration 24/7.", span: "col-span-12 md:col-span-6 lg:col-span-4" },
+              { Icon: Target, title: "First-party data", desc: "Server-side tracking, CAPI & CDPs in a cookieless world.", span: "col-span-12 md:col-span-12 lg:col-span-3" },
+              { Icon: Megaphone, title: "Short-form video", desc: "Reels, Shorts & TikTok funnels engineered to convert, not just go viral.", span: "col-span-12 md:col-span-6 lg:col-span-4" },
+              { Icon: BarChart3, title: "Incrementality testing", desc: "Geo-lifts & MMM to prove what actually drives revenue.", span: "col-span-12 md:col-span-6 lg:col-span-4" },
+              { Icon: Globe, title: "Omnichannel attribution", desc: "Unified GA4 + warehouse views — one source of truth.", span: "col-span-12 md:col-span-12 lg:col-span-4" },
+            ].map(({ Icon, title, desc, span }) => (
+              <div key={title} className={`${span} rounded-3xl border border-border bg-card p-7 hover:border-primary transition`}>
+                <Icon className="h-6 w-6 text-primary" />
+                <h3 className="mt-4 text-lg md:text-xl font-display uppercase">{title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
               </div>
-              <h3 className="mt-4 font-display font-semibold">{title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============ PROCESS ============ */}
+      <section className="mx-auto max-w-7xl px-6 py-24">
+        <div className="text-center max-w-2xl mx-auto">
+          <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">My process</p>
+          <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">A proven path to growth</h2>
+          <p className="mt-4 text-muted-foreground">A transparent, repeatable system that turns goals into compounding revenue.</p>
+        </div>
+        <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-5 gap-4">
+          {[
+            ["01","Discovery & Audit","Deep market, competitor & funnel analysis."],
+            ["02","Strategy","Custom data-backed roadmap aligned to revenue."],
+            ["03","Implementation","Multi-channel execution with AI-assisted ops."],
+            ["04","Optimization","Continuous testing, learning, scaling."],
+            ["05","Reporting","Real-time dashboards. Monthly strategic reviews."],
+          ].map(([num, title, desc]) => (
+            <div key={num} className="rounded-3xl border border-border bg-card p-6 hover:border-primary transition">
+              <div className="text-3xl font-display text-gradient-gold">{num}</div>
+              <h3 className="mt-3 font-display uppercase">{title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="bg-secondary border-y border-border">
+      {/* ============ TESTIMONIALS BENTO ============ */}
+      <section className="border-y border-border bg-card/30">
         <div className="mx-auto max-w-7xl px-6 py-24">
-          <div className="text-center max-w-2xl mx-auto">
-            <p className="text-xs uppercase tracking-widest text-foreground/70 font-medium">Why work with me</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display font-semibold">Built for results, trusted for the long term</h2>
-            <p className="mt-4 text-muted-foreground">Long-term partnerships through performance, transparency, and a relentless focus on your bottom line.</p>
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Receipts</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">What clients say</h2>
           </div>
-          <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[
-              ["Proven Results","A track record of measurable growth across hundreds of campaigns and industries."],
-              ["Transparent Reporting","Real-time dashboards and clear monthly reports — you always know what's working."],
-              ["Certified Experts","Google, Meta, and Amazon certified specialists with deep platform expertise."],
-              ["Customized Strategies","No templates. Every strategy is engineered around your goals and market."],
-              ["Dedicated Partnership","A single point of contact who knows your business inside and out."],
-              ["ROI-Focused Campaigns","Every decision is tied to revenue and return — not vanity metrics."],
-            ].map(([title, desc]) => (
-              <div key={title} className="rounded-2xl border border-border bg-white p-6">
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-foreground mt-0.5 shrink-0" />
-                  <div>
-                    <h3 className="font-display font-semibold">{title}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{desc}</p>
-                  </div>
+          <div className="grid grid-cols-12 auto-rows-[minmax(160px,auto)] gap-4">
+            <div className="col-span-12 md:col-span-7 rounded-3xl border border-border bg-card p-8">
+              <Quote className="h-7 w-7 text-primary" />
+              <p className="mt-4 text-xl md:text-2xl font-display leading-snug">&ldquo;Organic traffic up <span className="text-gradient-gold">240%</span> and qualified leads have never been higher.&rdquo;</p>
+              <div className="mt-6 flex items-center gap-1">{Array.from({length:5}).map((_,i)=><Star key={i} className="h-4 w-4 fill-primary text-primary"/>)}</div>
+              <div className="mt-3"><div className="font-semibold text-sm">Sarah Mitchell</div><div className="text-xs text-muted-foreground">CEO, Northbridge Retail</div></div>
+            </div>
+            <div className="col-span-12 md:col-span-5 grid grid-rows-2 gap-4">
+              {[
+                ["\"PPC cut our CPL in half while doubling volume.\"","David Chen","Founder, Velocity SaaS"],
+                ["\"We scaled from regional to national. Strategy made the difference.\"","Maria Lopez","CMO, Harborline Homes"],
+              ].map(([q,n,r])=>(
+                <div key={n} className="rounded-3xl border border-border bg-card p-6">
+                  <p className="text-sm leading-relaxed">{q}</p>
+                  <div className="mt-3"><div className="font-semibold text-sm">{n}</div><div className="text-xs text-muted-foreground">{r}</div></div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Our Process */}
-      <section className="bg-ink text-white">
-        <div className="mx-auto max-w-7xl px-6 py-24">
-          <div className="text-center max-w-2xl mx-auto">
-            <p className="text-xs uppercase tracking-widest text-white/60 font-medium">My process</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display font-semibold">A proven path to growth</h2>
-            <p className="mt-4 text-white/70">A transparent, repeatable process that turns goals into measurable results.</p>
-          </div>
-          <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-5 gap-5">
-            {[
-              ["01","Discovery & Audit","Analyze your business, market, competitors, and current performance to find opportunities."],
-              ["02","Strategy Development","Build a custom, data-backed roadmap aligned with your growth goals."],
-              ["03","Implementation","Execute campaigns with precision across every channel."],
-              ["04","Optimization","Continuously test, refine, and scale what drives the best returns."],
-              ["05","Reporting & Growth","Transparent reporting and strategic reviews keep growth compounding."],
-            ].map(([num, title, desc]) => (
-              <div key={num} className="rounded-2xl border border-white/15 bg-white/[0.04] p-6">
-                <div className="text-3xl font-display font-semibold text-white">{num}</div>
-                <h3 className="mt-3 font-display font-semibold">{title}</h3>
-                <p className="mt-2 text-sm text-white/70 leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
+      {/* ============ WHY ME + STATS BENTO ============ */}
       <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="text-center max-w-2xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-display font-semibold">What clients say</h2>
-          <p className="mt-4 text-muted-foreground">Don&apos;t take my word for it — hear from the businesses I&apos;ve helped grow.</p>
-        </div>
-        <div className="mt-12 grid md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-12 auto-rows-[minmax(140px,auto)] gap-4">
+          <div className="col-span-12 md:col-span-8 rounded-3xl border border-border bg-card p-8 md:p-10 relative overflow-hidden">
+            <div className="absolute -top-20 -left-20 h-64 w-64 rounded-full bg-primary/15 blur-3xl"/>
+            <p className="relative text-xs uppercase tracking-[0.25em] text-primary font-semibold">Who I am</p>
+            <h2 className="relative mt-3 text-3xl md:text-5xl font-display uppercase leading-[1.05]">Growth partner, not just <span className="text-gradient-gold">another freelancer.</span></h2>
+            <p className="relative mt-5 max-w-xl text-muted-foreground leading-relaxed">Senior strategy, certified specialists &amp; AI-powered frameworks — turning marketing into a predictable engine for revenue.</p>
+            <Link to="/about" className="relative mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
+              About me <ArrowRight className="h-4 w-4"/>
+            </Link>
+          </div>
           {[
-            ["\"Transformed our online presence. Organic traffic is up 240% and qualified leads have never been higher.\"","Sarah Mitchell","CEO, Northbridge Retail"],
-            ["\"PPC management cut our cost per lead in half while doubling volume. The transparency and reporting are unmatched.\"","David Chen","Founder, Velocity SaaS"],
-            ["\"We scaled from a regional player to a national brand. The strategy and execution made the difference.\"","Maria Lopez","CMO, Harborline Homes"],
-          ].map(([quote, name, role]) => (
-            <div key={name} className="rounded-2xl border border-border bg-white p-6">
-              <Quote className="h-6 w-6 text-foreground" />
-              <p className="mt-4 text-sm text-foreground leading-relaxed">{quote}</p>
-              <div className="mt-5 flex items-center gap-1">
-                {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-foreground text-foreground" />)}
-              </div>
-              <div className="mt-4">
-                <div className="font-semibold text-sm">{name}</div>
-                <div className="text-xs text-muted-foreground">{role}</div>
-              </div>
+            ["7+","Years"],
+            ["120+","Campaigns"],
+            ["4.2x","Avg ROAS"],
+            ["24h","Reply"],
+          ].map(([k,v])=>(
+            <div key={v} className="col-span-6 md:col-span-2 rounded-3xl border border-border bg-card p-6 flex flex-col justify-between">
+              <div className="text-3xl md:text-4xl font-display text-gradient-gold">{k}</div>
+              <div className="text-xs uppercase tracking-widest text-muted-foreground">{v}</div>
+            </div>
+          ))}
+          {[
+            { Icon: TrendingUp, title: "ROI-Focused", desc: "Every campaign tied to return." },
+            { Icon: ShieldCheck, title: "Transparent", desc: "Real-time dashboards." },
+            { Icon: Award, title: "Certified", desc: "Google, Meta & Amazon." },
+            { Icon: Rocket, title: "Fast", desc: "Ship in days, not months." },
+          ].map(({Icon,title,desc})=>(
+            <div key={title} className="col-span-6 md:col-span-3 rounded-3xl border border-border bg-card p-6">
+              <Icon className="h-5 w-5 text-primary"/>
+              <h3 className="mt-3 font-display uppercase">{title}</h3>
+              <p className="mt-1 text-xs text-muted-foreground">{desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Industries */}
-      <section className="bg-secondary border-y border-border">
+      {/* ============ INSIGHTS ============ */}
+      <section className="border-y border-border bg-card/30">
         <div className="mx-auto max-w-7xl px-6 py-24">
-          <div className="text-center max-w-2xl mx-auto">
-            <p className="text-xs uppercase tracking-widest text-foreground/70 font-medium">Industries I serve</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display font-semibold">Expertise across every sector</h2>
-            <p className="mt-4 text-muted-foreground">Tailored strategies for the unique dynamics of your industry.</p>
+          <div className="flex items-end justify-between flex-wrap gap-6 mb-12">
+            <div>
+              <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Insights</p>
+              <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">Fresh from the blog</h2>
+            </div>
+            <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">All articles <ArrowRight className="h-4 w-4"/></Link>
           </div>
-          <div className="mt-10 flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
-            {["Ecommerce & Retail","SaaS & Technology","Healthcare","Real Estate","Professional Services","Finance & Insurance","Manufacturing","Hospitality & Travel","Education","Legal","Home Services","B2B & Industrial"].map((tag) => (
-              <span key={tag} className="rounded-full border border-border bg-white px-5 py-2 text-sm text-foreground">{tag}</span>
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              ["SEO","10 SEO Trends That Will Define 2026","AI search, entity optimization & what brands are doing to stay ahead.","May 28 · 8 min"],
+              ["PPC","Maximize ROI From Google Ads in 2026","Lower CPA and scale profitable campaigns with AI bidding.","May 14 · 6 min"],
+              ["Content","Content That Actually Converts","The framework I use to build assets that drive real revenue.","Apr 30 · 7 min"],
+            ].map(([tag,title,desc,meta])=>(
+              <article key={title} className="rounded-3xl border border-border bg-card p-6 flex flex-col hover:border-primary transition">
+                <span className="self-start rounded-full bg-primary/15 border border-primary/30 px-3 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-widest">{tag}</span>
+                <h3 className="mt-4 text-lg font-display uppercase leading-snug">{title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{desc}</p>
+                <p className="mt-5 text-xs text-muted-foreground">{meta}</p>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Blog / Insights */}
+      {/* ============ FINAL CTA ============ */}
       <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="text-center max-w-2xl mx-auto">
-          <p className="text-xs uppercase tracking-widest text-foreground/70 font-medium">Insights</p>
-          <h2 className="mt-3 text-4xl md:text-5xl font-display font-semibold">Latest from the blog</h2>
-          <p className="mt-4 text-muted-foreground">Actionable strategies and trends to keep your marketing ahead of the curve.</p>
-        </div>
-        <div className="mt-12 grid md:grid-cols-3 gap-5">
-          {[
-            ["SEO","10 SEO Trends That Will Define 2026","From AI-driven search to entity optimization, here's what forward-thinking brands are doing to stay ahead.","May 28, 2026 · 8 min read"],
-            ["PPC","How to Maximize ROI From Google Ads in 2026","Practical strategies to lower your cost per acquisition and scale profitable campaigns.","May 14, 2026 · 6 min read"],
-            ["Content Marketing","The Anatomy of Content That Actually Converts","Why most content fails — and the framework I use to create assets that drive revenue.","April 30, 2026 · 7 min read"],
-          ].map(([tag, title, desc, meta]) => (
-            <article key={title} className="rounded-2xl border border-border bg-white p-6 flex flex-col">
-              <span className="self-start rounded-full bg-secondary border border-border px-3 py-1 text-xs font-medium">{tag}</span>
-              <h3 className="mt-4 text-lg font-display font-semibold leading-snug">{title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{desc}</p>
-              <p className="mt-5 text-xs text-muted-foreground">{meta}</p>
-            </article>
-          ))}
-        </div>
-        <div className="mt-10 text-center">
-          <Link to="/blog" className="inline-flex items-center gap-2 rounded-md border border-ink/30 bg-white px-6 py-3 text-sm font-medium text-foreground hover:border-ink transition-colors">
-            Read all articles <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="mx-auto max-w-7xl px-6 pb-24">
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-ink text-white p-12 md:p-16 text-center">
-          <h2 className="text-4xl md:text-5xl font-display font-semibold">Ready to accelerate your growth?</h2>
-          <p className="mt-4 max-w-2xl mx-auto text-white/70">
-            Book a free, no-obligation strategy call. I&apos;ll audit your current marketing and show you exactly where the biggest opportunities are.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3 justify-center">
-            <Link to="/contact" className="inline-flex items-center gap-2 rounded-md bg-white text-ink px-6 py-3 text-sm font-medium hover:bg-white/90 transition-colors">
-              Get Free Strategy Call <ArrowRight className="h-4 w-4" />
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/30 via-card to-card p-12 md:p-20 text-center">
+          <div className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-primary/30 blur-3xl"/>
+          <p className="relative text-xs uppercase tracking-[0.25em] text-primary font-semibold">Let&apos;s build</p>
+          <h2 className="relative mt-4 text-4xl md:text-6xl font-display uppercase leading-[1.02]">Ready to <span className="text-gradient-gold">accelerate</span><br/>your growth?</h2>
+          <p className="relative mt-5 max-w-xl mx-auto text-muted-foreground">Free, no-obligation strategy call. I&apos;ll audit your marketing &amp; show you the biggest opportunities.</p>
+          <div className="relative mt-8 flex flex-wrap gap-3 justify-center">
+            <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
+              Book free call <ArrowRight className="h-4 w-4"/>
             </Link>
-            <Link to="/services" className="inline-flex items-center gap-2 rounded-md border border-white/30 px-6 py-3 text-sm font-medium text-white hover:border-white transition-colors">
-              <Phone className="h-4 w-4" /> View Services
+            <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-7 py-3.5 text-sm font-semibold text-foreground hover:border-primary transition">
+              <Phone className="h-4 w-4"/> View services
             </Link>
           </div>
         </div>
