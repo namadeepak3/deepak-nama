@@ -113,7 +113,8 @@ export const createLead = createServerFn({ method: "POST" })
       ip = getRequestIP({ xForwardedFor: true }) ?? "";
       ua = getRequestHeader("user-agent") ?? "";
     } catch { /* not in request scope */ }
-    const { error } = await supabaseAdmin.from("leads").insert({
+    const kind = data.kind ?? "inquiry";
+    const { data: inserted, error } = await supabaseAdmin.from("leads").insert({
       name: data.name,
       email: data.email,
       phone: data.phone ?? "",
@@ -122,7 +123,10 @@ export const createLead = createServerFn({ method: "POST" })
       service: data.service ?? "",
       budget: data.budget ?? "",
       message: data.message,
-      kind: data.kind ?? "inquiry",
+      kind,
+      status: "new",
+      assigned_to: null,
+      assigned_email: "",
       page_url: data.pageUrl ?? "",
       referrer: data.referrer ?? "",
       utm_source: data.utmSource ?? "",
@@ -130,8 +134,20 @@ export const createLead = createServerFn({ method: "POST" })
       utm_campaign: data.utmCampaign ?? "",
       ip_address: ip,
       user_agent: ua,
-    });
+    }).select("id").maybeSingle();
     if (error) throw new Error(error.message);
+    // System notification for admins (visible in Activity panel)
+    if (inserted?.id) {
+      await supabaseAdmin.from("lead_audit_log").insert({
+        lead_id: inserted.id,
+        actor_user_id: "00000000-0000-0000-0000-000000000000",
+        actor_email: "system",
+        action: kind === "audit" ? "audit_lead_created" : "lead_created",
+        field: "status",
+        old_value: "",
+        new_value: "new",
+      });
+    }
     return { ok: true };
   });
 
