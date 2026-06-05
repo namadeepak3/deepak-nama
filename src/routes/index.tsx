@@ -151,6 +151,10 @@ function Home() {
             has_website: Boolean(values.website),
           });
           try { sessionStorage.setItem("auditPopupShown", "1"); } catch { /* ignore */ }
+          const preview = await fetchAuditPreview({ data: { website: values.website, message: values.message } });
+          return preview;
+        }}
+        onViewFullResult={() => {
           setAuditOpen(false);
           navigate({ to: "/thank-you" });
         }}
