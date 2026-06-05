@@ -568,13 +568,13 @@ function Home() {
         </div>
         <Accordion type="single" collapsible className="space-y-3">
           {[
-            { q: "What services do you offer?", a: "Full-stack digital marketing — SEO &amp; GEO, Google Ads, Meta &amp; LinkedIn paid social, performance creative, lifecycle/email, analytics, and AI-powered automation." },
-            { q: "How much do you charge?", a: "Project retainers typically range ₹50k–₹5L/mo depending on scope, channels and ad spend. Every quote is custom — book a strategy call for a tailored proposal." },
-            { q: "How fast will I see results?", a: "Paid channels usually show signal within 2–3 weeks. SEO compounds over 3–6 months. I share a 30/60/90-day roadmap before we start so expectations are crystal clear." },
-            { q: "Do you work with my industry?", a: "I&apos;ve shipped campaigns across 18+ industries — ecommerce, SaaS, fintech, healthcare, real estate, education, D2C and B2B. If your funnel needs growth, I can help." },
-            { q: "Do you handle ad spend management?", a: "Yes. I manage Google, Meta, LinkedIn, Amazon &amp; YouTube ad accounts end-to-end — strategy, creative, bidding, tracking, and weekly optimization." },
-            { q: "How do you report on performance?", a: "Live Looker Studio dashboards tied to your GA4 + ad accounts + CRM. Plus a written monthly review with insights, learnings and next bets." },
-            { q: "Can I cancel anytime?", a: "Yes. Month-to-month retainers with 30-day notice. No long lock-ins, no hidden fees — performance keeps the partnership going." },
+            { q: "What services does the agency offer?", a: "Full-service digital marketing — SEO &amp; GEO, Google Ads, Meta &amp; LinkedIn paid social, performance creative, lifecycle/email, analytics, and AI-powered automation." },
+            { q: "How are engagements priced?", a: "Retainers typically range ₹50k–₹5L/mo depending on scope, channels and ad spend. Every proposal is custom — request a strategy call for a tailored quote." },
+            { q: "How fast will we see results?", a: "Paid channels usually show signal within 2–3 weeks. SEO compounds over 3–6 months. We share a 30/60/90-day roadmap before kickoff so expectations are crystal clear." },
+            { q: "Do you work with our industry?", a: "We&apos;ve shipped campaigns across 18+ industries — ecommerce, SaaS, fintech, healthcare, real estate, education, D2C and B2B. If your funnel needs growth, we can help." },
+            { q: "Do you handle ad spend management?", a: "Yes. Our paid-media team manages Google, Meta, LinkedIn, Amazon &amp; YouTube ad accounts end-to-end — strategy, creative, bidding, tracking and weekly optimization." },
+            { q: "How do you report on performance?", a: "Live Looker Studio dashboards tied to your GA4, ad accounts and CRM — plus a written monthly review with insights, learnings and next bets from your account lead." },
+            { q: "Can we cancel anytime?", a: "Yes. Month-to-month retainers with 30-day notice. No long lock-ins, no hidden fees — performance keeps the partnership going." },
           ].map((f,i)=>(
             <AccordionItem key={i} value={`item-${i}`} className="rounded-2xl border border-border bg-card px-5 data-[state=open]:border-primary transition">
               <AccordionTrigger className="text-left text-base font-display hover:no-underline">{f.q}</AccordionTrigger>
@@ -590,10 +590,10 @@ function Home() {
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-primary/30 blur-3xl"/>
           <p className="relative text-xs tracking-[0.22em] uppercase text-primary font-semibold">Let&apos;s build</p>
           <h2 className="relative mt-4 text-4xl md:text-6xl font-display leading-[1.02]">Ready to <span className="text-gradient-gold">accelerate</span><br/>your growth?</h2>
-          <p className="relative mt-5 max-w-xl mx-auto text-muted-foreground">Free, no-obligation strategy call. I&apos;ll audit your marketing &amp; show you the biggest opportunities.</p>
+          <p className="relative mt-5 max-w-xl mx-auto text-muted-foreground">Book a free, no-obligation strategy call. Our team will audit your marketing and show you the biggest opportunities.</p>
           <div className="relative mt-8 flex flex-wrap gap-3 justify-center">
             <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
-              Book free call <ArrowRight className="h-4 w-4"/>
+              Book free strategy call <ArrowRight className="h-4 w-4"/>
             </Link>
             <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-7 py-3.5 text-sm font-semibold text-foreground hover:border-primary transition">
               <Phone className="h-4 w-4"/> View services
