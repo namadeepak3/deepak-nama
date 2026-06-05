@@ -113,18 +113,18 @@ function Home() {
   ];
 
   const AI_TOOLS = [
-    { name: "ChatGPT", sub: "OpenAI", emoji: "🤖" },
-    { name: "Claude", sub: "Anthropic", emoji: "🧠" },
-    { name: "Gemini", sub: "Google", emoji: "✨" },
-    { name: "Perplexity", sub: "Answer engine", emoji: "🔎" },
-    { name: "Midjourney", sub: "Image", emoji: "🎨" },
-    { name: "Runway", sub: "Video", emoji: "🎬" },
-    { name: "ElevenLabs", sub: "Voice", emoji: "🎙️" },
-    { name: "Sora", sub: "Video AI", emoji: "📽️" },
-    { name: "n8n", sub: "Agents", emoji: "🔗" },
-    { name: "LangChain", sub: "Orchestration", emoji: "⛓️" },
-    { name: "Zapier AI", sub: "Automation", emoji: "⚡" },
-    { name: "Cursor", sub: "Dev agent", emoji: "🧑‍💻" },
+    { name: "ChatGPT", sub: "OpenAI", slug: "openai", color: "10A37F" },
+    { name: "Claude", sub: "Anthropic", slug: "anthropic", color: "D97757" },
+    { name: "Gemini", sub: "Google", slug: "googlegemini", color: "8E75B2" },
+    { name: "Perplexity", sub: "Answer engine", slug: "perplexity", color: "20808D" },
+    { name: "Midjourney", sub: "Image", slug: "midjourney", color: "000000" },
+    { name: "Runway", sub: "Video", slug: "runway", color: "000000" },
+    { name: "ElevenLabs", sub: "Voice", slug: "elevenlabs", color: "000000" },
+    { name: "n8n", sub: "Agents", slug: "n8n", color: "EA4B71" },
+    { name: "LangChain", sub: "Orchestration", slug: "langchain", color: "1C3C3C" },
+    { name: "Zapier", sub: "Automation", slug: "zapier", color: "FF4F00" },
+    { name: "Cursor", sub: "Dev agent", slug: "cursor", color: "000000" },
+    { name: "HuggingFace", sub: "Models", slug: "huggingface", color: "FFD21E" },
   ];
 
   const inquirySchema = z.object({
