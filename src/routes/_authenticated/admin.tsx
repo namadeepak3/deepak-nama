@@ -2189,7 +2189,7 @@ const LEAD_STATUS_STYLES: Record<LeadStatus, string> = {
   spam: "border-destructive/30 bg-destructive/10 text-destructive",
 };
 
-function InquiriesPanel() {
+function InquiriesPanel({ kind }: { kind: "audit" | "inquiry" }) {
   const qc = useQueryClient();
   const listFn = useServerFn(listLeads);
   const updateFn = useServerFn(updateLead);
@@ -2228,13 +2228,14 @@ function InquiriesPanel() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
   });
 
-  const leads = leadsQuery.data ?? [];
+  const allLeads = leadsQuery.data ?? [];
+  const leads = allLeads.filter((l) => (l.kind ?? "inquiry") === kind);
   const assignees = assigneesQuery.data ?? [];
   const filtered = leads.filter((l) => {
     const q = search.trim().toLowerCase();
     if (
       q &&
-      !`${l.name} ${l.email} ${l.service} ${l.message} ${l.ipAddress} ${l.pageUrl} ${l.utmSource} ${l.utmCampaign} ${l.assignedEmail}`
+      !`${l.name} ${l.email} ${l.phone} ${l.website} ${l.company} ${l.service} ${l.message} ${l.ipAddress} ${l.pageUrl} ${l.utmSource} ${l.utmCampaign} ${l.assignedEmail}`
         .toLowerCase()
         .includes(q)
     )
@@ -2300,8 +2301,9 @@ function InquiriesPanel() {
   return (
     <div className="mt-8 space-y-4">
       <div className="rounded-xl border border-border bg-card p-4 text-xs text-muted-foreground">
-        Every visitor inquiry with full visitor metadata (IP, user agent, referrer, UTM, page URL) plus
-        the contact form details. Update status, assign to an admin, and view the full audit trail.
+        {kind === "audit"
+          ? "Submissions from the homepage Website Audit popup. Name, website, phone, email and message plus visitor metadata. Assign, update status, edit, and view the full audit trail."
+          : "General inquiries from the contact form. Name, email, phone, company, service, budget and message plus visitor metadata. Assign, update status, edit, and view the full audit trail."}
       </div>
 
       <div className="grid grid-cols-3 sm:grid-cols-7 gap-2">
