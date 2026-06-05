@@ -42,12 +42,24 @@ function Home() {
     e.preventDefault();
     setErrors({});
     const formData = new FormData(e.currentTarget);
+    const phone = (formData.get("phone") as string) || "";
+    const company = (formData.get("company") as string) || "";
+    const website = (formData.get("website") as string) || "";
+    const timeline = (formData.get("timeline") as string) || "";
+    const messageBody = (formData.get("message") as string) || "";
+    const composedMessage = [
+      company && `Company: ${company}`,
+      website && `Website: ${website}`,
+      phone && `Phone: ${phone}`,
+      timeline && `Timeline: ${timeline}`,
+      messageBody && `\n${messageBody}`,
+    ].filter(Boolean).join("\n");
     const raw = {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
       service: formData.get("service") as string,
       budget: formData.get("budget") as string,
-      message: formData.get("message") as string,
+      message: composedMessage || messageBody,
     };
     const result = inquirySchema.safeParse(raw);
     if (!result.success) {
@@ -85,7 +97,7 @@ function Home() {
         <div aria-hidden className="pointer-events-none absolute top-20 right-[8%] h-72 w-72 rounded-full bg-foreground/[0.06] blur-3xl animate-ai-pulse" />
         <div aria-hidden className="pointer-events-none absolute bottom-10 left-[10%] h-56 w-56 rounded-full bg-foreground/[0.04] blur-3xl animate-ai-pulse" style={{ animationDelay: "1.2s" }} />
 
-        <div className="relative mx-auto max-w-7xl px-6 pt-6 pb-16 md:pt-10 md:pb-20 grid lg:grid-cols-12 gap-10 items-center">
+        <div className="relative mx-auto max-w-7xl px-6 pt-6 pb-10 md:pt-8 md:pb-14 grid lg:grid-cols-12 gap-8 items-center">
           {/* LEFT — details */}
           <div className="lg:col-span-7">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 backdrop-blur px-3 py-1 text-xs text-foreground">
@@ -146,19 +158,33 @@ function Home() {
             ) : (
             <form
               onSubmit={onInquiry}
-              className="rounded-3xl border border-border bg-card/95 backdrop-blur shadow-gold p-6 md:p-7 space-y-4"
+              className="rounded-3xl border border-border bg-card/95 backdrop-blur shadow-gold p-6 md:p-7 space-y-3"
             >
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Start a project</p>
                 <h3 className="mt-1 text-2xl font-display">Request a free growth audit</h3>
+                <p className="mt-1 text-xs text-muted-foreground">Tell us a bit about your brand — a senior strategist replies in 1 business day.</p>
               </div>
-              <div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
                   <input name="name" placeholder="Your name" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.name ? "border-red-400" : "border-border"}`} />
                   {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+                </div>
+                <div>
+                  <input name="phone" placeholder="Phone (optional)" className="w-full rounded-xl bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary" />
+                </div>
               </div>
-              <div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
                   <input name="email" type="email" placeholder="Email address" className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary ${errors.email ? "border-red-400" : "border-border"}`} />
                   {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+                </div>
+                <div>
+                  <input name="company" placeholder="Company / Brand" className="w-full rounded-xl bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary" />
+                </div>
+              </div>
+              <div>
+                <input name="website" placeholder="Website (optional)" className="w-full rounded-xl bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -169,6 +195,9 @@ function Home() {
                     <option>PPC</option>
                     <option>Social Media (SMO)</option>
                     <option>AI Automation</option>
+                    <option>Content Marketing</option>
+                    <option>Email & Lifecycle</option>
+                    <option>Web & CRO</option>
                   </select>
                   {errors.service && <p className="mt-1 text-xs text-red-500">{errors.service}</p>}
                 </div>
@@ -185,7 +214,16 @@ function Home() {
                 </div>
               </div>
               <div>
-                  <textarea name="message" rows={3} placeholder="Tell me about your goals..." className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none ${errors.message ? "border-red-400" : "border-border"}`} />
+                <select name="timeline" className="w-full rounded-xl bg-secondary border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary">
+                  <option value="">When do you want to start?</option>
+                  <option>ASAP (within 2 weeks)</option>
+                  <option>Within 1 month</option>
+                  <option>1–3 months</option>
+                  <option>Just exploring</option>
+                </select>
+              </div>
+              <div>
+                  <textarea name="message" rows={3} placeholder="Tell us about your goals, current marketing & biggest challenge..." className={`w-full rounded-xl bg-secondary border px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none ${errors.message ? "border-red-400" : "border-border"}`} />
                   {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message}</p>}
               </div>
                 <button
@@ -195,7 +233,7 @@ function Home() {
                 >
                   {sending ? "Sending..." : <>Send inquiry <Send className="h-4 w-4" /></>}
                 </button>
-              <p className="text-[11px] text-muted-foreground text-center">A strategist replies within 1 business day. No spam.</p>
+              <p className="text-[11px] text-muted-foreground text-center">🔒 Your details stay private. No spam, ever.</p>
             </form>
             )}
           </div>
@@ -227,7 +265,7 @@ function Home() {
       <section className="relative overflow-hidden border-b border-border bg-background">
         <div aria-hidden className="absolute inset-0 bg-ai-dots opacity-70" />
         <div aria-hidden className="absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-6 py-24">
+        <div className="relative mx-auto max-w-7xl px-6 py-14">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             {/* Left — copy */}
             <div className="lg:col-span-5">
@@ -368,179 +406,15 @@ function Home() {
           </div>
 
           {/* Animated beam separator */}
-          <div aria-hidden className="mt-16 h-px w-full bg-gradient-to-r from-transparent via-primary to-transparent animate-ai-beam opacity-60" />
-        </div>
-      </section>
-
-      {/* ============ AI CORE PROOF STRIP ============ */}
-      <section className="border-b border-border bg-card/40">
-        <div className="mx-auto max-w-7xl px-6 py-16">
-          <div className="grid lg:grid-cols-12 gap-6">
-            {/* Testimonial */}
-            <div className="lg:col-span-5 rounded-3xl border border-border bg-card p-7 flex flex-col">
-              <Quote className="h-6 w-6 text-foreground" />
-              <p className="mt-4 text-lg font-display leading-snug text-foreground">
-                &ldquo;Their AI core rebuilt our paid funnel in 6 weeks. CPL dropped 52% and MQLs doubled.&rdquo;
-              </p>
-              <div className="mt-5 flex items-center gap-1">
-                {Array.from({length:5}).map((_,i)=><Star key={i} className="h-4 w-4 fill-foreground text-foreground"/>)}
-              </div>
-              <div className="mt-5 pt-5 border-t border-border flex items-center justify-between">
-                <div>
-                  <div className="font-semibold text-sm">David Chen</div>
-                  <div className="text-xs text-muted-foreground">Founder, Velocity SaaS</div>
-                </div>
-                <span className="text-[10px] uppercase tracking-widest text-foreground font-semibold">Google · 4 mo</span>
-              </div>
-            </div>
-
-            {/* Case study highlights */}
-            <div className="lg:col-span-7 grid sm:grid-cols-2 gap-4">
-              {[
-                { tag: "D2C · Ecommerce", brand: "Lumen Skincare", k: "8.1x", kl: "Peak ROAS", note: "From ₹40L to ₹3.2Cr/mo in 9 months." },
-                { tag: "Fintech", brand: "Finovate", k: "+240%", kl: "Organic traffic", note: "#1 ranking on 14 money keywords." },
-                { tag: "B2B SaaS", brand: "Velocity SaaS", k: "-52%", kl: "CPL", note: "MQLs doubled in 4 months." },
-                { tag: "Real Estate", brand: "Harborline Homes", k: "5.8x", kl: "ROAS", note: "Regional to national in 12 months." },
-              ].map((c)=>(
-                <Link key={c.brand} to="/blog" className="group rounded-3xl border border-border bg-card p-5 hover:border-foreground transition">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{c.tag}</span>
-                  <div className="mt-2 font-display text-base text-foreground">{c.brand}</div>
-                  <div className="mt-3 flex items-baseline gap-2">
-                    <span className="text-2xl font-display text-gradient-gold leading-none">{c.k}</span>
-                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{c.kl}</span>
-                  </div>
-                  <p className="mt-3 text-xs text-muted-foreground leading-relaxed">{c.note}</p>
-                  <div className="mt-3 inline-flex items-center gap-1 text-[11px] font-semibold text-foreground">
-                    Read case study <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5"/>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-          <div className="mt-8 text-center">
-            <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-6 py-3 text-sm font-semibold hover:opacity-90 transition">
-              See what AI can do for your brand <ArrowRight className="h-4 w-4"/>
-            </Link>
-          </div>
+          <div aria-hidden className="mt-8 h-px w-full bg-gradient-to-r from-transparent via-primary to-transparent animate-ai-beam opacity-60" />
         </div>
       </section>
 
       {/* ============ SERVICES — BENTO ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="flex items-end justify-between flex-wrap gap-6 mb-10">
-          <div className="max-w-2xl">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">What we do</p>
-              <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">An <span className="text-gradient-gold">AI-powered</span> growth engine.</h2>
-          </div>
-          <Link to="/services" className="text-sm text-muted-foreground hover:text-primary inline-flex items-center gap-1">
-            All services <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-        <div className="grid grid-cols-12 auto-rows-[minmax(180px,auto)] gap-4">
-          {[
-            {
-              Icon: Bot,
-              tag: "Autonomous ops",
-              title: "AI Agents",
-              desc: "Always-on agents that monitor campaigns, draft briefs, send alerts and ship optimizations 24/7.",
-              deliverables: ["Custom GPT workflows", "Slack + email alerts", "Auto-pacing & budget guards"],
-              span: "col-span-12 md:col-span-7",
-            },
-            {
-              Icon: Sparkles,
-              tag: "Creative at scale",
-              title: "GenAI Creative",
-              desc: "Static, video and copy variants generated, tested and iterated in days — not months.",
-              deliverables: ["50+ ad variants / month", "AI video & UGC", "Brand-safe model tuning"],
-              span: "col-span-12 md:col-span-5",
-            },
-            {
-              Icon: Target,
-              tag: "Performance media",
-              title: "Predictive Ads",
-              desc: "ML bidding across Google, Meta, LinkedIn and Amazon — modeled to your real margin, not vanity ROAS.",
-              deliverables: ["MMM + geo-lift tests", "Server-side CAPI", "Profit-true bid models"],
-              span: "col-span-12 md:col-span-4",
-            },
-            {
-              Icon: Search,
-              tag: "Discovery",
-              title: "AI Search / GEO",
-              desc: "Get cited inside Google AI Overviews, Perplexity and ChatGPT with structured, entity-rich content.",
-              deliverables: ["GEO content clusters", "Schema + knowledge graph", "LLM citation tracking"],
-              span: "col-span-12 md:col-span-4",
-            },
-            {
-              Icon: BarChart3,
-              tag: "Measurement",
-              title: "ML Attribution",
-              desc: "Unified GA4 + warehouse + ad-platform data, modeled to show which channel really moved revenue.",
-              deliverables: ["BigQuery pipeline", "MTA + MMM blend", "Live executive dashboards"],
-              span: "col-span-12 md:col-span-4",
-            },
-          ].map(({ Icon, tag, title, desc, deliverables, span }) => (
-            <Link
-              key={title}
-              to="/services"
-              className={`group relative ${span} rounded-3xl border border-border bg-card p-7 hover:border-foreground transition overflow-hidden`}
-            >
-              <div className="absolute -bottom-16 -right-16 h-44 w-44 rounded-full bg-foreground/[0.05] blur-3xl opacity-0 group-hover:opacity-100 transition" />
-              <div className="relative flex items-center justify-between">
-                <div className="h-11 w-11 rounded-xl bg-foreground text-background grid place-items-center">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <span className="rounded-full border border-border bg-secondary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{tag}</span>
-              </div>
-              <h3 className="relative mt-5 text-xl md:text-2xl font-display">{title}</h3>
-              <p className="relative mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
-              <ul className="relative mt-5 space-y-1.5">
-                {deliverables.map((d) => (
-                  <li key={d} className="flex items-start gap-2 text-xs text-foreground/80">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-foreground mt-0.5 shrink-0" /> {d}
-                  </li>
-                ))}
-              </ul>
-              <div className="relative mt-5 inline-flex items-center gap-1 text-xs font-semibold text-foreground">
-                Explore service <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* ============ 2026 TRENDS ============ */}
-      <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-24">
-          <div className="grid lg:grid-cols-12 gap-10 items-end mb-12">
-            <div className="lg:col-span-7">
-              <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">2026 playbook</p>
-              <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">Marketing trends we&apos;re <span className="text-gradient-gold">building on.</span></h2>
-            </div>
-            <p className="lg:col-span-5 text-muted-foreground">Every strategy we ship leans into where attention and algorithms are heading next — not where they used to be.</p>
-          </div>
-          <div className="grid grid-cols-12 auto-rows-[minmax(160px,auto)] gap-4">
-            {[
-              { Icon: Search, title: "AI Search (SGE & GEO)", desc: "Optimizing for Google AI Overviews, Perplexity & ChatGPT citations.", span: "col-span-12 md:col-span-6 lg:col-span-5" },
-              { Icon: Bot, title: "Agentic Automation", desc: "AI agents handling reporting, bidding & creative iteration 24/7.", span: "col-span-12 md:col-span-6 lg:col-span-4" },
-              { Icon: Target, title: "First-party data", desc: "Server-side tracking, CAPI & CDPs in a cookieless world.", span: "col-span-12 md:col-span-12 lg:col-span-3" },
-              { Icon: Megaphone, title: "Short-form video", desc: "Reels, Shorts & TikTok funnels engineered to convert, not just go viral.", span: "col-span-12 md:col-span-6 lg:col-span-4" },
-              { Icon: BarChart3, title: "Incrementality testing", desc: "Geo-lifts & MMM to prove what actually drives revenue.", span: "col-span-12 md:col-span-6 lg:col-span-4" },
-              { Icon: Globe, title: "Omnichannel attribution", desc: "Unified GA4 + warehouse views — one source of truth.", span: "col-span-12 md:col-span-12 lg:col-span-4" },
-            ].map(({ Icon, title, desc, span }) => (
-              <div key={title} className={`${span} rounded-3xl border border-border bg-card p-7 hover:border-primary transition`}>
-                <Icon className="h-6 w-6 text-primary" />
-                <h3 className="mt-4 text-lg md:text-xl font-display">{title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ============ DIGITAL MARKETING SERVICES ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-24">
-          <div className="flex items-end justify-between flex-wrap gap-6 mb-12">
+        <div className="mx-auto max-w-7xl px-6 py-14">
+          <div className="flex items-end justify-between flex-wrap gap-6 mb-8">
             <div className="max-w-2xl">
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Digital marketing services</p>
               <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">Every channel your brand <span className="text-gradient-gold">needs to grow.</span></h2>
@@ -590,8 +464,8 @@ function Home() {
       </section>
 
       {/* ============ INDUSTRIES WE SERVE ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="flex items-end justify-between flex-wrap gap-6 mb-12">
+      <section className="mx-auto max-w-7xl px-6 py-14">
+        <div className="flex items-end justify-between flex-wrap gap-6 mb-8">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
             <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
@@ -628,7 +502,7 @@ function Home() {
       </section>
 
       {/* ============ PROCESS ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
+      <section className="mx-auto max-w-7xl px-6 py-14">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">End-to-end AI workflow</p>
           <h2 className="mt-3 text-4xl md:text-5xl font-display">Plan. Build. Launch. Optimize. Report.</h2>
@@ -682,7 +556,7 @@ function Home() {
       {/* ============ WHO I AM ============ */}
       <section className="relative border-y border-border bg-card/30 overflow-hidden">
         <div aria-hidden className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl"/>
-        <div className="relative mx-auto max-w-5xl px-6 py-24 text-center">
+        <div className="relative mx-auto max-w-5xl px-6 py-14 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold text-foreground">
             <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span></span>
             Accepting Q3 2026 retainers · Headquartered in Mumbai, IN
@@ -737,8 +611,8 @@ function Home() {
       <section className="relative border-y border-border bg-gradient-to-br from-primary/10 via-card/30 to-card/30 overflow-hidden">
         <div aria-hidden className="absolute -top-32 left-1/4 h-72 w-72 rounded-full bg-primary/20 blur-3xl"/>
         <div aria-hidden className="absolute -bottom-32 right-1/4 h-72 w-72 rounded-full bg-primary/15 blur-3xl"/>
-        <div className="relative mx-auto max-w-7xl px-6 py-24">
-          <div className="text-center max-w-2xl mx-auto mb-14">
+        <div className="relative mx-auto max-w-7xl px-6 py-14">
+          <div className="text-center max-w-2xl mx-auto mb-8">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Results that compound</p>
             <h2 className="mt-3 text-4xl md:text-5xl font-display">Numbers do the talking</h2>
             <p className="mt-4 text-muted-foreground">Aggregate impact across 120+ client engagements shipped in the last 24 months.</p>
@@ -765,8 +639,8 @@ function Home() {
       </section>
 
       {/* ============ CASE STUDIES ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="flex items-end justify-between flex-wrap gap-6 mb-12">
+      <section className="mx-auto max-w-7xl px-6 py-14">
+        <div className="flex items-end justify-between flex-wrap gap-6 mb-8">
           <div className="max-w-2xl">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
             <h2 className="mt-3 text-4xl md:text-5xl font-display leading-[1.05]">Brands we&apos;ve <span className="text-gradient-gold">scaled.</span></h2>
@@ -839,8 +713,8 @@ function Home() {
 
       {/* ============ INSIGHTS ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-24">
-          <div className="flex items-end justify-between flex-wrap gap-6 mb-12">
+        <div className="mx-auto max-w-7xl px-6 py-14">
+          <div className="flex items-end justify-between flex-wrap gap-6 mb-8">
             <div>
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Insights</p>
               <h2 className="mt-3 text-4xl md:text-5xl font-display">Fresh from the blog</h2>
@@ -866,8 +740,8 @@ function Home() {
 
       {/* ============ TESTIMONIALS CAROUSEL ============ */}
       <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-24">
-          <div className="text-center max-w-2xl mx-auto mb-12">
+        <div className="mx-auto max-w-7xl px-6 py-14">
+          <div className="text-center max-w-2xl mx-auto mb-8">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Receipts</p>
             <h2 className="mt-3 text-4xl md:text-5xl font-display">What clients say</h2>
             <p className="mt-4 text-muted-foreground">Real results from real brands — across SEO, paid media, social and lifecycle.</p>
@@ -912,8 +786,8 @@ function Home() {
       </section>
 
       {/* ============ FAQ ============ */}
-      <section className="mx-auto max-w-4xl px-6 py-24">
-        <div className="text-center mb-12">
+      <section className="mx-auto max-w-4xl px-6 py-14">
+        <div className="text-center mb-8">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">FAQs</p>
           <h2 className="mt-3 text-4xl md:text-5xl font-display">Common questions</h2>
           <p className="mt-4 text-muted-foreground">Everything you want to know before we kick off your engagement.</p>
@@ -937,7 +811,7 @@ function Home() {
       </section>
 
       {/* ============ FINAL CTA ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
+      <section className="mx-auto max-w-7xl px-6 py-14">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/30 via-card to-card p-12 md:p-20 text-center">
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-primary/30 blur-3xl"/>
           <p className="relative text-xs tracking-[0.22em] uppercase text-primary font-semibold">Let&apos;s build</p>
