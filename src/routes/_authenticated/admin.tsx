@@ -14,6 +14,7 @@ import {
 } from "@/lib/services.functions";
 import { ICON_OPTIONS, iconFor, type Service } from "@/lib/services.shared";
 import { supabase } from "@/integrations/supabase/client";
+import { useIdleLogout } from "@/hooks/use-idle-logout";
 import {
   listAllPosts,
   upsertPost,
