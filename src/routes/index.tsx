@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, ShieldCheck, Zap, LineChart, Send, CheckCircle2, TrendingUp, Award, Star, Quote, Phone, Bot, Search, Megaphone, Target, BarChart3, Globe, Rocket, Activity, Play, MousePointerClick, Mail, ShoppingCart, Youtube } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { listServices } from "@/lib/services.functions";
@@ -326,133 +327,56 @@ function Home() {
         </div>
       </section>
 
-      {/* ============ TESTIMONIALS CAROUSEL ============ */}
-      <section className="border-y border-border bg-card/30">
-        <div className="mx-auto max-w-7xl px-6 py-24">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Receipts</p>
-            <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">What clients say</h2>
-            <p className="mt-4 text-muted-foreground">Real results from real brands — across SEO, paid, social &amp; lifecycle.</p>
-          </div>
-          <Carousel opts={{ align: "start", loop: true }} className="relative">
-            <CarouselContent className="-ml-4">
-              {[
-                { q: "Organic traffic up 240% and qualified leads have never been higher.", n: "Sarah Mitchell", r: "CEO, Northbridge Retail", m: "SEO · 6 months", k: "+240%", kl: "Organic" },
-                { q: "PPC cut our CPL in half while doubling lead volume. Reporting is unmatched.", n: "David Chen", r: "Founder, Velocity SaaS", m: "Google Ads · 4 months", k: "-52%", kl: "CPL" },
-                { q: "We scaled from a regional player to a national brand. Strategy made the difference.", n: "Maria Lopez", r: "CMO, Harborline Homes", m: "Performance · 9 months", k: "5.8x", kl: "ROAS" },
-                { q: "Meta &amp; Google funnels now print revenue. Best marketing hire we&apos;ve made.", n: "Aarav Khanna", r: "Founder, Lumen D2C", m: "Paid Social · 5 months", k: "+312%", kl: "Revenue" },
-                { q: "Content + technical SEO finally clicked. We rank #1 on our money keywords.", n: "Priya Raman", r: "Head of Growth, Finovate", m: "SEO · 8 months", k: "#1", kl: "SERP" },
-              ].map((t) => (
-                <CarouselItem key={t.n} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                  <div className="h-full rounded-3xl border border-border bg-card p-7 flex flex-col">
-                    <div className="flex items-center justify-between">
-                      <Quote className="h-6 w-6 text-primary" />
-                      <div className="text-right">
-                        <div className="text-2xl font-display text-gradient-gold leading-none">{t.k}</div>
-                        <div className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">{t.kl}</div>
-                      </div>
-                    </div>
-                    <p className="mt-5 text-base leading-relaxed flex-1" dangerouslySetInnerHTML={{__html: `&ldquo;${t.q}&rdquo;`}} />
-                    <div className="mt-5 flex items-center gap-1">{Array.from({length:5}).map((_,i)=><Star key={i} className="h-4 w-4 fill-primary text-primary"/>)}</div>
-                    <div className="mt-4 pt-4 border-t border-border flex items-center justify-between gap-2">
-                      <div>
-                        <div className="font-semibold text-sm">{t.n}</div>
-                        <div className="text-xs text-muted-foreground">{t.r}</div>
-                      </div>
-                      <span className="text-[10px] uppercase tracking-widest text-primary font-semibold">{t.m}</span>
-                    </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <div className="flex justify-center gap-3 mt-8">
-              <CarouselPrevious className="static translate-y-0 h-10 w-10 border-border bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary" />
-              <CarouselNext className="static translate-y-0 h-10 w-10 border-border bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary" />
-            </div>
-          </Carousel>
-        </div>
-      </section>
-
       {/* ============ WHO I AM ============ */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="grid lg:grid-cols-12 gap-10 items-center">
-          {/* Portrait / signature panel */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-border bg-gradient-to-br from-primary/25 via-card to-card">
-              <div className="absolute inset-0 opacity-60" style={{backgroundImage:`url(${heroBg})`, backgroundSize:"cover", backgroundPosition:"center"}}/>
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"/>
-              <div className="absolute top-5 left-5 right-5 flex items-center justify-between">
-                <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/90 backdrop-blur px-3 py-1 text-[11px] font-semibold text-foreground">
-                  <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span></span>
-                  Available · Q3 2026
-                </span>
-                <span className="rounded-full border border-border bg-card/90 backdrop-blur px-3 py-1 text-[11px] text-muted-foreground">Mumbai · IN</span>
-              </div>
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="text-7xl md:text-8xl font-display text-foreground leading-none">VR</div>
-                <div className="mt-2 text-sm font-semibold text-foreground">vrseoguru</div>
-                <div className="text-xs text-muted-foreground">Freelance Growth Partner</div>
-              </div>
-            </div>
-            {/* Floating mini-cards */}
-            <div className="absolute -top-4 -right-4 hidden md:block rounded-2xl border border-border bg-card shadow-gold p-3 w-44">
-              <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-primary font-semibold"><Activity className="h-3 w-3"/> Live</div>
-              <div className="mt-1 text-2xl font-display text-gradient-gold leading-none">4.2x</div>
-              <div className="text-[11px] text-muted-foreground">Avg client ROAS</div>
-            </div>
-            <div className="absolute -bottom-4 -left-4 hidden md:block rounded-2xl border border-border bg-card shadow-gold p-3 w-48">
-              <div className="flex items-center gap-1 text-primary mb-1">{Array.from({length:5}).map((_,i)=><Star key={i} className="h-3 w-3 fill-primary text-primary"/>)}</div>
-              <div className="text-xs font-semibold">98% client retention</div>
-              <div className="text-[11px] text-muted-foreground">Across 120+ campaigns</div>
-            </div>
+      <section className="relative border-y border-border bg-card/30 overflow-hidden">
+        <div aria-hidden className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl"/>
+        <div className="relative mx-auto max-w-5xl px-6 py-24 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-semibold text-foreground">
+            <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span></span>
+            Available · Q3 2026 · Mumbai, IN
+          </div>
+          <p className="mt-6 text-xs uppercase tracking-[0.3em] text-primary font-semibold">Who I am</p>
+          <h2 className="mt-4 text-4xl md:text-6xl font-display uppercase leading-[1.02]">
+            Hi, I&apos;m <span className="text-gradient-gold">vrseoguru</span> —<br/>your freelance growth partner.
+          </h2>
+          <p className="mt-6 max-w-2xl mx-auto text-base md:text-lg text-muted-foreground leading-relaxed">
+            For 7+ years I&apos;ve built revenue systems for ecommerce, SaaS &amp; D2C brands across India and abroad — fusing senior strategy with AI-powered execution. Every campaign engineered around your <span className="text-foreground font-semibold">bottom line</span>, not vanity metrics.
+          </p>
+
+          {/* Certification chips */}
+          <div className="mt-8 flex flex-wrap justify-center gap-2">
+            {["Google Ads Certified","Meta Blueprint","GA4 Certified","Amazon Ads","HubSpot","SEMrush Pro"].map(c=>(
+              <span key={c} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs text-foreground">
+                <CheckCircle2 className="h-3.5 w-3.5 text-primary"/> {c}
+              </span>
+            ))}
           </div>
 
-          {/* Details */}
-          <div className="lg:col-span-7">
-            <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Who I am</p>
-            <h2 className="mt-3 text-4xl md:text-5xl lg:text-6xl font-display uppercase leading-[1.02]">A growth partner,<br/><span className="text-gradient-gold">not just another freelancer.</span></h2>
-            <p className="mt-5 text-muted-foreground leading-relaxed max-w-xl">
-              7+ years building revenue systems for ecommerce, SaaS &amp; D2C brands. I fuse senior strategy with AI-powered execution — every campaign engineered around your bottom line, not vanity metrics.
-            </p>
-
-            {/* Stat row */}
-            <div className="mt-8 grid grid-cols-4 gap-3">
-              {[["7+","Years"],["120+","Campaigns"],["4.2x","Avg ROAS"],["24h","Reply"]].map(([k,v])=>(
-                <div key={v} className="rounded-2xl border border-border bg-card p-4">
-                  <div className="text-2xl md:text-3xl font-display text-gradient-gold leading-none">{k}</div>
-                  <div className="mt-2 text-[11px] uppercase tracking-widest text-muted-foreground">{v}</div>
+          {/* Pillars */}
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
+            {[
+              { Icon: TrendingUp, title: "ROI-Focused", desc: "Every rupee tied to revenue." },
+              { Icon: ShieldCheck, title: "Transparent", desc: "Live dashboards, no jargon." },
+              { Icon: Award, title: "Certified", desc: "Google · Meta · Amazon." },
+              { Icon: Rocket, title: "Fast", desc: "Live in under 14 days." },
+            ].map(({Icon,title,desc})=>(
+              <div key={title} className="rounded-2xl border border-border bg-card p-5 hover:border-primary transition">
+                <div className="h-10 w-10 rounded-xl bg-primary/15 border border-primary/30 grid place-items-center">
+                  <Icon className="h-5 w-5 text-primary"/>
                 </div>
-              ))}
-            </div>
+                <h3 className="mt-4 text-sm font-display uppercase">{title}</h3>
+                <p className="mt-1 text-xs text-muted-foreground">{desc}</p>
+              </div>
+            ))}
+          </div>
 
-            {/* Pillars */}
-            <div className="mt-6 grid sm:grid-cols-2 gap-3">
-              {[
-                { Icon: TrendingUp, title: "ROI-Focused", desc: "Every campaign tied to revenue & return." },
-                { Icon: ShieldCheck, title: "Transparent", desc: "Live dashboards, weekly insights." },
-                { Icon: Award, title: "Certified", desc: "Google, Meta & Amazon partner-level." },
-                { Icon: Rocket, title: "Fast", desc: "First campaign live in under 14 days." },
-              ].map(({Icon,title,desc})=>(
-                <div key={title} className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4">
-                  <div className="h-9 w-9 shrink-0 rounded-lg bg-primary/15 border border-primary/30 grid place-items-center">
-                    <Icon className="h-4 w-4 text-primary"/>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-display uppercase">{title}</h3>
-                    <p className="text-xs text-muted-foreground mt-0.5">{desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/about" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
-                About me <ArrowRight className="h-4 w-4"/>
-              </Link>
-              <Link to="/contact" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary transition">
-                Let&apos;s talk
-              </Link>
-            </div>
+          <div className="mt-10 flex flex-wrap gap-3 justify-center">
+            <Link to="/about" className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
+              Full story <ArrowRight className="h-4 w-4"/>
+            </Link>
+            <Link to="/contact" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary transition">
+              Let&apos;s talk
+            </Link>
           </div>
         </div>
       </section>
@@ -586,6 +510,78 @@ function Home() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* ============ TESTIMONIALS CAROUSEL ============ */}
+      <section className="border-y border-border bg-card/30">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">Receipts</p>
+            <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">What clients say</h2>
+            <p className="mt-4 text-muted-foreground">Real results from real brands — across SEO, paid, social &amp; lifecycle.</p>
+          </div>
+          <Carousel opts={{ align: "start", loop: true }} className="relative">
+            <CarouselContent className="-ml-4">
+              {[
+                { q: "Organic traffic up 240% and qualified leads have never been higher.", n: "Sarah Mitchell", r: "CEO, Northbridge Retail", m: "SEO · 6 months", k: "+240%", kl: "Organic" },
+                { q: "PPC cut our CPL in half while doubling lead volume. Reporting is unmatched.", n: "David Chen", r: "Founder, Velocity SaaS", m: "Google Ads · 4 months", k: "-52%", kl: "CPL" },
+                { q: "We scaled from a regional player to a national brand. Strategy made the difference.", n: "Maria Lopez", r: "CMO, Harborline Homes", m: "Performance · 9 months", k: "5.8x", kl: "ROAS" },
+                { q: "Meta &amp; Google funnels now print revenue. Best marketing hire we&apos;ve made.", n: "Aarav Khanna", r: "Founder, Lumen D2C", m: "Paid Social · 5 months", k: "+312%", kl: "Revenue" },
+                { q: "Content + technical SEO finally clicked. We rank #1 on our money keywords.", n: "Priya Raman", r: "Head of Growth, Finovate", m: "SEO · 8 months", k: "#1", kl: "SERP" },
+              ].map((t) => (
+                <CarouselItem key={t.n} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                  <div className="h-full rounded-3xl border border-border bg-card p-7 flex flex-col">
+                    <div className="flex items-center justify-between">
+                      <Quote className="h-6 w-6 text-primary" />
+                      <div className="text-right">
+                        <div className="text-2xl font-display text-gradient-gold leading-none">{t.k}</div>
+                        <div className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">{t.kl}</div>
+                      </div>
+                    </div>
+                    <p className="mt-5 text-base leading-relaxed flex-1" dangerouslySetInnerHTML={{__html: `&ldquo;${t.q}&rdquo;`}} />
+                    <div className="mt-5 flex items-center gap-1">{Array.from({length:5}).map((_,i)=><Star key={i} className="h-4 w-4 fill-primary text-primary"/>)}</div>
+                    <div className="mt-4 pt-4 border-t border-border flex items-center justify-between gap-2">
+                      <div>
+                        <div className="font-semibold text-sm">{t.n}</div>
+                        <div className="text-xs text-muted-foreground">{t.r}</div>
+                      </div>
+                      <span className="text-[10px] uppercase tracking-widest text-primary font-semibold">{t.m}</span>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="flex justify-center gap-3 mt-8">
+              <CarouselPrevious className="static translate-y-0 h-10 w-10 border-border bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary" />
+              <CarouselNext className="static translate-y-0 h-10 w-10 border-border bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary" />
+            </div>
+          </Carousel>
+        </div>
+      </section>
+
+      {/* ============ FAQ ============ */}
+      <section className="mx-auto max-w-4xl px-6 py-24">
+        <div className="text-center mb-12">
+          <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">FAQs</p>
+          <h2 className="mt-3 text-4xl md:text-5xl font-display uppercase">Common questions</h2>
+          <p className="mt-4 text-muted-foreground">Everything you want to know before we kick off.</p>
+        </div>
+        <Accordion type="single" collapsible className="space-y-3">
+          {[
+            { q: "What services do you offer?", a: "Full-stack digital marketing — SEO &amp; GEO, Google Ads, Meta &amp; LinkedIn paid social, performance creative, lifecycle/email, analytics, and AI-powered automation." },
+            { q: "How much do you charge?", a: "Project retainers typically range ₹50k–₹5L/mo depending on scope, channels and ad spend. Every quote is custom — book a strategy call for a tailored proposal." },
+            { q: "How fast will I see results?", a: "Paid channels usually show signal within 2–3 weeks. SEO compounds over 3–6 months. I share a 30/60/90-day roadmap before we start so expectations are crystal clear." },
+            { q: "Do you work with my industry?", a: "I&apos;ve shipped campaigns across 18+ industries — ecommerce, SaaS, fintech, healthcare, real estate, education, D2C and B2B. If your funnel needs growth, I can help." },
+            { q: "Do you handle ad spend management?", a: "Yes. I manage Google, Meta, LinkedIn, Amazon &amp; YouTube ad accounts end-to-end — strategy, creative, bidding, tracking, and weekly optimization." },
+            { q: "How do you report on performance?", a: "Live Looker Studio dashboards tied to your GA4 + ad accounts + CRM. Plus a written monthly review with insights, learnings and next bets." },
+            { q: "Can I cancel anytime?", a: "Yes. Month-to-month retainers with 30-day notice. No long lock-ins, no hidden fees — performance keeps the partnership going." },
+          ].map((f,i)=>(
+            <AccordionItem key={i} value={`item-${i}`} className="rounded-2xl border border-border bg-card px-5 data-[state=open]:border-primary transition">
+              <AccordionTrigger className="text-left text-base font-display uppercase hover:no-underline">{f.q}</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground leading-relaxed" dangerouslySetInnerHTML={{__html: f.a}}/>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </section>
 
       {/* ============ FINAL CTA ============ */}
