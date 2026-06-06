@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      announcement_bar: {
+        Row: {
+          created_at: string
+          cta_href: string
+          cta_label: string
+          enabled: boolean
+          id: string
+          message: string
+          singleton: boolean
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cta_href?: string
+          cta_label?: string
+          enabled?: boolean
+          id?: string
+          message?: string
+          singleton?: boolean
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cta_href?: string
+          cta_label?: string
+          enabled?: boolean
+          id?: string
+          message?: string
+          singleton?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       blog_categories: {
         Row: {
           created_at: string
