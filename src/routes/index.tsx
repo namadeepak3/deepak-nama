@@ -1335,49 +1335,54 @@ function Home() {
       </section>
 
       {/* ============ TESTIMONIALS CAROUSEL ============ */}
-      <section className="bg-gradient-to-b from-background via-card/50 to-background">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
-          <div className="text-center max-w-2xl mx-auto mb-6">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Receipts</p>
-            <h2 className="mt-3 text-3xl md:text-4xl font-display">What clients say</h2>
-            <p className="mt-4 text-muted-foreground">Real results from real brands — across SEO, paid media, social and lifecycle.</p>
+      <section className="bg-[#fbf4e8]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-16 overflow-hidden">
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <h2 className="text-3xl md:text-4xl font-display font-semibold text-neutral-900">What our customers say</h2>
+            <p className="mt-3 text-neutral-600">Real results from real brands — across SEO, paid media, social and lifecycle.</p>
           </div>
-          <Carousel opts={{ align: "start", loop: true }} className="relative">
-            <CarouselContent className="-ml-4">
-              {[
-                { q: "Organic traffic up 240% and qualified leads have never been higher.", n: "Sarah Mitchell", r: "CEO, Northbridge Retail", m: "SEO · 6 months", k: "+240%", kl: "Organic" },
-                { q: "PPC cut our CPL in half while doubling lead volume. Reporting is unmatched.", n: "David Chen", r: "Founder, Velocity SaaS", m: "Google Ads · 4 months", k: "-52%", kl: "CPL" },
-                { q: "We scaled from a regional player to a national brand. Strategy made the difference.", n: "Maria Lopez", r: "CMO, Harborline Homes", m: "Performance · 9 months", k: "5.8x", kl: "ROAS" },
-                { q: "Meta &amp; Google funnels now print revenue. Best marketing hire we&apos;ve made.", n: "Aarav Khanna", r: "Founder, Lumen D2C", m: "Paid Social · 5 months", k: "+312%", kl: "Revenue" },
-                { q: "Content + technical SEO finally clicked. We rank #1 on our money keywords.", n: "Priya Raman", r: "Head of Growth, Finovate", m: "SEO · 8 months", k: "#1", kl: "SERP" },
-              ].map((t) => (
-                <CarouselItem key={t.n} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                  <div className="h-full rounded-3xl border border-border bg-card p-7 flex flex-col">
-                    <div className="flex items-center justify-between">
-                      <Quote className="h-6 w-6 text-primary" />
-                      <div className="text-right">
-                        <div className="text-2xl font-display text-gradient-gold leading-none">{t.k}</div>
-                        <div className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">{t.kl}</div>
-                      </div>
-                    </div>
-                    <p className="mt-5 text-base leading-relaxed flex-1">{`“${t.q.replace(/&amp;/g, "&")}”`}</p>
-                    <div className="mt-5 flex items-center gap-1">{Array.from({length:5}).map((_,i)=><Star key={i} className="h-4 w-4 fill-primary text-primary"/>)}</div>
-                    <div className="mt-4 pt-4 border-t border-border flex items-center justify-between gap-2">
-                      <div>
-                        <div className="font-semibold text-sm">{t.n}</div>
-                        <div className="text-xs text-muted-foreground">{t.r}</div>
-                      </div>
-                      <span className="text-[10px] uppercase tracking-widest text-primary font-semibold">{t.m}</span>
-                    </div>
+          {(() => {
+            const TESTIMONIALS = [
+              { q: "Organic traffic up 240% and qualified leads have never been higher. The technical SEO playbook is the real deal.", n: "Sarah Mitchell", r: "CEO at Northbridge Retail", initials: "SM", color: "bg-amber-300" },
+              { q: "PPC cut our CPL in half while doubling lead volume. Reporting is unmatched — every rupee tied to pipeline.", n: "David Chen", r: "Founder at Velocity SaaS", initials: "DC", color: "bg-rose-300" },
+              { q: "We scaled from a regional player to a national brand. Strategy and execution made the difference.", n: "Maria Lopez", r: "CMO at Harborline Homes", initials: "ML", color: "bg-emerald-300" },
+              { q: "Meta and Google funnels now print revenue. Best marketing hire we've made this year.", n: "Aarav Khanna", r: "Founder at Lumen D2C", initials: "AK", color: "bg-violet-300" },
+              { q: "Content and technical SEO finally clicked. We rank #1 on every one of our money keywords.", n: "Priya Raman", r: "Head of Growth at Finovate", initials: "PR", color: "bg-sky-300" },
+              { q: "The AI agents handle reporting and lead routing 24/7. It feels like we hired a 10-person ops team.", n: "Thomas Smith", r: "Digital Marketing Specialist", initials: "TS", color: "bg-orange-300" },
+              { q: "Local SEO put us in the Map Pack across 30+ cities. Calls from Google jumped almost overnight.", n: "Neal Schaffer", r: "Marketing Director at LocalCo", initials: "NS", color: "bg-lime-300" },
+              { q: "The new website looks beautiful and converts. Page speed and SEO baked-in from day one.", n: "Gareth O'Sullivan", r: "Content Manager at Creatify", initials: "GO", color: "bg-pink-300" },
+              { q: "Lifecycle on WhatsApp and email lifted repeat revenue by 38%. The journeys are surgical.", n: "Abbie D", r: "Senior Engineer at Laywers", initials: "AD", color: "bg-cyan-300" },
+              { q: "Easily the most transparent agency I've worked with. Weekly insights, no fluff, all numbers.", n: "Dennis Lewis", r: "Advisor at Image Protect", initials: "DL", color: "bg-fuchsia-300" },
+            ];
+            const row1 = TESTIMONIALS.slice(0, 5);
+            const row2 = TESTIMONIALS.slice(5);
+            const Card = (t: typeof TESTIMONIALS[number]) => (
+              <div className="shrink-0 w-[320px] md:w-[380px] rounded-2xl bg-white border border-neutral-200/70 p-6 shadow-sm">
+                <div className="flex items-center gap-3">
+                  <div className={`h-10 w-10 rounded-full ${t.color} grid place-items-center text-neutral-900 font-semibold text-sm`}>{t.initials}</div>
+                  <div>
+                    <div className="font-semibold text-sm text-neutral-900">{t.n}</div>
+                    <div className="text-xs text-neutral-500">{t.r}</div>
                   </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <div className="flex justify-center gap-3 mt-8">
-              <CarouselPrevious className="static translate-y-0 h-10 w-10 border-border bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary" />
-              <CarouselNext className="static translate-y-0 h-10 w-10 border-border bg-card text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary" />
-            </div>
-          </Carousel>
+                </div>
+                <p className="mt-4 text-sm text-neutral-700 leading-relaxed">{t.q}</p>
+              </div>
+            );
+            return (
+              <div className="space-y-5">
+                <div className="relative">
+                  <div className="flex gap-5 marquee-track">
+                    {[...row1, ...row1].map((t, i) => <div key={`a-${i}`}>{Card(t)}</div>)}
+                  </div>
+                </div>
+                <div className="relative">
+                  <div className="flex gap-5 marquee-track-reverse">
+                    {[...row2, ...row2].map((t, i) => <div key={`b-${i}`}>{Card(t)}</div>)}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </section>
 
