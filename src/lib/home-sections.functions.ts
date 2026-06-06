@@ -7,6 +7,8 @@ import {
   type HomeSectionRecord as HomeSection,
 } from "@/lib/home-sections.shared";
 
+export type { HomeSection, HomeSectionContent };
+
 export const listHomeSections = createServerFn({ method: "GET" }).handler(
   async (): Promise<HomeSection[]> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
