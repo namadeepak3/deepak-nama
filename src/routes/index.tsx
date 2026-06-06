@@ -853,7 +853,6 @@ function Home() {
       {/* ============ WHATSAPP & SMS LEAD FORM ============ */}
       <section className="relative overflow-hidden bg-background">
         <div aria-hidden className="pointer-events-none absolute -top-24 left-[-10%] h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
-
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 py-16 md:py-24">
           <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-card via-primary/5 to-card p-8 md:p-12 shadow-gold">
             <div className="grid md:grid-cols-2 gap-8 items-center">
