@@ -1,23 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import {
+  mergeHomeSections,
+  type HomeSectionContent,
+  type HomeSectionRecord as HomeSection,
+} from "@/lib/home-sections.shared";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type HomeSectionContent = Record<string, any>;
-
-export type HomeSection = {
-  id: string;
-  key: string;
-  enabled: boolean;
-  sort_order: number;
-  eyebrow: string;
-  title: string;
-  subtitle: string;
-  cta_label: string;
-  cta_href: string;
-  image_url: string;
-  content: HomeSectionContent;
-};
+export type { HomeSection, HomeSectionContent };
 
 export const listHomeSections = createServerFn({ method: "GET" }).handler(
   async (): Promise<HomeSection[]> => {
@@ -27,11 +17,11 @@ export const listHomeSections = createServerFn({ method: "GET" }).handler(
       .select("id,key,enabled,sort_order,eyebrow,title,subtitle,cta_label,cta_href,image_url,content")
       .order("sort_order", { ascending: true });
     if (error) throw new Error(error.message);
-    return (data ?? []).map((r: any) => ({
+    return mergeHomeSections((data ?? []).map((r: any) => ({
       ...r,
       image_url: r.image_url ?? "",
       content: (r.content ?? {}) as HomeSectionContent,
-    })) as HomeSection[];
+    })) as HomeSection[]);
   },
 );
 
