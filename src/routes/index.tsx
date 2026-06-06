@@ -1006,12 +1006,23 @@ function Home() {
             <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span></span>
             Headquartered in Mumbai, IN
           </div>
-          <p className="mt-6 text-xs uppercase tracking-[0.3em] text-primary font-semibold">About the agency</p>
+          {txt("about", "image_url") && (
+            <div className="mt-6 mx-auto max-w-3xl aspect-[16/9] overflow-hidden rounded-3xl border border-border bg-muted">
+              <img src={txt("about", "image_url")} alt={txt("about", "title", "About the agency")} className="h-full w-full object-cover" />
+            </div>
+          )}
+          <p className="mt-6 text-xs uppercase tracking-[0.3em] text-primary font-semibold">{txt("about", "eyebrow", "About the agency")}</p>
           <h2 className="mt-4 text-3xl md:text-5xl font-display leading-[1.02]">
-            <span className="text-gradient-gold">vrseoguru</span> — an AI-powered <br className="hidden sm:block"/>digital marketing services agency.
+            {sec("about")?.title ? (
+              <span>{txt("about", "title")}</span>
+            ) : (
+              <>
+                <span className="text-gradient-gold">vrseoguru</span> — an AI-powered <br className="hidden sm:block"/>digital marketing services agency.
+              </>
+            )}
           </h2>
           <p className="mt-6 max-w-2xl mx-auto text-sm md:text-base text-muted-foreground leading-relaxed">
-            For over seven years our team has built revenue systems for ecommerce, SaaS and D2C brands across India and abroad — pairing senior strategists and a proprietary AI stack with paid-media, SEO, creative and lifecycle specialists. Every engagement is engineered around your <span className="text-foreground font-semibold">bottom line</span>, not vanity metrics.
+            {txt("about", "subtitle", "For over seven years our team has built revenue systems for ecommerce, SaaS and D2C brands across India and abroad — pairing senior strategists and a proprietary AI stack with paid-media, SEO, creative and lifecycle specialists. Every engagement is engineered around your bottom line, not vanity metrics.")}
           </p>
 
           {/* Certification chips */}
