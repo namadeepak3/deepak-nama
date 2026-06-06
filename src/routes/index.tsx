@@ -284,6 +284,12 @@ function Home() {
     const s = homeSections.find((x) => x.key === key);
     return s ? s.enabled : true;
   };
+  const sec = (key: string) => homeSections.find((x) => x.key === key);
+  const txt = (key: string, field: "eyebrow" | "title" | "subtitle" | "cta_label" | "cta_href" | "image_url", fallback = "") => {
+    const s = sec(key);
+    const v = s ? (s[field] as string) : "";
+    return v || fallback;
+  };
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<null | { name: string; email: string }>(null);
