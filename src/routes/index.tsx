@@ -835,55 +835,7 @@ function Home() {
       </section>
 
       {/* (placeholder removed — section continues below) */}
-      <section className="bg-gradient-to-b from-background via-card/50 to-background">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Digital marketing services</p>
-            <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">Every channel your brand <span className="text-gradient-gold">needs to grow.</span></h2>
-            <p className="mt-4 text-muted-foreground">Senior specialists across SEO, paid media, social, content, email and web — all wired into our AI ops layer.</p>
-            <Link to="/services" className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">All services <ArrowRight className="h-4 w-4"/></Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              { Icon: Search, title: "SEO & GEO", desc: "Technical SEO, topical authority and AI-search optimization to win Google + LLM citations.", bullets: ["Tech audits", "Content clusters", "AI Overviews"] },
-              { Icon: Globe, title: "Local SEO Growth", desc: "Win the Google Map Pack and ‘near me’ searches — calls, walk-ins and bookings from high-intent locals.", bullets: ["Map Pack", "GBP optimisation", "Local citations"] },
-              { Icon: Target, title: "PPC / Google Ads", desc: "Search, Performance Max, Shopping and YouTube — profit-modeled and ML-bid.", bullets: ["Search & PMax", "Shopping feeds", "Conversion API"] },
-              { Icon: Megaphone, title: "Meta & Paid Social", desc: "Facebook, Instagram, TikTok and Pinterest funnels engineered for return on ad spend.", bullets: ["Creative testing", "Retargeting", "UGC & influencers"] },
-              { Icon: Linkedin, title: "LinkedIn & B2B", desc: "Account-based campaigns, demand-gen and pipeline programs for B2B SaaS and services.", bullets: ["ABM lists", "Demand gen", "Sales enablement"] },
-              { Icon: ShoppingCart, title: "Amazon & Marketplaces", desc: "Sponsored Ads, listing optimization and DSP for brands scaling on Amazon and Flipkart.", bullets: ["Sponsored Ads", "Listing SEO", "Amazon DSP"] },
-              { Icon: Share2, title: "Social Media (SMO)", desc: "Organic content calendars, community management and short-form video that compounds reach.", bullets: ["Content calendar", "Community ops", "Reels & Shorts"] },
-              { Icon: PenTool, title: "Content Marketing", desc: "SEO-led articles, thought-leadership and lead magnets built to convert, not just rank.", bullets: ["Editorial strategy", "Long-form content", "Lead magnets"] },
-              { Icon: MessageCircle, title: "WhatsApp & SMS Marketing", desc: "Two-way WhatsApp Business API and SMS journeys with 95%+ open rates — built for commerce, support and re-engagement.", bullets: ["WhatsApp API", "SMS broadcasts", "Drip & chatbot flows"] },
-              { Icon: Youtube, title: "Video & YouTube Ads", desc: "Performance video production plus YouTube media buying for awareness and conversion.", bullets: ["Ad production", "YouTube Ads", "Connected TV"] },
-              { Icon: Code2, title: "Web & CRO", desc: "Landing pages, Shopify and Webflow builds — designed and tested to lift conversion.", bullets: ["Landing pages", "A/B testing", "Page speed"] },
-              { Icon: BarChart3, title: "Analytics & Tracking", desc: "GA4, server-side tracking, BigQuery and Looker dashboards you can actually trust.", bullets: ["GA4 setup", "Server-side CAPI", "Looker dashboards"] },
-              { Icon: Bot, title: "Marketing Automation", desc: "AI agents and workflow automation across CRM, ads and content ops — 24/7.", bullets: ["AI agents", "CRM workflows", "Auto-reporting"] },
-            ].map(({ Icon, title, desc, bullets }) => (
-              <Link
-                key={title}
-                to="/services"
-                className="group relative rounded-3xl border border-border bg-card p-6 hover:border-foreground transition overflow-hidden"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary border border-primary/30 grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="font-display text-lg">{title}</h3>
-                </div>
-                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{desc}</p>
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {bullets.map((b) => (
-                    <span key={b} className="rounded-full border border-border bg-secondary px-2.5 py-0.5 text-[10px] text-muted-foreground">{b}</span>
-                  ))}
-                </div>
-                <div className="mt-5 inline-flex items-center gap-1 text-xs font-semibold text-foreground">
-                  Learn more <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ServicesShowcase />
 
       {/* ============ INDUSTRIES WE SERVE ============ */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
