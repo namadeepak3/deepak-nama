@@ -135,6 +135,7 @@ function emptyService(nextOrder: number): ServiceInput {
     faqs: [],
     tiers: [],
     sort_order: nextOrder,
+    show_on_home: true,
   };
 }
 
@@ -644,6 +645,7 @@ function serviceToInput(s: Service): ServiceInput {
     faqs: s.faqs,
     tiers: s.tiers,
     sort_order: s.sortOrder,
+    show_on_home: s.showOnHome,
   };
 }
 
