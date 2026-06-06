@@ -32,6 +32,7 @@ import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminSecurityRouteImport } from './routes/_authenticated/admin.security'
 import { Route as AuthenticatedAdminLegalRouteImport } from './routes/_authenticated/admin.legal'
 import { Route as AuthenticatedAdminFaqsRouteImport } from './routes/_authenticated/admin.faqs'
+import { Route as AuthenticatedAdminAnnouncementRouteImport } from './routes/_authenticated/admin.announcement'
 import { Route as ApiPublicHealthRlsRouteImport } from './routes/api/public/health/rls'
 
 const WebsiteAuditRoute = WebsiteAuditRouteImport.update({
@@ -149,6 +150,12 @@ const AuthenticatedAdminFaqsRoute = AuthenticatedAdminFaqsRouteImport.update({
   path: '/faqs',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminAnnouncementRoute =
+  AuthenticatedAdminAnnouncementRouteImport.update({
+    id: '/announcement',
+    path: '/announcement',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const ApiPublicHealthRlsRoute = ApiPublicHealthRlsRouteImport.update({
   id: '/api/public/health/rls',
   path: '/api/public/health/rls',
@@ -174,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/case-studies/': typeof CaseStudiesIndexRoute
   '/services/': typeof ServicesIndexRoute
+  '/admin/announcement': typeof AuthenticatedAdminAnnouncementRoute
   '/admin/faqs': typeof AuthenticatedAdminFaqsRoute
   '/admin/legal': typeof AuthenticatedAdminLegalRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
@@ -198,6 +206,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/case-studies': typeof CaseStudiesIndexRoute
   '/services': typeof ServicesIndexRoute
+  '/admin/announcement': typeof AuthenticatedAdminAnnouncementRoute
   '/admin/faqs': typeof AuthenticatedAdminFaqsRoute
   '/admin/legal': typeof AuthenticatedAdminLegalRoute
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
@@ -225,6 +234,7 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/case-studies/': typeof CaseStudiesIndexRoute
   '/services/': typeof ServicesIndexRoute
+  '/_authenticated/admin/announcement': typeof AuthenticatedAdminAnnouncementRoute
   '/_authenticated/admin/faqs': typeof AuthenticatedAdminFaqsRoute
   '/_authenticated/admin/legal': typeof AuthenticatedAdminLegalRoute
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/case-studies/'
     | '/services/'
+    | '/admin/announcement'
     | '/admin/faqs'
     | '/admin/legal'
     | '/admin/security'
@@ -276,6 +287,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/case-studies'
     | '/services'
+    | '/admin/announcement'
     | '/admin/faqs'
     | '/admin/legal'
     | '/admin/security'
@@ -302,6 +314,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/case-studies/'
     | '/services/'
+    | '/_authenticated/admin/announcement'
     | '/_authenticated/admin/faqs'
     | '/_authenticated/admin/legal'
     | '/_authenticated/admin/security'
@@ -494,6 +507,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminFaqsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/announcement': {
+      id: '/_authenticated/admin/announcement'
+      path: '/announcement'
+      fullPath: '/admin/announcement'
+      preLoaderRoute: typeof AuthenticatedAdminAnnouncementRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/api/public/health/rls': {
       id: '/api/public/health/rls'
       path: '/api/public/health/rls'
@@ -505,6 +525,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminAnnouncementRoute: typeof AuthenticatedAdminAnnouncementRoute
   AuthenticatedAdminFaqsRoute: typeof AuthenticatedAdminFaqsRoute
   AuthenticatedAdminLegalRoute: typeof AuthenticatedAdminLegalRoute
   AuthenticatedAdminSecurityRoute: typeof AuthenticatedAdminSecurityRoute
@@ -512,6 +533,7 @@ interface AuthenticatedAdminRouteChildren {
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminAnnouncementRoute: AuthenticatedAdminAnnouncementRoute,
   AuthenticatedAdminFaqsRoute: AuthenticatedAdminFaqsRoute,
   AuthenticatedAdminLegalRoute: AuthenticatedAdminLegalRoute,
   AuthenticatedAdminSecurityRoute: AuthenticatedAdminSecurityRoute,
