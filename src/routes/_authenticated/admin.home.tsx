@@ -3,12 +3,14 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowUp, ArrowDown, Eye, EyeOff, Save, Layout } from "lucide-react";
+import { ArrowLeft, ArrowUp, ArrowDown, Eye, EyeOff, Save, Layout, Plus, Trash2 } from "lucide-react";
 import {
   listHomeSections,
   updateHomeSection,
   reorderHomeSections,
   toggleHomeSection,
+  createHomeSection,
+  deleteHomeSection,
   type HomeSection,
 } from "@/lib/home-sections.functions";
 import { ImageUploadField } from "@/components/admin/ImageUploadField";
@@ -52,6 +54,8 @@ function AdminHomePage() {
   const update = useServerFn(updateHomeSection);
   const reorder = useServerFn(reorderHomeSections);
   const toggle = useServerFn(toggleHomeSection);
+  const create = useServerFn(createHomeSection);
+  const remove = useServerFn(deleteHomeSection);
 
   const sectionsQ = useQuery({ queryKey: ["home_sections"], queryFn: () => list() });
   const [selected, setSelected] = useState<string | null>(null);
@@ -103,6 +107,26 @@ function AdminHomePage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const createMut = useMutation({
+    mutationFn: (v: { title: string }) => create({ data: { title: v.title, eyebrow: "", subtitle: "" } }),
+    onSuccess: async (res) => {
+      toast.success("Section created");
+      await qc.invalidateQueries({ queryKey: ["home_sections"] });
+      setSelected(res.id);
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: (id: string) => remove({ data: { id } }),
+    onSuccess: () => {
+      toast.success("Section deleted");
+      setSelected(null);
+      qc.invalidateQueries({ queryKey: ["home_sections"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   function move(index: number, dir: -1 | 1) {
     const arr = [...(sectionsQ.data ?? [])];
     const target = index + dir;
@@ -124,13 +148,23 @@ function AdminHomePage() {
             <Layout className="h-5 w-5 text-primary" /> Home page sections
           </h1>
           <p className="mt-1 text-xs text-muted-foreground">
-            Show/hide, reorder, and edit the header text of each section on the home page.
+            Show/hide, reorder, edit, or add new sections on the home page. Custom sections render after built-in ones in the order shown.
           </p>
         </div>
       </div>
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-6 grid md:grid-cols-[320px_1fr] gap-6">
         <div className="space-y-2">
+          <button
+            onClick={() => {
+              const title = window.prompt("New section title");
+              if (title && title.trim()) createMut.mutate({ title: title.trim() });
+            }}
+            disabled={createMut.isPending}
+            className="w-full inline-flex items-center justify-center gap-2 rounded-md border border-dashed border-border bg-card p-2 text-xs text-muted-foreground hover:text-foreground hover:border-primary"
+          >
+            <Plus className="h-3.5 w-3.5" /> Add custom section
+          </button>
           {sectionsQ.isLoading && <p className="text-sm text-muted-foreground">Loading…</p>}
           {(sectionsQ.data ?? []).map((s, i) => {
             const active = s.id === selected;
@@ -186,6 +220,17 @@ function AdminHomePage() {
                 <p className="text-xs uppercase tracking-widest text-muted-foreground">{draft.key}</p>
                 <h2 className="text-lg font-display">{labelFor(draft.key)}</h2>
               </div>
+              {draft.key.startsWith("custom_") && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm("Delete this custom section? This cannot be undone.")) deleteMut.mutate(draft.id);
+                  }}
+                  className="inline-flex items-center gap-2 rounded-md border border-destructive/40 px-3 py-1.5 text-xs text-destructive hover:bg-destructive/10"
+                >
+                  <Trash2 className="h-3.5 w-3.5" /> Delete section
+                </button>
+              )}
 
               <button
                 type="button"
