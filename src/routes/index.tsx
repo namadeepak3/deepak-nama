@@ -290,6 +290,7 @@ function Home() {
     const v = s ? (s[field] as string) : "";
     return v || fallback;
   };
+  const sectionOrder = (key: string) => sec(key)?.sort_order ?? 999;
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<null | { name: string; email: string }>(null);
@@ -440,7 +441,7 @@ function Home() {
     }
   };
   return (
-    <>
+    <div className="flex flex-col">
       <Toaster />
       <AuditPopup
         open={auditOpen}
@@ -481,7 +482,7 @@ function Home() {
 
       {/* ============ HERO ============ */}
       {isEnabled("hero") && (
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden" style={{ order: sectionOrder("hero") }}>
         {/* Clean monochrome backdrop */}
         <div aria-hidden className="absolute inset-0 bg-background" />
         <div aria-hidden className="absolute inset-0 bg-ai-grid opacity-70" />
@@ -643,7 +644,7 @@ function Home() {
 
       {/* ============ CHANNELS I RUN ============ */}
       {isEnabled("channels") && (
-      <section className="bg-gradient-to-b from-background via-card/60 to-background">
+      <section className="bg-gradient-to-b from-background via-card/60 to-background" style={{ order: sectionOrder("channels") }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
           <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">{txt("channels", "eyebrow", "AI-powered channels we run")}</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
@@ -666,7 +667,7 @@ function Home() {
 
       {/* ============ AI-POWERED STACK ============ */}
       {isEnabled("ai_stack") && (
-      <section className="relative overflow-hidden bg-background bg-ai-signal">
+      <section className="relative overflow-hidden bg-background bg-ai-signal" style={{ order: sectionOrder("ai_stack") }}>
         <div aria-hidden className="absolute inset-0 bg-ai-dots opacity-70" />
         <div aria-hidden className="absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl" />
         <div className="relative mx-auto max-w-7xl overflow-x-clip px-4 sm:px-6 py-8 md:py-12">
@@ -809,11 +810,11 @@ function Home() {
       </section>
       )}
 
-      {isEnabled("services") && <ServicesShowcase />}
+      {isEnabled("services") && <div style={{ order: sectionOrder("services") }}><ServicesShowcase /></div>}
 
       {/* ============ MARKETING PLATFORMS ============ */}
       {isEnabled("platforms") && (
-      <section className="relative overflow-hidden bg-background">
+      <section className="relative overflow-hidden bg-background" style={{ order: sectionOrder("platforms") }}>
         <div aria-hidden className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/10 blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24">
           <div className="mt-12">
