@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { listServices } from "@/lib/services.functions";
+import { getAnnouncement } from "@/lib/announcement.functions";
 import { iconFor } from "@/lib/services.shared";
 import { Menu, X, ChevronDown, ArrowRight, Mail, Github, Linkedin, Twitter } from "lucide-react";
 import { useState } from "react";
