@@ -645,7 +645,7 @@ function Home() {
       {isEnabled("channels") && (
       <section className="bg-gradient-to-b from-background via-card/60 to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
-          <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">AI-powered channels we run</p>
+          <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">{txt("channels", "eyebrow", "AI-powered channels we run")}</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
             {[
               { Icon: Bot, label: "AI Agents" },
