@@ -52,6 +52,16 @@ function CaseStudiesIndex() {
                 params={{ slug: c.slug }}
                 className="group flex flex-col rounded-3xl border border-border bg-card p-6 hover:border-foreground transition"
               >
+                {c.coverImage && (
+                  <div className="-mx-6 -mt-6 mb-5 aspect-[16/9] overflow-hidden rounded-t-3xl bg-muted">
+                    <img
+                      src={c.coverImage}
+                      alt={c.title}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                    />
+                  </div>
+                )}
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <span className="rounded-full bg-secondary border border-border px-2.5 py-0.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">{c.tag}</span>
                   <div className="flex gap-1.5">
