@@ -152,20 +152,33 @@ function SiteShell() {
 
 function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const navLink = "text-sm text-white/70 hover:text-white transition-colors";
+  const navLink = "text-sm text-foreground/70 hover:text-foreground transition-colors";
   const fetchServices = useServerFn(listServices);
   const { data: services = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchServices() });
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-xl bg-ink border-b border-white/10 text-white">
-      <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 font-display font-bold tracking-tight">
-          <span className="h-7 w-7 rounded-md bg-white text-ink grid place-items-center text-xs">V</span>
-          <span className="text-white">vrseoguru</span>
-        </Link>
+    <header className="sticky top-0 z-50">
+      {/* Top announcement bar */}
+      <div className="bg-ink text-white text-xs">
+        <div className="mx-auto max-w-7xl px-6 h-10 flex items-center justify-center gap-2 text-center">
+          <span className="h-2 w-2 rounded-full bg-primary inline-block animate-pulse" />
+          <span className="font-medium">vrseoguru AI Ops is live. Build automations with ChatGPT, Claude, n8n, Zapier &amp; more.</span>
+          <Link to="/services" className="hidden sm:inline-flex items-center gap-1 text-primary font-semibold hover:underline">
+            Explore plan <ArrowRight className="h-3 w-3" />
+          </Link>
+        </div>
+      </div>
+
+      {/* Floating pill nav */}
+      <div className="bg-background/80 backdrop-blur-xl py-3 px-3 sm:px-6 border-b border-border/40">
+        <div className="mx-auto max-w-7xl rounded-full bg-card border border-border shadow-[0_8px_30px_rgb(0,0,0,0.06)] pl-5 pr-2 h-14 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2 font-display font-bold tracking-tight">
+            <span className="h-8 w-8 rounded-full bg-primary text-primary-foreground grid place-items-center text-xs shadow-gold">V</span>
+            <span className="text-foreground text-base">vrseoguru</span>
+          </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
-          <Link to="/" className={`${navLink} px-3 py-2`} activeOptions={{ exact: true }} activeProps={{ className: "text-white" }}>Home</Link>
+          <Link to="/" className={`${navLink} px-3 py-2`} activeOptions={{ exact: true }} activeProps={{ className: "text-foreground font-semibold" }}>Home</Link>
 
           {/* Mega menu trigger */}
           <div className="relative group">
@@ -205,54 +218,62 @@ function SiteHeader() {
             </div>
           </div>
 
-          <Link to="/about" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-white" }}>About</Link>
-          <Link to="/case-studies" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-white" }}>Case Studies</Link>
-          <Link to="/blog" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-white" }}>Blog</Link>
-          <Link to="/contact" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-white" }}>Contact</Link>
+          <Link to="/about" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-foreground font-semibold" }}>About</Link>
+          <Link to="/case-studies" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-foreground font-semibold" }}>Case Studies</Link>
+          <Link to="/blog" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-foreground font-semibold" }}>Blog</Link>
+          <Link to="/contact" className={`${navLink} px-3 py-2`} activeProps={{ className: "text-foreground font-semibold" }}>Contact</Link>
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link to="/contact" className="hidden md:inline-flex items-center text-sm text-foreground/70 hover:text-foreground px-3">
+            Book a demo
+          </Link>
+          <span className="hidden md:inline-block h-5 w-px bg-border" aria-hidden />
+          <Link to="/auth" className="hidden md:inline-flex items-center text-sm text-foreground/70 hover:text-foreground px-2">
+            Sign in
+          </Link>
           <Link
             to="/contact"
-            className="hidden md:inline-flex items-center gap-2 rounded-md bg-white text-ink px-4 py-2 text-sm font-medium hover:bg-white/90 transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-full bg-primary text-primary-foreground px-4 sm:px-5 h-10 text-sm font-semibold hover:opacity-90 shadow-gold transition-opacity"
           >
-            Hire me <ArrowRight className="h-3.5 w-3.5" />
+            Start free trial <ArrowRight className="h-3.5 w-3.5" />
           </Link>
           <button
             onClick={() => setMobileOpen((v) => !v)}
-            className="lg:hidden h-9 w-9 rounded-md border border-white/20 grid place-items-center text-white"
+            className="lg:hidden h-10 w-10 rounded-full border border-border grid place-items-center text-foreground ml-1"
             aria-label="Toggle menu"
           >
             {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
         </div>
+        </div>
       </div>
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-white/10 bg-ink text-white backdrop-blur-xl">
+        <div className="lg:hidden border-t border-border bg-card text-foreground backdrop-blur-xl">
           <div className="mx-auto max-w-7xl px-6 py-4 space-y-1">
-            <Link to="/" onClick={() => setMobileOpen(false)} className="block py-2 text-white">Home</Link>
+            <Link to="/" onClick={() => setMobileOpen(false)} className="block py-2">Home</Link>
             <details className="group">
-              <summary className="flex items-center justify-between py-2 text-white cursor-pointer list-none">
+              <summary className="flex items-center justify-between py-2 cursor-pointer list-none">
                 <span>Services</span>
                 <ChevronDown className="h-4 w-4 group-open:rotate-180 transition-transform" />
               </summary>
-              <div className="pl-3 mt-1 space-y-1 border-l border-white/20 ml-1">
-                <Link to="/services" onClick={() => setMobileOpen(false)} className="block py-2 text-sm text-white">All services</Link>
+              <div className="pl-3 mt-1 space-y-1 border-l border-border ml-1">
+                <Link to="/services" onClick={() => setMobileOpen(false)} className="block py-2 text-sm">All services</Link>
                 {services.map((s) => (
-                  <Link key={s.slug} to="/services/$slug" params={{ slug: s.slug }} onClick={() => setMobileOpen(false)} className="block py-2 text-sm text-white/70 hover:text-white">
+                  <Link key={s.slug} to="/services/$slug" params={{ slug: s.slug }} onClick={() => setMobileOpen(false)} className="block py-2 text-sm text-foreground/70 hover:text-foreground">
                     {s.title}
                   </Link>
                 ))}
               </div>
             </details>
-            <Link to="/about" onClick={() => setMobileOpen(false)} className="block py-2 text-white">About</Link>
-            <Link to="/case-studies" onClick={() => setMobileOpen(false)} className="block py-2 text-white">Case Studies</Link>
-            <Link to="/blog" onClick={() => setMobileOpen(false)} className="block py-2 text-white">Blog</Link>
-            <Link to="/contact" onClick={() => setMobileOpen(false)} className="block py-2 text-white">Contact</Link>
-            <Link to="/contact" onClick={() => setMobileOpen(false)} className="mt-3 inline-flex items-center gap-2 rounded-md bg-white text-ink px-4 py-2 text-sm font-medium">
-              Hire me <ArrowRight className="h-3.5 w-3.5" />
+            <Link to="/about" onClick={() => setMobileOpen(false)} className="block py-2">About</Link>
+            <Link to="/case-studies" onClick={() => setMobileOpen(false)} className="block py-2">Case Studies</Link>
+            <Link to="/blog" onClick={() => setMobileOpen(false)} className="block py-2">Blog</Link>
+            <Link to="/contact" onClick={() => setMobileOpen(false)} className="block py-2">Contact</Link>
+            <Link to="/contact" onClick={() => setMobileOpen(false)} className="mt-3 inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-medium">
+              Start free trial <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
         </div>
