@@ -284,6 +284,12 @@ function Home() {
     const s = homeSections.find((x) => x.key === key);
     return s ? s.enabled : true;
   };
+  const sec = (key: string) => homeSections.find((x) => x.key === key);
+  const txt = (key: string, field: "eyebrow" | "title" | "subtitle" | "cta_label" | "cta_href" | "image_url", fallback = "") => {
+    const s = sec(key);
+    const v = s ? (s[field] as string) : "";
+    return v || fallback;
+  };
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<null | { name: string; email: string }>(null);
@@ -639,7 +645,7 @@ function Home() {
       {isEnabled("channels") && (
       <section className="bg-gradient-to-b from-background via-card/60 to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
-          <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">AI-powered channels we run</p>
+          <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">{txt("channels", "eyebrow", "AI-powered channels we run")}</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
             {[
               { Icon: Bot, label: "AI Agents" },
@@ -1000,12 +1006,23 @@ function Home() {
             <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span></span>
             Headquartered in Mumbai, IN
           </div>
-          <p className="mt-6 text-xs uppercase tracking-[0.3em] text-primary font-semibold">About the agency</p>
+          {txt("about", "image_url") && (
+            <div className="mt-6 mx-auto max-w-3xl aspect-[16/9] overflow-hidden rounded-3xl border border-border bg-muted">
+              <img src={txt("about", "image_url")} alt={txt("about", "title", "About the agency")} className="h-full w-full object-cover" />
+            </div>
+          )}
+          <p className="mt-6 text-xs uppercase tracking-[0.3em] text-primary font-semibold">{txt("about", "eyebrow", "About the agency")}</p>
           <h2 className="mt-4 text-3xl md:text-5xl font-display leading-[1.02]">
-            <span className="text-gradient-gold">vrseoguru</span> — an AI-powered <br className="hidden sm:block"/>digital marketing services agency.
+            {sec("about")?.title ? (
+              <span>{txt("about", "title")}</span>
+            ) : (
+              <>
+                <span className="text-gradient-gold">vrseoguru</span> — an AI-powered <br className="hidden sm:block"/>digital marketing services agency.
+              </>
+            )}
           </h2>
           <p className="mt-6 max-w-2xl mx-auto text-sm md:text-base text-muted-foreground leading-relaxed">
-            For over seven years our team has built revenue systems for ecommerce, SaaS and D2C brands across India and abroad — pairing senior strategists and a proprietary AI stack with paid-media, SEO, creative and lifecycle specialists. Every engagement is engineered around your <span className="text-foreground font-semibold">bottom line</span>, not vanity metrics.
+            {txt("about", "subtitle", "For over seven years our team has built revenue systems for ecommerce, SaaS and D2C brands across India and abroad — pairing senior strategists and a proprietary AI stack with paid-media, SEO, creative and lifecycle specialists. Every engagement is engineered around your bottom line, not vanity metrics.")}
           </p>
 
           {/* Certification chips */}
@@ -1370,14 +1387,28 @@ function Home() {
       {isEnabled("final_cta") && (
       <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/30 via-card to-card p-12 md:p-20 text-center">
+          {txt("final_cta", "image_url") && (
+            <div aria-hidden className="absolute inset-0 opacity-25">
+              <img src={txt("final_cta", "image_url")} alt="" className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-background/40 to-background/80" />
+            </div>
+          )}
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-primary/30 blur-3xl"/>
-          <p className="relative text-xs tracking-[0.22em] uppercase text-primary font-semibold">Let&apos;s build</p>
-          <h2 className="relative mt-4 text-3xl md:text-5xl font-display leading-[1.02]">Ready to <span className="text-gradient-gold">accelerate</span><br/>your growth?</h2>
-          <p className="relative mt-5 max-w-xl mx-auto text-muted-foreground">Book a free, no-obligation strategy call. Our team will audit your marketing and show you the biggest opportunities.</p>
+          <p className="relative text-xs tracking-[0.22em] uppercase text-primary font-semibold">{txt("final_cta", "eyebrow", "Let's build")}</p>
+          <h2 className="relative mt-4 text-3xl md:text-5xl font-display leading-[1.02]">
+            {sec("final_cta")?.title ? txt("final_cta", "title") : (<>Ready to <span className="text-gradient-gold">accelerate</span><br/>your growth?</>)}
+          </h2>
+          <p className="relative mt-5 max-w-xl mx-auto text-muted-foreground">{txt("final_cta", "subtitle", "Book a free, no-obligation strategy call. Our team will audit your marketing and show you the biggest opportunities.")}</p>
           <div className="relative mt-8 flex flex-wrap gap-3 justify-center">
-            <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
-              Book free strategy call <ArrowRight className="h-4 w-4"/>
-            </Link>
+            {(() => {
+              const label = txt("final_cta", "cta_label", "Book free strategy call");
+              const href = txt("final_cta", "cta_href", "/contact");
+              return (
+                <a href={href} className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
+                  {label} <ArrowRight className="h-4 w-4"/>
+                </a>
+              );
+            })()}
             <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-7 py-3.5 text-sm font-semibold text-foreground hover:border-primary transition">
               <Phone className="h-4 w-4"/> View services
             </Link>

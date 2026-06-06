@@ -2,6 +2,9 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type HomeSectionContent = Record<string, any>;
+
 export type HomeSection = {
   id: string;
   key: string;
@@ -12,6 +15,8 @@ export type HomeSection = {
   subtitle: string;
   cta_label: string;
   cta_href: string;
+  image_url: string;
+  content: HomeSectionContent;
 };
 
 export const listHomeSections = createServerFn({ method: "GET" }).handler(
@@ -19,10 +24,14 @@ export const listHomeSections = createServerFn({ method: "GET" }).handler(
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await supabaseAdmin
       .from("home_sections")
-      .select("id,key,enabled,sort_order,eyebrow,title,subtitle,cta_label,cta_href")
+      .select("id,key,enabled,sort_order,eyebrow,title,subtitle,cta_label,cta_href,image_url,content")
       .order("sort_order", { ascending: true });
     if (error) throw new Error(error.message);
-    return (data ?? []) as HomeSection[];
+    return (data ?? []).map((r: any) => ({
+      ...r,
+      image_url: r.image_url ?? "",
+      content: (r.content ?? {}) as HomeSectionContent,
+    })) as HomeSection[];
   },
 );
 
@@ -48,6 +57,8 @@ const updateInput = z.object({
   subtitle: z.string().max(600).default(""),
   cta_label: z.string().max(60).default(""),
   cta_href: z.string().max(500).default(""),
+  image_url: z.string().max(1000).default(""),
+  content: z.record(z.string(), z.any()).default({}),
 });
 
 export const updateHomeSection = createServerFn({ method: "POST" })
@@ -66,6 +77,8 @@ export const updateHomeSection = createServerFn({ method: "POST" })
         subtitle: data.subtitle,
         cta_label: data.cta_label,
         cta_href: data.cta_href,
+        image_url: data.image_url,
+        content: data.content as never,
       })
       .eq("id", data.id);
     if (error) throw new Error(error.message);

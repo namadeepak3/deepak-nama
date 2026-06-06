@@ -300,12 +300,14 @@ export type Database = {
       }
       home_sections: {
         Row: {
+          content: Json
           created_at: string
           cta_href: string
           cta_label: string
           enabled: boolean
           eyebrow: string
           id: string
+          image_url: string
           key: string
           sort_order: number
           subtitle: string
@@ -313,12 +315,14 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          content?: Json
           created_at?: string
           cta_href?: string
           cta_label?: string
           enabled?: boolean
           eyebrow?: string
           id?: string
+          image_url?: string
           key: string
           sort_order?: number
           subtitle?: string
@@ -326,12 +330,14 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          content?: Json
           created_at?: string
           cta_href?: string
           cta_label?: string
           enabled?: boolean
           eyebrow?: string
           id?: string
+          image_url?: string
           key?: string
           sort_order?: number
           subtitle?: string
