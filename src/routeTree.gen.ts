@@ -35,6 +35,7 @@ import { Route as AuthenticatedAdminHomeRouteImport } from './routes/_authentica
 import { Route as AuthenticatedAdminFaqsRouteImport } from './routes/_authenticated/admin.faqs'
 import { Route as AuthenticatedAdminCaseStudiesRouteImport } from './routes/_authenticated/admin.case-studies'
 import { Route as AuthenticatedAdminAnnouncementRouteImport } from './routes/_authenticated/admin.announcement'
+import { Route as ApiPublicSiteImagesSplatRouteImport } from './routes/api/public/site-images/$'
 import { Route as ApiPublicHealthRlsRouteImport } from './routes/api/public/health/rls'
 
 const WebsiteAuditRoute = WebsiteAuditRouteImport.update({
@@ -169,6 +170,12 @@ const AuthenticatedAdminAnnouncementRoute =
     path: '/announcement',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const ApiPublicSiteImagesSplatRoute =
+  ApiPublicSiteImagesSplatRouteImport.update({
+    id: '/api/public/site-images/$',
+    path: '/api/public/site-images/$',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHealthRlsRoute = ApiPublicHealthRlsRouteImport.update({
   id: '/api/public/health/rls',
   path: '/api/public/health/rls',
@@ -202,6 +209,7 @@ export interface FileRoutesByFullPath {
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/api/public/health/rls': typeof ApiPublicHealthRlsRoute
+  '/api/public/site-images/$': typeof ApiPublicSiteImagesSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -229,6 +237,7 @@ export interface FileRoutesByTo {
   '/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/api/public/health/rls': typeof ApiPublicHealthRlsRoute
+  '/api/public/site-images/$': typeof ApiPublicSiteImagesSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -259,6 +268,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/security': typeof AuthenticatedAdminSecurityRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/api/public/health/rls': typeof ApiPublicHealthRlsRoute
+  '/api/public/site-images/$': typeof ApiPublicSiteImagesSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -289,6 +299,7 @@ export interface FileRouteTypes {
     | '/admin/security'
     | '/admin/'
     | '/api/public/health/rls'
+    | '/api/public/site-images/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -316,6 +327,7 @@ export interface FileRouteTypes {
     | '/admin/security'
     | '/admin'
     | '/api/public/health/rls'
+    | '/api/public/site-images/$'
   id:
     | '__root__'
     | '/'
@@ -345,6 +357,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/security'
     | '/_authenticated/admin/'
     | '/api/public/health/rls'
+    | '/api/public/site-images/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -367,6 +380,7 @@ export interface RootRouteChildren {
   CaseStudiesIndexRoute: typeof CaseStudiesIndexRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
   ApiPublicHealthRlsRoute: typeof ApiPublicHealthRlsRoute
+  ApiPublicSiteImagesSplatRoute: typeof ApiPublicSiteImagesSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -553,6 +567,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAnnouncementRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/api/public/site-images/$': {
+      id: '/api/public/site-images/$'
+      path: '/api/public/site-images/$'
+      fullPath: '/api/public/site-images/$'
+      preLoaderRoute: typeof ApiPublicSiteImagesSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/health/rls': {
       id: '/api/public/health/rls'
       path: '/api/public/health/rls'
@@ -617,6 +638,7 @@ const rootRouteChildren: RootRouteChildren = {
   CaseStudiesIndexRoute: CaseStudiesIndexRoute,
   ServicesIndexRoute: ServicesIndexRoute,
   ApiPublicHealthRlsRoute: ApiPublicHealthRlsRoute,
+  ApiPublicSiteImagesSplatRoute: ApiPublicSiteImagesSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
