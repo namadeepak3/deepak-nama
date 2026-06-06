@@ -16,12 +16,6 @@ import { AuditPopup } from "@/components/audit-popup";
 import blogSeoAsset from "@/assets/blog-seo.jpg.asset.json";
 import blogPpcAsset from "@/assets/blog-ppc.jpg.asset.json";
 import blogContentAsset from "@/assets/blog-content.jpg.asset.json";
-import aiVisual1 from "@/assets/ai-visual-1.jpg";
-import aiVisual2 from "@/assets/ai-visual-2.jpg";
-import aiVisual3 from "@/assets/ai-visual-3.jpg";
-import aiVisual4 from "@/assets/ai-visual-4.jpg";
-import aiVisual5 from "@/assets/ai-visual-5.jpg";
-import aiVisual6 from "@/assets/ai-visual-6.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
