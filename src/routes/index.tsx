@@ -31,6 +31,213 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
+// ============ DIGITAL MARKETING SERVICES — TABBED SHOWCASE ============
+function ServicesShowcase() {
+  const TABS = [
+    {
+      key: "search",
+      label: "Search",
+      Icon: Search,
+      accent: "bg-amber-200",
+      eyebrow: "SEO • GEO • Local",
+      title: "Own every search — Google, Maps and AI Overviews.",
+      desc: "Technical SEO, topical authority and answer-engine optimisation that compounds organic revenue. We win Map Pack, featured snippets and LLM citations across ChatGPT, Gemini and Perplexity.",
+      bullets: [
+        "Tech audits, content clusters & internal linking",
+        "Google Business Profile + local citations at scale",
+        "GEO — get cited in ChatGPT, Gemini & Perplexity",
+      ],
+      metric: { primary: "+312%", primaryLabel: "Organic traffic", a: "Tracked queries", aVal: "12.4k", b: "AI citations", bVal: "284" },
+    },
+    {
+      key: "paid",
+      label: "Paid Media",
+      Icon: Target,
+      accent: "bg-rose-200",
+      eyebrow: "Google • Meta • LinkedIn • Amazon",
+      title: "Profit-modeled paid media across every major channel.",
+      desc: "ML-bid Search, PMax, Shopping, Meta, LinkedIn ABM and Amazon DSP — instrumented with server-side CAPI so every rupee is attributed to real margin, not vanity ROAS.",
+      bullets: [
+        "Search, PMax, Shopping & YouTube — profit-modeled",
+        "Meta + TikTok creative testing on UGC engines",
+        "LinkedIn ABM and Amazon Sponsored / DSP",
+      ],
+      metric: { primary: "4.2x", primaryLabel: "Blended ROAS", a: "CPA reduced", aVal: "−41%", b: "Channels live", bVal: "8" },
+    },
+    {
+      key: "social",
+      label: "Social & Creative",
+      Icon: Share2,
+      accent: "bg-violet-200",
+      eyebrow: "SMO • Reels • UGC • YouTube",
+      title: "GenAI creative + community engines that scale reach.",
+      desc: "Brand-trained creative pods generate Reels, Shorts and UGC variants at velocity — paired with community management and influencer programs that compound organic reach.",
+      bullets: [
+        "Content calendars & short-form video at scale",
+        "Influencer + UGC sourcing, briefing and rights",
+        "Performance video & YouTube media buying",
+      ],
+      metric: { primary: "9.1M", primaryLabel: "Monthly reach", a: "Reels shipped", aVal: "180/mo", b: "Engagement", bVal: "+62%" },
+    },
+    {
+      key: "content",
+      label: "Content & CRM",
+      Icon: PenTool,
+      accent: "bg-emerald-200",
+      eyebrow: "SEO content • Email • WhatsApp • SMS",
+      title: "Lifecycle that turns first-click into lifetime value.",
+      desc: "SEO-led editorial plus WhatsApp Business API, SMS and email journeys — personalised by AI segments for onboarding, retention, win-back and high-intent commerce.",
+      bullets: [
+        "Editorial strategy, long-form & lead magnets",
+        "WhatsApp API + SMS broadcasts and drip flows",
+        "Email lifecycle with predictive segmentation",
+      ],
+      metric: { primary: "95%", primaryLabel: "Message open rate", a: "Flows live", aVal: "24", b: "Repeat rev.", bVal: "+38%" },
+    },
+    {
+      key: "ops",
+      label: "Web, CRO & Ops",
+      Icon: Cpu,
+      accent: "bg-sky-200",
+      eyebrow: "Web • CRO • Analytics • Automation",
+      title: "The stack that ships and the agents that optimise it.",
+      desc: "Landing pages, Shopify and Webflow builds, GA4 + server-side tracking, BigQuery + Looker dashboards, and n8n / Zapier AI agents wired across your marketing ops.",
+      bullets: [
+        "Landing pages, A/B testing & page speed",
+        "GA4, server-side CAPI & Looker dashboards",
+        "AI agents on n8n + Zapier across CRM/ads/content",
+      ],
+      metric: { primary: "24/7", primaryLabel: "Always-on agents", a: "CRO lift", aVal: "+28%", b: "Reports auto", bVal: "100%" },
+    },
+  ];
+
+  const [active, setActive] = useState(TABS[0].key);
+  const current = TABS.find((t) => t.key === active) ?? TABS[0];
+  const CurrentIcon = current.Icon;
+
+  return (
+    <section className="bg-gradient-to-b from-background via-card/50 to-background">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-20">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Digital marketing services</p>
+          <h2 className="mt-3 text-3xl md:text-5xl font-display leading-[1.05]">
+            Every channel your brand <span className="text-gradient-gold">needs to grow.</span>
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            Pick a discipline. See what we ship, the proof and the agents behind it — orchestrated under one AI ops layer.
+          </p>
+        </div>
+
+        {/* Tab rail */}
+        <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2 border-b border-border pb-1">
+          {TABS.map(({ key, label, Icon }) => {
+            const isActive = key === active;
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setActive(key)}
+                className={`relative inline-flex items-center gap-2 px-3 sm:px-5 py-3 text-sm font-semibold transition-colors ${
+                  isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Icon className="h-4 w-4" />
+                {label}
+                {isActive && (
+                  <span className="absolute left-2 right-2 -bottom-1 h-[3px] rounded-full bg-primary" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Active panel */}
+        <div className="mt-8 grid lg:grid-cols-2 gap-6">
+          {/* Left — copy */}
+          <div className="rounded-3xl bg-card border border-border p-8 md:p-10">
+            <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-primary font-semibold">
+              <CurrentIcon className="h-4 w-4" /> {current.eyebrow}
+            </div>
+            <h3 className="mt-4 text-2xl md:text-3xl font-display leading-tight">{current.title}</h3>
+            <p className="mt-4 text-muted-foreground leading-relaxed">{current.desc}</p>
+
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                to="/services"
+                className="btn-fx inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-gold"
+              >
+                Start free trial <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+              <Link
+                to="/services"
+                className="btn-fx inline-flex items-center gap-2 rounded-full border border-border bg-background px-5 py-2.5 text-sm font-semibold text-foreground hover:border-primary"
+              >
+                Learn more
+              </Link>
+            </div>
+
+            <ul className="mt-7 space-y-3">
+              {current.bullets.map((b) => (
+                <li key={b} className="flex items-start gap-3 text-sm">
+                  <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                  <span className="text-foreground/80">{b}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Right — showcase card */}
+          <div className={`relative rounded-3xl ${current.accent} p-6 md:p-10 overflow-hidden min-h-[420px] flex items-center justify-center`}>
+            <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.6),transparent_60%)]" />
+            {/* Mock dashboard */}
+            <div className="relative w-full max-w-md">
+              <div className="rounded-2xl bg-white shadow-xl border border-black/5 p-5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-widest text-gray-500 font-semibold">{current.label} performance</p>
+                    <p className="mt-1 text-3xl font-display text-gray-900">{current.metric.primary}</p>
+                    <p className="text-xs text-gray-500">{current.metric.primaryLabel} · last 30 days</p>
+                  </div>
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary grid place-items-center">
+                    <CurrentIcon className="h-5 w-5" />
+                  </div>
+                </div>
+                {/* Bar chart */}
+                <div className="mt-5 grid grid-cols-12 items-end gap-1 h-24">
+                  {[40, 55, 35, 70, 50, 80, 60, 90, 72, 95, 85, 100].map((h, i) => (
+                    <div key={i} className="rounded-t bg-gradient-to-t from-primary/30 to-primary" style={{ height: `${h}%` }} />
+                  ))}
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div className="rounded-xl bg-gray-50 border border-gray-100 p-3">
+                    <p className="text-[10px] uppercase tracking-widest text-gray-500">{current.metric.a}</p>
+                    <p className="mt-1 text-lg font-display text-gray-900">{current.metric.aVal}</p>
+                  </div>
+                  <div className="rounded-xl bg-gray-50 border border-gray-100 p-3">
+                    <p className="text-[10px] uppercase tracking-widest text-gray-500">{current.metric.b}</p>
+                    <p className="mt-1 text-lg font-display text-gray-900">{current.metric.bVal}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating mini-card */}
+              <div className="absolute -bottom-4 -right-2 hidden sm:block w-56 rounded-2xl bg-white shadow-xl border border-black/5 p-4 rotate-2">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  <p className="text-[11px] font-semibold text-gray-700">AI agent live</p>
+                </div>
+                <p className="mt-2 text-xs text-gray-600 leading-snug">
+                  Optimising {current.label.toLowerCase()} every 15 min. Next action queued.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 
 function Home() {
   const navigate = useNavigate();
@@ -835,55 +1042,7 @@ function Home() {
       </section>
 
       {/* (placeholder removed — section continues below) */}
-      <section className="bg-gradient-to-b from-background via-card/50 to-background">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Digital marketing services</p>
-            <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">Every channel your brand <span className="text-gradient-gold">needs to grow.</span></h2>
-            <p className="mt-4 text-muted-foreground">Senior specialists across SEO, paid media, social, content, email and web — all wired into our AI ops layer.</p>
-            <Link to="/services" className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">All services <ArrowRight className="h-4 w-4"/></Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              { Icon: Search, title: "SEO & GEO", desc: "Technical SEO, topical authority and AI-search optimization to win Google + LLM citations.", bullets: ["Tech audits", "Content clusters", "AI Overviews"] },
-              { Icon: Globe, title: "Local SEO Growth", desc: "Win the Google Map Pack and ‘near me’ searches — calls, walk-ins and bookings from high-intent locals.", bullets: ["Map Pack", "GBP optimisation", "Local citations"] },
-              { Icon: Target, title: "PPC / Google Ads", desc: "Search, Performance Max, Shopping and YouTube — profit-modeled and ML-bid.", bullets: ["Search & PMax", "Shopping feeds", "Conversion API"] },
-              { Icon: Megaphone, title: "Meta & Paid Social", desc: "Facebook, Instagram, TikTok and Pinterest funnels engineered for return on ad spend.", bullets: ["Creative testing", "Retargeting", "UGC & influencers"] },
-              { Icon: Linkedin, title: "LinkedIn & B2B", desc: "Account-based campaigns, demand-gen and pipeline programs for B2B SaaS and services.", bullets: ["ABM lists", "Demand gen", "Sales enablement"] },
-              { Icon: ShoppingCart, title: "Amazon & Marketplaces", desc: "Sponsored Ads, listing optimization and DSP for brands scaling on Amazon and Flipkart.", bullets: ["Sponsored Ads", "Listing SEO", "Amazon DSP"] },
-              { Icon: Share2, title: "Social Media (SMO)", desc: "Organic content calendars, community management and short-form video that compounds reach.", bullets: ["Content calendar", "Community ops", "Reels & Shorts"] },
-              { Icon: PenTool, title: "Content Marketing", desc: "SEO-led articles, thought-leadership and lead magnets built to convert, not just rank.", bullets: ["Editorial strategy", "Long-form content", "Lead magnets"] },
-              { Icon: MessageCircle, title: "WhatsApp & SMS Marketing", desc: "Two-way WhatsApp Business API and SMS journeys with 95%+ open rates — built for commerce, support and re-engagement.", bullets: ["WhatsApp API", "SMS broadcasts", "Drip & chatbot flows"] },
-              { Icon: Youtube, title: "Video & YouTube Ads", desc: "Performance video production plus YouTube media buying for awareness and conversion.", bullets: ["Ad production", "YouTube Ads", "Connected TV"] },
-              { Icon: Code2, title: "Web & CRO", desc: "Landing pages, Shopify and Webflow builds — designed and tested to lift conversion.", bullets: ["Landing pages", "A/B testing", "Page speed"] },
-              { Icon: BarChart3, title: "Analytics & Tracking", desc: "GA4, server-side tracking, BigQuery and Looker dashboards you can actually trust.", bullets: ["GA4 setup", "Server-side CAPI", "Looker dashboards"] },
-              { Icon: Bot, title: "Marketing Automation", desc: "AI agents and workflow automation across CRM, ads and content ops — 24/7.", bullets: ["AI agents", "CRM workflows", "Auto-reporting"] },
-            ].map(({ Icon, title, desc, bullets }) => (
-              <Link
-                key={title}
-                to="/services"
-                className="group relative rounded-3xl border border-border bg-card p-6 hover:border-foreground transition overflow-hidden"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary border border-primary/30 grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="font-display text-lg">{title}</h3>
-                </div>
-                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{desc}</p>
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {bullets.map((b) => (
-                    <span key={b} className="rounded-full border border-border bg-secondary px-2.5 py-0.5 text-[10px] text-muted-foreground">{b}</span>
-                  ))}
-                </div>
-                <div className="mt-5 inline-flex items-center gap-1 text-xs font-semibold text-foreground">
-                  Learn more <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ServicesShowcase />
 
       {/* ============ INDUSTRIES WE SERVE ============ */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
