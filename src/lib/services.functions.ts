@@ -36,6 +36,7 @@ const serviceInputSchema = z.object({
   faqs: z.array(faqSchema).max(20).default([]),
   tiers: z.array(tierSchema).max(6).default([]),
   sort_order: z.number().int().min(0).max(9999).default(0),
+  show_on_home: z.boolean().default(true),
 });
 
 export type ServiceInput = z.infer<typeof serviceInputSchema>;
@@ -171,6 +172,7 @@ export const upsertService = createServerFn({ method: "POST" })
       faqs: data.faqs,
       tiers: data.tiers,
       sort_order: data.sort_order,
+      show_on_home: data.show_on_home,
     };
     if (data.id) {
       const { data: row, error } = await supabaseAdmin
@@ -224,3 +226,30 @@ export const reorderServices = createServerFn({ method: "POST" })
     }
     return { ok: true };
   });
+
+export const toggleServiceShowOnHome = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { id: string; show_on_home: boolean }) =>
+    z.object({ id: z.string().uuid(), show_on_home: z.boolean() }).parse(input),
+  )
+  .handler(async ({ data, context }): Promise<{ ok: true }> => {
+    await assertCanEditServices(context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("services")
+      .update({ show_on_home: data.show_on_home })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const listHomeServices = createServerFn({ method: "GET" }).handler(async (): Promise<Service[]> => {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin
+    .from("services")
+    .select("*")
+    .eq("show_on_home", true)
+    .order("sort_order", { ascending: true });
+  if (error) throw new Error(error.message);
+  return ((data ?? []) as ServiceRow[]).map(mapRow);
+});

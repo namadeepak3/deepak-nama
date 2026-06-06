@@ -298,6 +298,48 @@ export type Database = {
         }
         Relationships: []
       }
+      home_sections: {
+        Row: {
+          created_at: string
+          cta_href: string
+          cta_label: string
+          enabled: boolean
+          eyebrow: string
+          id: string
+          key: string
+          sort_order: number
+          subtitle: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cta_href?: string
+          cta_label?: string
+          enabled?: boolean
+          eyebrow?: string
+          id?: string
+          key: string
+          sort_order?: number
+          subtitle?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cta_href?: string
+          cta_label?: string
+          enabled?: boolean
+          eyebrow?: string
+          id?: string
+          key?: string
+          sort_order?: number
+          subtitle?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lead_audit_log: {
         Row: {
           action: string
@@ -552,6 +594,7 @@ export type Database = {
           intro: string
           process: Json
           short_desc: string
+          show_on_home: boolean
           slug: string
           sort_order: number
           tag: string
@@ -570,6 +613,7 @@ export type Database = {
           intro?: string
           process?: Json
           short_desc?: string
+          show_on_home?: boolean
           slug: string
           sort_order?: number
           tag?: string
@@ -588,6 +632,7 @@ export type Database = {
           intro?: string
           process?: Json
           short_desc?: string
+          show_on_home?: boolean
           slug?: string
           sort_order?: number
           tag?: string

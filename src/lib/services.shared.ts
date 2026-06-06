@@ -43,6 +43,7 @@ export type Service = {
   tiers: Tier[];
   sortOrder: number;
   viewCount: number;
+  showOnHome: boolean;
 };
 
 export const ICON_MAP: Record<string, LucideIcon> = {
@@ -481,6 +482,7 @@ export type ServiceRow = {
   tiers: unknown;
   sort_order: number;
   view_count?: number | null;
+  show_on_home?: boolean | null;
 };
 
 export function mapRow(row: ServiceRow): Service {
@@ -499,5 +501,6 @@ export function mapRow(row: ServiceRow): Service {
     tiers: (row.tiers as Tier[]) ?? [],
     sortOrder: row.sort_order,
     viewCount: row.view_count ?? 0,
+    showOnHome: row.show_on_home ?? true,
   };
 }
