@@ -50,6 +50,11 @@ function CaseStudyDetail() {
           <Link to="/case-studies" className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
             ← All case studies
           </Link>
+          {c.coverImage && (
+            <div className="mt-6 aspect-[16/7] overflow-hidden rounded-3xl border border-border bg-muted">
+              <img src={c.coverImage} alt={c.title} className="h-full w-full object-cover" />
+            </div>
+          )}
           <div className="mt-6 flex items-center justify-between flex-wrap gap-3">
             <span className="rounded-full bg-secondary border border-border px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">{c.tag}</span>
             <div className="flex gap-1.5">
