@@ -16,12 +16,6 @@ import { AuditPopup } from "@/components/audit-popup";
 import blogSeoAsset from "@/assets/blog-seo.jpg.asset.json";
 import blogPpcAsset from "@/assets/blog-ppc.jpg.asset.json";
 import blogContentAsset from "@/assets/blog-content.jpg.asset.json";
-import aiVisual1 from "@/assets/ai-visual-1.jpg";
-import aiVisual2 from "@/assets/ai-visual-2.jpg";
-import aiVisual3 from "@/assets/ai-visual-3.jpg";
-import aiVisual4 from "@/assets/ai-visual-4.jpg";
-import aiVisual5 from "@/assets/ai-visual-5.jpg";
-import aiVisual6 from "@/assets/ai-visual-6.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -850,70 +844,6 @@ function Home() {
         </div>
       </section>
 
-      {/* ============ AI VISUALS SHOWCASE ============ */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-background via-card/40 to-background">
-        <div aria-hidden className="pointer-events-none absolute -top-24 right-[-10%] h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
-        <div aria-hidden className="pointer-events-none absolute -bottom-24 left-[-10%] h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24">
-          <div className="text-center max-w-3xl mx-auto">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold inline-flex items-center gap-2 justify-center">
-              <Sparkles className="h-3.5 w-3.5" /> AI Visuals
-            </p>
-            <h2 className="mt-3 text-3xl md:text-5xl font-display leading-[1.05]">
-              Scroll-stopping creative, <span className="text-gradient-gold">generated in hours.</span>
-            </h2>
-            <p className="mt-4 text-muted-foreground">
-              Product shots, lifestyle moments, fashion campaigns and ad creative — produced with frontier AI models,
-              art-directed by humans, ready to ship across paid, organic and lifecycle.
-            </p>
-          </div>
-
-          <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-            {[
-              { src: aiVisual1, tag: "Skincare • Product", alt: "AI-generated luxury skincare product shot" },
-              { src: aiVisual2, tag: "Footwear • Hero", alt: "AI-generated sneaker hero ad creative" },
-              { src: aiVisual3, tag: "Cafe • UGC", alt: "AI-generated lifestyle UGC cafe shot" },
-              { src: aiVisual4, tag: "Fintech • 3D", alt: "AI-generated abstract chrome 3D render" },
-              { src: aiVisual5, tag: "Fashion • Editorial", alt: "AI-generated fashion editorial portrait" },
-              { src: aiVisual6, tag: "F&B • Food", alt: "AI-generated artisan burger food shot" },
-            ].map((v) => (
-              <div key={v.tag} className="group relative overflow-hidden rounded-2xl border border-border bg-card aspect-[4/5] hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all">
-                <img
-                  src={v.src}
-                  alt={v.alt}
-                  loading="lazy"
-                  width={896}
-                  height={1152}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/95 via-background/60 to-transparent p-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] uppercase tracking-[0.22em] text-primary font-semibold">{v.tag}</span>
-                    <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground">
-                      <Sparkles className="h-3 w-3" /> AI
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              to="/contact"
-              className="btn-fx inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-gold"
-            >
-              Brief us a campaign <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/services"
-              className="btn-fx inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary"
-            >
-              <PenTool className="h-4 w-4 text-primary" /> See creative services
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* ============ WHATSAPP & SMS LEAD FORM ============ */}
       <section className="relative overflow-hidden bg-background">
