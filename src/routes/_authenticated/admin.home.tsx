@@ -248,8 +248,22 @@ function AdminHomePage() {
                 </label>
               </div>
 
+              <ImageUploadField
+                label="Section image"
+                value={draft.image_url}
+                folder="home-sections"
+                onChange={(url) => setDraft({ ...draft, image_url: url })}
+                hint="Used by sections that render an image (e.g. Hero badge, About photo, Final CTA background)."
+              />
+
+              <JsonContentEditor
+                value={draft.content}
+                onChange={(c) => setDraft({ ...draft, content: c })}
+                sectionKey={draft.key}
+              />
+
               <p className="text-[11px] text-muted-foreground">
-                Note: not every section on the home page uses every field. Some richly designed sections only react to the visibility toggle and order — title/eyebrow edits apply where a clear section header exists.
+                Header text, image and content overrides apply where the section uses them. Visibility and order always apply.
               </p>
 
               <div className="flex justify-end pt-2">
@@ -266,5 +280,74 @@ function AdminHomePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+const CONTENT_HINTS: Record<string, string> = {
+  hero: 'Optional overrides. Example: { "badge": "AI-powered digital marketing services", "stats": [["4.2x","Avg client ROAS"]] }',
+  channels: 'Override the channel chips. Example: { "items": [{"label":"AI Agents","icon":"Bot"}, {"label":"GenAI Creative","icon":"Sparkles"}] }',
+  industries: 'Override industry list. Example: { "items": ["E-commerce","SaaS","Healthcare"] }',
+  results: 'Override result stats. Example: { "stats": [["4.2x","Avg ROAS"],["−41%","CPA"]] }',
+  tech_stack: 'Override tool list. Example: { "tools": [{"name":"ChatGPT","sub":"OpenAI","slug":"openai"}] }',
+};
+
+function JsonContentEditor({
+  value,
+  onChange,
+  sectionKey,
+}: {
+  value: Record<string, unknown>;
+  onChange: (v: Record<string, unknown>) => void;
+  sectionKey: string;
+}) {
+  const [text, setText] = useState(() => JSON.stringify(value ?? {}, null, 2));
+  const [err, setErr] = useState<string>("");
+
+  useEffect(() => {
+    setText(JSON.stringify(value ?? {}, null, 2));
+    setErr("");
+  }, [value]);
+
+  function commit(t: string) {
+    setText(t);
+    if (!t.trim()) {
+      onChange({});
+      setErr("");
+      return;
+    }
+    try {
+      const parsed = JSON.parse(t);
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        onChange(parsed as Record<string, unknown>);
+        setErr("");
+      } else {
+        setErr("Content must be a JSON object {}");
+      }
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Invalid JSON");
+    }
+  }
+
+  return (
+    <label className="block">
+      <span className="block text-xs font-medium text-muted-foreground mb-1">
+        Advanced content (JSON) — overrides the section's hardcoded lists
+      </span>
+      <textarea
+        value={text}
+        onChange={(e) => commit(e.target.value)}
+        rows={10}
+        spellCheck={false}
+        className="w-full rounded-md border border-border bg-background px-3 py-2 text-xs font-mono"
+        placeholder='{}'
+      />
+      {err ? (
+        <p className="mt-1 text-[11px] text-destructive">{err}</p>
+      ) : (
+        <p className="mt-1 text-[11px] text-muted-foreground">
+          {CONTENT_HINTS[sectionKey] ?? "Leave as {} to keep defaults. Schema depends on the section."}
+        </p>
+      )}
+    </label>
   );
 }
