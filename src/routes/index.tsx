@@ -790,175 +790,12 @@ function Home() {
         </div>
       </section>
 
-      {/* ============ SERVICES — BENTO ============ */}
-      {/* ============ DIGITAL MARKETING SERVICES ============ */}
-      {/* ============ EXPLORE DIGITAL MARKETING ============ */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
-        <div aria-hidden className="pointer-events-none absolute -top-24 right-[-10%] h-80 w-80 rounded-full bg-primary/20 blur-3xl" />
-        <div aria-hidden className="pointer-events-none absolute -bottom-24 left-[-10%] h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-16">
-          <div className="text-center max-w-3xl mx-auto">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Explore digital marketing</p>
-            <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">
-              The <span className="text-gradient-gold">building blocks</span> of modern growth.
-            </h2>
-            <p className="mt-4 text-muted-foreground">
-              From the first impression to lifetime value — every discipline, framework and channel we orchestrate under one AI-powered roof.
-            </p>
-          </div>
+      <ServicesShowcase />
 
-          <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {[
-              { Icon: Brain, title: "Strategy & Positioning", desc: "ICP research, message-market fit and category design." },
-              { Icon: Search, title: "Search & Discovery", desc: "SEO, GEO and answer-engine optimisation." },
-              { Icon: Target, title: "Paid Acquisition", desc: "Google, Meta, LinkedIn, TikTok — profit-modeled." },
-              { Icon: Sparkles, title: "Creative Production", desc: "GenAI-assisted statics, motion and UGC at scale." },
-              { Icon: MessageCircle, title: "Conversational", desc: "WhatsApp, SMS, chatbots and live concierge." },
-              { Icon: PenTool, title: "Content & SEO", desc: "Editorial, thought-leadership and topical authority." },
-              { Icon: Share2, title: "Social & Community", desc: "Reels, Shorts and community-led growth loops." },
-              { Icon: Workflow, title: "Lifecycle & CRM", desc: "Onboarding, retention and win-back orchestration." },
-              { Icon: BarChart3, title: "Analytics & Attribution", desc: "GA4, server-side, MMM and warehouse modelling." },
-              { Icon: Eye, title: "CRO & Experimentation", desc: "Hypothesis-led A/B testing and personalisation." },
-              { Icon: Cpu, title: "Marketing Automation", desc: "n8n, Zapier and AI agents wired to your stack." },
-              { Icon: Database, title: "Data & AI Layer", desc: "First-party data, CDP, RAG and predictive models." },
-            ].map(({ Icon, title, desc }) => (
-              <div
-                key={title}
-                className="group relative rounded-2xl border border-border bg-card/80 backdrop-blur p-5 hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all"
-              >
-                <div className="h-11 w-11 rounded-xl bg-primary/10 border border-primary/30 text-primary grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <h3 className="mt-4 font-display text-base leading-tight">{title}</h3>
-                <p className="mt-2 text-xs text-muted-foreground leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              to="/services"
-              className="btn-fx inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-gold"
-            >
-              Browse all services <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/contact"
-              className="btn-fx inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:border-primary"
-            >
-              <Lightbulb className="h-4 w-4 text-primary" /> Get a custom roadmap
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ============ AI-POWERED PROCESS ============ */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
-        <div aria-hidden className="pointer-events-none absolute inset-0 bg-ai-grid opacity-40" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24">
-          <div className="text-center max-w-3xl mx-auto">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold inline-flex items-center gap-2 justify-center">
-              <Workflow className="h-3.5 w-3.5" /> Our AI agentic process
-            </p>
-            <h2 className="mt-3 text-3xl md:text-5xl font-display leading-[1.05]">
-              Our <span className="text-gradient-gold">Digital Marketing Process</span>
-            </h2>
-            <div className="mt-3 mx-auto h-1 w-16 rounded bg-primary" />
-            <p className="mt-4 text-muted-foreground">
-              Click any step to expand details and examples — autonomous agents working alongside senior marketers.
-            </p>
-          </div>
-
-          {/* Expandable step rail */}
-          <div className="mt-12 grid md:grid-cols-5 gap-3">
-            {PROCESS_STEPS.map(({ n, Icon, title }) => {
-              const active = openStep === n;
-              return (
-                <button
-                  key={n}
-                  type="button"
-                  onClick={() => { setOpenStep(n); track("process_step_click", { step: n, title }); }}
-                  className={`btn-fx group flex md:flex-col items-center gap-3 md:gap-2 rounded-2xl border p-3 md:p-4 text-left md:text-center transition-all ${active ? "border-primary bg-primary/10 shadow-gold" : "border-border bg-card hover:border-primary/60"}`}
-                >
-                  <div className={`relative h-12 w-12 md:h-14 md:w-14 rounded-full grid place-items-center shrink-0 ${active ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary border border-primary/30"}`}>
-                    <Icon className="h-5 w-5 md:h-6 md:w-6" />
-                    <span className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold grid place-items-center">{n}</span>
-                  </div>
-                  <div className="font-display text-sm font-semibold leading-tight">{title}</div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Expanded panel */}
-          {PROCESS_STEPS.filter((s) => s.n === openStep).map((s) => (
-            <div key={s.n} className="mt-6 rounded-3xl border border-primary/30 bg-card/80 backdrop-blur p-6 md:p-10 animate-fade-in">
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="md:col-span-2">
-                  <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-primary font-semibold">
-                    <s.Icon className="h-4 w-4" /> Step {s.n}
-                  </div>
-                  <h3 className="mt-2 text-2xl md:text-3xl font-display">{s.title}</h3>
-                  <p className="mt-3 text-muted-foreground">{s.details}</p>
-                </div>
-                <ul className="space-y-2">
-                  {s.examples.map((ex) => (
-                    <li key={ex} className="flex items-start gap-2 rounded-xl border border-border bg-background/60 px-3 py-2 text-sm">
-                      <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                      <span>{ex}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ============ AI TOOLS WE USE ============ */}
+      {/* ============ MARKETING PLATFORMS ============ */}
       <section className="relative overflow-hidden bg-background">
         <div aria-hidden className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/10 blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24">
-          <div className="text-center max-w-3xl mx-auto">
-            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold inline-flex items-center gap-2 justify-center">
-              <Cpu className="h-3.5 w-3.5" /> Our AI + Marketing Stack
-            </p>
-            <h2 className="mt-3 text-3xl md:text-5xl font-display leading-[1.05]">
-              Tools <span className="text-gradient-gold">We Use</span>
-            </h2>
-            <div className="mt-3 mx-auto h-1 w-16 rounded bg-primary" />
-            <p className="mt-4 text-muted-foreground">
-              Frontier AI models and best-in-class marketing platforms — orchestrated by custom agents.
-            </p>
-          </div>
-
-          <div className="mt-10">
-            <p className="text-center text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-semibold">AI Models & Agents</p>
-            <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {AI_TOOLS.map((t) => (
-                <a
-                  key={t.name}
-                  href={`https://www.google.com/search?q=${encodeURIComponent(t.name)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => track("tools_carousel_click", { tool: t.name, kind: "ai" })}
-                  className="group rounded-2xl border border-border bg-card/80 backdrop-blur p-4 text-center hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all"
-                >
-                  <div className="mx-auto h-14 w-14 rounded-2xl bg-white border border-border grid place-items-center group-hover:scale-110 transition-transform shadow-sm">
-                    <img
-                      src={`https://cdn.simpleicons.org/${t.slug}/${t.color}`}
-                      alt={t.name}
-                      loading="lazy"
-                      className="h-8 w-8 object-contain"
-                    />
-                  </div>
-                  <div className="mt-3 font-display text-sm font-semibold">{t.name}</div>
-                  <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t.sub}</div>
-                </a>
-              ))}
-            </div>
-          </div>
-
           <div className="mt-12">
             <div className="text-center">
               <p className="text-[11px] uppercase tracking-[0.22em] text-primary font-bold">Marketing Platforms</p>
@@ -1071,92 +908,64 @@ function Home() {
         </div>
       </section>
 
-      {/* (placeholder removed — section continues below) */}
-      <ServicesShowcase />
+      {/* ============ AI-POWERED PROCESS ============ */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+        <div aria-hidden className="pointer-events-none absolute inset-0 bg-ai-grid opacity-40" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24">
+          <div className="text-center max-w-3xl mx-auto">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold inline-flex items-center gap-2 justify-center">
+              <Workflow className="h-3.5 w-3.5" /> Our AI agentic process
+            </p>
+            <h2 className="mt-3 text-3xl md:text-5xl font-display leading-[1.05]">
+              Our <span className="text-gradient-gold">Digital Marketing Process</span>
+            </h2>
+            <div className="mt-3 mx-auto h-1 w-16 rounded bg-primary" />
+            <p className="mt-4 text-muted-foreground">
+              Click any step to expand details and examples — autonomous agents working alongside senior marketers.
+            </p>
+          </div>
 
-      {/* ============ INDUSTRIES WE SERVE ============ */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
-        <div className="text-center max-w-2xl mx-auto mb-8">
-          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
-          <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
-          <p className="mt-4 text-muted-foreground">18+ industries shipped — every model, funnel and dashboard adapted to how your buyers actually convert.</p>
-          <Link to="/contact" className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">Talk to a strategist <ArrowRight className="h-4 w-4"/></Link>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {[
-            { Icon: ShoppingCart, name: "Ecommerce & D2C", note: "Shopify, Amazon, marketplaces" },
-            { Icon: Bot, name: "SaaS & B2B", note: "Demand-gen & ABM pipelines" },
-            { Icon: LineChart, name: "Fintech", note: "Compliance-aware acquisition" },
-            { Icon: ShieldCheck, name: "Healthcare", note: "HIPAA-safe campaigns" },
-            { Icon: Globe, name: "Real Estate", note: "Geo-targeted lead funnels" },
-            { Icon: Award, name: "Education & EdTech", note: "Enrollment & retention" },
-            { Icon: Sparkles, name: "Beauty & Lifestyle", note: "Influencer + UGC engines" },
-            { Icon: Rocket, name: "Travel & Hospitality", note: "Seasonal demand modeling" },
-            { Icon: Target, name: "Automotive", note: "Local + national hybrid" },
-            { Icon: Megaphone, name: "Media & Publishing", note: "Audience growth + retention" },
-            { Icon: BarChart3, name: "Manufacturing & B2B", note: "Long-cycle attribution" },
-            { Icon: Mail, name: "Professional Services", note: "Authority + lead capture" },
-          ].map(({ Icon, name, note }) => (
-            <div key={name} className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-4 hover:border-primary hover:shadow-gold transition">
-              <div className="h-10 w-10 shrink-0 rounded-xl bg-primary/10 text-primary border border-primary/30 grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                <Icon className="h-4 w-4" />
-              </div>
-              <div className="min-w-0">
-                <div className="font-display text-sm text-foreground break-words leading-tight">{name}</div>
-                <div className="mt-0.5 text-[11px] text-muted-foreground break-words leading-snug">{note}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+          {/* Expandable step rail */}
+          <div className="mt-12 grid md:grid-cols-5 gap-3">
+            {PROCESS_STEPS.map(({ n, Icon, title }) => {
+              const active = openStep === n;
+              return (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => { setOpenStep(n); track("process_step_click", { step: n, title }); }}
+                  className={`btn-fx group flex md:flex-col items-center gap-3 md:gap-2 rounded-2xl border p-3 md:p-4 text-left md:text-center transition-all ${active ? "border-primary bg-primary/10 shadow-gold" : "border-border bg-card hover:border-primary/60"}`}
+                >
+                  <div className={`relative h-12 w-12 md:h-14 md:w-14 rounded-full grid place-items-center shrink-0 ${active ? "bg-primary text-primary-foreground" : "bg-primary/10 text-primary border border-primary/30"}`}>
+                    <Icon className="h-5 w-5 md:h-6 md:w-6" />
+                    <span className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold grid place-items-center">{n}</span>
+                  </div>
+                  <div className="font-display text-sm font-semibold leading-tight">{title}</div>
+                </button>
+              );
+            })}
+          </div>
 
-      {/* ============ PROCESS ============ */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
-        <div className="text-center max-w-2xl mx-auto">
-          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">End-to-end AI workflow</p>
-          <h2 className="mt-3 text-3xl md:text-4xl font-display">Plan. Build. Launch. Optimize. Report.</h2>
-          <p className="mt-4 text-muted-foreground">A repeatable AI-augmented system that moves from brief to booked revenue — with humans in the loop at every step.</p>
-        </div>
-        <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {[
-            {
-              num: "01", title: "Plan", Icon: Compass,
-              desc: "LLM-powered audit of your market, competitors, funnel and account data. Output: a 90-day revenue roadmap.",
-              cta: "Book a free audit", href: "/contact",
-            },
-            {
-              num: "02", title: "Build", Icon: Hammer,
-              desc: "GenAI creative, GEO-ready content, tracking, dashboards and agent workflows — built and brand-tuned.",
-              cta: "See deliverables", href: "/services",
-            },
-            {
-              num: "03", title: "Launch", Icon: Rocket,
-              desc: "Multi-channel rollout across Google, Meta, LinkedIn, Amazon and AI search — live in under 14 days.",
-              cta: "Start a project", href: "/contact",
-            },
-            {
-              num: "04", title: "Optimize", Icon: FlaskConical,
-              desc: "ML bidding, predictive creative rotation and 24/7 anomaly agents tuning campaigns to your real margin.",
-              cta: "Our AI stack", href: "/services",
-            },
-            {
-              num: "05", title: "Report", Icon: FileBarChart,
-              desc: "Live executive dashboards plus a monthly strategic review from your senior account lead.",
-              cta: "View sample report", href: "/blog",
-            },
-          ].map(({ num, title, desc, Icon, cta, href }) => (
-            <div key={num} className="flex flex-col rounded-3xl border border-border bg-card p-6 hover:border-foreground transition">
-              <div className="flex items-center justify-between">
-                <div className="text-3xl font-display text-foreground/30">{num}</div>
-                <div className="h-10 w-10 rounded-xl bg-foreground text-background grid place-items-center">
-                  <Icon className="h-4 w-4" />
+          {/* Expanded panel */}
+          {PROCESS_STEPS.filter((s) => s.n === openStep).map((s) => (
+            <div key={s.n} className="mt-6 rounded-3xl border border-primary/30 bg-card/80 backdrop-blur p-6 md:p-10 animate-fade-in">
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="md:col-span-2">
+                  <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-primary font-semibold">
+                    <s.Icon className="h-4 w-4" /> Step {s.n}
+                  </div>
+                  <h3 className="mt-2 text-2xl md:text-3xl font-display">{s.title}</h3>
+                  <p className="mt-3 text-muted-foreground">{s.details}</p>
                 </div>
+                <ul className="space-y-2">
+                  {s.examples.map((ex) => (
+                    <li key={ex} className="flex items-start gap-2 rounded-xl border border-border bg-background/60 px-3 py-2 text-sm">
+                      <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                      <span>{ex}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <h3 className="mt-4 font-display text-lg">{title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{desc}</p>
-              <Link to={href} className="mt-5 inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:opacity-70 transition">
-                {cta} <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
             </div>
           ))}
         </div>
@@ -1213,6 +1022,140 @@ function Home() {
               Start a project
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* ============ INDUSTRIES WE SERVE ============ */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
+        <div className="text-center max-w-2xl mx-auto mb-8">
+          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
+          <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
+          <p className="mt-4 text-muted-foreground">18+ industries shipped — every model, funnel and dashboard adapted to how your buyers actually convert.</p>
+          <Link to="/contact" className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">Talk to a strategist <ArrowRight className="h-4 w-4"/></Link>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {[
+            { Icon: ShoppingCart, name: "Ecommerce & D2C", note: "Shopify, Amazon, marketplaces" },
+            { Icon: Bot, name: "SaaS & B2B", note: "Demand-gen & ABM pipelines" },
+            { Icon: LineChart, name: "Fintech", note: "Compliance-aware acquisition" },
+            { Icon: ShieldCheck, name: "Healthcare", note: "HIPAA-safe campaigns" },
+            { Icon: Globe, name: "Real Estate", note: "Geo-targeted lead funnels" },
+            { Icon: Award, name: "Education & EdTech", note: "Enrollment & retention" },
+            { Icon: Sparkles, name: "Beauty & Lifestyle", note: "Influencer + UGC engines" },
+            { Icon: Rocket, name: "Travel & Hospitality", note: "Seasonal demand modeling" },
+            { Icon: Target, name: "Automotive", note: "Local + national hybrid" },
+            { Icon: Megaphone, name: "Media & Publishing", note: "Audience growth + retention" },
+            { Icon: BarChart3, name: "Manufacturing & B2B", note: "Long-cycle attribution" },
+            { Icon: Mail, name: "Professional Services", note: "Authority + lead capture" },
+          ].map(({ Icon, name, note }) => (
+            <div key={name} className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-4 hover:border-primary hover:shadow-gold transition">
+              <div className="h-10 w-10 shrink-0 rounded-xl bg-primary/10 text-primary border border-primary/30 grid place-items-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                <Icon className="h-4 w-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="font-display text-sm text-foreground break-words leading-tight">{name}</div>
+                <div className="mt-0.5 text-[11px] text-muted-foreground break-words leading-snug">{note}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ============ OUR AI + MARKETING STACK ============ */}
+      <section className="relative overflow-hidden bg-background">
+        <div aria-hidden className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/10 blur-3xl" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24">
+          <div className="text-center max-w-3xl mx-auto">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold inline-flex items-center gap-2 justify-center">
+              <Cpu className="h-3.5 w-3.5" /> Our AI + Marketing Stack
+            </p>
+            <h2 className="mt-3 text-3xl md:text-5xl font-display leading-[1.05]">
+              Tools <span className="text-gradient-gold">We Use</span>
+            </h2>
+            <div className="mt-3 mx-auto h-1 w-16 rounded bg-primary" />
+            <p className="mt-4 text-muted-foreground">
+              Frontier AI models and best-in-class marketing platforms — orchestrated by custom agents.
+            </p>
+          </div>
+
+          <div className="mt-10">
+            <p className="text-center text-[11px] uppercase tracking-[0.22em] text-muted-foreground font-semibold">AI Models & Agents</p>
+            <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              {AI_TOOLS.map((t) => (
+                <a
+                  key={t.name}
+                  href={`https://www.google.com/search?q=${encodeURIComponent(t.name)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => track("tools_carousel_click", { tool: t.name, kind: "ai" })}
+                  className="group rounded-2xl border border-border bg-card/80 backdrop-blur p-4 text-center hover:border-primary hover:-translate-y-1 hover:shadow-gold transition-all"
+                >
+                  <div className="mx-auto h-14 w-14 rounded-2xl bg-white border border-border grid place-items-center group-hover:scale-110 transition-transform shadow-sm">
+                    <img
+                      src={`https://cdn.simpleicons.org/${t.slug}/${t.color}`}
+                      alt={t.name}
+                      loading="lazy"
+                      className="h-8 w-8 object-contain"
+                    />
+                  </div>
+                  <div className="mt-3 font-display text-sm font-semibold">{t.name}</div>
+                  <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{t.sub}</div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ PROCESS ============ */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
+        <div className="text-center max-w-2xl mx-auto">
+          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">End-to-end AI workflow</p>
+          <h2 className="mt-3 text-3xl md:text-4xl font-display">Plan. Build. Launch. Optimize. Report.</h2>
+          <p className="mt-4 text-muted-foreground">A repeatable AI-augmented system that moves from brief to booked revenue — with humans in the loop at every step.</p>
+        </div>
+        <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-5 gap-4">
+          {[
+            {
+              num: "01", title: "Plan", Icon: Compass,
+              desc: "LLM-powered audit of your market, competitors, funnel and account data. Output: a 90-day revenue roadmap.",
+              cta: "Book a free audit", href: "/contact",
+            },
+            {
+              num: "02", title: "Build", Icon: Hammer,
+              desc: "GenAI creative, GEO-ready content, tracking, dashboards and agent workflows — built and brand-tuned.",
+              cta: "See deliverables", href: "/services",
+            },
+            {
+              num: "03", title: "Launch", Icon: Rocket,
+              desc: "Multi-channel rollout across Google, Meta, LinkedIn, Amazon and AI search — live in under 14 days.",
+              cta: "Start a project", href: "/contact",
+            },
+            {
+              num: "04", title: "Optimize", Icon: FlaskConical,
+              desc: "ML bidding, predictive creative rotation and 24/7 anomaly agents tuning campaigns to your real margin.",
+              cta: "Our AI stack", href: "/services",
+            },
+            {
+              num: "05", title: "Report", Icon: FileBarChart,
+              desc: "Live executive dashboards plus a monthly strategic review from your senior account lead.",
+              cta: "View sample report", href: "/blog",
+            },
+          ].map(({ num, title, desc, Icon, cta, href }) => (
+            <div key={num} className="flex flex-col rounded-3xl border border-border bg-card p-6 hover:border-foreground transition">
+              <div className="flex items-center justify-between">
+                <div className="text-3xl font-display text-foreground/30">{num}</div>
+                <div className="h-10 w-10 rounded-xl bg-foreground text-background grid place-items-center">
+                  <Icon className="h-4 w-4" />
+                </div>
+              </div>
+              <h3 className="mt-4 font-display text-lg">{title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{desc}</p>
+              <Link to={href} className="mt-5 inline-flex items-center gap-1 text-xs font-semibold text-foreground hover:opacity-70 transition">
+                {cta} <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          ))}
         </div>
       </section>
 
