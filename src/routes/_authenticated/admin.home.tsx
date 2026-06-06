@@ -11,6 +11,7 @@ import {
   toggleHomeSection,
   type HomeSection,
 } from "@/lib/home-sections.functions";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 export const Route = createFileRoute("/_authenticated/admin/home")({
   head: () => ({
@@ -79,6 +80,8 @@ function AdminHomePage() {
           subtitle: input.subtitle,
           cta_label: input.cta_label,
           cta_href: input.cta_href,
+          image_url: input.image_url,
+          content: input.content,
         },
       }),
     onSuccess: () => {
