@@ -151,6 +151,7 @@ function AdminPage() {
   const save = useServerFn(upsertService);
   const del = useServerFn(deleteService);
   const reorder = useServerFn(reorderServices);
+  const toggleHome = useServerFn(toggleServiceShowOnHome);
 
   const capsQuery = useQuery({ queryKey: ["capabilities"], queryFn: () => caps() });
   const canManage = !!capsQuery.data?.canManageServices;
@@ -203,6 +204,12 @@ function AdminPage() {
     mutationFn: (order: { id: string; sort_order: number }[]) => reorder({ data: { order } }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["services"] }),
     onError: (e) => toast.error(e instanceof Error ? e.message : "Reorder failed"),
+  });
+
+  const toggleHomeMutation = useMutation({
+    mutationFn: (v: { id: string; show_on_home: boolean }) => toggleHome({ data: v }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["services"] }),
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Toggle failed"),
   });
 
   async function handleSignOut() {
@@ -290,6 +297,14 @@ function AdminPage() {
               >
                 <EyeCount className="h-3 w-3" /> {(s.viewCount ?? 0).toLocaleString()}
               </span>
+              <button
+                onClick={() => toggleHomeMutation.mutate({ id: s.id, show_on_home: !s.showOnHome })}
+                title={s.showOnHome ? "Showing on home" : "Hidden from home"}
+                className={`inline-flex items-center gap-1 rounded-md border px-2 py-1.5 text-[11px] ${s.showOnHome ? "border-primary text-primary" : "border-border text-muted-foreground"}`}
+              >
+                {s.showOnHome ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
+                Home
+              </button>
               <a
                 href={`/services/${s.slug}`}
                 target="_blank"
@@ -497,6 +512,18 @@ function AdminShell({
           className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
         >
           <Megaphone className="h-4 w-4" /> Announcement bar
+        </Link>
+        <Link
+          to="/admin/home"
+          className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+        >
+          <LayoutIcon className="h-4 w-4" /> Home page
+        </Link>
+        <Link
+          to="/admin/case-studies"
+          className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+        >
+          <BookMarked className="h-4 w-4" /> Case studies
         </Link>
         <button
           onClick={onSignOut}
