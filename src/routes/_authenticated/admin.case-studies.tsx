@@ -11,6 +11,7 @@ import {
   type CaseStudyInput,
 } from "@/lib/case-studies.functions";
 import type { CaseStudy } from "@/lib/case-studies.shared";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 export const Route = createFileRoute("/_authenticated/admin/case-studies")({
   head: () => ({
@@ -239,9 +240,15 @@ function CaseStudyEditor({
           <Field label="Industry" value={v.industry} onChange={(t) => setV({ ...v, industry: t })} />
           <Field label="Tag" value={v.tag} onChange={(t) => setV({ ...v, tag: t })} placeholder="SEO • Performance" />
           <Field label="Duration" value={v.duration} onChange={(t) => setV({ ...v, duration: t })} placeholder="6 months" />
-          <Field label="Cover image URL" value={v.cover_image} onChange={(t) => setV({ ...v, cover_image: t })} />
           <Field label="Sort order (higher = first)" value={String(v.sort_order)} onChange={(t) => setV({ ...v, sort_order: Number(t) || 0 })} />
         </div>
+
+        <ImageUploadField
+          label="Cover image (shown on case study cards and detail hero)"
+          value={v.cover_image}
+          folder="case-studies"
+          onChange={(url) => setV({ ...v, cover_image: url })}
+        />
 
         <TextArea label="Summary (1-2 lines for cards)" value={v.summary} onChange={(t) => setV({ ...v, summary: t })} rows={2} maxLength={800} />
 
@@ -281,7 +288,13 @@ function CaseStudyEditor({
           <p className="text-xs uppercase tracking-widest text-muted-foreground">SEO</p>
           <Field label="Meta title" value={v.meta_title} onChange={(t) => setV({ ...v, meta_title: t })} />
           <TextArea label="Meta description" value={v.meta_description} onChange={(t) => setV({ ...v, meta_description: t })} rows={2} maxLength={400} />
-          <Field label="OG image URL" value={v.og_image} onChange={(t) => setV({ ...v, og_image: t })} />
+          <ImageUploadField
+            label="OG / social share image"
+            value={v.og_image}
+            folder="case-studies"
+            onChange={(url) => setV({ ...v, og_image: url })}
+            hint="Used by Facebook, LinkedIn, Twitter when the case study link is shared."
+          />
         </div>
 
         <div className="flex flex-wrap items-center gap-4 pt-2">
