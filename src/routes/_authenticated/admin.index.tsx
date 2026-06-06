@@ -489,6 +489,12 @@ function AdminShell({
         >
           <FileText className="h-4 w-4" /> FAQs
         </Link>
+        <Link
+          to="/admin/announcement"
+          className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+        >
+          <Megaphone className="h-4 w-4" /> Announcement bar
+        </Link>
         <button
           onClick={onSignOut}
           className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
