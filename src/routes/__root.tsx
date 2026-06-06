@@ -156,19 +156,35 @@ function SiteHeader() {
   const navLink = "text-sm text-foreground/70 hover:text-foreground transition-colors";
   const fetchServices = useServerFn(listServices);
   const { data: services = [] } = useQuery({ queryKey: ["services"], queryFn: () => fetchServices() });
+  const fetchAnnouncement = useServerFn(getAnnouncement);
+  const { data: announcement } = useQuery({
+    queryKey: ["announcement"],
+    queryFn: () => fetchAnnouncement(),
+    staleTime: 60_000,
+  });
 
   return (
     <header className="sticky top-0 z-50">
       {/* Top announcement bar */}
-      <div className="bg-ink text-white text-xs">
-        <div className="mx-auto max-w-7xl px-6 h-10 flex items-center justify-center gap-2 text-center">
-          <span className="h-2 w-2 rounded-full bg-primary inline-block animate-pulse" />
-          <span className="font-medium">vrseoguru AI Ops is live. Build automations with ChatGPT, Claude, n8n, Zapier &amp; more.</span>
-          <Link to="/services" className="hidden sm:inline-flex items-center gap-1 text-primary font-semibold hover:underline">
-            Explore plan <ArrowRight className="h-3 w-3" />
-          </Link>
+      {announcement && announcement.enabled && announcement.message && (
+        <div className="bg-ink text-white text-xs">
+          <div className="mx-auto max-w-7xl px-6 h-10 flex items-center justify-center gap-2 text-center">
+            <span className="h-2 w-2 rounded-full bg-primary inline-block animate-pulse" />
+            <span className="font-medium">{announcement.message}</span>
+            {announcement.cta_label && announcement.cta_href && (
+              announcement.cta_href.startsWith("http") ? (
+                <a href={announcement.cta_href} target="_blank" rel="noreferrer" className="hidden sm:inline-flex items-center gap-1 text-primary font-semibold hover:underline">
+                  {announcement.cta_label} <ArrowRight className="h-3 w-3" />
+                </a>
+              ) : (
+                <a href={announcement.cta_href} className="hidden sm:inline-flex items-center gap-1 text-primary font-semibold hover:underline">
+                  {announcement.cta_label} <ArrowRight className="h-3 w-3" />
+                </a>
+              )
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Floating pill nav */}
       <div className="bg-background/80 backdrop-blur-xl py-3 px-3 sm:px-6 border-b border-border/40">
