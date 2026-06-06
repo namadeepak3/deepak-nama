@@ -1387,14 +1387,28 @@ function Home() {
       {isEnabled("final_cta") && (
       <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/30 via-card to-card p-12 md:p-20 text-center">
+          {txt("final_cta", "image_url") && (
+            <div aria-hidden className="absolute inset-0 opacity-25">
+              <img src={txt("final_cta", "image_url")} alt="" className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-background/40 to-background/80" />
+            </div>
+          )}
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-primary/30 blur-3xl"/>
-          <p className="relative text-xs tracking-[0.22em] uppercase text-primary font-semibold">Let&apos;s build</p>
-          <h2 className="relative mt-4 text-3xl md:text-5xl font-display leading-[1.02]">Ready to <span className="text-gradient-gold">accelerate</span><br/>your growth?</h2>
-          <p className="relative mt-5 max-w-xl mx-auto text-muted-foreground">Book a free, no-obligation strategy call. Our team will audit your marketing and show you the biggest opportunities.</p>
+          <p className="relative text-xs tracking-[0.22em] uppercase text-primary font-semibold">{txt("final_cta", "eyebrow", "Let's build")}</p>
+          <h2 className="relative mt-4 text-3xl md:text-5xl font-display leading-[1.02]">
+            {sec("final_cta")?.title ? txt("final_cta", "title") : (<>Ready to <span className="text-gradient-gold">accelerate</span><br/>your growth?</>)}
+          </h2>
+          <p className="relative mt-5 max-w-xl mx-auto text-muted-foreground">{txt("final_cta", "subtitle", "Book a free, no-obligation strategy call. Our team will audit your marketing and show you the biggest opportunities.")}</p>
           <div className="relative mt-8 flex flex-wrap gap-3 justify-center">
-            <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
-              Book free strategy call <ArrowRight className="h-4 w-4"/>
-            </Link>
+            {(() => {
+              const label = txt("final_cta", "cta_label", "Book free strategy call");
+              const href = txt("final_cta", "cta_href", "/contact");
+              return (
+                <a href={href} className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition shadow-gold">
+                  {label} <ArrowRight className="h-4 w-4"/>
+                </a>
+              );
+            })()}
             <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-7 py-3.5 text-sm font-semibold text-foreground hover:border-primary transition">
               <Phone className="h-4 w-4"/> View services
             </Link>
