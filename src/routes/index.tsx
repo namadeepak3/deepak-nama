@@ -1384,6 +1384,43 @@ function Home() {
       )}
 
       {/* ============ FINAL CTA ============ */}
+      {/* ============ CUSTOM SECTIONS (admin-created) ============ */}
+      {homeSections
+        .filter((s) => s.key.startsWith("custom_") && s.enabled)
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map((s) => (
+          <section key={s.id} className="mx-auto max-w-7xl px-6 py-12 md:py-16">
+            <div className="grid md:grid-cols-2 gap-10 items-center">
+              {s.image_url ? (
+                <div className="relative overflow-hidden rounded-2xl border border-border aspect-[4/3]">
+                  <img src={s.image_url} alt={s.title || ""} className="h-full w-full object-cover" />
+                </div>
+              ) : null}
+              <div className={s.image_url ? "" : "md:col-span-2 text-center max-w-3xl mx-auto"}>
+                {s.eyebrow && (
+                  <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">{s.eyebrow}</p>
+                )}
+                {s.title && (
+                  <h2 className="mt-3 font-display text-3xl md:text-4xl">{s.title}</h2>
+                )}
+                {s.subtitle && (
+                  <p className="mt-4 text-muted-foreground whitespace-pre-line">{s.subtitle}</p>
+                )}
+                {s.cta_label && s.cta_href && (
+                  <div className="mt-6">
+                    <a
+                      href={s.cta_href}
+                      className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm text-primary-foreground hover:opacity-90"
+                    >
+                      {s.cta_label}
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        ))}
+
       {isEnabled("final_cta") && (
       <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/30 via-card to-card p-12 md:p-20 text-center">

@@ -121,3 +121,65 @@ export const toggleHomeSection = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+const createInput = z.object({
+  title: z.string().min(1).max(300),
+  eyebrow: z.string().max(200).default(""),
+  subtitle: z.string().max(600).default(""),
+});
+
+export const createHomeSection = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: z.infer<typeof createInput>) => createInput.parse(d))
+  .handler(async ({ data, context }) => {
+    await assertEditor(context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const slug = data.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_+|_+$/g, "")
+      .slice(0, 40) || "section";
+    const key = `custom_${slug}_${Math.random().toString(36).slice(2, 7)}`;
+    const { data: maxRow } = await supabaseAdmin
+      .from("home_sections")
+      .select("sort_order")
+      .order("sort_order", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const nextOrder = ((maxRow?.sort_order as number | undefined) ?? -1) + 1;
+    const { data: inserted, error } = await supabaseAdmin
+      .from("home_sections")
+      .insert({
+        key,
+        enabled: true,
+        sort_order: nextOrder,
+        eyebrow: data.eyebrow,
+        title: data.title,
+        subtitle: data.subtitle,
+      })
+      .select("id")
+      .single();
+    if (error) throw new Error(error.message);
+    return { id: inserted!.id as string, key };
+  });
+
+const deleteInput = z.object({ id: z.string().uuid() });
+export const deleteHomeSection = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: z.infer<typeof deleteInput>) => deleteInput.parse(d))
+  .handler(async ({ data, context }) => {
+    await assertEditor(context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: row, error: readErr } = await supabaseAdmin
+      .from("home_sections")
+      .select("key")
+      .eq("id", data.id)
+      .single();
+    if (readErr) throw new Error(readErr.message);
+    if (!row || !String(row.key).startsWith("custom_")) {
+      throw new Error("Only custom sections can be deleted.");
+    }
+    const { error } = await supabaseAdmin.from("home_sections").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
