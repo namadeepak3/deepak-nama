@@ -8,6 +8,7 @@ import {
   upsertService,
   deleteService,
   reorderServices,
+  toggleServiceShowOnHome,
   getMyCapabilities,
   getServiceAnalytics,
   type ServiceInput,
@@ -107,6 +108,7 @@ import {
 } from "lucide-react";
 import { Globe } from "lucide-react";
 import { Megaphone } from "lucide-react";
+import { Layout as LayoutIcon, BookMarked } from "lucide-react";
 import { ExternalLink, Eye as EyeCount } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 
