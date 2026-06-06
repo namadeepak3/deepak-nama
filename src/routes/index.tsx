@@ -6,6 +6,7 @@ import { createLead } from "@/lib/leads.functions";
 import { generateAuditPreview, type AuditPreview } from "@/lib/audit-preview.functions";
 import { listCaseStudies } from "@/lib/case-studies.functions";
 import { listPublishedPosts } from "@/lib/blog.functions";
+import { listHomeSections } from "@/lib/home-sections.functions";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -277,6 +278,12 @@ function Home() {
   const { data: caseStudies = [] } = useQuery({ queryKey: ["case-studies", "home"], queryFn: () => fetchCases() });
   const fetchPosts = useServerFn(listPublishedPosts);
   const { data: blogPosts = [] } = useQuery({ queryKey: ["blog-posts", "home"], queryFn: () => fetchPosts() });
+  const fetchHomeSections = useServerFn(listHomeSections);
+  const { data: homeSections = [] } = useQuery({ queryKey: ["home-sections", "public"], queryFn: () => fetchHomeSections() });
+  const isEnabled = (key: string) => {
+    const s = homeSections.find((x) => x.key === key);
+    return s ? s.enabled : true;
+  };
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<null | { name: string; email: string }>(null);
@@ -467,6 +474,7 @@ function Home() {
       />
 
       {/* ============ HERO ============ */}
+      {isEnabled("hero") && (
       <section className="relative overflow-hidden">
         {/* Clean monochrome backdrop */}
         <div aria-hidden className="absolute inset-0 bg-background" />
@@ -625,8 +633,10 @@ function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ============ CHANNELS I RUN ============ */}
+      {isEnabled("channels") && (
       <section className="bg-gradient-to-b from-background via-card/60 to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
           <p className="text-center text-xs tracking-[0.22em] uppercase text-primary font-semibold mb-6">AI-powered channels we run</p>
@@ -646,8 +656,10 @@ function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ============ AI-POWERED STACK ============ */}
+      {isEnabled("ai_stack") && (
       <section className="relative overflow-hidden bg-background bg-ai-signal">
         <div aria-hidden className="absolute inset-0 bg-ai-dots opacity-70" />
         <div aria-hidden className="absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl" />
@@ -789,10 +801,12 @@ function Home() {
 
         </div>
       </section>
+      )}
 
-      <ServicesShowcase />
+      {isEnabled("services") && <ServicesShowcase />}
 
       {/* ============ MARKETING PLATFORMS ============ */}
+      {isEnabled("platforms") && (
       <section className="relative overflow-hidden bg-background">
         <div aria-hidden className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/10 blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24">
@@ -843,9 +857,11 @@ function Home() {
           </div>
         </div>
       </section>
+      )}
 
 
       {/* ============ WHATSAPP & SMS LEAD FORM ============ */}
+      {isEnabled("whatsapp") && (
       <section className="relative overflow-hidden bg-background">
         <div aria-hidden className="pointer-events-none absolute -top-24 left-[-10%] h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 py-16 md:py-24">
@@ -908,8 +924,10 @@ function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ============ AI-POWERED PROCESS ============ */}
+      {isEnabled("process") && (
       <section className="relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-ai-grid opacity-40" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24">
@@ -971,8 +989,10 @@ function Home() {
           ))}
         </div>
       </section>
+      )}
 
       {/* ============ WHO I AM ============ */}
+      {isEnabled("about") && (
       <section className="relative bg-gradient-to-b from-background via-card/50 to-background overflow-hidden">
         <div aria-hidden className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl"/>
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 py-8 md:py-12 text-center">
@@ -1025,8 +1045,10 @@ function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ============ INDUSTRIES WE SERVE ============ */}
+      {isEnabled("industries") && (
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
         <div className="text-center max-w-2xl mx-auto mb-8">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
@@ -1061,8 +1083,10 @@ function Home() {
           ))}
         </div>
       </section>
+      )}
 
       {/* ============ OUR AI + MARKETING STACK ============ */}
+      {isEnabled("tech_stack") && (
       <section className="relative overflow-hidden bg-background">
         <div aria-hidden className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/10 blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24">
@@ -1107,8 +1131,10 @@ function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ============ PROCESS ============ */}
+      {isEnabled("workflow") && (
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">End-to-end AI workflow</p>
@@ -1159,8 +1185,10 @@ function Home() {
           ))}
         </div>
       </section>
+      )}
 
       {/* ============ RESULTS ============ */}
+      {isEnabled("results") && (
       <section className="relative bg-gradient-to-br from-primary/10 via-card/30 to-background overflow-hidden">
         <div aria-hidden className="absolute -top-24 left-1/4 h-56 w-56 rounded-full bg-primary/20 blur-3xl"/>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
@@ -1188,8 +1216,10 @@ function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ============ CASE STUDIES ============ */}
+      {isEnabled("case_studies") && (
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
         <div className="text-center max-w-2xl mx-auto mb-8">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
@@ -1216,8 +1246,10 @@ function Home() {
           ))}
         </div>
       </section>
+      )}
 
       {/* ============ INSIGHTS ============ */}
+      {isEnabled("insights") && (
       <section className="bg-gradient-to-b from-background via-card/50 to-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="text-center max-w-2xl mx-auto mb-8">
@@ -1277,8 +1309,10 @@ function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ============ TESTIMONIALS CAROUSEL ============ */}
+      {isEnabled("testimonials") && (
       <section className="bg-gradient-to-b from-background via-card/50 to-background w-full overflow-hidden">
         <div className="py-12 md:py-16">
           <div className="text-center max-w-2xl mx-auto mb-10 px-4">
@@ -1330,8 +1364,10 @@ function Home() {
           })()}
         </div>
       </section>
+      )}
 
       {/* ============ FINAL CTA ============ */}
+      {isEnabled("final_cta") && (
       <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/30 via-card to-card p-12 md:p-20 text-center">
           <div className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-primary/30 blur-3xl"/>
@@ -1348,6 +1384,7 @@ function Home() {
           </div>
         </div>
       </section>
+      )}
     </>
   );
 }
