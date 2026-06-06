@@ -1335,11 +1335,12 @@ function Home() {
       </section>
 
       {/* ============ TESTIMONIALS CAROUSEL ============ */}
-      <section className="bg-[#fbf4e8]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-16 overflow-hidden">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <h2 className="text-3xl md:text-4xl font-display font-semibold text-neutral-900">What our customers say</h2>
-            <p className="mt-3 text-neutral-600">Real results from real brands — across SEO, paid media, social and lifecycle.</p>
+      <section className="bg-gradient-to-b from-background via-card/50 to-background w-full overflow-hidden">
+        <div className="py-12 md:py-16">
+          <div className="text-center max-w-2xl mx-auto mb-10 px-4">
+            <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Receipts</p>
+            <h2 className="mt-3 text-3xl md:text-4xl font-display font-semibold">What our customers say</h2>
+            <p className="mt-3 text-muted-foreground">Real results from real brands — across SEO, paid media, social and lifecycle.</p>
           </div>
           {(() => {
             const TESTIMONIALS = [
@@ -1357,15 +1358,15 @@ function Home() {
             const row1 = TESTIMONIALS.slice(0, 5);
             const row2 = TESTIMONIALS.slice(5);
             const Card = (t: typeof TESTIMONIALS[number]) => (
-              <div className="shrink-0 w-[320px] md:w-[380px] rounded-2xl bg-white border border-neutral-200/70 p-6 shadow-sm">
+              <div className="shrink-0 w-[320px] md:w-[380px] rounded-2xl bg-card border border-border p-6 shadow-sm">
                 <div className="flex items-center gap-3">
                   <div className={`h-10 w-10 rounded-full ${t.color} grid place-items-center text-neutral-900 font-semibold text-sm`}>{t.initials}</div>
                   <div>
-                    <div className="font-semibold text-sm text-neutral-900">{t.n}</div>
-                    <div className="text-xs text-neutral-500">{t.r}</div>
+                    <div className="font-semibold text-sm text-foreground">{t.n}</div>
+                    <div className="text-xs text-muted-foreground">{t.r}</div>
                   </div>
                 </div>
-                <p className="mt-4 text-sm text-neutral-700 leading-relaxed">{t.q}</p>
+                <p className="mt-4 text-sm text-foreground/80 leading-relaxed">{t.q}</p>
               </div>
             );
             return (
