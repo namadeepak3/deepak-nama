@@ -869,7 +869,7 @@ function Home() {
 
       {/* ============ WHATSAPP & SMS LEAD FORM ============ */}
       {isEnabled("whatsapp") && (
-      <section className="relative overflow-hidden bg-background">
+      <section className="relative overflow-hidden bg-background" style={{ order: sectionOrder("whatsapp") }}>
         <div aria-hidden className="pointer-events-none absolute -top-24 left-[-10%] h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 py-16 md:py-24">
           <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-card via-primary/5 to-card p-8 md:p-12 shadow-gold">
@@ -935,7 +935,7 @@ function Home() {
 
       {/* ============ AI-POWERED PROCESS ============ */}
       {isEnabled("process") && (
-      <section className="relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+      <section className="relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background" style={{ order: sectionOrder("process") }}>
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-ai-grid opacity-40" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24">
           <div className="text-center max-w-3xl mx-auto">
@@ -1000,7 +1000,7 @@ function Home() {
 
       {/* ============ WHO I AM ============ */}
       {isEnabled("about") && (
-      <section className="relative bg-gradient-to-b from-background via-card/50 to-background overflow-hidden">
+      <section className="relative bg-gradient-to-b from-background via-card/50 to-background overflow-hidden" style={{ order: sectionOrder("about") }}>
         <div aria-hidden className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/15 blur-3xl"/>
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 py-8 md:py-12 text-center">
           <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[10px] sm:text-[11px] font-semibold text-foreground">
@@ -1067,7 +1067,7 @@ function Home() {
 
       {/* ============ INDUSTRIES WE SERVE ============ */}
       {isEnabled("industries") && (
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12 overflow-x-clip" style={{ order: sectionOrder("industries") }}>
         <div className="text-center max-w-2xl mx-auto mb-8">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Industries we serve</p>
           <h2 className="mt-3 text-3xl md:text-4xl font-display leading-[1.05]">AI-powered growth, <span className="text-gradient-gold">tuned to your sector.</span></h2>
@@ -1105,7 +1105,7 @@ function Home() {
 
       {/* ============ OUR AI + MARKETING STACK ============ */}
       {isEnabled("tech_stack") && (
-      <section className="relative overflow-hidden bg-background">
+      <section className="relative overflow-hidden bg-background" style={{ order: sectionOrder("tech_stack") }}>
         <div aria-hidden className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full bg-primary/10 blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-16 md:py-24">
           <div className="text-center max-w-3xl mx-auto">
@@ -1153,7 +1153,7 @@ function Home() {
 
       {/* ============ PROCESS ============ */}
       {isEnabled("workflow") && (
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12" style={{ order: sectionOrder("workflow") }}>
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">End-to-end AI workflow</p>
           <h2 className="mt-3 text-3xl md:text-4xl font-display">Plan. Build. Launch. Optimize. Report.</h2>
@@ -1207,7 +1207,7 @@ function Home() {
 
       {/* ============ RESULTS ============ */}
       {isEnabled("results") && (
-      <section className="relative bg-gradient-to-br from-primary/10 via-card/30 to-background overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary/10 via-card/30 to-background overflow-hidden" style={{ order: sectionOrder("results") }}>
         <div aria-hidden className="absolute -top-24 left-1/4 h-56 w-56 rounded-full bg-primary/20 blur-3xl"/>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="text-center max-w-2xl mx-auto mb-8">
@@ -1238,7 +1238,7 @@ function Home() {
 
       {/* ============ CASE STUDIES ============ */}
       {isEnabled("case_studies") && (
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12" style={{ order: sectionOrder("case_studies") }}>
         <div className="text-center max-w-2xl mx-auto mb-8">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Case studies</p>
           <h2 className="mt-2 text-3xl md:text-4xl font-display leading-[1.05]">Brands we&apos;ve <span className="text-gradient-gold">scaled.</span></h2>
@@ -1268,7 +1268,7 @@ function Home() {
 
       {/* ============ INSIGHTS ============ */}
       {isEnabled("insights") && (
-      <section className="bg-gradient-to-b from-background via-card/50 to-background">
+      <section className="bg-gradient-to-b from-background via-card/50 to-background" style={{ order: sectionOrder("insights") }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
           <div className="text-center max-w-2xl mx-auto mb-8">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Insights</p>
@@ -1331,7 +1331,7 @@ function Home() {
 
       {/* ============ TESTIMONIALS CAROUSEL ============ */}
       {isEnabled("testimonials") && (
-      <section className="bg-gradient-to-b from-background via-card/50 to-background w-full overflow-hidden">
+      <section className="bg-gradient-to-b from-background via-card/50 to-background w-full overflow-hidden" style={{ order: sectionOrder("testimonials") }}>
         <div className="py-12 md:py-16">
           <div className="text-center max-w-2xl mx-auto mb-10 px-4">
             <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Receipts</p>
@@ -1423,7 +1423,7 @@ function Home() {
         ))}
 
       {isEnabled("final_cta") && (
-      <section className="mx-auto max-w-7xl px-6 py-8 md:py-12">
+      <section className="mx-auto max-w-7xl px-6 py-8 md:py-12" style={{ order: sectionOrder("final_cta") }}>
         <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/30 via-card to-card p-12 md:p-20 text-center">
           {txt("final_cta", "image_url") && (
             <div aria-hidden className="absolute inset-0 opacity-25">
