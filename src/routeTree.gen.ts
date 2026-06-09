@@ -15,6 +15,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as LocalSeoRouteImport } from './routes/local-seo'
 import { Route as FaqsRouteImport } from './routes/faqs'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -66,6 +67,11 @@ const RefundPolicyRoute = RefundPolicyRouteImport.update({
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   id: '/privacy-policy',
   path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocalSeoRoute = LocalSeoRouteImport.update({
+  id: '/local-seo',
+  path: '/local-seo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqsRoute = FaqsRouteImport.update({
@@ -188,6 +194,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
+  '/local-seo': typeof LocalSeoRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -217,6 +224,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
+  '/local-seo': typeof LocalSeoRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -247,6 +255,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
+  '/local-seo': typeof LocalSeoRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -278,6 +287,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/faqs'
+    | '/local-seo'
     | '/privacy-policy'
     | '/refund-policy'
     | '/sitemap.xml'
@@ -307,6 +317,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/faqs'
+    | '/local-seo'
     | '/privacy-policy'
     | '/refund-policy'
     | '/sitemap.xml'
@@ -336,6 +347,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/faqs'
+    | '/local-seo'
     | '/privacy-policy'
     | '/refund-policy'
     | '/sitemap.xml'
@@ -367,6 +379,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
   FaqsRoute: typeof FaqsRoute
+  LocalSeoRoute: typeof LocalSeoRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -425,6 +438,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy-policy'
       fullPath: '/privacy-policy'
       preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/local-seo': {
+      id: '/local-seo'
+      path: '/local-seo'
+      fullPath: '/local-seo'
+      preLoaderRoute: typeof LocalSeoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faqs': {
@@ -625,6 +645,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
   FaqsRoute: FaqsRoute,
+  LocalSeoRoute: LocalSeoRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
