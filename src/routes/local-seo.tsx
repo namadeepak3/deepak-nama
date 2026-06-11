@@ -116,60 +116,84 @@ Website / GMB: ${website || "—"}`;
       <Toaster />
 
       {/* HERO */}
-      <section className="relative overflow-hidden border-b border-border bg-noir-grid">
+      <section id="audit" className="relative overflow-hidden border-b border-border bg-noir-grid">
         <div className="absolute inset-0 -z-10 opacity-60 pointer-events-none">
           <div className="absolute -top-32 -left-20 h-80 w-80 rounded-full bg-primary/20 blur-3xl" />
           <div className="absolute top-40 -right-20 h-80 w-80 rounded-full bg-accent/20 blur-3xl" />
         </div>
-        <div className="mx-auto max-w-7xl px-6 py-16 md:py-24 grid lg:grid-cols-12 gap-10 items-center">
-          <div className="lg:col-span-7">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 py-12 md:py-20 grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          <div className="lg:col-span-6">
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] uppercase tracking-widest text-primary font-semibold">
               <MapPin className="h-3.5 w-3.5" /> Local SEO that ranks you in the map pack
             </span>
-            <h1 className="mt-5 text-4xl md:text-6xl font-display leading-[1.05]">
+            <h1 className="mt-5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display leading-[1.05]">
               Own the <span className="text-gradient-gold italic">"near&nbsp;me"</span> searches in your city.
             </h1>
-            <p className="mt-5 max-w-xl text-muted-foreground text-lg">
+            <p className="mt-4 sm:mt-5 max-w-xl text-muted-foreground text-base sm:text-lg">
               We get service businesses into Google&apos;s top 3-pack — so nearby customers call you before they ever scroll past your competitors.
             </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <a
-                href="#audit"
-                className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold shadow-gold hover:opacity-90 transition"
-              >
-                Get my free local SEO audit <ArrowRight className="h-4 w-4" />
-              </a>
-              <a
-                href="#proof"
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold hover:border-foreground transition"
-              >
-                See proof
-              </a>
-            </div>
-            <div className="mt-8 grid grid-cols-3 gap-4 max-w-md">
+            <ul className="mt-6 space-y-2.5 text-sm">
+              {[
+                "Free GMB & map-pack audit in 24 hours",
+                "1-page action plan tailored to your city",
+                "No spam, no sales script — just useful data",
+              ].map((x) => (
+                <li key={x} className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" /> {x}</li>
+              ))}
+            </ul>
+            <div className="mt-7 grid grid-cols-3 gap-3 max-w-md">
               <HeroStat k="+312%" v="map views" />
               <HeroStat k="3.1x" v="GMB calls" />
               <HeroStat k="Top 3" v="map pack" />
             </div>
           </div>
 
-          <div className="lg:col-span-5">
-            <div className="relative rounded-3xl border border-border bg-card p-3 shadow-2xl">
-              <img
-                src={gmbDashboard}
-                alt="Google Business Profile dashboard showing local ranking and call growth"
-                width={1280}
-                height={832}
-                className="rounded-2xl w-full h-auto"
-              />
-              <div className="absolute -bottom-4 -left-4 rounded-2xl bg-ink text-white px-4 py-3 shadow-xl border border-white/10">
-                <div className="flex items-center gap-2 text-xs">
-                  <Star className="h-4 w-4 fill-primary text-primary" />
-                  <span className="font-semibold">4.9 avg rating</span>
-                  <span className="text-white/60">· 480+ reviews driven</span>
-                </div>
+          <div className="lg:col-span-6 w-full">
+            <form
+              onSubmit={onSubmit}
+              className="rounded-2xl sm:rounded-3xl border border-border bg-card p-5 sm:p-7 md:p-8 space-y-4 shadow-2xl"
+            >
+              <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-primary font-semibold">
+                <Sparkles className="h-3.5 w-3.5" /> Free local SEO audit
               </div>
-            </div>
+              <h2 className="text-xl sm:text-2xl font-display leading-tight">
+                Get your free local SEO audit
+              </h2>
+              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+                <FormField label="Your name" name="name" placeholder="Jane Doe" required />
+                <FormField label="Phone / WhatsApp" name="phone" placeholder="+91 98xxxxxxxx" required />
+              </div>
+              <FormField label="Email" name="email" type="email" placeholder="you@business.com" required />
+              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+                <FormField label="Business name" name="business" placeholder="Smile Studio Dental" required />
+                <FormField label="City / area you serve" name="city" placeholder="Pune, Kothrud" required />
+              </div>
+              <FormField label="Website or Google Maps URL" name="website" placeholder="https://" />
+              <div>
+                <label className="block text-sm font-medium mb-2">Your #1 local SEO goal</label>
+                <select
+                  name="goal"
+                  className="w-full rounded-md bg-input/30 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary"
+                >
+                  <option>Rank in Google Map 3-pack</option>
+                  <option>More phone calls from Google</option>
+                  <option>Fix & optimise my GMB profile</option>
+                  <option>Get more 5-star reviews</option>
+                  <option>Beat a specific competitor</option>
+                  <option>Multi-location local SEO</option>
+                </select>
+              </div>
+              <button
+                type="submit"
+                disabled={sending}
+                className="w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold shadow-gold hover:opacity-90 transition disabled:opacity-60"
+              >
+                {sending ? "Sending..." : <>Send me my free audit <Send className="h-4 w-4" /></>}
+              </button>
+              <p className="text-xs text-muted-foreground text-center">
+                No spam. Audit delivered to your inbox within 24 hours.
+              </p>
+            </form>
           </div>
         </div>
       </section>
@@ -345,73 +369,6 @@ Website / GMB: ${website || "—"}`;
               <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
             </details>
           ))}
-        </div>
-      </section>
-
-      {/* FORM */}
-      <section id="audit" className="bg-noir-grid border-t border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20 grid md:grid-cols-5 gap-10">
-          <div className="md:col-span-2">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] uppercase tracking-widest text-primary font-semibold">
-              <Sparkles className="h-3.5 w-3.5" /> Free local SEO audit
-            </span>
-            <h2 className="mt-5 text-3xl md:text-4xl font-display leading-tight">
-              Get a free local SEO audit of your business.
-            </h2>
-            <p className="mt-4 text-muted-foreground">
-              We&apos;ll audit your Google Business Profile, citations, reviews and local rankings — and send back a 1-page action plan within 24 hours.
-            </p>
-            <ul className="mt-6 space-y-3 text-sm">
-              {[
-                "GMB profile health score",
-                "Map pack ranking check for your top 5 keywords",
-                "Citation & NAP consistency report",
-                "Review velocity benchmark vs competitors",
-              ].map((x) => (
-                <li key={x} className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" /> {x}</li>
-              ))}
-            </ul>
-          </div>
-
-          <form
-            onSubmit={onSubmit}
-            className="md:col-span-3 rounded-3xl border border-border bg-card p-7 md:p-8 space-y-4"
-          >
-            <div className="grid sm:grid-cols-2 gap-4">
-              <FormField label="Your name" name="name" placeholder="Jane Doe" required />
-              <FormField label="Phone / WhatsApp" name="phone" placeholder="+91 98xxxxxxxx" required />
-            </div>
-            <FormField label="Email" name="email" type="email" placeholder="you@business.com" required />
-            <div className="grid sm:grid-cols-2 gap-4">
-              <FormField label="Business name" name="business" placeholder="Smile Studio Dental" required />
-              <FormField label="City / area you serve" name="city" placeholder="Pune, Kothrud" required />
-            </div>
-            <FormField label="Website or Google Maps URL" name="website" placeholder="https://" />
-            <div>
-              <label className="block text-sm font-medium mb-2">Your #1 local SEO goal</label>
-              <select
-                name="goal"
-                className="w-full rounded-md bg-input/30 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary"
-              >
-                <option>Rank in Google Map 3-pack</option>
-                <option>More phone calls from Google</option>
-                <option>Fix & optimise my GMB profile</option>
-                <option>Get more 5-star reviews</option>
-                <option>Beat a specific competitor</option>
-                <option>Multi-location local SEO</option>
-              </select>
-            </div>
-            <button
-              type="submit"
-              disabled={sending}
-              className="w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold shadow-gold hover:opacity-90 transition disabled:opacity-60"
-            >
-              {sending ? "Sending..." : <>Send me my free audit <Send className="h-4 w-4" /></>}
-            </button>
-            <p className="text-xs text-muted-foreground text-center">
-              No spam. No sales script. Just a useful audit in your inbox within 24 hours.
-            </p>
-          </form>
         </div>
       </section>
 
