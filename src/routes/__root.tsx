@@ -142,14 +142,16 @@ function RootComponent() {
 function SiteShell() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isAdmin = pathname.startsWith("/admin");
+  const isBare = pathname === "/local-seo" || pathname.startsWith("/local-seo/");
+  const hideChrome = isAdmin || isBare;
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
-      {!isAdmin && <SiteHeader />}
+      {!hideChrome && <SiteHeader />}
       <main className="flex-1">
         <Outlet />
       </main>
-      {!isAdmin && <SiteFooter />}
-      {!isAdmin && <WhatsAppFab />}
+      {!hideChrome && <SiteFooter />}
+      {!hideChrome && <WhatsAppFab />}
     </div>
   );
 }
