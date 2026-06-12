@@ -372,25 +372,146 @@ Website / GMB: ${website || "—"}`;
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section className="mx-auto max-w-7xl px-6 py-16">
-        <div className="rounded-3xl border border-border bg-ink text-white p-10 md:p-14 text-center relative overflow-hidden">
-          <div className="absolute -top-20 -right-20 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
-          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Ready to be the #1 result?</p>
-          <h2 className="mt-3 text-3xl md:text-5xl font-display max-w-2xl mx-auto leading-tight">
-            Stop losing customers to the business next door.
-          </h2>
-          <p className="mt-4 max-w-xl mx-auto text-white/70">
-            Book a free 20-min local SEO strategy call — we&apos;ll map out exactly what it takes to dominate your city on Google.
-          </p>
-          <Link
-            to="/contact"
-            className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-7 py-3.5 text-sm font-semibold shadow-gold hover:opacity-90 transition"
-          >
-            Book my strategy call <ArrowRight className="h-4 w-4" />
-          </Link>
+      {/* STRONG BOTTOM CTA — FREE AUDIT FORM */}
+      <section id="bottom-cta" className="mx-auto max-w-7xl px-5 sm:px-6 py-16 md:py-20">
+        <div className="rounded-3xl border border-border bg-ink text-white p-8 sm:p-10 md:p-14 relative overflow-hidden">
+          <div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-primary/20 blur-3xl" />
+          <div className="absolute -bottom-20 -left-20 h-72 w-72 rounded-full bg-accent/15 blur-3xl" />
+
+          <div className="relative grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+            {/* Left: pitch */}
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] uppercase tracking-widest text-primary font-semibold">
+                <Sparkles className="h-3.5 w-3.5" /> Free local SEO audit — 24 hr delivery
+              </span>
+              <h2 className="mt-5 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display leading-tight">
+                Ready to own the <span className="text-gradient-gold italic">"near me"</span> searches in your city?
+              </h2>
+              <p className="mt-4 text-white/70 max-w-md text-sm sm:text-base">
+                Submit your details and get a personalised GMB + map-pack audit with a 1-page action plan — no sales call required.
+              </p>
+
+              <ul className="mt-6 space-y-2.5 text-sm">
+                {[
+                  "Full GMB health check + competitor gap analysis",
+                  "Priority keyword map for your city & neighbourhood",
+                  "Citations & review velocity score",
+                  "Delivered to your inbox within 24 hours",
+                ].map((x) => (
+                  <li key={x} className="flex gap-2.5">
+                    <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                    <span className="text-white/80">{x}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-7 flex flex-wrap items-center gap-4">
+                <div className="flex -space-x-2">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className="h-8 w-8 rounded-full border-2 border-ink bg-primary/20 flex items-center justify-center text-[10px] font-semibold text-white"
+                    >
+                      {String.fromCharCode(64 + i)}
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-white/60">
+                  <span className="text-white font-medium">100+ local brands</span> audited this quarter
+                </p>
+              </div>
+            </div>
+
+            {/* Right: mini form */}
+            <form
+              onSubmit={onSubmit}
+              className="rounded-2xl sm:rounded-3xl border border-white/10 bg-white/[0.04] p-5 sm:p-7 md:p-8 space-y-4 backdrop-blur-sm"
+            >
+              <h3 className="text-lg sm:text-xl font-display">Get my free audit</h3>
+              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+                <FormField
+                  label="Your name"
+                  name="name"
+                  placeholder="Jane Doe"
+                  required
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-primary"
+                />
+                <FormField
+                  label="Phone / WhatsApp"
+                  name="phone"
+                  placeholder="+91 98xxxxxxxx"
+                  required
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-primary"
+                />
+              </div>
+              <FormField
+                label="Email"
+                name="email"
+                type="email"
+                placeholder="you@business.com"
+                required
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-primary"
+              />
+              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+                <FormField
+                  label="Business name"
+                  name="business"
+                  placeholder="Smile Studio Dental"
+                  required
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-primary"
+                />
+                <FormField
+                  label="City you serve"
+                  name="city"
+                  placeholder="Pune, Kothrud"
+                  required
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-primary"
+                />
+              </div>
+              <FormField
+                label="Website or Google Maps URL"
+                name="website"
+                placeholder="https://"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-primary"
+              />
+              <div>
+                <label className="block text-sm font-medium mb-2 text-white/90">Your #1 local SEO goal</label>
+                <select
+                  name="goal"
+                  className="w-full rounded-md bg-white/5 border border-white/10 px-4 py-3 text-sm text-white focus:outline-none focus:border-primary"
+                >
+                  <option className="bg-ink text-white">Rank in Google Map 3-pack</option>
+                  <option className="bg-ink text-white">More phone calls from Google</option>
+                  <option className="bg-ink text-white">Fix & optimise my GMB profile</option>
+                  <option className="bg-ink text-white">Get more 5-star reviews</option>
+                  <option className="bg-ink text-white">Beat a specific competitor</option>
+                  <option className="bg-ink text-white">Multi-location local SEO</option>
+                </select>
+              </div>
+              <button
+                type="submit"
+                disabled={sending}
+                className="w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold shadow-gold hover:opacity-90 transition disabled:opacity-60"
+              >
+                {sending ? "Sending..." : <>Send me my free audit <Send className="h-4 w-4" /></>}
+              </button>
+              <p className="text-[11px] text-white/40 text-center">
+                No spam. Unsubscribe anytime. Audit delivered within 24 hours.
+              </p>
+            </form>
+          </div>
         </div>
       </section>
+
+      {/* STICKY MOBILE CTA BAR */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 p-3 bg-ink/95 backdrop-blur-md border-t border-white/10 lg:hidden">
+        <a
+          href="#bottom-cta"
+          className="w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold shadow-gold"
+        >
+          Get free local SEO audit <ArrowRight className="h-4 w-4" />
+        </a>
+      </div>
     </>
   );
 }
@@ -406,14 +527,18 @@ function HeroStat({ k, v }: { k: string; v: string }) {
 
 function FormField({
   label,
+  className = "",
   ...rest
-}: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
+}: { label: string; className?: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div>
       <label className="block text-sm font-medium mb-2">{label}</label>
       <input
         {...rest}
-        className="w-full rounded-md bg-input/30 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary"
+        className={
+          "w-full rounded-md bg-input/30 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary " +
+          className
+        }
       />
     </div>
   );
