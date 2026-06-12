@@ -527,14 +527,18 @@ function HeroStat({ k, v }: { k: string; v: string }) {
 
 function FormField({
   label,
+  className = "",
   ...rest
-}: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
+}: { label: string; className?: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div>
       <label className="block text-sm font-medium mb-2">{label}</label>
       <input
         {...rest}
-        className="w-full rounded-md bg-input/30 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary"
+        className={
+          "w-full rounded-md bg-input/30 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary " +
+          className
+        }
       />
     </div>
   );
