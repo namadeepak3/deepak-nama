@@ -234,18 +234,18 @@ Website / GMB: ${website || "—"}`;
       </section>
 
       {/* IMPROVEMENTS — WHAT WE FIX */}
-      <section id="improvements" className="bg-ink text-white">
+      <section id="improvements" className="bg-card/40 border-y border-border">
         <div className="mx-auto max-w-7xl px-6 py-20">
           <div className="grid lg:grid-cols-12 gap-12 items-start">
             <div className="lg:col-span-5">
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Local SEO improvements</p>
-              <h2 className="mt-3 text-3xl md:text-5xl font-display leading-tight">
+              <h2 className="mt-3 text-3xl md:text-5xl font-display leading-tight text-foreground">
                 Everything we fix to get you in the <span className="text-gradient-gold">3-pack.</span>
               </h2>
-              <p className="mt-5 text-white/70">
+              <p className="mt-5 text-muted-foreground">
                 A 47-point local SEO playbook running every month — built around how Google ranks businesses for "near me" and city + service queries.
               </p>
-              <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-3">
+              <div className="mt-8 rounded-2xl border border-border bg-background p-3 shadow-sm">
                 <img
                   src={mapPack}
                   alt="Google Maps 3-pack screenshot"
@@ -258,12 +258,12 @@ Website / GMB: ${website || "—"}`;
             </div>
             <div className="lg:col-span-7 grid sm:grid-cols-2 gap-4">
               {improvements.map((it) => (
-                <div key={it.title} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 hover:bg-white/[0.07] transition">
-                  <div className="h-9 w-9 rounded-lg bg-primary/15 border border-primary/30 grid place-items-center">
+                <div key={it.title} className="rounded-2xl border border-border bg-background p-5 hover:border-primary/50 hover:shadow-md transition">
+                  <div className="h-9 w-9 rounded-lg bg-primary/10 border border-primary/30 grid place-items-center">
                     <it.icon className="h-4 w-4 text-primary" />
                   </div>
-                  <h3 className="mt-4 text-base font-semibold">{it.title}</h3>
-                  <p className="mt-2 text-sm text-white/70 leading-relaxed">{it.body}</p>
+                  <h3 className="mt-4 text-base font-semibold text-foreground">{it.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{it.body}</p>
                 </div>
               ))}
             </div>
@@ -318,7 +318,7 @@ Website / GMB: ${website || "—"}`;
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform group-hover:scale-105"
                   />
-                  <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-ink/90 text-white text-[10px] px-2.5 py-1 uppercase tracking-widest">
+                  <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-primary text-primary-foreground text-[10px] px-2.5 py-1 uppercase tracking-widest">
                     <Camera className="h-3 w-3" /> GMB screenshot
                   </span>
                 </div>
