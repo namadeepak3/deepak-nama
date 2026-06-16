@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -18,6 +18,17 @@ import {
   Target,
   MessageSquare,
   Camera,
+  Wrench,
+  Stethoscope,
+  Scissors,
+  Home,
+  UtensilsCrossed,
+  Dumbbell,
+  Scale,
+  ShieldCheck,
+  Clock,
+  Award,
+  ChevronDown,
 } from "lucide-react";
 import { createLead } from "@/lib/leads.functions";
 import gmbDashboard from "@/assets/local-seo-gmb-dashboard.jpg";
@@ -62,6 +73,7 @@ export const Route = createFileRoute("/local-seo")({
 
 function LocalSeoPage() {
   const [sending, setSending] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
   const submitLead = useServerFn(createLead);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -112,36 +124,39 @@ Website / GMB: ${website || "—"}`;
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-background">
       <Toaster />
 
       {/* HERO */}
-      <section id="audit" className="relative overflow-hidden border-b border-border bg-noir-grid">
-        <div className="absolute inset-0 -z-10 opacity-60 pointer-events-none">
-          <div className="absolute -top-32 -left-20 h-80 w-80 rounded-full bg-primary/20 blur-3xl" />
-          <div className="absolute top-40 -right-20 h-80 w-80 rounded-full bg-accent/20 blur-3xl" />
+      <section id="audit" className="relative overflow-hidden bg-aurora border-b border-border">
+        <div className="absolute inset-0 -z-10 opacity-50 pointer-events-none">
+          <div className="absolute -top-32 -left-20 h-80 w-80 rounded-full bg-primary/15 blur-3xl" />
+          <div className="absolute top-40 -right-20 h-80 w-80 rounded-full bg-accent/15 blur-3xl" />
         </div>
-        <div className="mx-auto max-w-7xl px-5 sm:px-6 py-12 md:py-20 grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 py-16 md:py-24 lg:py-28 grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           <div className="lg:col-span-6">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] uppercase tracking-widest text-primary font-semibold">
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">
               <MapPin className="h-3.5 w-3.5" /> Local SEO that ranks you in the map pack
             </span>
-            <h1 className="mt-5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display leading-[1.05]">
+            <h1 className="mt-6 text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-display leading-[1.08] tracking-tight">
               Own the <span className="text-gradient-gold italic">"near&nbsp;me"</span> searches in your city.
             </h1>
-            <p className="mt-4 sm:mt-5 max-w-xl text-muted-foreground text-base sm:text-lg">
+            <p className="mt-5 max-w-xl text-muted-foreground text-base sm:text-lg leading-relaxed">
               We get service businesses into Google&apos;s top 3-pack — so nearby customers call you before they ever scroll past your competitors.
             </p>
-            <ul className="mt-6 space-y-2.5 text-sm">
+            <ul className="mt-7 space-y-3 text-sm">
               {[
                 "Free GMB & map-pack audit in 24 hours",
                 "1-page action plan tailored to your city",
                 "No spam, no sales script — just useful data",
               ].map((x) => (
-                <li key={x} className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" /> {x}</li>
+                <li key={x} className="flex gap-3 items-start">
+                  <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+                  <span>{x}</span>
+                </li>
               ))}
             </ul>
-            <div className="mt-7 grid grid-cols-3 gap-3 max-w-md">
+            <div className="mt-8 grid grid-cols-3 gap-3 max-w-md">
               <HeroStat k="+312%" v="map views" />
               <HeroStat k="3.1x" v="GMB calls" />
               <HeroStat k="Top 3" v="map pack" />
@@ -151,20 +166,20 @@ Website / GMB: ${website || "—"}`;
           <div className="lg:col-span-6 w-full">
             <form
               onSubmit={onSubmit}
-              className="rounded-2xl sm:rounded-3xl border border-border bg-card p-5 sm:p-7 md:p-8 space-y-4 shadow-2xl"
+              className="rounded-3xl border border-border bg-card p-6 sm:p-8 md:p-10 space-y-5 shadow-gold"
             >
-              <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-primary font-semibold">
+              <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">
                 <Sparkles className="h-3.5 w-3.5" /> Free local SEO audit
               </div>
               <h2 className="text-xl sm:text-2xl font-display leading-tight">
                 Get your free local SEO audit
               </h2>
-              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid sm:grid-cols-2 gap-4">
                 <FormField label="Your name" name="name" placeholder="Jane Doe" required />
                 <FormField label="Phone / WhatsApp" name="phone" placeholder="+91 98xxxxxxxx" required />
               </div>
               <FormField label="Email" name="email" type="email" placeholder="you@business.com" required />
-              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid sm:grid-cols-2 gap-4">
                 <FormField label="Business name" name="business" placeholder="Smile Studio Dental" required />
                 <FormField label="City / area you serve" name="city" placeholder="Pune, Kothrud" required />
               </div>
@@ -173,7 +188,7 @@ Website / GMB: ${website || "—"}`;
                 <label className="block text-sm font-medium mb-2">Your #1 local SEO goal</label>
                 <select
                   name="goal"
-                  className="w-full rounded-md bg-input/30 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary"
+                  className="w-full rounded-xl bg-input/40 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
                 >
                   <option>Rank in Google Map 3-pack</option>
                   <option>More phone calls from Google</option>
@@ -186,7 +201,7 @@ Website / GMB: ${website || "—"}`;
               <button
                 type="submit"
                 disabled={sending}
-                className="w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold shadow-gold hover:opacity-90 transition disabled:opacity-60"
+                className="w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3.5 text-sm font-semibold shadow-gold btn-fx disabled:opacity-60"
               >
                 {sending ? "Sending..." : <>Send me my free audit <Send className="h-4 w-4" /></>}
               </button>
@@ -199,53 +214,59 @@ Website / GMB: ${website || "—"}`;
       </section>
 
       {/* TRUST STRIP */}
-      <section className="border-b border-border bg-card/40">
-        <div className="mx-auto max-w-7xl px-6 py-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-xs uppercase tracking-widest text-muted-foreground">
-          <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> Google Partner mindset</span>
-          <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> 100+ local brands scaled</span>
-          <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> 30-day visible results</span>
-          <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> No long contracts</span>
+      <section className="border-b border-border bg-primary/[0.03]">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 py-8 md:py-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            {[
+              { icon: ShieldCheck, label: "Google Partner mindset" },
+              { icon: Award, label: "100+ local brands scaled" },
+              { icon: Clock, label: "30-day visible results" },
+              { icon: CheckCircle2, label: "No long contracts" },
+            ].map(({ icon: Icon, label }) => (
+              <div key={label} className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 grid place-items-center shrink-0">
+                  <Icon className="h-5 w-5 text-primary" />
+                </div>
+                <span className="text-sm font-medium text-foreground">{label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* WHO IT'S FOR */}
-      <section className="mx-auto max-w-7xl px-6 py-16 md:py-20">
-        <div className="max-w-2xl">
+      <section className="mx-auto max-w-7xl px-5 sm:px-6 py-20 md:py-28">
+        <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Built for local service businesses</p>
-          <h2 className="mt-3 text-3xl md:text-4xl font-display">If customers find you on Google, this is for you.</h2>
+          <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-display leading-tight">
+            If customers find you on Google, this is for you.
+          </h2>
         </div>
-        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            { label: "Plumbers & electricians", icon: Building2 },
-            { label: "Dentists & clinics", icon: Building2 },
-            { label: "Salons & spas", icon: Building2 },
-            { label: "Real estate & PG", icon: Building2 },
-            { label: "Restaurants & cafés", icon: Building2 },
-            { label: "Gyms & studios", icon: Building2 },
-            { label: "Law & CA firms", icon: Building2 },
-            { label: "Home services", icon: Building2 },
-          ].map((b) => (
-            <div key={b.label} className="rounded-2xl border border-border bg-card p-5 hover:border-foreground transition">
-              <b.icon className="h-5 w-5 text-primary" />
-              <p className="mt-3 text-sm font-medium">{b.label}</p>
+        <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {businessTypes.map((b) => (
+            <div key={b.label} className="group rounded-2xl border border-border bg-card p-6 hover:border-primary/40 hover:shadow-lg transition-all duration-300">
+              <div className="h-11 w-11 rounded-xl bg-primary/10 border border-primary/20 grid place-items-center group-hover:bg-primary/15 transition-colors">
+                <b.icon className="h-5 w-5 text-primary" />
+              </div>
+              <p className="mt-4 text-sm font-semibold text-foreground">{b.label}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* IMPROVEMENTS — WHAT WE FIX */}
+      {/* IMPROVEMENTS */}
       <section id="improvements" className="bg-card/40 border-y border-border">
-        <div className="mx-auto max-w-7xl px-6 py-20">
-          <div className="grid lg:grid-cols-12 gap-12 items-start">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 py-20 md:py-28">
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             <div className="lg:col-span-5">
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Local SEO improvements</p>
-              <h2 className="mt-3 text-3xl md:text-5xl font-display leading-tight text-foreground">
+              <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-display leading-tight text-foreground">
                 Everything we fix to get you in the <span className="text-gradient-gold">3-pack.</span>
               </h2>
-              <p className="mt-5 text-muted-foreground">
-                A 47-point local SEO playbook running every month — built around how Google ranks businesses for "near me" and city + service queries.
+              <p className="mt-5 text-muted-foreground text-base leading-relaxed">
+                A 47-point local SEO playbook running every month — built around how Google ranks businesses for &quot;near me&quot; and city + service queries.
               </p>
-              <div className="mt-8 rounded-2xl border border-border bg-background p-3 shadow-sm">
+              <div className="mt-10 rounded-2xl border border-border bg-background p-3 shadow-sm">
                 <img
                   src={mapPack}
                   alt="Google Maps 3-pack screenshot"
@@ -258,8 +279,8 @@ Website / GMB: ${website || "—"}`;
             </div>
             <div className="lg:col-span-7 grid sm:grid-cols-2 gap-4">
               {improvements.map((it) => (
-                <div key={it.title} className="rounded-2xl border border-border bg-background p-5 hover:border-primary/50 hover:shadow-md transition">
-                  <div className="h-9 w-9 rounded-lg bg-primary/10 border border-primary/30 grid place-items-center">
+                <div key={it.title} className="group rounded-2xl border border-border bg-background p-6 hover:border-primary/40 hover:shadow-md transition-all duration-300">
+                  <div className="h-10 w-10 rounded-lg bg-primary/10 border border-primary/20 grid place-items-center group-hover:bg-primary/15 transition-colors">
                     <it.icon className="h-4 w-4 text-primary" />
                   </div>
                   <h3 className="mt-4 text-base font-semibold text-foreground">{it.title}</h3>
@@ -272,42 +293,50 @@ Website / GMB: ${website || "—"}`;
       </section>
 
       {/* PROCESS */}
-      <section className="mx-auto max-w-7xl px-6 py-20">
-        <div className="max-w-2xl">
+      <section className="mx-auto max-w-7xl px-5 sm:px-6 py-20 md:py-28">
+        <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">How it works</p>
-          <h2 className="mt-3 text-3xl md:text-4xl font-display">From invisible to inbound calls in 90 days.</h2>
+          <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-display leading-tight">
+            From invisible to inbound calls in 90 days.
+          </h2>
         </div>
-        <div className="mt-12 grid md:grid-cols-4 gap-4">
+        <div className="mt-14 grid md:grid-cols-4 gap-6 relative">
+          {/* Connecting line - desktop only */}
+          <div className="hidden md:block absolute top-12 left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-primary/30 via-primary/50 to-primary/30" />
           {process.map((p, i) => (
-            <div key={p.title} className="rounded-2xl border border-border bg-card p-6 relative">
-              <span className="text-5xl font-display text-primary/30 leading-none">0{i + 1}</span>
-              <h3 className="mt-4 text-lg font-semibold">{p.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.body}</p>
+            <div key={p.title} className="relative">
+              <div className="rounded-2xl border border-border bg-card p-7 relative z-10">
+                <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground grid place-items-center text-sm font-bold shadow-gold">
+                  {i + 1}
+                </div>
+                <h3 className="mt-5 text-lg font-semibold">{p.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.body}</p>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* CASE STUDIES — local stats + GMB screenshots */}
+      {/* CASE STUDIES */}
       <section id="proof" className="bg-card/30 border-y border-border">
-        <div className="mx-auto max-w-7xl px-6 py-20">
-          <div className="flex items-end justify-between flex-wrap gap-4">
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 py-20 md:py-28">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="max-w-2xl">
               <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">Local SEO case studies</p>
-              <h2 className="mt-3 text-3xl md:text-5xl font-display leading-tight">
+              <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-display leading-tight">
                 Real local brands, <span className="text-gradient-gold">real map pack wins.</span>
               </h2>
             </div>
-            <p className="text-sm text-muted-foreground max-w-md">
+            <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
               Every number is pulled from the client&apos;s own Google Business Profile dashboard.
             </p>
           </div>
 
-          <div className="mt-12 grid lg:grid-cols-3 gap-5">
+          <div className="mt-14 grid lg:grid-cols-3 gap-6">
             {caseStudies.map((cs) => (
               <article
                 key={cs.title}
-                className="group rounded-3xl border border-border bg-background overflow-hidden hover:border-foreground transition flex flex-col"
+                className="group rounded-3xl border border-border bg-background overflow-hidden hover:border-primary/40 hover:shadow-xl transition-all duration-300 flex flex-col"
               >
                 <div className="relative aspect-[4/3] bg-muted overflow-hidden">
                   <img
@@ -316,38 +345,40 @@ Website / GMB: ${website || "—"}`;
                     width={1280}
                     height={960}
                     loading="lazy"
-                    className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-primary text-primary-foreground text-[10px] px-2.5 py-1 uppercase tracking-widest">
+                  <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-primary text-primary-foreground text-[10px] px-3 py-1.5 uppercase tracking-widest font-semibold">
                     <Camera className="h-3 w-3" /> GMB screenshot
                   </span>
                 </div>
-                <div className="p-6 flex-1 flex flex-col">
+                <div className="p-7 flex-1 flex flex-col">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <MapPin className="h-3.5 w-3.5" /> {cs.city} · {cs.industry}
                   </div>
-                  <h3 className="mt-2 text-lg font-display">{cs.title}</h3>
-                  <div className="mt-5 grid grid-cols-3 gap-2">
+                  <h3 className="mt-3 text-lg font-display leading-snug">{cs.title}</h3>
+                  <div className="mt-6 grid grid-cols-3 gap-3">
                     {cs.stats.map((s) => (
-                      <div key={s.v} className="rounded-xl border border-border bg-card p-2.5 text-center">
-                        <div className="text-base font-display text-gradient-gold leading-none">{s.k}</div>
-                        <div className="mt-1 text-[9px] uppercase tracking-widest text-muted-foreground">{s.v}</div>
+                      <div key={s.v} className="rounded-xl border border-border bg-card p-3 text-center">
+                        <div className="text-lg font-display text-gradient-gold leading-none">{s.k}</div>
+                        <div className="mt-1.5 text-[10px] uppercase tracking-widest text-muted-foreground">{s.v}</div>
                       </div>
                     ))}
                   </div>
-                  <p className="mt-5 text-sm text-muted-foreground leading-relaxed flex-1">{cs.summary}</p>
+                  <p className="mt-6 text-sm text-muted-foreground leading-relaxed flex-1">{cs.summary}</p>
                 </div>
               </article>
             ))}
           </div>
 
-          <div className="mt-12 rounded-3xl border border-border bg-card p-8 md:p-10 flex flex-col md:flex-row gap-6 items-start">
-            <Quote className="h-8 w-8 text-primary shrink-0" />
+          <div className="mt-14 rounded-3xl border border-border bg-card p-8 md:p-12 flex flex-col md:flex-row gap-6 items-start">
+            <div className="h-12 w-12 rounded-2xl bg-primary/10 border border-primary/20 grid place-items-center shrink-0">
+              <Quote className="h-6 w-6 text-primary" />
+            </div>
             <div>
-              <p className="text-lg md:text-xl font-display leading-snug">
-                "We went from page 3 to the top of the map pack in 8 weeks. Our phone hasn&apos;t stopped ringing — 40+ new patients a month from Google alone."
+              <p className="text-lg md:text-xl font-display leading-relaxed text-foreground">
+                &quot;We went from page 3 to the top of the map pack in 8 weeks. Our phone hasn&apos;t stopped ringing — 40+ new patients a month from Google alone.&quot;
               </p>
-              <p className="mt-4 text-sm text-muted-foreground">
+              <p className="mt-5 text-sm text-muted-foreground font-medium">
                 Dr. Rohan Mehta — Smile Studio Dental, Pune
               </p>
             </div>
@@ -356,84 +387,100 @@ Website / GMB: ${website || "—"}`;
       </section>
 
       {/* FAQ */}
-      <section className="mx-auto max-w-4xl px-6 py-20">
-        <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">FAQ</p>
-        <h2 className="mt-3 text-3xl md:text-4xl font-display">Local SEO, answered.</h2>
-        <div className="mt-10 divide-y divide-border border-y border-border">
-          {faqs.map((f) => (
-            <details key={f.q} className="group py-5">
-              <summary className="flex items-center justify-between cursor-pointer list-none">
-                <span className="text-base font-medium pr-6">{f.q}</span>
-                <span className="h-7 w-7 rounded-full border border-border grid place-items-center text-muted-foreground group-open:rotate-45 transition">+</span>
-              </summary>
-              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
-            </details>
+      <section className="mx-auto max-w-4xl px-5 sm:px-6 py-20 md:py-28">
+        <div className="text-center">
+          <p className="text-xs tracking-[0.22em] uppercase text-primary font-semibold">FAQ</p>
+          <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-display leading-tight">
+            Local SEO, answered.
+          </h2>
+        </div>
+        <div className="mt-14 space-y-4">
+          {faqs.map((f, i) => (
+            <div
+              key={f.q}
+              className={`rounded-2xl border transition-all duration-300 ${
+                openFaq === i ? "border-primary/40 bg-card shadow-md" : "border-border bg-card/50 hover:border-primary/25"
+              }`}
+            >
+              <button
+                onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                className="w-full flex items-center justify-between p-6 text-left"
+              >
+                <span className="text-base font-medium pr-6 text-foreground">{f.q}</span>
+                <span className={`h-8 w-8 rounded-full border grid place-items-center shrink-0 transition-all duration-300 ${
+                  openFaq === i ? "border-primary bg-primary text-primary-foreground rotate-180" : "border-border text-muted-foreground"
+                }`}>
+                  <ChevronDown className="h-4 w-4" />
+                </span>
+              </button>
+              <div className={`overflow-hidden transition-all duration-300 ${openFaq === i ? "max-h-96" : "max-h-0"}`}>
+                <p className="px-6 pb-6 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+              </div>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* STRONG BOTTOM CTA — FREE AUDIT FORM */}
-      <section id="bottom-cta" className="mx-auto max-w-7xl px-5 sm:px-6 py-16 md:py-20">
-        <div className="rounded-3xl border border-border bg-card p-6 sm:p-10 md:p-14 relative overflow-hidden shadow-sm">
-          <div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-primary/15 blur-3xl pointer-events-none" />
+      {/* BOTTOM CTA */}
+      <section id="bottom-cta" className="mx-auto max-w-7xl px-5 sm:px-6 pb-20 md:pb-28">
+        <div className="rounded-3xl border border-border bg-card p-8 sm:p-12 md:p-16 relative overflow-hidden shadow-lg">
+          <div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-primary/12 blur-3xl pointer-events-none" />
           <div className="absolute -bottom-20 -left-20 h-72 w-72 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
 
-          <div className="relative grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
-            {/* Left: pitch */}
+          <div className="relative grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div>
-              <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[11px] uppercase tracking-widest text-primary font-semibold">
+              <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">
                 <Sparkles className="h-3.5 w-3.5" /> Free local SEO audit — 24 hr delivery
               </span>
-              <h2 className="mt-5 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display leading-tight text-foreground">
-                Ready to own the <span className="text-gradient-gold italic">"near me"</span> searches in your city?
+              <h2 className="mt-6 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display leading-tight text-foreground">
+                Ready to own the <span className="text-gradient-gold italic">&quot;near me&quot;</span> searches in your city?
               </h2>
-              <p className="mt-4 text-muted-foreground max-w-md text-sm sm:text-base">
+              <p className="mt-5 text-muted-foreground max-w-md text-base leading-relaxed">
                 Submit your details and get a personalised GMB + map-pack audit with a 1-page action plan — no sales call required.
               </p>
 
-              <ul className="mt-6 space-y-2.5 text-sm">
+              <ul className="mt-8 space-y-3 text-sm">
                 {[
                   "Full GMB health check + competitor gap analysis",
                   "Priority keyword map for your city & neighbourhood",
                   "Citations & review velocity score",
                   "Delivered to your inbox within 24 hours",
                 ].map((x) => (
-                  <li key={x} className="flex gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                  <li key={x} className="flex gap-3 items-start">
+                    <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-foreground/80">{x}</span>
                   </li>
                 ))}
               </ul>
 
-              <div className="mt-7 flex flex-wrap items-center gap-4">
+              <div className="mt-8 flex flex-wrap items-center gap-4">
                 <div className="flex -space-x-2">
                   {[1, 2, 3, 4].map((i) => (
                     <div
                       key={i}
-                      className="h-8 w-8 rounded-full border-2 border-card bg-primary/20 flex items-center justify-center text-[10px] font-semibold text-primary"
+                      className="h-9 w-9 rounded-full border-2 border-card bg-primary/15 flex items-center justify-center text-[10px] font-semibold text-primary"
                     >
                       {String.fromCharCode(64 + i)}
                     </div>
                   ))}
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  <span className="text-foreground font-medium">100+ local brands</span> audited this quarter
+                <p className="text-sm text-muted-foreground">
+                  <span className="text-foreground font-semibold">100+ local brands</span> audited this quarter
                 </p>
               </div>
             </div>
 
-            {/* Right: mini form */}
             <form
               onSubmit={onSubmit}
-              className="rounded-2xl sm:rounded-3xl border border-border bg-background p-5 sm:p-7 md:p-8 space-y-4 shadow-lg"
+              className="rounded-3xl border border-border bg-background p-6 sm:p-8 md:p-10 space-y-5 shadow-xl"
             >
               <h3 className="text-lg sm:text-xl font-display text-foreground">Get my free audit</h3>
-              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid sm:grid-cols-2 gap-4">
                 <FormField label="Your name" name="name" placeholder="Jane Doe" required />
                 <FormField label="Phone / WhatsApp" name="phone" placeholder="+91 98xxxxxxxx" required />
               </div>
               <FormField label="Email" name="email" type="email" placeholder="you@business.com" required />
-              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid sm:grid-cols-2 gap-4">
                 <FormField label="Business name" name="business" placeholder="Smile Studio Dental" required />
                 <FormField label="City you serve" name="city" placeholder="Pune, Kothrud" required />
               </div>
@@ -442,7 +489,7 @@ Website / GMB: ${website || "—"}`;
                 <label className="block text-sm font-medium mb-2 text-foreground">Your #1 local SEO goal</label>
                 <select
                   name="goal"
-                  className="w-full rounded-md bg-input/30 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary"
+                  className="w-full rounded-xl bg-input/40 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
                 >
                   <option>Rank in Google Map 3-pack</option>
                   <option>More phone calls from Google</option>
@@ -455,7 +502,7 @@ Website / GMB: ${website || "—"}`;
               <button
                 type="submit"
                 disabled={sending}
-                className="w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold shadow-gold hover:opacity-90 transition disabled:opacity-60"
+                className="w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3.5 text-sm font-semibold shadow-gold btn-fx disabled:opacity-60"
               >
                 {sending ? "Sending..." : <>Send me my free audit <Send className="h-4 w-4" /></>}
               </button>
@@ -471,20 +518,20 @@ Website / GMB: ${website || "—"}`;
       <div className="fixed bottom-0 left-0 right-0 z-50 p-3 bg-background/95 backdrop-blur-md border-t border-border lg:hidden shadow-[0_-8px_30px_-12px_rgba(0,0,0,0.15)]">
         <a
           href="#bottom-cta"
-          className="w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold shadow-gold"
+          className="w-full inline-flex justify-center items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3.5 text-sm font-semibold shadow-gold btn-fx"
         >
           Get free local SEO audit <ArrowRight className="h-4 w-4" />
         </a>
       </div>
-    </>
+    </div>
   );
 }
 
 function HeroStat({ k, v }: { k: string; v: string }) {
   return (
-    <div className="rounded-xl border border-border bg-card/60 backdrop-blur p-3 text-center">
+    <div className="rounded-xl border border-border bg-card/70 backdrop-blur p-4 text-center">
       <div className="text-xl md:text-2xl font-display text-gradient-gold leading-none">{k}</div>
-      <div className="mt-1.5 text-[10px] uppercase tracking-widest text-muted-foreground">{v}</div>
+      <div className="mt-2 text-[10px] uppercase tracking-[0.15em] text-muted-foreground">{v}</div>
     </div>
   );
 }
@@ -500,13 +547,24 @@ function FormField({
       <input
         {...rest}
         className={
-          "w-full rounded-md bg-input/30 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary " +
+          "w-full rounded-xl bg-input/40 border border-border px-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors " +
           className
         }
       />
     </div>
   );
 }
+
+const businessTypes = [
+  { label: "Plumbers & electricians", icon: Wrench },
+  { label: "Dentists & clinics", icon: Stethoscope },
+  { label: "Salons & spas", icon: Scissors },
+  { label: "Real estate & PG", icon: Home },
+  { label: "Restaurants & cafés", icon: UtensilsCrossed },
+  { label: "Gyms & studios", icon: Dumbbell },
+  { label: "Law & CA firms", icon: Scale },
+  { label: "Home services", icon: Building2 },
+];
 
 const improvements = [
   {
