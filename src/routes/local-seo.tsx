@@ -242,6 +242,21 @@ Website / GMB: ${website || "—"}`;
     } finally {
       setSending(false);
     }
+    } catch (clientErr) {
+      const device = getDeviceType();
+      const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+      const source = params?.get("utm_source") || (typeof document !== "undefined" && document.referrer ? new URL(document.referrer).hostname : "direct");
+      track("lead_client_error", {
+        form_id: "local_seo_form",
+        page: "local-seo",
+        device,
+        source,
+        error: clientErr instanceof Error ? clientErr.message : "unknown_client_error",
+        error_type: clientErr instanceof Error ? clientErr.name : "unknown",
+      });
+      toast.error("Something went wrong. Please refresh and try again.");
+      setSending(false);
+    }
   };
 
   return (
