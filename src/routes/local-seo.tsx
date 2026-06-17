@@ -125,7 +125,8 @@ function LocalSeoPage() {
     return { errors, isValid: Object.keys(errors).length === 0 };
   };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
     e.preventDefault();
     const form = e.currentTarget;
     const formId = form.dataset.formId || "local_seo_form";
