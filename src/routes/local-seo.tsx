@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
@@ -31,6 +31,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { createLead } from "@/lib/leads.functions";
+import { track } from "@/lib/analytics";
 import gmbDashboard from "@/assets/local-seo-gmb-dashboard.jpg";
 import mapPack from "@/assets/local-seo-map-pack.jpg";
 
@@ -76,9 +77,26 @@ function LocalSeoPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const submitLead = useServerFn(createLead);
 
+  const getDeviceType = () => {
+    if (typeof window === "undefined") return "unknown";
+    const w = window.innerWidth;
+    if (w < 768) return "mobile";
+    if (w < 1024) return "tablet";
+    return "desktop";
+  };
+
+  useEffect(() => {
+    track("lead_form_view", {
+      page: "local-seo",
+      device: getDeviceType(),
+      referrer: typeof document !== "undefined" ? document.referrer : "",
+    });
+  }, []);
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
+    const formId = form.dataset.formId || "local_seo_form";
     const fd = new FormData(form);
     const name = ((fd.get("name") as string) || "").trim();
     const email = ((fd.get("email") as string) || "").trim();
@@ -93,9 +111,27 @@ City / service area: ${city}
 Primary goal: ${goal}
 Website / GMB: ${website || "—"}`;
     setSending(true);
+    const device = getDeviceType();
+    const params =
+      typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+    const utmSource = params?.get("utm_source") ?? "";
+    const utmMedium = params?.get("utm_medium") ?? "";
+    const utmCampaign = params?.get("utm_campaign") ?? "landing_local_seo";
+    const source = utmSource || (typeof document !== "undefined" && document.referrer
+      ? new URL(document.referrer).hostname
+      : "direct");
+
+    track("lead_submit_attempt", {
+      form_id: formId,
+      page: "local-seo",
+      device,
+      source,
+      utm_source: utmSource,
+      utm_medium: utmMedium,
+      utm_campaign: utmCampaign,
+      goal,
+    });
     try {
-      const params =
-        typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
       await submitLead({
         data: {
           name,
@@ -109,14 +145,40 @@ Website / GMB: ${website || "—"}`;
           kind: "inquiry",
           pageUrl: typeof window !== "undefined" ? window.location.href : "",
           referrer: typeof document !== "undefined" ? document.referrer : "",
-          utmSource: params?.get("utm_source") ?? "",
-          utmMedium: params?.get("utm_medium") ?? "",
-          utmCampaign: params?.get("utm_campaign") ?? "landing_local_seo",
+          utmSource,
+          utmMedium,
+          utmCampaign,
         },
       });
       form.reset();
+      track("generate_lead", {
+        form_id: formId,
+        page: "local-seo",
+        device,
+        source,
+        utm_source: utmSource,
+        utm_medium: utmMedium,
+        utm_campaign: utmCampaign,
+        goal,
+        value: 1,
+        currency: "USD",
+      });
+      track("lead_submit_success", {
+        form_id: formId,
+        page: "local-seo",
+        device,
+        source,
+        goal,
+      });
       toast.success("Got it — I'll send your free local SEO audit within 24 hours.");
     } catch (err) {
+      track("lead_submit_error", {
+        form_id: formId,
+        page: "local-seo",
+        device,
+        source,
+        error: err instanceof Error ? err.message : "unknown",
+      });
       toast.error(err instanceof Error ? err.message : "Could not submit. Try again.");
     } finally {
       setSending(false);
@@ -166,6 +228,7 @@ Website / GMB: ${website || "—"}`;
           <div className="lg:col-span-6 w-full">
             <form
               onSubmit={onSubmit}
+              data-form-id="local_seo_hero_form"
               className="rounded-3xl border border-border bg-card p-6 sm:p-8 md:p-10 space-y-5 shadow-gold"
             >
               <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">
@@ -472,6 +535,7 @@ Website / GMB: ${website || "—"}`;
 
             <form
               onSubmit={onSubmit}
+              data-form-id="local_seo_bottom_form"
               className="rounded-3xl border border-border bg-background p-6 sm:p-8 md:p-10 space-y-5 shadow-xl"
             >
               <h3 className="text-lg sm:text-xl font-display text-foreground">Get my free audit</h3>
