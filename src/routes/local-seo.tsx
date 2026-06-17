@@ -93,11 +93,78 @@ function LocalSeoPage() {
     });
   }, []);
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const validateForm = (fd: FormData) => {
+    const errors: Record<string, string> = {};
+    const name = ((fd.get("name") as string) || "").trim();
+    const email = ((fd.get("email") as string) || "").trim();
+    const phone = ((fd.get("phone") as string) || "").trim();
+    const business = ((fd.get("business") as string) || "").trim();
+    const city = ((fd.get("city") as string) || "").trim();
+
+    if (!name) errors.name = "Name is required";
+    else if (name.length < 2) errors.name = "Name must be at least 2 characters";
+    else if (name.length > 100) errors.name = "Name must be under 100 characters";
+
+    if (!email) errors.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = "Invalid email address";
+    else if (email.length > 255) errors.email = "Email must be under 255 characters";
+
+    if (!phone) errors.phone = "Phone is required";
+    else if (phone.length < 6) errors.phone = "Phone number seems too short";
+    else if (phone.length > 30) errors.phone = "Phone must be under 30 characters";
+
+    if (!business) errors.business = "Business name is required";
+    else if (business.length > 150) errors.business = "Business name must be under 150 characters";
+
+    if (!city) errors.city = "City is required";
+    else if (city.length > 100) errors.city = "City must be under 100 characters";
+
+    const website = ((fd.get("website") as string) || "").trim();
+    if (website && !/^https?:\/\/.+/.test(website)) errors.website = "Website must start with http:// or https://";
+
+    return { errors, isValid: Object.keys(errors).length === 0 };
+  };
+
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
     e.preventDefault();
     const form = e.currentTarget;
     const formId = form.dataset.formId || "local_seo_form";
     const fd = new FormData(form);
+
+    const device = getDeviceType();
+    const params =
+      typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+    const utmSource = params?.get("utm_source") ?? "";
+    const utmMedium = params?.get("utm_medium") ?? "";
+    const utmCampaign = params?.get("utm_campaign") ?? "landing_local_seo";
+    const source = utmSource || (typeof document !== "undefined" && document.referrer
+      ? new URL(document.referrer).hostname
+      : "direct");
+
+    // Client-side validation
+    const { errors, isValid } = validateForm(fd);
+    if (!isValid) {
+      track("lead_validation_error", {
+        form_id: formId,
+        page: "local-seo",
+        device,
+        source,
+        utm_source: utmSource,
+        utm_medium: utmMedium,
+        utm_campaign: utmCampaign,
+        failed_fields: Object.keys(errors).join(","),
+        error_count: Object.keys(errors).length,
+      });
+      // Focus the first invalid field and show toast
+      const firstField = form.querySelector<HTMLElement>(
+        `[name="${Object.keys(errors)[0]}"]`,
+      );
+      firstField?.focus();
+      toast.error(Object.values(errors)[0]);
+      return;
+    }
+
     const name = ((fd.get("name") as string) || "").trim();
     const email = ((fd.get("email") as string) || "").trim();
     const phone = ((fd.get("phone") as string) || "").trim();
@@ -111,15 +178,6 @@ City / service area: ${city}
 Primary goal: ${goal}
 Website / GMB: ${website || "—"}`;
     setSending(true);
-    const device = getDeviceType();
-    const params =
-      typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-    const utmSource = params?.get("utm_source") ?? "";
-    const utmMedium = params?.get("utm_medium") ?? "";
-    const utmCampaign = params?.get("utm_campaign") ?? "landing_local_seo";
-    const source = utmSource || (typeof document !== "undefined" && document.referrer
-      ? new URL(document.referrer).hostname
-      : "direct");
 
     track("lead_submit_attempt", {
       form_id: formId,
@@ -131,6 +189,7 @@ Website / GMB: ${website || "—"}`;
       utm_campaign: utmCampaign,
       goal,
     });
+
     try {
       await submitLead({
         data: {
@@ -181,6 +240,21 @@ Website / GMB: ${website || "—"}`;
       });
       toast.error(err instanceof Error ? err.message : "Could not submit. Try again.");
     } finally {
+      setSending(false);
+    }
+    } catch (clientErr) {
+      const device = getDeviceType();
+      const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+      const source = params?.get("utm_source") || (typeof document !== "undefined" && document.referrer ? new URL(document.referrer).hostname : "direct");
+      track("lead_client_error", {
+        form_id: "local_seo_form",
+        page: "local-seo",
+        device,
+        source,
+        error: clientErr instanceof Error ? clientErr.message : "unknown_client_error",
+        error_type: clientErr instanceof Error ? clientErr.name : "unknown",
+      });
+      toast.error("Something went wrong. Please refresh and try again.");
       setSending(false);
     }
   };
