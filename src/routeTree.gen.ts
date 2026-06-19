@@ -13,6 +13,7 @@ import { Route as WebsiteAuditRouteImport } from './routes/website-audit'
 import { Route as ThankYouRouteImport } from './routes/thank-you'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SeoJaipurRouteImport } from './routes/seo-jaipur'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as LocalSeoRouteImport } from './routes/local-seo'
@@ -57,6 +58,11 @@ const TermsRoute = TermsRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeoJaipurRoute = SeoJaipurRouteImport.update({
+  id: '/seo-jaipur',
+  path: '/seo-jaipur',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RefundPolicyRoute = RefundPolicyRouteImport.update({
@@ -197,6 +203,7 @@ export interface FileRoutesByFullPath {
   '/local-seo': typeof LocalSeoRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/seo-jaipur': typeof SeoJaipurRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/thank-you': typeof ThankYouRoute
@@ -227,6 +234,7 @@ export interface FileRoutesByTo {
   '/local-seo': typeof LocalSeoRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/seo-jaipur': typeof SeoJaipurRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/thank-you': typeof ThankYouRoute
@@ -258,6 +266,7 @@ export interface FileRoutesById {
   '/local-seo': typeof LocalSeoRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/seo-jaipur': typeof SeoJaipurRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/thank-you': typeof ThankYouRoute
@@ -290,6 +299,7 @@ export interface FileRouteTypes {
     | '/local-seo'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/seo-jaipur'
     | '/sitemap.xml'
     | '/terms'
     | '/thank-you'
@@ -320,6 +330,7 @@ export interface FileRouteTypes {
     | '/local-seo'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/seo-jaipur'
     | '/sitemap.xml'
     | '/terms'
     | '/thank-you'
@@ -350,6 +361,7 @@ export interface FileRouteTypes {
     | '/local-seo'
     | '/privacy-policy'
     | '/refund-policy'
+    | '/seo-jaipur'
     | '/sitemap.xml'
     | '/terms'
     | '/thank-you'
@@ -382,6 +394,7 @@ export interface RootRouteChildren {
   LocalSeoRoute: typeof LocalSeoRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
+  SeoJaipurRoute: typeof SeoJaipurRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   ThankYouRoute: typeof ThankYouRoute
@@ -424,6 +437,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seo-jaipur': {
+      id: '/seo-jaipur'
+      path: '/seo-jaipur'
+      fullPath: '/seo-jaipur'
+      preLoaderRoute: typeof SeoJaipurRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/refund-policy': {
@@ -648,6 +668,7 @@ const rootRouteChildren: RootRouteChildren = {
   LocalSeoRoute: LocalSeoRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   RefundPolicyRoute: RefundPolicyRoute,
+  SeoJaipurRoute: SeoJaipurRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   ThankYouRoute: ThankYouRoute,
